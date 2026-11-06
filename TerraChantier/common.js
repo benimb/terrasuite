@@ -1,0 +1,54 @@
+/* TerraSuite : outils communs aux applications en ligne (TerraChantier, TerraContacts) */
+const $ = (q, el = document) => el.querySelector(q), $$ = (q, el = document) => [...el.querySelectorAll(q)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const today = () => { const d = new Date(); return new Date(d - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10); };
+const dayOf = iso => { if (!iso) return ''; const d = new Date(iso); return new Date(d - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10); };
+const fmtD = d => d ? new Date(d.length === 10 ? d + 'T12:00' : d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+const fmtDL = d => d ? new Date(d.length === 10 ? d + 'T12:00' : d).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : '';
+const fmtT = d => d ? new Date(d).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '';
+const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+const ICON = {
+  back: '<svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>', cam: '<svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
+  gear: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+  x: '<svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>', img: '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>',
+  users: '<svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  share: '<svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>'
+};
+/* nomenclature TerraSuite des lots (commune à TerraEstim, TerraDocs, TerraPlanning) : liste habituelle des lots d'un chantier et lots habituels des entreprises */
+const DEFAULT_LOTS = [['00', 'Prescriptions communes, installations de chantier'], ['01', 'Démolition, désamiantage, curage'], ['02', 'Gros œuvre, maçonnerie'], ['03', 'Charpente, ossature bois'], ['04', 'Couverture, zinguerie'], ['05', 'Étanchéité'], ['06', 'Façades, ravalement, bardage, ITE'], ['07', 'Menuiseries extérieures, occultations'], ['08', 'Serrurerie, métallerie'], ['09', 'Plâtrerie, cloisons, doublages, faux plafonds'], ['10', 'Menuiseries intérieures, agencement'], ['11', 'Revêtements de sols durs, faïence'], ['12', 'Revêtements de sols souples'], ['13', 'Peinture, revêtements muraux'], ['14', 'Plomberie, sanitaires'], ['15', 'Chauffage, ventilation, climatisation'], ['16', 'Électricité courants forts et faibles'], ['17', 'Ascenseurs, appareils élévateurs'], ['18', 'VRD'], ['19', 'Espaces verts, paysage'], ['20', 'Mobilier, équipements, signalétique']];
+/* ancienne liste de TerraContacts (jusqu'à la 0.1.1) → nomenclature TerraSuite, pour les lots habituels des fiches non encore converties */
+const NOMEN_V = 'ts1';
+const CONTACT_LOTS_OLD = { '00': ['00'], '01': ['01'], '02': ['02'], '03': ['03', '04'], '04': ['05'], '05': ['07'], '06': ['08'], '07': ['09'], '08': ['10'], '09': ['11', '12'], '10': ['13'], '11': ['16'], '12': ['14'], '13': ['15'], '14': ['17'], '15': ['18', '19'] };
+const lotsNomen = L => [...new Set((L || []).flatMap(c => CONTACT_LOTS_OLD[c] || [c]))];
+/* rôles regroupés par catégorie : la maîtrise d'œuvre réunit l'architecte et les bureaux d'études, etc. (clé MOE conservée pour l'architecte) */
+const ROLE_CATS = [['MOA', "Maîtrise d'ouvrage", [['MOA', "Maître d'ouvrage"], ['AMO', "Assistance à maîtrise d'ouvrage"]]], ['MOE', "Maîtrise d'œuvre", [['MOE', 'Architecte'], ['BET', "Bureau d'études"], ['ECO', 'Économiste'], ['PAY', 'Paysagiste']]],
+  ['CTL', 'Contrôle et coordination', [['BCT', 'Bureau de contrôle'], ['CSPS', 'Coordination SPS'], ['OPC', 'OPC']]], ['ENT', 'Entreprises', [['ENT', 'Entreprise']]], ['AUT', 'Autres intervenants', [['USR', 'Utilisateur, exploitant'], ['CONC', 'Concessionnaire'], ['AUT', 'Autre']]]];
+const ROLES = ROLE_CATS.flatMap(c => c[2]);
+const roleName = k => (ROLES.find(r => r[0] === k) || ROLES[ROLES.length - 1])[1], roleRank = k => { const i = ROLES.findIndex(r => r[0] === k); return i < 0 ? 99 : i; };
+const roleCat = k => (ROLE_CATS.find(c => c[2].some(r => r[0] === k)) || ROLE_CATS[ROLE_CATS.length - 1])[0], catName = c => (ROLE_CATS.find(x => x[0] === c) || ROLE_CATS[ROLE_CATS.length - 1])[1];
+const catRoles = c => (ROLE_CATS.find(x => x[0] === c) || [0, 0, []])[2].map(r => r[0]);
+const roleOptions = sel => ROLE_CATS.map(([, t, rs]) => `<optgroup label="${esc(t)}">${rs.map(([k, n]) => `<option value="${k}"${sel === k ? ' selected' : ''}>${esc(n)}</option>`).join('')}</optgroup>`).join('');
+
+function toast(msg, ms = 2600) { const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), ms); }
+function sheet(title, body, foot = '', { wide } = {}) {
+  const bg = document.createElement('div'); bg.className = 'sheet-bg';
+  bg.innerHTML = `<div class="sheet"${wide ? ' style="max-width:1100px"' : ''} role="dialog" aria-modal="true"><header><h2>${esc(title)}</h2><button class="icon-btn" data-close aria-label="Fermer">${ICON.x}</button></header><div class="body">${body}</div>${foot ? `<footer>${foot}</footer>` : ''}</div>`;
+  document.body.appendChild(bg); document.body.style.overflow = 'hidden';
+  const close = () => { bg.remove(); if (!$('.sheet-bg')) document.body.style.overflow = ''; bg.dispatchEvent(new Event('closed')); };
+  bg.addEventListener('click', e => { if (e.target === bg || e.target.closest('[data-close]')) close(); });
+  return { el: bg.querySelector('.sheet'), bg, close };
+}
+/* retour à la page d'accueil TerraSuite : l'onglet ouvert depuis l'accueil (sur l'ordinateur) se referme pour y revenir ;
+   sinon (application installée, téléphone), page d'accueil en ligne */
+function goSuite() {
+  if (window.opener && !window.opener.closed) { try { window.opener.focus(); } catch (e) {} window.close(); }
+  setTimeout(() => { location.href = 'terrasuite.html'; }, 250);
+}
+const suiteBtn = () => `<button class="btn sm suite-btn" onclick="goSuite()" title="Accueil TerraSuite">← TerraSuite</button>`;
+/* enregistrement d'un service worker commun (mise à jour automatique) */
+function registerSW() {
+  if (!('serviceWorker' in navigator) || !location.protocol.startsWith('http')) return;
+  const had = !!navigator.serviceWorker.controller; let done = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => { if (had && !done) { done = true; location.reload(); } });
+  navigator.serviceWorker.register('sw.js').then(r => r.update()).catch(e => console.warn('SW', e));
+}

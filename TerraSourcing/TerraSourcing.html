@@ -1,0 +1,893 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TerraSourcing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* TerraSourcing : veille des appels d'offres publics (BOAMP). Filtres à gauche, liste au centre, fiche à droite. Même famille visuelle que les autres applications, accent sarcelle. */
+:root{
+  --bg:#EDF0EF; --panel:#FFFFFF; --sunk:#F4F7F6; --ink:#1B2423; --muted:#5D6A68; --line:#D2DBD9; --line2:#E4EAE8;
+  --accent:#0F766E; --accent-ink:#FFFFFF; --accent-soft:#D5EEEB; --sel:#E2F3F0;
+  --warn:#9A5B00; --warn-bg:#FFF4DF; --err:#B3261E; --err-bg:#FCE8E6; --ok:#2E6B3F; --ok-bg:#E3F2E7; --info:#24546E;
+  --f-ui:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --f-cond:"IBM Plex Sans Condensed","Arial Narrow","IBM Plex Sans",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#121817; --panel:#1A2120; --sunk:#161C1B; --ink:#E1E9E7; --muted:#95A4A1; --line:#303B39; --line2:#26302E;
+  --accent:#5FC4B8; --accent-ink:#0B1A18; --accent-soft:#1C3A36; --sel:#1C302D;
+  --warn:#E2B15A; --warn-bg:#2E2512; --err:#F08A80; --err-bg:#3A1C1A; --ok:#7CC48F; --ok-bg:#1B3022; --info:#7DB4CF; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#121817; --panel:#1A2120; --sunk:#161C1B; --ink:#E1E9E7; --muted:#95A4A1; --line:#303B39; --line2:#26302E;
+  --accent:#5FC4B8; --accent-ink:#0B1A18; --accent-soft:#1C3A36; --sel:#1C302D;
+  --warn:#E2B15A; --warn-bg:#2E2512; --err:#F08A80; --err-bg:#3A1C1A; --ok:#7CC48F; --ok-bg:#1B3022; --info:#7DB4CF; color-scheme:dark }
+[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:13px;line-height:1.45}
+*{box-sizing:border-box}
+button,input,select,textarea{font:inherit;color:inherit}
+#app{display:flex;flex-direction:column;height:100%;min-height:0}
+.top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line)}
+.brand{font-family:var(--f-cond);font-weight:600;font-size:15px;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:baseline;gap:8px;white-space:nowrap}
+.brand small{font-family:var(--f-ui);font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted);font-size:12px}
+.ver{font-family:var(--f-mono);font-size:11px;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:0 7px;letter-spacing:0;text-transform:none;font-weight:400}
+.tabs{display:flex;gap:2px;background:var(--sunk);border:1px solid var(--line);border-radius:7px;padding:2px;overflow-x:auto;max-width:100%}
+.tabs button{border:0;background:transparent;padding:5px 12px;border-radius:5px;cursor:pointer;color:var(--muted);font-weight:500;white-space:nowrap}
+.tabs button[aria-selected="true"]{background:var(--panel);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+.tabs .n{font-family:var(--f-mono);font-size:11px;margin-left:4px;color:var(--muted)}
+.tabs .n.new{color:var(--accent-ink);background:var(--accent);border-radius:999px;padding:0 6px}
+.grow{flex:1}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:6px;padding:5px 10px;cursor:pointer;white-space:nowrap;line-height:1.3;color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.btn:hover{border-color:var(--muted)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:500}
+.btn.sm{padding:2px 7px;font-size:12px}
+.btn.on{background:var(--accent-soft);border-color:var(--accent)}
+.btn.danger{color:var(--err)}
+.btn:disabled{opacity:.45;cursor:default}
+:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+input[type=text],input[type=search],input[type=number],input[type=date],select,textarea{background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:5px 8px;min-width:0}
+textarea{width:100%;resize:vertical;min-height:60px}
+.status{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:380px}
+.status.ok{color:var(--ok)} .status.err{color:var(--err)}
+.view{flex:1;min-height:0;display:flex;flex-direction:column}
+.hint{font-size:11.5px;color:var(--muted);margin:0}
+.mono{font-family:var(--f-mono);font-size:12px}
+h2,h3,h4{margin:0}
+.lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+
+/* recherche : filtres | résultats | fiche */
+.three{flex:1;min-height:0;display:grid;grid-template-columns:290px minmax(0,1fr) minmax(380px,40%)}
+.filters{border-right:1px solid var(--line);background:var(--sunk);overflow:auto;padding:12px 14px 30px;display:flex;flex-direction:column;gap:12px}
+.fgroup{display:flex;flex-direction:column;gap:5px}
+.fgroup>.lbl{display:flex;justify-content:space-between;align-items:center}
+.checks{display:flex;flex-direction:column;gap:2px}
+.checks label,.chk{display:flex;align-items:center;gap:6px;font-size:12.5px;cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{display:inline-flex;align-items:center;gap:3px;background:var(--accent-soft);border-radius:999px;padding:1px 4px 1px 9px;font-size:12px}
+.chip button{border:0;background:transparent;cursor:pointer;font-size:14px;line-height:1;padding:0 4px;color:inherit}
+.presets{display:flex;flex-wrap:wrap;gap:4px}
+.ac{position:relative}
+.acl{position:absolute;z-index:40;left:0;right:0;top:calc(100% + 2px);background:var(--panel);border:1px solid var(--line);border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.14);max-height:260px;overflow:auto}
+.acl button{display:block;width:100%;text-align:left;border:0;background:transparent;padding:5px 9px;cursor:pointer;font-size:12.5px}
+.acl button:hover,.acl button.on{background:var(--sel)}
+.acl small{color:var(--muted);font-family:var(--f-mono)}
+.results{overflow:auto;background:var(--panel);min-height:0;display:flex;flex-direction:column}
+.rbar{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line);padding:8px 14px;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.rlist{display:flex;flex-direction:column}
+.rec{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:4px 10px;padding:9px 14px;border-bottom:1px solid var(--line2);cursor:pointer;align-items:start}
+.rec:hover{background:var(--sunk)}
+.rec.sel{background:var(--sel)}
+.rec .t{font-weight:500;line-height:1.35}
+.rec.seen .t{font-weight:400;color:var(--muted)}
+.rec .m{grid-column:2/4;font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:3px 10px}
+.rec .d{text-align:right;font-family:var(--f-mono);font-size:12px;white-space:nowrap}
+.star{border:0;background:transparent;cursor:pointer;font-size:16px;line-height:1;padding:0;color:var(--muted)}
+.star.on{color:var(--accent)}
+.star.refuse{font-size:13px;margin-top:4px}
+.star.refuse:hover{color:var(--err)}
+.tag{display:inline-block;padding:0 7px;border-radius:9px;font-size:11px;font-weight:500;white-space:nowrap;background:var(--sunk);border:1px solid var(--line);color:var(--muted)}
+.tag.acc{background:var(--accent-soft);border-color:transparent;color:var(--ink)}
+.tag.warn{background:var(--warn-bg);border-color:transparent;color:var(--warn)}
+.tag.err{background:var(--err-bg);border-color:transparent;color:var(--err)}
+.tag.ok{background:var(--ok-bg);border-color:transparent;color:var(--ok)}
+.dl.urg{color:var(--err);font-weight:600}
+.dl.soon{color:var(--warn);font-weight:600}
+.dl.past{color:var(--muted);text-decoration:line-through}
+.newdot{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block;margin-top:5px}
+.more{padding:12px 14px;text-align:center}
+.empty{margin:auto;max-width:460px;text-align:center;padding:40px 16px;display:flex;flex-direction:column;gap:10px;align-items:center;color:var(--muted)}
+.empty b{color:var(--ink);font-size:15px}
+.detail{border-left:1px solid var(--line);background:var(--sunk);overflow:auto;min-height:0;padding:14px 16px 40px;display:flex;flex-direction:column;gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card h3{font-family:var(--f-cond);font-weight:600;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.dtitle{font-family:var(--f-cond);font-weight:600;font-size:18px;line-height:1.25;text-wrap:balance}
+.kv{display:grid;grid-template-columns:150px minmax(0,1fr);gap:4px 10px;font-size:12.5px;margin:0}
+.kv dt{color:var(--muted)} .kv dd{margin:0;overflow-wrap:anywhere}
+.links{display:flex;flex-wrap:wrap;gap:6px}
+.flags{display:flex;flex-wrap:wrap;gap:4px}
+.txt{white-space:pre-wrap;font-size:12.5px;max-height:260px;overflow:auto;background:var(--sunk);border-radius:6px;padding:8px 10px}
+details summary{cursor:pointer;color:var(--muted);font-size:12px}
+table.t{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px}
+.t th{position:sticky;top:0;z-index:2;background:var(--panel);text-align:left;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 8px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+.t td{padding:6px 8px;border-bottom:1px solid var(--line2);vertical-align:top}
+.t tr.row{cursor:pointer}
+.t tr.row:hover td{background:var(--sunk)}
+.t tr.sel td{background:var(--sel)}
+.t .num{text-align:right;font-family:var(--f-mono);font-size:12px;white-space:nowrap}
+
+/* suivi */
+.two{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(400px,42%)}
+.stbar{display:flex;flex-wrap:wrap;gap:4px}
+.stbar button .n{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fld{display:flex;flex-direction:column;gap:3px;min-width:0}
+.fld>label{font-size:11.5px;color:var(--muted)}
+.go{display:flex;flex-direction:column;gap:4px}
+.go label{display:flex;gap:7px;align-items:flex-start;font-size:12.5px}
+.pane{overflow:auto;padding:18px 16px 40px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;max-width:1300px}
+.menu{position:absolute;top:calc(100% + 4px);right:0;z-index:50;background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.14);padding:4px;width:300px;display:flex;flex-direction:column}
+.menu button{border:0;background:transparent;text-align:left;padding:7px 10px;border-radius:5px;cursor:pointer}
+.menu button:hover{background:var(--sel)}
+.menu button span{display:block;font-size:11.5px;color:var(--muted)}
+.wrap{position:relative}
+@media (max-width:1100px){
+  .three{grid-template-columns:250px minmax(0,1fr)}
+  .three .detail{grid-column:1/3;border-left:0;border-top:1px solid var(--line)}
+  .two{grid-template-columns:1fr}
+}
+@media (max-width:720px){
+  #app{height:auto;min-height:100%}
+  .view{flex:none}
+  .three{grid-template-columns:1fr}
+  .three .detail{grid-column:auto}
+  .filters{border-right:0;border-bottom:1px solid var(--line)}
+  .kv{grid-template-columns:110px minmax(0,1fr)}
+  .brand small{display:none}
+}
+@media print{
+  .top,.filters,.rbar,.star,.noprint{display:none!important}
+  body,#app{height:auto;background:#fff}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <a class="btn" href="../terrasuite.html" id="homeLink">← TerraSuite</a>
+    <div class="brand">TerraSourcing <span class="ver" id="ver" title="Version bêta"></span><small>Appels d'offres publics</small></div>
+    <nav class="tabs" role="tablist" aria-label="Vues">
+      <button role="tab" data-tab="home" aria-selected="true">Accueil</button>
+      <button role="tab" data-tab="search" aria-selected="false">Recherche</button>
+      <button role="tab" data-tab="veille" aria-selected="false">Veilles<span class="n" id="nVeille"></span></button>
+      <button role="tab" data-tab="suivi" aria-selected="false">Suivi des réponses<span class="n" id="nSuivi"></span></button>
+      <button role="tab" data-tab="refus" aria-selected="false">Refusés<span class="n" id="nRefus"></span></button>
+      <button role="tab" data-tab="attrib" aria-selected="false">Attributions</button>
+    </nav>
+    <span class="grow"></span>
+    <div class="wrap"><button class="btn" id="bSave" aria-haspopup="true">Sauvegarde ▾</button>
+      <div class="menu" id="saveMenu" hidden role="menu">
+        <button data-act="xlsx" role="menuitem"><b>Suivi des réponses</b> (.xlsx)<span>Un tableau par ligne de suivi, pour Excel</span></button>
+        <button data-act="csv" role="menuitem"><b>Résultats affichés</b> (.csv)<span>La liste de la recherche en cours</span></button>
+        <button data-act="backup" role="menuitem"><b>Exporter tout</b> (.json)<span>Veilles, suivi, refusés, avis vus</span></button>
+        <button data-act="restore" role="menuitem"><b>Restaurer une sauvegarde</b><span>Ajoute ou remplace les éléments de même identifiant</span></button>
+      </div></div>
+    <span class="status" id="status" role="status"></span>
+  </header>
+  <main class="view" id="view"></main>
+  <input type="file" id="jsonIn" accept=".json,application/json" hidden>
+</div>
+<!-- avis des plateformes (AWS…), fichier déposé par la collecte quotidienne ; absent : seul le BOAMP est interrogé -->
+<script src="TerraSourcing-plateformes.js"></script>
+<script>
+/* ================= TerraSourcing : noyau ================= */
+const APP_VERSION = '0.3';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const uid = () => Date.now().toString(36).slice(-5) + Math.random().toString(36).slice(2, 8);
+const clone = o => JSON.parse(JSON.stringify(o));
+const NF0 = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 });
+function setStatus(t, cls) { const el = $('#status'); if (!el) return; el.textContent = t || ''; el.className = 'status' + (cls ? ' ' + cls : ''); }
+const pad = n => String(n).padStart(2, '0');
+const isoDay = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const today = () => isoDay(new Date());
+const addDays = (n, d = new Date()) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const fmtDay = s => { if (!s) return ''; const [y, m, d] = s.slice(0, 10).split('-'); return `${d}/${m}/${y}`; };
+const fmtDayShort = s => { if (!s) return ''; const [y, m, d] = s.slice(0, 10).split('-'); return `${d}/${m}`; };
+/* date limite « AAAA-MM-JJTHH:MM » (heure de Paris), lue sans tenir compte du fuseau indiqué : le BOAMP marque +00:00 des heures locales */
+const dlDate = s => s ? new Date(s.slice(0, 10) + 'T' + (s.slice(11, 16) || '23:59')) : null;
+function fmtDl(s) { if (!s) return ''; const t = s.slice(11, 16); return fmtDay(s) + (t && t !== '00:00' ? ' ' + t.replace(':', 'h') : ''); }
+function daysLeft(s) { const d = dlDate(s); if (!d) return null; return Math.ceil((d - new Date()) / 864e5); }
+function dlClass(s) { const n = daysLeft(s); if (n === null) return ''; return n < 0 ? 'past' : n <= 5 ? 'urg' : n <= 12 ? 'soon' : ''; }
+function dlLabel(s) { const n = daysLeft(s); if (n === null) return ''; return n < 0 ? 'clos' : n === 0 ? "aujourd'hui" : 'J-' + n; }
+const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/œ/g, 'oe');
+
+/* ---------- stockage navigateur ---------- */
+const LS = {
+  get(k, d) { try { const v = localStorage.getItem('ts-' + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem('ts-' + k, JSON.stringify(v)); return true; } catch (e) { setStatus('Enregistrement impossible dans ce navigateur : ' + e.message, 'err'); return false; } }
+};
+
+/* ---------- API BOAMP (DILA, Opendatasoft) ---------- */
+const BOAMP = 'https://boamp-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/boamp';
+async function getJSON(url, timeout = 30000) {
+  const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), timeout);
+  try {
+    const r = await fetch(url, { signal: ctl.signal });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(j.message || 'HTTP ' + r.status);
+    return j;
+  } catch (e) { throw new Error(e.name === 'AbortError' ? 'délai dépassé' : e.message === 'Failed to fetch' ? 'BOAMP injoignable (connexion internet ?)' : e.message); }
+  finally { clearTimeout(tm); }
+}
+const qs = s => '"' + String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
+const inList = (field, vals) => `${field} IN (${vals.map(qs).join(',')})`;
+
+/* ---------- référentiels ---------- */
+const DESC_DEFAULT = ["Maîtrise d'oeuvre", 'Etude', 'Ingénierie', "Assistance à maîtrise d'ouvrage", 'Bâtiment', 'Urbanisme', 'Architecture', 'Prestations intellectuelles', 'Programmation', 'Paysage', 'Diagnostic', 'Economiste', 'Ordonnancement pilotage et coordination', 'Contrôle technique', 'Coordination sécurité et protection de la santé'];
+const PROC = [['OUVERT', 'Ouverte (AO)'], ['RESTREINT', 'Restreinte'], ['NEGOCIE', 'Négociée'], ['PROCEDURE_ADAPTE', 'Adaptée (MAPA)'], ['DIALOGUE_COMPETITIF', 'Dialogue compétitif'], ['AUTRE', 'Autre (dont concours)']];
+const FAM = [['MAPA', 'MAPA (< 90 k€)'], ['FNS', '90 k€ à seuils européens'], ['JOUE', 'Marchés européens'], ['DSP', 'Délégations de service public']];
+const NAT = [['Avis de marché', 'Avis de marché'], ['Rectificatif', 'Rectificatifs'], ['Résultat de marché', "Résultats (attributions)"], ['Avis d\'annulation', 'Annulations'], ['Avis informatif', 'Pré-information']];
+const DEPTS = { '01': 'Ain', '02': 'Aisne', '03': 'Allier', '04': 'Alpes-de-Haute-Provence', '05': 'Hautes-Alpes', '06': 'Alpes-Maritimes', '07': 'Ardèche', '08': 'Ardennes', '09': 'Ariège', '10': 'Aube', '11': 'Aude', '12': 'Aveyron', '13': 'Bouches-du-Rhône', '14': 'Calvados', '15': 'Cantal', '16': 'Charente', '17': 'Charente-Maritime', '18': 'Cher', '19': 'Corrèze', '2A': 'Corse-du-Sud', '2B': 'Haute-Corse', '21': "Côte-d'Or", '22': "Côtes-d'Armor", '23': 'Creuse', '24': 'Dordogne', '25': 'Doubs', '26': 'Drôme', '27': 'Eure', '28': 'Eure-et-Loir', '29': 'Finistère', '30': 'Gard', '31': 'Haute-Garonne', '32': 'Gers', '33': 'Gironde', '34': 'Hérault', '35': 'Ille-et-Vilaine', '36': 'Indre', '37': 'Indre-et-Loire', '38': 'Isère', '39': 'Jura', '40': 'Landes', '41': 'Loir-et-Cher', '42': 'Loire', '43': 'Haute-Loire', '44': 'Loire-Atlantique', '45': 'Loiret', '46': 'Lot', '47': 'Lot-et-Garonne', '48': 'Lozère', '49': 'Maine-et-Loire', '50': 'Manche', '51': 'Marne', '52': 'Haute-Marne', '53': 'Mayenne', '54': 'Meurthe-et-Moselle', '55': 'Meuse', '56': 'Morbihan', '57': 'Moselle', '58': 'Nièvre', '59': 'Nord', '60': 'Oise', '61': 'Orne', '62': 'Pas-de-Calais', '63': 'Puy-de-Dôme', '64': 'Pyrénées-Atlantiques', '65': 'Hautes-Pyrénées', '66': 'Pyrénées-Orientales', '67': 'Bas-Rhin', '68': 'Haut-Rhin', '69': 'Rhône', '70': 'Haute-Saône', '71': 'Saône-et-Loire', '72': 'Sarthe', '73': 'Savoie', '74': 'Haute-Savoie', '75': 'Paris', '76': 'Seine-Maritime', '77': 'Seine-et-Marne', '78': 'Yvelines', '79': 'Deux-Sèvres', '80': 'Somme', '81': 'Tarn', '82': 'Tarn-et-Garonne', '83': 'Var', '84': 'Vaucluse', '85': 'Vendée', '86': 'Vienne', '87': 'Haute-Vienne', '88': 'Vosges', '89': 'Yonne', '90': 'Territoire de Belfort', '91': 'Essonne', '92': 'Hauts-de-Seine', '93': 'Seine-Saint-Denis', '94': 'Val-de-Marne', '95': "Val-d'Oise", '971': 'Guadeloupe', '972': 'Martinique', '973': 'Guyane', '974': 'La Réunion', '976': 'Mayotte' };
+const REGIONS = {
+  'Île-de-France': ['75', '77', '78', '91', '92', '93', '94', '95'],
+  'Petite couronne': ['75', '92', '93', '94'],
+  'Hauts-de-France': ['02', '59', '60', '62', '80'],
+  'Normandie': ['14', '27', '50', '61', '76'],
+  'Centre-Val de Loire': ['18', '28', '36', '37', '41', '45'],
+  'Grand Est': ['08', '10', '51', '52', '54', '55', '57', '67', '68', '88'],
+  'Bourgogne-Franche-Comté': ['21', '25', '39', '58', '70', '71', '89', '90'],
+  'Pays de la Loire': ['44', '49', '53', '72', '85'],
+  'Bretagne': ['22', '29', '35', '56'],
+  'Nouvelle-Aquitaine': ['16', '17', '19', '23', '24', '33', '40', '47', '64', '79', '86', '87'],
+  'Occitanie': ['09', '11', '12', '30', '31', '32', '34', '46', '48', '65', '66', '81', '82'],
+  'Auvergne-Rhône-Alpes': ['01', '03', '07', '15', '26', '38', '42', '43', '63', '69', '73', '74'],
+  "Provence-Alpes-Côte d'Azur": ['04', '05', '06', '13', '83', '84'],
+  'Corse': ['2A', '2B'],
+  'Outre-mer': ['971', '972', '973', '974', '976']
+};
+const STATUTS = [
+  ['etude', 'À étudier', ''], ['go', 'Go', 'acc'], ['analyse', 'Analyse du RC', 'acc'], ['equipe', 'Équipe', 'acc'], ['redaction', 'Rédaction', 'acc'],
+  ['depose', 'Déposé', 'warn'], ['retenu', 'Candidature retenue', 'warn'], ['gagne', 'Gagné', 'ok'], ['perdu', 'Perdu', 'err'], ['nogo', 'No-go', ''], ['abandon', 'Abandonné, sans suite', '']
+];
+const STATUT = Object.fromEntries(STATUTS.map(([k, l, c]) => [k, { l, c }]));
+const ACTIFS = new Set(['etude', 'go', 'analyse', 'equipe', 'redaction', 'depose', 'retenu']);
+
+/* ---------- filtres et requête ---------- */
+const FILTER_DEFAULT = { kw: '', excl: '', desc: ["Maîtrise d'oeuvre"], depts: [], nat: ['Avis de marché'], proc: [], fam: [], days: 30, open: true, concours: false, ac: false, cr: false, sort: 'parution' };
+function splitTerms(s) { return String(s || '').split(/[,;\n]/).map(x => x.trim()).filter(Boolean); }
+function whereOf(f, o = {}) {
+  const w = [];
+  const kw = splitTerms(f.kw); if (kw.length) w.push('(' + kw.map(t => `search(${qs(t)})`).join(' OR ') + ')');
+  for (const t of splitTerms(f.excl)) w.push(`NOT search(${qs(t)})`);
+  if (f.desc && f.desc.length) w.push(inList('descripteur_libelle', f.desc));
+  if (f.depts && f.depts.length) w.push(inList('code_departement', f.depts));
+  const nat = o.nat || f.nat; if (nat && nat.length) w.push(inList('nature_libelle', nat));
+  if (f.proc && f.proc.length) w.push(inList('type_procedure', f.proc));
+  if (f.fam && f.fam.length) w.push(inList('famille', f.fam));
+  // types de mission : un avis est retenu s'il correspond à l'un des types cochés
+  const mis = [];
+  if (f.concours) mis.push('search("concours")');
+  if (f.ac) mis.push('search("accord-cadre") OR search("accord cadre")');
+  if (f.cr) mis.push('search("conception-réalisation") OR search("conception réalisation")');
+  if (mis.length) w.push('(' + mis.join(' OR ') + ')');
+  if (o.since) w.push(`dateparution > date'${o.since}'`);
+  else if (+f.days) w.push(`dateparution >= date'${isoDay(addDays(-f.days))}'`);
+  if (f.open && !o.noOpen) w.push(`datefindiffusion >= date'${today()}' AND (datelimitereponse >= now() OR datelimitereponse is null)`);
+  if (o.titulaire) w.push(`search(${qs(o.titulaire)})`);
+  return w.join(' AND ');
+}
+async function boampRecords(where, { limit = 50, offset = 0, order = 'dateparution desc, idweb desc' } = {}) {
+  const u = `${BOAMP}/records?limit=${limit}&offset=${offset}&order_by=${encodeURIComponent(order)}&select=exclude(gestion)&where=${encodeURIComponent(where)}`;
+  return getJSON(u);
+}
+async function boampCount(where) { const j = await getJSON(`${BOAMP}/records?limit=0&where=${encodeURIComponent(where)}`); return j.total_count || 0; }
+async function boampFacets(facets, where) {
+  const u = `${BOAMP}/facets?${facets.map(f => 'facet=' + encodeURIComponent(f)).join('&')}&where=${encodeURIComponent(where)}`;
+  const j = await getJSON(u); const o = {}; for (const f of j.facets || []) o[f.name] = f.facets.map(x => ({ v: x.name, n: x.count })); return o;
+}
+function filterSummary(f) {
+  const p = [];
+  if (f.kw) p.push('« ' + splitTerms(f.kw).join(' » ou « ') + ' »');
+  if (f.desc && f.desc.length) p.push(f.desc.join(', '));
+  if (f.depts && f.depts.length) { const reg = Object.entries(REGIONS).find(([, d]) => d.length === f.depts.length && d.every(x => f.depts.includes(x))); p.push(reg ? reg[0] : f.depts.join(', ')); } else p.push('toute la France');
+  if (f.proc && f.proc.length) p.push(f.proc.map(c => (PROC.find(x => x[0] === c) || [, c])[1]).join(', '));
+  if (f.fam && f.fam.length) p.push(f.fam.join(', '));
+  if (f.concours) p.push('concours'); if (f.ac) p.push('accords-cadres'); if (f.cr) p.push('conception-réalisation');
+  if (f.excl) p.push('sauf ' + splitTerms(f.excl).join(', '));
+  return p.join(' · ');
+}
+
+/* ---------- lecture d'un avis ---------- */
+const recCache = new Map();
+function flatten(o, path = '', out = []) {
+  if (o === null || o === undefined) return out;
+  if (Array.isArray(o)) { o.forEach((v, i) => flatten(v, path + '.' + i, out)); return out; }
+  if (typeof o === 'object') { for (const k in o) flatten(o[k], k === '#text' ? path : path ? path + '.' + k : k, out); return out; }
+  const v = String(o).trim(); if (v) out.push([path, v]); return out;
+}
+const asArr = v => { if (Array.isArray(v)) return v; if (v === null || v === undefined || v === '') return []; if (typeof v === 'string' && v.startsWith('[')) { try { return JSON.parse(v); } catch (e) {} } return [v]; };
+function combineDT(d, t) { if (!d) return ''; const day = d.slice(0, 10); const tm = t ? t.slice(0, 5) : ''; return day + (tm ? 'T' + tm : ''); }
+function parseRec(r) {
+  if (recCache.has(r.idweb)) { const c = recCache.get(r.idweb); if (c._src === r) return c; }
+  let don = null; try { don = typeof r.donnees === 'string' ? JSON.parse(r.donnees) : r.donnees; } catch (e) {}
+  const F = don ? flatten(don) : [], val = re => { const x = F.find(([p]) => re.test(p)); return x ? x[1] : ''; }, vals = re => F.filter(([p]) => re.test(p)).map(x => x[1]);
+  const o = { _src: r, idweb: r.idweb, objet: r.objet || '', acheteur: r.nomacheteur || '', depts: asArr(r.code_departement), famille: r.famille || '', familleL: r.famille_libelle || '', nature: r.nature_libelle || '', procedure: (r.procedure_libelle || '').replace(/^Procédure /, ''), typeProc: r.type_procedure || '', parution: r.dateparution || '', finDiff: r.datefindiffusion || '', url: r.url_avis || `https://www.boamp.fr/pages/avis/?q=idweb:${r.idweb}`, desc: asArr(r.descripteur_libelle), typeMarche: asArr(r.type_marche_facette), titulaires: asArr(r.titulaire), lie: asArr(r.annonce_lie), etat: r.etat || '' };
+  // dates limites
+  const dlOff = r.datelimitereponse ? r.datelimitereponse.slice(0, 16) : combineDT(val(/TenderSubmissionDeadlinePeriod\.cbc:EndDate$/), val(/TenderSubmissionDeadlinePeriod\.cbc:EndTime$/)) || (val(/dateReceptionOffres$|dateLimiteReponse$/i) || '').slice(0, 16);
+  const dlCand = combineDT(val(/ParticipationRequestReceptionPeriod\.cbc:EndDate$/), val(/ParticipationRequestReceptionPeriod\.cbc:EndTime$/)) || (val(/dateReceptionCandidatures?$|dateLimiteCandidature/i) || '').slice(0, 16);
+  o.dlOffres = dlOff; o.dlCand = dlCand;
+  o.dl = dlCand && (!dlOff || dlCand < dlOff) ? dlCand : dlOff; o.dlKind = o.dl && o.dl === dlCand && dlCand !== dlOff ? 'candidatures' : 'offres';
+  o.dlQuestions = combineDT(val(/AdditionalInformationRequestPeriod\.cbc:EndDate$/), val(/AdditionalInformationRequestPeriod\.cbc:EndTime$/));
+  // liens
+  const links = [], seenU = new Set(), add = (u, l) => { u = u.trim(); if (!/^https?:\/\//i.test(u) || seenU.has(u)) return; seenU.add(u); links.push([l, u]); };
+  for (const [p, v] of F) if (/urlDocConsul|CallForTendersDocumentReference.*URI|urlDce/i.test(p)) add(v, 'DCE');
+  for (const [p, v] of F) if (/AccessToolsURI|urlParticipation|TenderRecipientParty.*EndpointID|urlDepot/i.test(p)) add(v, 'Dépôt');
+  for (const [p, v] of F) if (/urlProfilAcheteur|BuyerProfileURI|adresseProfilAcheteur/i.test(p)) add(v, 'Profil acheteur');
+  for (const [p, v] of F) if (/^https?:\/\//.test(v) && /url|uri|internet/i.test(p) && !/Organization\.\d+\.efac:Company\.cbc:WebsiteURI|tribunal|Appeal|recours/i.test(p) && !/tribunal|legifrance|europa\.eu\/legal/i.test(v)) add(v, 'Lien');
+  o.links = links.slice(0, 6);
+  // montant, durée, lieu
+  const mt = val(/valeurEstimee\.valeur$|EstimatedOverallContractAmount$|montantEstime|valeurTotale\.valeur$/i); o.montant = mt ? +String(mt).replace(/[^\d.,]/g, '').replace(',', '.') || null : null;
+  const dm = F.find(([p]) => /DurationMeasure$/.test(p)), du = F.find(([p]) => /DurationMeasure\.@unitCode$/.test(p));
+  o.duree = dm ? `${dm[1]} ${({ MONTH: 'mois', DAY: 'jours', YEAR: 'ans', WEEK: 'semaines' })[du && du[1]] || ''}`.trim() : (val(/nbMois$|dureeMois$/i) ? val(/nbMois$|dureeMois$/i) + ' mois' : '');
+  o.lieu = val(/lieuExecution$/i) || val(/ProcurementProject\.cac:RealizedLocation\.cac:Address\.cbc:CityName$/) || '';
+  o.ville = val(/organisme\.(adr\.)?ville$/i) || val(/efac:Organization\.0\.efac:Company\.cac:PostalAddress\.cbc:CityName$/) || '';
+  // description, lots, critères, conditions
+  const descs = vals(/(^|\.)cac:ProcurementProject\.cbc:Description$|objetComplet$|description(Marche|Prestations)?$|natureMarche\.description$|caracteristiques/i);
+  o.description = descs.filter(d => d.length > 25 && !/^ns\d+:/.test(d)).sort((a, b) => b.length - a.length)[0] || '';
+  const lots = []; for (const [p, v] of F) if (/ProcurementProjectLot\.\d+\.cac:ProcurementProject\.cbc:Name$|[Ll]ots?\.(lot\.)?\d+\.(intitule|libelle|description)$/.test(p) && !lots.includes(v)) lots.push(v);
+  o.lots = lots.slice(0, 40);
+  const crit = new Map();
+  for (const [p, v] of F) { const m = p.match(/^(.*SubordinateAwardingCriterion(\.\d+)?)\.(.*)$/); if (!m) continue; const c = crit.get(m[1]) || {}; if (/cbc:Description$/.test(m[3])) c.d = v; if (/ParameterNumeric$/.test(m[3])) c.w = v; crit.set(m[1], c); }
+  o.criteres = [...crit.values()].filter(c => c.d).map(c => c.d + (c.w ? ` (${c.w})` : ''));
+  if (!o.criteres.length) o.criteres = vals(/critere.*(libelle|enonce|text)$|criteres?\.\d+$/i).slice(0, 10);
+  o.criteres = [...new Set(o.criteres)].slice(0, 12);
+  o.conditions = [...new Set(vals(/SelectionCriteria(\.\d+)?\.cbc:Description$|conditionParticipation|capaciteTechnique|capacite(Eco|Pro)|justifications?$/i))].slice(0, 8);
+  o.cpv = [...new Set(vals(/MainCommodityClassification\.cbc:ItemClassificationCode$|cpv(\.principal)?(\.objetPrincipal)?\.classPrincipale$|cpv/i).filter(v => /^\d{8}/.test(v)))].slice(0, 6);
+  o.text = norm([o.objet, o.description, ...o.lots, ...o.conditions, ...o.criteres, ...F.map(x => x[1]).filter(v => v.length > 20)].join(' \n '));
+  o.flags = flagsOf(o, r);
+  recCache.set(r.idweb, o);
+  return o;
+}
+function flagsOf(o, r) {
+  const t = o.text, f = [];
+  if (/ordre des architectes|architectes? (inscrit|dplg|d\.?p\.?l\.?g|hmonp|diplome d'etat)|inscrit[^.]{0,60}(ordre|tableau)[^.]{0,30}architect|mandataire[^.]{0,80}architect|architect[^.]{0,40}mandataire|71200000|71220000|71221000/.test(t) || (o.cpv || []).some(c => /^712[0-2]/.test(c))) f.push(['archi', 'Architecte requis', 'acc']);
+  if (/visite[^.]{0,80}obligatoire|obligatoire[^.]{0,40}visite/.test(t)) f.push(['visite', 'Visite obligatoire', 'err']);
+  else if (/visite (du site|des lieux|sur site|de site)|visites? (facultative|conseillee|recommandee)/.test(t)) f.push(['visite', 'Visite prévue', 'warn']);
+  if (/\bconcours\b/.test(t) || /concours/i.test(r.procedure_libelle || '')) f.push(['concours', 'Concours', 'acc']);
+  if (/accord[- ]cadre/.test(t)) f.push(['ac', 'Accord-cadre', '']);
+  if (/multi[- ]?attributaires?|plusieurs (titulaires|attributaires)|\b\d+ (titulaires|attributaires)|multiattributaire/.test(t)) f.push(['multi', 'Multi-attributaires', 'ok']);
+  if (/conception[- ]realisation|marche global de performance|marche global/.test(t)) f.push(['cr', 'Conception-réalisation', 'warn']);
+  if (/\bbim\b/.test(t)) f.push(['bim', 'BIM', '']);
+  if (/rehabilitation|renovation|restructuration/.test(t)) f.push(['rehab', 'Réhabilitation', '']);
+  if (/construction (neuve|d'un|d'une)|extension/.test(t)) f.push(['neuf', 'Neuf, extension', '']);
+  if (/patrimoine|monument historique|architecte des batiments de france|\babf\b/.test(t)) f.push(['patri', 'Patrimoine', '']);
+  if (r.type_procedure === 'RESTREINT' || /candidatures?/.test(o.dlKind) || /concours/.test(t)) f.push(['cand', 'Candidature d\'abord', '']);
+  const n = daysLeft(o.dl); if (n !== null && n >= 0 && n < 7) f.push(['court', 'Délai court', 'err']);
+  return f;
+}
+/* numéro de dossier de l'agence : date limite au format AAMMJJ */
+const dossierNo = dl => dl ? dl.slice(2, 4) + dl.slice(5, 7) + dl.slice(8, 10) : '';
+
+/* ===== Page d'accueil de l'application (orientation) : que faire en arrivant ===== */
+const Ori = (() => {
+  const E = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const I = {
+    plus: '<path d="M12 5v14M5 12h14"/>', up: '<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/>',
+    open: '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>', proj: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v5"/>',
+    doc: '<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/>', grid: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+    search: '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>', map: '<path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/>',
+    chart: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>', save: '<path d="M5 3h11l5 5v13H3V3z"/><path d="M7 3v6h8M7 21v-7h10v7"/>', link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+    pin: '<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>', star: '<path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/>', play: '<path d="M6 4l14 8-14 8z"/>'
+  };
+  const svg = k => `<svg viewBox="0 0 24 24" aria-hidden="true">${I[k] || I.plus}</svg>`;
+  const CSS = `.ori{max-width:1120px;margin:0 auto;padding:28px 24px 48px;display:flex;flex-direction:column;gap:22px;color:var(--ink,#1c1f22)}
+.ori h1{margin:0;font-size:26px;letter-spacing:-.01em;line-height:1.15}.ori .lead{margin:6px 0 0;color:var(--muted,#666);font-size:15px;line-height:1.5;max-width:760px}
+.ori h2{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted,#666);font-weight:700}
+.ori-resume{display:flex;align-items:center;gap:14px;padding:14px 18px;border:1.5px solid var(--accent,#333);border-radius:12px;background:var(--accent-soft,var(--soft,#eef));cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
+.ori-resume:hover{filter:brightness(.98)}.ori-resume .k{font-size:12px;font-weight:700;color:var(--accent,#333);text-transform:uppercase;letter-spacing:.05em}.ori-resume b{display:block;font-size:16px}.ori-resume span.s{font-size:13px;color:var(--muted,#666)}
+.ori-acts{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.ori-act{display:flex;gap:12px;align-items:flex-start;text-align:left;padding:16px;border:1px solid var(--line,#ddd);border-radius:12px;background:var(--panel,var(--surface,#fff));cursor:pointer;font:inherit;color:inherit;transition:border-color .12s,transform .12s}
+.ori-act:hover,.ori-act:focus-visible{border-color:var(--accent,#333);transform:translateY(-1px);outline:none}
+.ori-act .ic{flex:0 0 38px;height:38px;border-radius:10px;display:grid;place-items:center;background:var(--accent-soft,var(--soft,#eef));color:var(--accent,#333)}
+.ori-act.pri .ic{background:var(--accent,#333);color:var(--accent-ink,#fff)}
+.ori-act svg,.ori-resume svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ori-act b{display:block;font-size:15px;margin-bottom:3px}.ori-act span{font-size:13px;color:var(--muted,#666);line-height:1.4}
+.ori-cols{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:820px){.ori-cols{grid-template-columns:1fr}.ori{padding:18px 14px 40px}}
+.ori-box{border:1px solid var(--line,#ddd);border-radius:12px;background:var(--panel,var(--surface,#fff));padding:14px 16px}
+.ori-box+.ori-box{margin-top:14px}
+.ori-q{width:100%;margin:0 0 8px;padding:7px 10px;border:1px solid var(--line,#ddd);border-radius:8px;font:inherit;background:var(--sunk,transparent);color:inherit;box-sizing:border-box}
+.ori-ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;max-height:420px;overflow:auto}
+.ori-ul button{display:flex;gap:10px;align-items:baseline;width:100%;text-align:left;padding:8px 6px;border:0;border-bottom:1px solid var(--line2,var(--line,#eee));background:none;font:inherit;color:inherit;cursor:pointer;border-radius:6px}
+.ori-ul button:hover{background:var(--sel,var(--soft,#f3f3f3))}.ori-ul .t{flex:1;min-width:0;font-weight:600;font-size:14px}.ori-ul .s{font-size:12.5px;color:var(--muted,#666);white-space:nowrap}
+.ori-ul .c{font:700 12px ui-monospace,monospace;color:var(--accent,#333);min-width:44px}
+.ori-empty{color:var(--muted,#666);font-size:14px;padding:6px 0}
+.ori-steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:7px;font-size:14px;line-height:1.45}.ori-steps b{font-weight:700}
+.ori-pj{display:flex;flex-direction:column;gap:6px}.ori-pj .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.ori-pj .row .t{flex:1;min-width:120px;font-size:14px}
+.ori-pj .row button{font-weight:600;font-size:12.5px;font-family:inherit;padding:4px 9px;border:1px solid var(--line,#ddd);border-radius:7px;background:none;color:inherit;cursor:pointer}.ori-pj .row button:hover{border-color:var(--accent,#333);color:var(--accent,#333)}
+.ori-foot{font-size:12.5px;color:var(--muted,#666)}
+.ori.compact{padding:16px 14px 32px;gap:16px}.ori.compact h1{font-size:21px}.ori.compact .ori-cols,.ori.compact .ori-acts{grid-template-columns:1fr}.ori.compact .ori-act{padding:11px 12px}`;
+  function style() { if (document.getElementById('ori-css')) return; const s = document.createElement('style'); s.id = 'ori-css'; s.textContent = CSS; document.head.appendChild(s); }
+  /* cfg : { titre, lead, reprendre:{t,s,go}, actions:[{ic,t,s,go,pri}], liste:{titre,items:[{c,t,s,go}],vide,recherche}, projets:{titre,items:[{c,t,boutons:[{t,go}]}],vide}, etapes:[html], pied } */
+  function render(el, cfg) {
+    style(); const fns = []; const f = fn => { fns.push(fn); return fns.length - 1; };
+    const L = cfg.liste, P = cfg.projets;
+    const pjHtml = P ? `<div class="ori-box"><h2>${E(P.titre || 'Projets de l\'agence')}</h2><div class="ori-pj">${P.items.map(p => `<div class="row"><span class="t">${p.c ? `<b>${E(p.c)}</b> · ` : ''}${E(p.t)}</span>${p.boutons.map(b => `<button data-of="${f(b.go)}">${E(b.t)}</button>`).join('')}</div>`).join('') || `<div class="ori-empty">${E(P.vide || 'Aucun projet en cours.')}</div>`}</div></div>` : '';
+    const listHtml = items => items.map(x => `<li><button data-of="${f(x.go)}">${x.c !== undefined ? `<span class="c">${E(x.c)}</span>` : ''}<span class="t">${E(x.t)}</span>${x.s ? `<span class="s">${E(x.s)}</span>` : ''}</button></li>`).join('');
+    el.innerHTML = `<div class="ori-scroll" style="height:100%;max-height:100%;overflow:auto;width:100%"><div class="ori${cfg.compact ? ' compact' : ''}">
+      <div><h1>${E(cfg.titre)}</h1>${cfg.lead ? `<p class="lead">${cfg.lead}</p>` : ''}</div>
+      ${cfg.reprendre ? `<button class="ori-resume" data-of="${f(cfg.reprendre.go)}">${svg('play')}<span><span class="k">Reprendre</span><b>${E(cfg.reprendre.t)}</b>${cfg.reprendre.s ? `<span class="s">${E(cfg.reprendre.s)}</span>` : ''}</span></button>` : ''}
+      <div><h2>Que voulez-vous faire ?</h2><div class="ori-acts">${cfg.actions.map(a => `<button class="ori-act${a.pri ? ' pri' : ''}" data-of="${f(a.go)}"><span class="ic">${svg(a.ic)}</span><span><b>${E(a.t)}</b><span>${E(a.s || '')}</span></span></button>`).join('')}</div></div>
+      <div class="ori-cols"><div>${L ? `<div class="ori-box"><h2>${E(L.titre)} ${L.items.length ? `<span style="font-weight:400">(${L.items.length})</span>` : ''}</h2>${L.recherche && L.items.length > 6 ? '<input type="search" class="ori-q" placeholder="Rechercher…" aria-label="Rechercher dans la liste">' : ''}<ul class="ori-ul">${listHtml(L.items) || `<li class="ori-empty">${E(L.vide || 'Rien pour le moment.')}</li>`}</ul></div>` : pjHtml}${cfg.extra || ''}</div>
+        <div>${L ? pjHtml : ''}
+          ${cfg.etapes ? `<div class="ori-box"><h2>Comment ça marche</h2><ol class="ori-steps">${cfg.etapes.map(s => `<li>${s}</li>`).join('')}</ol></div>` : ''}
+          ${cfg.pied ? `<p class="ori-foot">${cfg.pied}</p>` : ''}</div></div></div></div>`;
+    el.querySelectorAll('[data-of]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); const fn = fns[+b.dataset.of]; if (fn) fn(); }));
+    const q = el.querySelector('.ori-q'); if (q) q.addEventListener('input', () => { const v = q.value.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); el.querySelectorAll('.ori-ul li').forEach(li => { li.hidden = v && !li.textContent.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').includes(v); }); });
+  }
+  const date = t => { if (!t) return ''; const d = new Date(t); return isNaN(d) ? '' : d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }); };
+  return { render, date, svg };
+})();
+
+/* ================= TerraSourcing : interface ================= */
+const st = {
+  tab: 'home', f: Object.assign(clone(FILTER_DEFAULT), LS.get('filters', {})), res: [], total: 0, offset: 0, loading: false, err: '', sel: null,
+  profiles: LS.get('profiles', []), suivi: LS.get('suivi', {}), seen: LS.get('seen', {}), descOpts: LS.get('desc-opts', null),
+  newCounts: {}, suiviSel: null, suiviFilter: 'actifs', attr: { f: { kw: '', tit: '', days: 365 }, res: [], total: 0, facets: null, sel: null, loading: false },
+  plat: null, srcFilter: LS.get('srcFilter', 'tout'), refus: LS.get('refus', {}), refusSel: null
+};
+const saveF = () => LS.set('filters', st.f);
+const saveSuivi = () => { LS.set('suivi', st.suivi); badges(); };
+const saveProfiles = () => { LS.set('profiles', st.profiles); badges(); };
+const saveRefus = () => { LS.set('refus', st.refus); badges(); };
+const MOTIFS = ['', 'Hors périmètre (programme)', 'Zone géographique', 'Montant trop faible ou trop élevé', 'Délai trop court', 'Architecte non requis', 'Références insuffisantes', 'Charge de l\'agence', 'Autre'];
+/* « pas intéressé » : l'avis quitte la liste principale et rejoint l'onglet Refusés */
+function refuse(o) {
+  if (!o) return;
+  if (st.suivi[o.idweb]) { if (!confirm('Cet avis est dans le suivi des réponses. Le retirer du suivi et le classer dans les refusés ?')) return; delete st.suivi[o.idweb]; saveSuivi(); }
+  st.refus[o.idweb] = { ...snapshot(o), refuseLe: Date.now(), motif: '', note: '' }; saveRefus();
+  if (st.sel && st.sel.idweb === o.idweb) st.sel = null;
+  setStatus('Classé dans les refusés', 'ok');
+}
+function unrefuse(id) { delete st.refus[id]; saveRefus(); setStatus('Avis rétabli dans la liste', 'ok'); }
+function markSeen(id) { if (st.seen[id]) return; st.seen[id] = Date.now(); const ks = Object.keys(st.seen); if (ks.length > 6000) ks.sort((a, b) => st.seen[a] - st.seen[b]).slice(0, 1500).forEach(k => delete st.seen[k]); LS.set('seen', st.seen); }
+
+/* ---------- données des plateformes (fichier TerraSourcing-plateformes.js déposé par la collecte quotidienne) ---------- */
+function loadPlat() {
+  const D = window.TS_PLATEFORMES; if (!D || !Array.isArray(D.avis)) { st.plat = null; return; }
+  st.plat = { at: D.at || '', sources: D.sources || {}, avis: D.avis.map(platRec) };
+}
+function platRec(a) {
+  const o = { _plat: true, source: a.source || 'Plateforme', idweb: a.id, objet: a.objet || '', acheteur: a.acheteur || '', depts: a.depts || [], famille: '', familleL: a.source, nature: 'Avis de marché', procedure: a.procedure || '', typeProc: '', parution: a.parution || '', url: a.url || '', desc: [], typeMarche: [], etat: '', dlQuestions: '', titulaires: [], lie: [], dl: a.dl || '', dlKind: 'offres', dlOffres: a.dl || '', dlCand: '', links: (a.links || []).filter(x => x && x[1]), montant: null, duree: '', lieu: a.lieu || '', ville: '', description: a.texte || '', lots: [], criteres: [], conditions: [], cpv: [], idm: a.idm || '', boamp: a.boamp || '' };
+  o.text = norm([o.objet, o.acheteur, o.description, o.lieu].join(' '));
+  o.flags = flagsOf(o, {});
+  return o;
+}
+/* un avis de plateforme déjà publié au BOAMP n'est montré qu'une fois (version BOAMP, plus complète) : recherche du numéro de consultation dans le BOAMP, mémorisée */
+async function platBoampCheck() {
+  if (!st.plat) return;
+  const cache = LS.get('plat-boamp', {}), todo = st.plat.avis.filter(o => o.idm && !(o.idweb in cache));
+  st.plat.avis.forEach(o => { if (cache[o.idweb]) o.boamp = cache[o.idweb]; });
+  let i = 0, changed = false;
+  const worker = async () => { while (i < todo.length) { const o = todo[i++]; try { const j = await getJSON(`${BOAMP}/records?limit=1&select=idweb&where=${encodeURIComponent(`search(${qs(o.idm)})`)}`, 15000); const id = (j.results && j.results[0] && j.results[0].idweb) || ''; cache[o.idweb] = id; if (id) { o.boamp = id; changed = true; } } catch (e) { break; } } };
+  await Promise.all([worker(), worker(), worker(), worker()]);
+  const keep = new Set(st.plat.avis.map(o => o.idweb)); for (const k in cache) if (!keep.has(k)) delete cache[k];
+  LS.set('plat-boamp', cache);
+  if (changed && st.tab === 'search' && st.srcFilter !== 'plat') search();
+}
+const DESC_RX = { "Maîtrise d'oeuvre": /maitrise d.?oeuvre|\bmoe\b|architect|concours/, 'Etude': /etude|diagnostic/, "Assistance à maîtrise d'ouvrage": /assistance a maitrise d.?ouvrage|\bamo\b|programmation/, 'Ingénierie': /ingenierie|bureau d.?etudes/, 'Bâtiment': /batiment|construction|rehabilitation|renovation/, 'Urbanisme': /urbanis/, 'Paysage': /paysag/ };
+/* filtre appliqué aux avis des plateformes, comme la requête BOAMP */
+function platMatch(o, f) {
+  const kw = splitTerms(f.kw).map(norm), ex = splitTerms(f.excl).map(norm);
+  if (kw.length && !kw.some(k => o.text.includes(k))) return false;
+  if (ex.some(k => o.text.includes(k))) return false;
+  if (f.depts && f.depts.length && o.depts.length && !o.depts.some(d => f.depts.includes(d))) return false;
+  if ((f.concours || f.ac || f.cr) && !((f.concours && /concours/.test(o.text)) || (f.ac && /accord[- ]cadre/.test(o.text)) || (f.cr && /conception[- ]realisation/.test(o.text)))) return false;
+  if (f.open && o.dl && daysLeft(o.dl) < 0) return false;
+  if (+f.days && o.parution && o.parution < isoDay(addDays(-f.days))) return false;
+  // domaine : les avis des plateformes n'ont pas de descripteur, on cherche les mots du domaine dans l'objet
+  if (f.desc && f.desc.length && !f.desc.some(d => (DESC_RX[d] || new RegExp(norm(d).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))).test(o.text))) return false;
+  return true;
+}
+
+/* ---------- en-tête ---------- */
+function badges() {
+  const n = Object.values(st.newCounts).reduce((a, b) => a + (b || 0), 0), el = $('#nVeille');
+  if (el) { el.textContent = n ? n : st.profiles.length || ''; el.className = 'n' + (n ? ' new' : ''); el.title = n ? n + ' nouveaux avis' : ''; }
+  const act = Object.values(st.suivi).filter(s => ACTIFS.has(s.statut)).length; const e2 = $('#nSuivi'); if (e2) e2.textContent = act || ''; const e3 = $('#nRefus'); if (e3) e3.textContent = Object.keys(st.refus).length || '';
+}
+function setTab(t) { st.tab = t; $$('.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === t))); render(); }
+function render() { ({ home: renderHome, search: renderSearch, veille: renderVeille, suivi: renderSuivi, refus: renderRefus, attrib: renderAttrib })[st.tab](); badges(); }
+
+/* ================= Recherche ================= */
+function renderSearch() {
+  const v = $('#view');
+  v.innerHTML = `<div class="three"><aside class="filters" id="filters"></aside><section class="results" id="results"></section><aside class="detail" id="detail"></aside></div>`;
+  renderFilters(); renderResults(); renderDetail();
+}
+function chk(name, val, on, lab) { return `<label><input type="checkbox" data-${name}="${esc(val)}"${on ? ' checked' : ''}> ${esc(lab)}</label>`; }
+function renderFilters() {
+  const f = st.f, el = $('#filters');
+  const descs = [...new Set([...(f.desc || []), ...((st.descOpts || DESC_DEFAULT).slice(0, 12))])];
+  el.innerHTML = `
+  <div class="fgroup"><span class="lbl">Mots-clés</span><input type="search" id="fKw" value="${esc(f.kw)}" placeholder="ex. logements, médiathèque, école"><p class="hint">Séparez par des virgules : un avis est retenu s'il contient l'un des termes.</p>
+    <input type="search" id="fExcl" value="${esc(f.excl)}" placeholder="Mots à exclure (ex. voirie, assainissement)"></div>
+  <div class="fgroup"><span class="lbl">Domaine (descripteurs BOAMP) <button class="btn sm" id="fDescClear" title="Tous les domaines">Tous</button></span>
+    <div class="checks" id="fDesc">${descs.map(d => chk('desc', d, f.desc.includes(d), d)).join('')}</div>
+    <div class="ac"><input type="search" id="fDescAdd" placeholder="Autre domaine…" autocomplete="off"><div class="acl" id="fDescL" hidden></div></div></div>
+  <div class="fgroup"><span class="lbl">Type de mission</span><p class="hint">Rien coché : toutes les missions. Cochés : l'un ou l'autre.</p><div class="checks">${chk('flag', 'concours', f.concours, 'Concours')}${chk('flag', 'ac', f.ac, 'Accords-cadres')}${chk('flag', 'cr', f.cr, 'Conception-réalisation')}</div></div>
+  <div class="fgroup"><span class="lbl">Zone géographique <button class="btn sm" id="fDepClear">Toute la France</button></span>
+    <div class="chips">${f.depts.map(d => `<span class="chip">${esc(d)} ${esc(DEPTS[d] || '')}<button data-rmdep="${esc(d)}" aria-label="Retirer">×</button></span>`).join('') || '<span class="hint">Toute la France</span>'}</div>
+    <div class="ac"><input type="search" id="fDepAdd" placeholder="Ajouter un département (n° ou nom)" autocomplete="off"><div class="acl" id="fDepL" hidden></div></div>
+    <select id="fReg"><option value="">Ajouter une région…</option>${Object.keys(REGIONS).map(r => `<option>${esc(r)}</option>`).join('')}</select></div>
+  <div class="fgroup"><span class="lbl">Procédure</span><p class="hint">Rien coché : toutes les procédures.</p><div class="checks">${PROC.map(([c, l]) => chk('proc', c, f.proc.includes(c), l)).join('')}</div></div>
+  <div class="fgroup"><span class="lbl">Montant</span><div class="checks">${FAM.map(([c, l]) => chk('fam', c, f.fam.includes(c), l)).join('')}</div><p class="hint">Rien coché : tous les montants.</p></div>
+  <div class="fgroup"><span class="lbl">Avis</span><div class="checks">${NAT.map(([c, l]) => chk('nat', c, f.nat.includes(c), l)).join('')}</div>
+    ${chk('open', '1', f.open, 'Seulement les consultations encore ouvertes')}</div>
+  <div class="fgroup"><span class="lbl">Parus depuis</span><select id="fDays">${[[7, '7 jours'], [15, '15 jours'], [30, '30 jours'], [60, '2 mois'], [90, '3 mois'], [365, '1 an'], [0, 'toujours']].map(([n, l]) => `<option value="${n}"${+f.days === n ? ' selected' : ''}>${l}</option>`).join('')}</select></div>
+  <div class="fgroup"><span class="lbl">Sources</span><select id="fSrc">${[['tout', 'BOAMP et plateformes'], ['boamp', 'BOAMP seulement'], ['plat', 'Plateformes seulement']].map(([k, l]) => `<option value="${k}"${st.srcFilter === k ? ' selected' : ''}>${l}</option>`).join('')}</select>
+    <p class="hint">${st.plat ? `Plateformes collectées le ${new Date(st.plat.at).toLocaleString('fr-FR')} : ${st.plat.avis.length} avis (${Object.keys(st.plat.sources).join(', ')}).` : 'Pas encore de collecte des plateformes (AWS…) : seul le BOAMP est interrogé.'}</p></div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn pri" id="fGo">Rechercher</button><button class="btn" id="fReset">Réinitialiser</button></div>`;
+  const upd = (fn, now = true) => { fn(); saveF(); if (now) search(); };
+  $('#fGo').onclick = () => upd(() => { st.f.kw = $('#fKw').value.trim(); st.f.excl = $('#fExcl').value.trim(); });
+  ['#fKw', '#fExcl'].forEach(s => $(s).addEventListener('keydown', e => { if (e.key === 'Enter') $('#fGo').click(); }));
+  $('#fReset').onclick = () => upd(() => { st.f = clone(FILTER_DEFAULT); renderFilters(); });
+  $$('#filters [data-desc]').forEach(x => x.onchange = () => upd(() => { const d = x.dataset.desc; st.f.desc = x.checked ? [...st.f.desc, d] : st.f.desc.filter(y => y !== d); }));
+  $('#fDescClear').onclick = () => upd(() => { st.f.desc = []; renderFilters(); });
+  $$('#filters [data-flag]').forEach(x => x.onchange = () => upd(() => { st.f[x.dataset.flag] = x.checked; }));
+  $$('#filters [data-proc]').forEach(x => x.onchange = () => upd(() => { const c = x.dataset.proc; st.f.proc = x.checked ? [...st.f.proc, c] : st.f.proc.filter(y => y !== c); }));
+  $$('#filters [data-fam]').forEach(x => x.onchange = () => upd(() => { const c = x.dataset.fam; st.f.fam = x.checked ? [...st.f.fam, c] : st.f.fam.filter(y => y !== c); }));
+  $$('#filters [data-nat]').forEach(x => x.onchange = () => upd(() => { const c = x.dataset.nat; st.f.nat = x.checked ? [...st.f.nat, c] : st.f.nat.filter(y => y !== c); }));
+  $('#filters [data-open]').onchange = e => upd(() => { st.f.open = e.target.checked; });
+  $('#fDays').onchange = e => upd(() => { st.f.days = +e.target.value; });
+  $('#fSrc').onchange = e => { st.srcFilter = e.target.value; LS.set('srcFilter', st.srcFilter); search(); };
+  $('#fDepClear').onclick = () => upd(() => { st.f.depts = []; renderFilters(); });
+  $$('#filters [data-rmdep]').forEach(b => b.onclick = () => upd(() => { st.f.depts = st.f.depts.filter(d => d !== b.dataset.rmdep); renderFilters(); }));
+  $('#fReg').onchange = e => { const r = REGIONS[e.target.value]; if (!r) return; upd(() => { st.f.depts = [...new Set([...st.f.depts, ...r])]; renderFilters(); }); };
+  autoc($('#fDepAdd'), $('#fDepL'), q => { const n = norm(q); return Object.entries(DEPTS).filter(([c, nm]) => c.startsWith(q.toUpperCase()) || norm(nm).includes(n)).slice(0, 12).map(([c, nm]) => ({ v: c, l: `${c} ${nm}` })); }, it => upd(() => { if (!st.f.depts.includes(it.v)) st.f.depts.push(it.v); renderFilters(); $('#fDepAdd') && $('#fDepAdd').focus(); }));
+  autoc($('#fDescAdd'), $('#fDescL'), q => { const n = norm(q); return (st.descOpts || DESC_DEFAULT).filter(d => norm(d).includes(n)).slice(0, 15).map(d => ({ v: d, l: d })); }, it => upd(() => { if (!st.f.desc.includes(it.v)) st.f.desc.push(it.v); renderFilters(); }));
+}
+/* liste de suggestions sous un champ */
+function autoc(inp, list, find, pick) {
+  let items = [], on = 0;
+  const show = () => { items = inp.value.trim() ? find(inp.value.trim()) : []; on = 0; list.hidden = !items.length; list.innerHTML = items.map((it, i) => `<button type="button" data-i="${i}" class="${i === on ? 'on' : ''}">${esc(it.l)}</button>`).join(''); list.querySelectorAll('button').forEach(b => b.onmousedown = e => { e.preventDefault(); pick(items[+b.dataset.i]); }); };
+  inp.addEventListener('input', show);
+  inp.addEventListener('keydown', e => { if (list.hidden) return; if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); on = (on + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length; list.querySelectorAll('button').forEach((b, i) => b.classList.toggle('on', i === on)); } if (e.key === 'Enter' && items[on]) { e.preventDefault(); pick(items[on]); } if (e.key === 'Escape') list.hidden = true; });
+  inp.addEventListener('blur', () => setTimeout(() => { list.hidden = true; }, 150));
+}
+let searchSeq = 0;
+async function search(more = false) {
+  const seq = ++searchSeq; st.loading = true; st.err = '';
+  if (!more) { st.offset = 0; st.res = []; st.total = 0; }
+  renderResults();
+  const order = st.f.sort === 'limite' ? 'datelimitereponse asc, dateparution desc' : 'dateparution desc, idweb desc';
+  let boamp = [], total = 0;
+  if (st.srcFilter !== 'plat') {
+    try { const j = await boampRecords(whereOf(st.f), { offset: st.offset, order }); if (seq !== searchSeq) return; boamp = (j.results || []).map(parseRec); total = j.total_count || 0; }
+    catch (e) { if (seq !== searchSeq) return; st.err = e.message; }
+  }
+  let plat = [];
+  if (!more && st.plat && st.srcFilter !== 'boamp' && (!st.f.nat.length || st.f.nat.includes('Avis de marché'))) plat = st.plat.avis.filter(o => platMatch(o, st.f) && (st.srcFilter === 'plat' || !o.boamp));
+  st.res = more ? [...st.res, ...boamp] : [...plat, ...boamp]; st.total = total; st.platN = more ? st.platN : plat.length; st.offset += boamp.length; st.loading = false;
+  if (st.f.sort === 'limite') st.res.sort((a, b) => (a.dl || '9999').localeCompare(b.dl || '9999'));
+  else st.res.sort((a, b) => (b.parution || '').localeCompare(a.parution || ''));
+  renderResults();
+  setStatus(st.err ? 'BOAMP : ' + st.err : '', st.err ? 'err' : '');
+}
+function recRow(o) {
+  const s = st.suivi[o.idweb], isNew = !st.seen[o.idweb];
+  return `<div class="rec${st.sel && st.sel.idweb === o.idweb ? ' sel' : ''}${isNew ? '' : ' seen'}" data-id="${esc(o.idweb)}">
+    <div><button class="star${s ? ' on' : ''}" data-star="${esc(o.idweb)}" title="${s ? 'Dans le suivi : ' + STATUT[s.statut].l : 'Ajouter au suivi'}">${s ? '★' : '☆'}</button><br><button class="star refuse" data-refuse="${esc(o.idweb)}" title="Pas intéressé : retirer de la liste">✕</button>${isNew ? '<br><span class="newdot" title="Pas encore consulté"></span>' : ''}</div>
+    <div class="t">${esc(o.objet)}</div>
+    <div class="d"><span class="dl ${dlClass(o.dl)}" title="${o.dl ? 'Date limite des ' + o.dlKind : 'Date limite à lire dans l\'avis'}">${o.dl ? fmtDl(o.dl) : '—'}</span><br><span class="hint">${o.dl ? dlLabel(o.dl) : ''}</span></div>
+    <div class="m"><span>${esc(o.acheteur)}</span>${o.depts.length ? `<span class="mono">${esc(o.depts.join(', '))}</span>` : ''}<span>${o._plat ? `<span class="tag warn" title="Avis lu sur la plateforme, absent du BOAMP">${esc(o.source)}</span>` : esc(o.familleL)}</span>${o.procedure ? `<span>${esc(o.procedure)}</span>` : ''}<span>paru le ${fmtDay(o.parution)}</span>${o.nature && o.nature !== 'Avis de marché' ? `<span class="tag">${esc(o.nature)}</span>` : ''}${s ? `<span class="tag ${STATUT[s.statut].c}">${esc(STATUT[s.statut].l)}</span>` : ''}${o.flags.filter(x => ['archi', 'visite', 'concours', 'multi', 'cr', 'court'].includes(x[0])).map(x => `<span class="tag ${x[2]}">${esc(x[1])}</span>`).join('')}</div>
+  </div>`;
+}
+function renderResults() {
+  const el = $('#results'); if (!el) return;
+  const shown = st.res.filter(o => !st.refus[o.idweb]), nHid = st.res.length - shown.length;
+  const nNew = shown.filter(o => !st.seen[o.idweb]).length;
+  el.innerHTML = `<div class="rbar"><b>${st.loading && !st.res.length ? 'Recherche…' : (st.total + (st.platN || 0) - nHid) + ' avis'}</b>${nHid ? `<span class="hint" title="Avis classés « pas intéressé », visibles dans l'onglet Refusés">${nHid} refusé${nHid > 1 ? 's' : ''} masqué${nHid > 1 ? 's' : ''}</span>` : ''}${st.platN ? `<span class="hint">dont ${st.platN} des plateformes</span>` : ''}${nNew ? `<span class="tag acc">${nNew} non consultés</span>` : ''}
+    <span class="grow"></span><label class="hint">Tri <select id="rSort"><option value="parution"${st.f.sort !== 'limite' ? ' selected' : ''}>parution récente</option><option value="limite"${st.f.sort === 'limite' ? ' selected' : ''}>date limite proche</option></select></label>
+    <button class="btn sm" id="rSave" title="Enregistrer ces critères comme veille">+ Enregistrer comme veille</button>${nNew ? '<button class="btn sm" id="rSeen">Tout marquer consulté</button>' : ''}</div>
+    ${st.err ? `<p class="hint" style="color:var(--err);padding:10px 14px">BOAMP : ${esc(st.err)}</p>` : ''}
+    <p class="hint" style="padding:6px 14px 0">${esc(filterSummary(st.f))}</p>
+    <div class="rlist">${shown.map(recRow).join('') || (st.loading ? '' : '<div class="empty"><b>Aucun avis</b><span>Élargissez la zone, la période ou les domaines.</span></div>')}</div>
+    ${st.res.length - (st.platN || 0) < st.total ? `<div class="more"><button class="btn" id="rMore"${st.loading ? ' disabled' : ''}>${st.loading ? 'Chargement…' : `Afficher la suite (${st.total - st.res.length + (st.platN || 0)} restants)`}</button></div>` : ''}`;
+  $('#rSort').onchange = e => { st.f.sort = e.target.value; saveF(); search(); };
+  $('#rSave').onclick = () => saveProfile();
+  if ($('#rSeen')) $('#rSeen').onclick = () => { shown.forEach(o => markSeen(o.idweb)); renderResults(); };
+  if ($('#rMore')) $('#rMore').onclick = () => search(true);
+  $$('#results .rec').forEach(r => r.onclick = e => { if (e.target.closest('[data-star],[data-refuse]')) return; const o = st.res.find(x => x.idweb === r.dataset.id); st.sel = o; markSeen(o.idweb); $$('#results .rec').forEach(x => x.classList.toggle('sel', x === r)); r.classList.add('seen'); const d = r.querySelector('.newdot'); if (d) d.remove(); renderDetail(); });
+  $$('#results [data-refuse]').forEach(b => b.onclick = () => { refuse(st.res.find(x => x.idweb === b.dataset.refuse)); renderResults(); renderDetail(); });
+  $$('#results [data-star]').forEach(b => b.onclick = () => { const o = st.res.find(x => x.idweb === b.dataset.star); toggleSuivi(o); renderResults(); if (st.sel && st.sel.idweb === o.idweb) renderDetail(); });
+}
+
+/* ---------- fiche d'un avis ---------- */
+function detailHTML(o, opts = {}) {
+  if (!o) return `<div class="empty"><b>Choisissez un avis</b><span>La fiche reprend les dates, les liens vers le DCE, les lots, les critères et une première analyse (architecte requis, visite, accord-cadre…).</span></div>`;
+  const s = st.suivi[o.idweb];
+  const kv = (k, v) => v ? `<dt>${k}</dt><dd>${v}</dd>` : '';
+  return `<div class="card">
+    <div class="hint">${o._plat ? esc(o.source) : 'BOAMP n° ' + esc(o.idweb)} · ${esc(o.nature)}${o.etat && o.etat !== 'INITIAL' ? ' · ' + esc(o.etat) : ''}</div>
+    <div class="dtitle">${esc(o.objet)}</div>
+    <div class="links">${o.url ? `<a class="btn sm" href="${esc(o.url)}" target="_blank" rel="noopener">${o._plat ? 'Avis sur ' + esc(o.source) : 'Avis BOAMP'} ↗</a>` : ''}${o.links.map(([l, u]) => `<a class="btn sm${/^(DCE|RC)/.test(l) ? ' pri' : ''}" href="${esc(u)}" target="_blank" rel="noopener" title="${esc(u)}">${esc(l)} ↗</a>`).join('')}${o.boamp ? `<a class="btn sm" href="https://www.boamp.fr/pages/avis/?q=idweb:${esc(o.boamp)}" target="_blank" rel="noopener">Aussi au BOAMP ↗</a>` : ''}</div>
+    <div class="flags">${o.flags.map(x => `<span class="tag ${x[2]}">${esc(x[1])}</span>`).join('') || '<span class="hint">Aucun repère détecté dans le texte de l\'avis.</span>'}</div>
+    ${opts.noSuivi ? '' : `<div style="display:flex;gap:6px;flex-wrap:wrap">${s ? `<button class="btn on" data-go-suivi="${esc(o.idweb)}">★ Dans le suivi : ${esc(STATUT[s.statut].l)}</button>` : `<button class="btn pri" data-add-suivi="${esc(o.idweb)}">☆ Ajouter au suivi</button>`}<button class="btn" data-buyer="${esc(o.acheteur)}" title="Marchés attribués par cet acheteur">Attributions de l'acheteur</button>${st.refus[o.idweb] ? `<button class="btn" data-unrefuse="${esc(o.idweb)}">Rétablir (classé refusé)</button>` : `<button class="btn danger" data-refuse-d="${esc(o.idweb)}">✕ Pas intéressé</button>`}</div>`}
+  </div>
+  <div class="card"><h3>Dates</h3><dl class="kv">
+    ${kv('Date limite candidatures', o.dlCand ? `<b class="dl ${dlClass(o.dlCand)}">${fmtDl(o.dlCand)}</b> <span class="hint">${dlLabel(o.dlCand)}</span>` : '')}
+    ${kv(o.dlCand ? 'Date limite offres' : 'Date limite de réponse', o.dlOffres ? `<b class="dl ${dlClass(o.dlOffres)}">${fmtDl(o.dlOffres)}</b> <span class="hint">${dlLabel(o.dlOffres)}</span>` : '<span class="hint">non indiquée dans les données : voir l\'avis</span>')}
+    ${kv('Questions jusqu\'au', o.dlQuestions ? fmtDl(o.dlQuestions) : '')}
+    ${kv('Parution', fmtDay(o.parution))}${kv('N° de dossier agence', o.dl ? `<span class="mono">${dossierNo(o.dl)}</span>` : '')}
+  </dl></div>
+  <div class="card"><h3>Marché</h3><dl class="kv">
+    ${kv('Acheteur', esc(o.acheteur) + (o.ville ? ` <span class="hint">${esc(o.ville)}</span>` : ''))}${kv('Lieu d\'exécution', esc(o.lieu))}${kv('Départements', esc(o.depts.map(d => d + ' ' + (DEPTS[d] || '')).join(', ')))}
+    ${kv('Procédure', esc(o.procedure))}${kv('Seuil', esc(o.familleL))}${kv('Type', esc(o.typeMarche.join(', ')))}${kv('Domaines', esc(o.desc.join(', ')))}
+    ${kv('Montant estimé', o.montant ? NF0.format(o.montant) + ' € HT' : '')}${kv('Durée', esc(o.duree))}${kv('CPV', esc(o.cpv.join(', ')))}${kv('Attributaires', esc(o.titulaires.join(', ')))}
+  </dl></div>
+  ${o.description ? `<div class="card"><h3>Description</h3><div class="txt">${esc(o.description)}</div></div>` : ''}
+  ${o.lots.length ? `<div class="card"><h3>Lots <span class="hint">${o.lots.length}</span></h3><ol style="margin:0;padding-left:20px">${o.lots.map(l => `<li>${esc(l)}</li>`).join('')}</ol></div>` : ''}
+  ${o.criteres.length ? `<div class="card"><h3>Critères d'attribution</h3><ul style="margin:0;padding-left:18px">${o.criteres.map(c => `<li>${esc(c)}</li>`).join('')}</ul></div>` : ''}
+  ${o.conditions.length ? `<div class="card"><h3>Conditions de participation</h3>${o.conditions.map(c => `<div class="txt" style="max-height:140px">${esc(c)}</div>`).join('')}</div>` : ''}
+  ${!o._plat && o.lie.length ? `<div class="card"><h3>Avis liés</h3><div class="links">${o.lie.map(i => `<a class="btn sm" href="https://www.boamp.fr/pages/avis/?q=idweb:${esc(i)}" target="_blank" rel="noopener">${esc(i)} ↗</a>`).join('')}</div></div>` : ''}
+  ${!o._plat ? `<details class="noprint"><summary>Données brutes de l'avis</summary><div class="txt" style="max-height:400px">${esc(JSON.stringify(o._src, (k, v) => k === 'donnees' ? '[voir ci-dessous]' : v, 1))}\n\n${esc(String(o._src.donnees || '').slice(0, 20000))}</div></details>` : ''}`;
+}
+function bindDetail(root) {
+  $$('[data-add-suivi]', root).forEach(b => b.onclick = () => { const o = findRec(b.dataset.addSuivi); toggleSuivi(o, true); if (st.tab === 'search') { renderResults(); renderDetail(); } else render(); });
+  $$('[data-refuse-d]', root).forEach(b => b.onclick = () => { refuse(findRec(b.dataset.refuseD)); render(); });
+  $$('[data-unrefuse]', root).forEach(b => b.onclick = () => { unrefuse(b.dataset.unrefuse); render(); });
+  $$('[data-go-suivi]', root).forEach(b => b.onclick = () => { st.suiviSel = b.dataset.goSuivi; setTab('suivi'); });
+  $$('[data-buyer]', root).forEach(b => b.onclick = () => { st.attr.f = { kw: '', tit: '', buyer: b.dataset.buyer, days: 1095 }; setTab('attrib'); attrSearch(); });
+}
+function renderDetail() { const el = $('#detail'); if (!el) return; el.innerHTML = detailHTML(st.sel); bindDetail(el); el.scrollTop = 0; }
+function findRec(id) { return st.res.find(x => x.idweb === id) || st.attr.res.find(x => x.idweb === id) || (st.sel && st.sel.idweb === id ? st.sel : null) || (st.plat && st.plat.avis.find(x => x.idweb === id)); }
+
+/* ================= Suivi des réponses ================= */
+function snapshot(o) {
+  return { idweb: o.idweb, source: o._plat ? o.source : 'BOAMP', objet: o.objet, acheteur: o.acheteur, depts: o.depts, procedure: o.procedure, famille: o.familleL, url: o.url, links: o.links, dl: o.dl, dlKind: o.dlKind, dlCand: o.dlCand, dlOffres: o.dlOffres, dlQuestions: o.dlQuestions, parution: o.parution, montant: o.montant, lots: o.lots, flags: o.flags.map(x => x[1]) };
+}
+function toggleSuivi(o, onlyAdd) {
+  if (!o) return;
+  if (st.suivi[o.idweb]) { if (onlyAdd) return; if (!confirm('Retirer cet avis du suivi ? Les notes saisies seront perdues.')) return; delete st.suivi[o.idweb]; saveSuivi(); setStatus('Retiré du suivi'); return; }
+  const fl = o.flags.map(x => x[0]);
+  st.suivi[o.idweb] = { ...snapshot(o), statut: 'etude', dossier: dossierNo(o.dl), added: Date.now(), updated: Date.now(), visite: fl.includes('visite') ? (o.flags.find(x => x[0] === 'visite')[1].includes('obligatoire') ? 'obligatoire' : 'prevue') : '', visiteDate: '', competences: '', pieces: '', notes: '', mandataire: '', go: { archi: fl.includes('archi'), perim: false, refs: false, delai: false }, montantOffre: '', dateDepot: '', resultat: '' };
+  saveSuivi(); setStatus('Ajouté au suivi', 'ok');
+}
+function suiviList() {
+  let L = Object.values(st.suivi);
+  if (st.suiviFilter === 'actifs') L = L.filter(s => ACTIFS.has(s.statut)); else if (st.suiviFilter !== 'tous') L = L.filter(s => s.statut === st.suiviFilter);
+  return L.sort((a, b) => (a.dl || '9999').localeCompare(b.dl || '9999'));
+}
+function renderSuivi() {
+  const all = Object.values(st.suivi), cnt = k => all.filter(s => s.statut === k).length;
+  const L = suiviList(), sel = st.suivi[st.suiviSel];
+  const soon = all.filter(s => ACTIFS.has(s.statut) && s.dl && daysLeft(s.dl) >= 0 && daysLeft(s.dl) <= 14).length;
+  $('#view').innerHTML = `<div class="two"><section class="results"><div class="rbar"><div class="stbar">
+      <button class="btn sm${st.suiviFilter === 'actifs' ? ' on' : ''}" data-sf="actifs">En cours <span class="n">${all.filter(s => ACTIFS.has(s.statut)).length}</span></button>
+      ${STATUTS.map(([k, l]) => `<button class="btn sm${st.suiviFilter === k ? ' on' : ''}" data-sf="${k}">${esc(l)} <span class="n">${cnt(k)}</span></button>`).join('')}
+      <button class="btn sm${st.suiviFilter === 'tous' ? ' on' : ''}" data-sf="tous">Tous <span class="n">${all.length}</span></button></div>
+      ${soon ? `<span class="tag warn">${soon} échéance(s) dans les 14 jours</span>` : ''}</div>
+    ${L.length ? `<table class="t"><thead><tr><th>Dossier</th><th>Date limite</th><th>Objet</th><th>Acheteur</th><th>Statut</th><th>Visite</th></tr></thead><tbody>${L.map(s => `<tr class="row${s.idweb === st.suiviSel ? ' sel' : ''}" data-sid="${esc(s.idweb)}"><td class="mono">${esc(s.dossier || '')}</td><td><span class="dl ${dlClass(s.dl)}">${s.dl ? fmtDl(s.dl) : '—'}</span><br><span class="hint">${s.dl ? dlLabel(s.dl) + (s.dlKind === 'candidatures' ? ', candidatures' : '') : ''}</span></td><td>${esc(s.objet)}</td><td>${esc(s.acheteur)}<br><span class="hint mono">${esc((s.depts || []).join(', '))}</span></td><td><span class="tag ${STATUT[s.statut].c}">${esc(STATUT[s.statut].l)}</span></td><td>${s.visite === 'obligatoire' ? '<span class="tag err">Obligatoire</span>' : s.visite === 'prevue' ? '<span class="tag warn">Prévue</span>' : s.visite === 'non' ? 'Non' : ''}${s.visiteDate ? '<br><span class="hint">' + esc(s.visiteDate) + '</span>' : ''}</td></tr>`).join('')}</tbody></table>`
+      : `<div class="empty"><b>Rien à suivre ici</b><span>Dans la recherche, l'étoile ☆ d'un avis l'ajoute au suivi. On y note ensuite la décision, la visite, l'équipe, les pièces et le résultat.</span></div>`}
+  </section><aside class="detail" id="sdetail"></aside></div>`;
+  $$('[data-sf]').forEach(b => b.onclick = () => { st.suiviFilter = b.dataset.sf; renderSuivi(); });
+  $$('[data-sid]').forEach(r => r.onclick = () => { st.suiviSel = r.dataset.sid; renderSuivi(); });
+  renderSuiviDetail(sel);
+}
+function renderSuiviDetail(s) {
+  const el = $('#sdetail'); if (!el) return;
+  if (!s) { el.innerHTML = `<div class="empty"><b>Choisissez une ligne</b><span>La fiche de suivi reprend la consultation et les éléments de la réponse.</span></div>`; return; }
+  const fld = (k, lab, ph = '', type = 'text') => `<div class="fld"><label for="sf_${k}">${lab}</label><input type="${type}" id="sf_${k}" data-sk="${k}" value="${esc(s[k] || '')}" placeholder="${esc(ph)}"></div>`;
+  const ta = (k, lab, ph) => `<div class="fld"><label for="sf_${k}">${lab}</label><textarea id="sf_${k}" data-sk="${k}" placeholder="${esc(ph)}">${esc(s[k] || '')}</textarea></div>`;
+  const go = s.go || {};
+  const goN = ['archi', 'perim', 'refs', 'delai'].filter(k => go[k]).length;
+  el.innerHTML = `<div class="card">
+    <div class="hint">${esc(s.source || 'BOAMP')} ${s.source === 'BOAMP' || !s.source ? 'n° ' + esc(s.idweb) : ''}</div>
+    <div class="dtitle">${esc(s.objet)}</div>
+    <div class="hint">${esc(s.acheteur)} · ${esc((s.depts || []).join(', '))} · ${esc(s.procedure || '')}</div>
+    <div class="links">${s.url ? `<a class="btn sm" href="${esc(s.url)}" target="_blank" rel="noopener">Avis ↗</a>` : ''}${(s.links || []).map(([l, u]) => `<a class="btn sm${/^(DCE|RC)/.test(l) ? ' pri' : ''}" href="${esc(u)}" target="_blank" rel="noopener">${esc(l)} ↗</a>`).join('')}</div>
+    <div class="flags">${(s.flags || []).map(x => `<span class="tag">${esc(x)}</span>`).join('')}</div>
+    <dl class="kv">${s.dlCand ? `<dt>Candidatures</dt><dd class="dl ${dlClass(s.dlCand)}">${fmtDl(s.dlCand)} · ${dlLabel(s.dlCand)}</dd>` : ''}<dt>${s.dlCand ? 'Offres' : 'Date limite'}</dt><dd class="dl ${dlClass(s.dlOffres || s.dl)}">${s.dlOffres || s.dl ? fmtDl(s.dlOffres || s.dl) + ' · ' + dlLabel(s.dlOffres || s.dl) : '—'}</dd>${s.dlQuestions ? `<dt>Questions</dt><dd>${fmtDl(s.dlQuestions)}</dd>` : ''}</dl>
+  </div>
+  <div class="card"><h3>Décision</h3>
+    <div class="fld"><label for="sf_statut">Statut</label><select id="sf_statut">${STATUTS.map(([k, l]) => `<option value="${k}"${s.statut === k ? ' selected' : ''}>${esc(l)}</option>`).join('')}</select></div>
+    <div class="go"><span class="lbl">Go / No-go ${goN}/4</span>
+      <label><input type="checkbox" data-go="archi"${go.archi ? ' checked' : ''}> L'architecture est requise ou pertinente (Ordre, bâtiment)</label>
+      <label><input type="checkbox" data-go="perim"${go.perim ? ' checked' : ''}> Programme dans le périmètre de l'agence</label>
+      <label><input type="checkbox" data-go="refs"${go.refs ? ' checked' : ''}> Références pertinentes (programme, mission, budget ±50 %)</label>
+      <label><input type="checkbox" data-go="delai"${go.delai ? ' checked' : ''}> Délai et visite compatibles avec la charge</label></div>
+  </div>
+  <div class="card"><h3>Consultation</h3><div class="grid2">
+    ${fld('dossier', 'N° de dossier', 'AAMMJJ')}${fld('mandataire', 'Mandataire', 'Votre agence')}
+    <div class="fld"><label for="sf_visite">Visite</label><select id="sf_visite" data-sk="visite">${[['', 'Non précisé'], ['obligatoire', 'Obligatoire'], ['prevue', 'Prévue, facultative'], ['non', 'Non']].map(([k, l]) => `<option value="${k}"${(s.visite || '') === k ? ' selected' : ''}>${l}</option>`).join('')}</select></div>
+    ${fld('visiteDate', 'Date et contact de visite', 'ex. 04/11 10h, M. X 06…')}</div>
+    ${ta('competences', 'Compétences de l\'équipe', 'Architecte (mandataire), BET structure, fluides, économiste…')}
+    ${ta('pieces', 'Pièces à rendre', 'DC1, DC2, attestations, références, mémoire…')}
+  </div>
+  <div class="card"><h3>Dépôt et résultat</h3><div class="grid2">
+    ${fld('dateDepot', 'Date de dépôt', 'JJ/MM/AAAA')}${fld('montantOffre', 'Montant de l\'offre (€ HT)', '')}
+    ${fld('resultat', 'Résultat, attributaire', 'ex. retenu au 2e tour, attribué à…')}</div>
+    ${ta('notes', 'Notes', 'Questions posées, échanges, points de vigilance…')}
+  </div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn danger" id="sfDel">Retirer du suivi</button></div>`;
+  const save = () => { s.updated = Date.now(); saveSuivi(); setStatus('Enregistré', 'ok'); };
+  $$('#sdetail [data-sk]').forEach(x => x.onchange = () => { s[x.dataset.sk] = x.value; save(); if (['dossier', 'visite', 'visiteDate'].includes(x.dataset.sk)) refreshSuiviTable(); });
+  $$('#sdetail [data-go]').forEach(x => x.onchange = () => { s.go = s.go || {}; s.go[x.dataset.go] = x.checked; save(); renderSuiviDetail(s); });
+  $('#sf_statut').onchange = e => { s.statut = e.target.value; save(); renderSuivi(); };
+  $('#sfDel').onclick = () => { if (!confirm('Retirer cet avis du suivi ? Les notes saisies seront perdues.')) return; delete st.suivi[s.idweb]; st.suiviSel = null; saveSuivi(); renderSuivi(); };
+}
+function refreshSuiviTable() { const keep = $('#sdetail') && $('#sdetail').scrollTop; const s = st.suivi[st.suiviSel]; renderSuivi(); if ($('#sdetail')) $('#sdetail').scrollTop = keep; }
+
+/* ================= Refusés ================= */
+function renderRefus() {
+  const L = Object.values(st.refus).sort((a, b) => b.refuseLe - a.refuseLe), sel = st.refus[st.refusSel];
+  $('#view').innerHTML = `<div class="two"><section class="results"><div class="rbar"><b>${L.length} avis refusé${L.length > 1 ? 's' : ''}</b><span class="hint">Ces avis n'apparaissent plus dans la recherche. « Rétablir » les y remet.</span></div>
+    ${L.length ? `<table class="t"><thead><tr><th>Refusé le</th><th>Objet</th><th>Acheteur</th><th>Date limite</th><th>Motif</th><th></th></tr></thead><tbody>${L.map(r => `<tr class="row${r.idweb === st.refusSel ? ' sel' : ''}" data-rid="${esc(r.idweb)}"><td class="mono">${new Date(r.refuseLe).toLocaleDateString('fr-FR')}</td><td>${esc(r.objet)}</td><td>${esc(r.acheteur)}<br><span class="hint mono">${esc((r.depts || []).join(', '))}</span></td><td><span class="dl ${dlClass(r.dl)}">${r.dl ? fmtDl(r.dl) : '—'}</span></td>
+      <td><select data-motif="${esc(r.idweb)}">${MOTIFS.map(m => `<option value="${esc(m)}"${(r.motif || '') === m ? ' selected' : ''}>${m ? esc(m) : 'Motif…'}</option>`).join('')}</select></td><td><button class="btn sm" data-unref="${esc(r.idweb)}">Rétablir</button></td></tr>`).join('')}</tbody></table>`
+      : `<div class="empty"><b>Aucun avis refusé</b><span>Dans la recherche, le bouton ✕ d'un avis, ou « Pas intéressé » sur sa fiche, le retire de la liste et le range ici.</span></div>`}
+  </section><aside class="detail" id="rdetail"></aside></div>`;
+  $$('[data-rid]').forEach(r => r.onclick = e => { if (e.target.closest('select,button')) return; st.refusSel = r.dataset.rid; renderRefus(); });
+  $$('[data-motif]').forEach(x => x.onchange = () => { st.refus[x.dataset.motif].motif = x.value; saveRefus(); });
+  $$('[data-unref]').forEach(b => b.onclick = () => { unrefuse(b.dataset.unref); if (st.refusSel === b.dataset.unref) st.refusSel = null; renderRefus(); });
+  const el = $('#rdetail');
+  if (!sel) { el.innerHTML = '<div class="empty"><b>Choisissez une ligne</b><span>Pour revoir l\'avis ou noter la raison du refus.</span></div>'; return; }
+  el.innerHTML = `<div class="card"><div class="hint">${esc(sel.source || 'BOAMP')} ${!sel.source || sel.source === 'BOAMP' ? 'n° ' + esc(sel.idweb) : ''}</div><div class="dtitle">${esc(sel.objet)}</div><div class="hint">${esc(sel.acheteur)} · ${esc((sel.depts || []).join(', '))} · ${esc(sel.procedure || '')}</div>
+    <div class="links">${sel.url ? `<a class="btn sm" href="${esc(sel.url)}" target="_blank" rel="noopener">Avis ↗</a>` : ''}${(sel.links || []).map(([l, u]) => `<a class="btn sm" href="${esc(u)}" target="_blank" rel="noopener">${esc(l)} ↗</a>`).join('')}</div>
+    <div class="flags">${(sel.flags || []).map(x => `<span class="tag">${esc(x)}</span>`).join('')}</div>
+    <div class="fld"><label for="rNote">Note</label><textarea id="rNote" placeholder="Pourquoi on ne répond pas, à revoir si…">${esc(sel.note || '')}</textarea></div>
+    <div style="display:flex;gap:6px"><button class="btn" id="rBack">Rétablir dans la liste</button></div></div>`;
+  $('#rNote').onchange = e => { sel.note = e.target.value; saveRefus(); setStatus('Enregistré', 'ok'); };
+  $('#rBack').onclick = () => { unrefuse(sel.idweb); st.refusSel = null; renderRefus(); };
+}
+
+/* ================= Veilles ================= */
+function saveProfile() {
+  const nom = prompt('Nom de la veille', filterSummary(st.f).slice(0, 60)); if (!nom) return;
+  st.profiles.push({ id: uid(), nom: nom.trim(), f: clone(st.f), src: st.srcFilter, lastSeen: today(), created: Date.now() });
+  saveProfiles(); setStatus('Veille enregistrée', 'ok'); refreshCounts();
+}
+async function refreshCounts() {
+  await Promise.all(st.profiles.map(async p => {
+    try { st.newCounts[p.id] = await boampCount(whereOf(p.f, { since: p.lastSeen, noOpen: false })); }
+    catch (e) { st.newCounts[p.id] = null; }
+    if (st.plat) st.newCounts[p.id] = (st.newCounts[p.id] || 0) + st.plat.avis.filter(o => !o.boamp && o.parution > p.lastSeen && platMatch(o, p.f)).length;
+  }));
+  badges(); if (st.tab === 'veille') renderVeille();
+}
+function renderVeille() {
+  $('#view').innerHTML = `<div class="pane"><div class="cols">
+    ${st.profiles.map(p => { const n = st.newCounts[p.id]; return `<section class="card"><h3>${esc(p.nom)} ${n ? `<span class="tag acc">${n} nouveau${n > 1 ? 'x' : ''}</span>` : n === 0 ? '<span class="hint">rien de nouveau</span>' : n === null ? '<span class="hint">BOAMP injoignable</span>' : '<span class="hint">…</span>'}</h3>
+      <p class="hint">${esc(filterSummary(p.f))}</p><p class="hint">Dernière consultation : ${fmtDay(p.lastSeen)}</p>
+      <div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn pri" data-open="${p.id}">Ouvrir${n ? ' les nouveaux' : ''}</button><button class="btn" data-upd="${p.id}" title="Remplacer les critères par ceux de la recherche en cours">Mettre à jour les critères</button><button class="btn" data-ren="${p.id}">Renommer</button><button class="btn danger" data-del="${p.id}">Supprimer</button></div></section>`; }).join('')}
+    <section class="card"><h3>Nouvelle veille</h3><p class="hint">Réglez les filtres dans l'onglet Recherche, puis « + Enregistrer comme veille ». À chaque ouverture de TerraSourcing, chaque veille compte les avis parus depuis votre dernière consultation.</p><p class="hint">Les avis des plateformes (AWS…) s'ajoutent après chaque collecte quotidienne.</p><button class="btn" id="vNew">Aller à la recherche</button></section>
+  </div></div>`;
+  $$('[data-open]').forEach(b => b.onclick = () => { const p = st.profiles.find(x => x.id === b.dataset.open); const n = st.newCounts[p.id]; st.f = clone(p.f); if (n) st.f.days = Math.max(1, Math.ceil((Date.now() - new Date(p.lastSeen)) / 864e5) + 1); st.srcFilter = p.src || 'tout'; saveF(); p.lastSeen = today(); st.newCounts[p.id] = 0; saveProfiles(); setTab('search'); search(); });
+  $$('[data-upd]').forEach(b => b.onclick = () => { const p = st.profiles.find(x => x.id === b.dataset.upd); if (!confirm(`Remplacer les critères de « ${p.nom} » par :\n${filterSummary(st.f)} ?`)) return; p.f = clone(st.f); saveProfiles(); refreshCounts(); });
+  $$('[data-ren]').forEach(b => b.onclick = () => { const p = st.profiles.find(x => x.id === b.dataset.ren); const n = prompt('Nom de la veille', p.nom); if (n) { p.nom = n.trim(); saveProfiles(); renderVeille(); } });
+  $$('[data-del]').forEach(b => b.onclick = () => { const p = st.profiles.find(x => x.id === b.dataset.del); if (!confirm(`Supprimer la veille « ${p.nom} » ?`)) return; st.profiles = st.profiles.filter(x => x !== p); saveProfiles(); renderVeille(); });
+  $('#vNew').onclick = () => setTab('search');
+}
+
+/* ================= Attributions ================= */
+function attrWhere() {
+  const a = st.attr.f, f = { ...clone(FILTER_DEFAULT), desc: st.f.desc, depts: st.f.depts, kw: a.kw, days: a.days, open: false };
+  let w = whereOf(f, { nat: ['Résultat de marché'], titulaire: a.tit || '' });
+  if (a.buyer) w += ` AND nomacheteur=${qs(a.buyer)}`;
+  return w;
+}
+async function attrSearch(more) {
+  const A = st.attr; A.loading = true; if (!more) { A.res = []; A.total = 0; A.facets = null; } renderAttrib();
+  try {
+    const w = attrWhere();
+    const [j, fc] = await Promise.all([boampRecords(w, { offset: A.res.length }), more ? Promise.resolve(A.facets) : boampFacets(['titulaire', 'nomacheteur'], w).catch(() => null)]);
+    A.res = [...A.res, ...(j.results || []).map(parseRec)]; A.total = j.total_count || 0; A.facets = fc; A.err = '';
+  } catch (e) { A.err = e.message; }
+  A.loading = false; renderAttrib();
+}
+function renderAttrib() {
+  const A = st.attr, a = A.f;
+  $('#view').innerHTML = `<div class="two"><section class="results"><div class="rbar">
+      <input type="search" id="aKw" value="${esc(a.kw)}" placeholder="Mots-clés (ex. groupe scolaire)" style="flex:1 1 180px">
+      <input type="search" id="aTit" value="${esc(a.tit)}" placeholder="Attributaire (nom d'agence)" style="flex:1 1 160px">
+      <select id="aDays">${[[90, '3 mois'], [365, '1 an'], [730, '2 ans'], [1095, '3 ans']].map(([n, l]) => `<option value="${n}"${+a.days === n ? ' selected' : ''}>${l}</option>`).join('')}</select>
+      <button class="btn pri" id="aGo">Rechercher</button></div>
+    <p class="hint" style="padding:6px 14px">Résultats de marchés publiés au BOAMP. Domaines et zone : ceux de l'onglet Recherche (${esc(filterSummary({ ...st.f, kw: '', excl: '' }))}).${a.buyer ? ` Acheteur : <b>${esc(a.buyer)}</b> <button class="btn sm" id="aNoBuyer">tous les acheteurs</button>` : ''}</p>
+    ${A.err ? `<p class="hint" style="color:var(--err);padding:0 14px">BOAMP : ${esc(A.err)}</p>` : ''}
+    ${A.facets && A.facets.titulaire && A.facets.titulaire.length ? `<div style="padding:4px 14px 10px"><span class="lbl">Attributaires les plus fréquents</span><div class="chips" style="margin-top:4px">${A.facets.titulaire.slice(0, 16).map(x => `<button class="btn sm" data-tit="${esc(x.v)}">${esc(x.v)} <span class="hint">${x.n}</span></button>`).join('')}</div></div>` : ''}
+    <table class="t"><thead><tr><th>Parution</th><th>Objet</th><th>Acheteur</th><th>Attributaire(s)</th></tr></thead><tbody>
+    ${A.res.map(o => `<tr class="row${A.sel && A.sel.idweb === o.idweb ? ' sel' : ''}" data-aid="${esc(o.idweb)}"><td class="mono">${fmtDay(o.parution)}</td><td>${esc(o.objet)}</td><td>${esc(o.acheteur)}<br><span class="hint mono">${esc(o.depts.join(', '))}</span></td><td>${esc(o.titulaires.join(', ')) || '<span class="hint">voir l\'avis</span>'}</td></tr>`).join('')}</tbody></table>
+    ${A.loading ? '<p class="hint" style="padding:14px">Recherche…</p>' : !A.res.length ? '<div class="empty"><b>Aucun résultat</b><span>Lancez une recherche, ou élargissez la période.</span></div>' : ''}
+    ${A.res.length < A.total ? `<div class="more"><button class="btn" id="aMore">Afficher la suite (${A.total - A.res.length})</button></div>` : ''}
+  </section><aside class="detail" id="adetail"></aside></div>`;
+  const go = () => { a.kw = $('#aKw').value.trim(); a.tit = $('#aTit').value.trim(); a.days = +$('#aDays').value; attrSearch(); };
+  $('#aGo').onclick = go; ['#aKw', '#aTit'].forEach(s => $(s).addEventListener('keydown', e => { if (e.key === 'Enter') go(); }));
+  if ($('#aNoBuyer')) $('#aNoBuyer').onclick = () => { delete a.buyer; attrSearch(); };
+  if ($('#aMore')) $('#aMore').onclick = () => attrSearch(true);
+  $$('[data-tit]').forEach(b => b.onclick = () => { a.tit = b.dataset.tit; attrSearch(); });
+  $$('[data-aid]').forEach(r => r.onclick = () => { A.sel = A.res.find(x => x.idweb === r.dataset.aid); renderAttrib(); });
+  const el = $('#adetail'); el.innerHTML = detailHTML(A.sel, { noSuivi: false }); bindDetail(el);
+}
+
+/* ================= Sauvegardes et exports ================= */
+function dl(name, data, type) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type })); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
+const csvCell = v => { v = String(v ?? ''); return /[;"\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+function loadXLSX() { return window.XLSX ? Promise.resolve() : new Promise((ok, ko) => { const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; s.onload = ok; s.onerror = () => ko(new Error('bibliothèque Excel injoignable')); document.head.appendChild(s); }); }
+async function saveAct(act) {
+  const stamp = today();
+  if (act === 'backup') dl(`TerraSourcing ${stamp}.json`, JSON.stringify({ app: 'TerraSourcing', version: APP_VERSION, at: new Date().toISOString(), profiles: st.profiles, suivi: st.suivi, refus: st.refus, seen: st.seen, filters: st.f }, null, 1), 'application/json');
+  if (act === 'restore') $('#jsonIn').click();
+  if (act === 'csv') {
+    const rows = [['Source', 'Référence', 'Objet', 'Acheteur', 'Départements', 'Procédure', 'Parution', 'Date limite', 'Repères', 'Lien avis', 'Lien DCE'], ...st.res.map(o => [o._plat ? o.source : 'BOAMP', o.idweb, o.objet, o.acheteur, o.depts.join(' '), o.procedure, fmtDay(o.parution), fmtDl(o.dl), o.flags.map(x => x[1]).join(', '), o.url, (o.links[0] || [])[1] || ''])];
+    dl(`TerraSourcing recherche ${stamp}.csv`, '﻿' + rows.map(r => r.map(csvCell).join(';')).join('\r\n'), 'text/csv');
+  }
+  if (act === 'xlsx') {
+    try { setStatus('Préparation du fichier Excel…'); await loadXLSX(); } catch (e) { setStatus(e.message, 'err'); return; }
+    const L = Object.values(st.suivi).sort((a, b) => (a.dl || '9999').localeCompare(b.dl || '9999'));
+    const aoa = [['Dossier', 'Statut', 'Date limite', 'Type', 'Objet', 'Acheteur', 'Départements', 'Procédure', 'Visite', 'Visite : date, contact', 'Compétences', 'Pièces à rendre', 'Go/No-go', 'Date de dépôt', 'Montant offre € HT', 'Résultat', 'Notes', 'Source', 'Référence', 'Lien avis', 'Lien DCE'],
+      ...L.map(s => [s.dossier, STATUT[s.statut].l, fmtDl(s.dl), s.dlKind || '', s.objet, s.acheteur, (s.depts || []).join(' '), s.procedure, s.visite, s.visiteDate, s.competences, s.pieces, ['archi', 'perim', 'refs', 'delai'].filter(k => (s.go || {})[k]).length + '/4', s.dateDepot, s.montantOffre, s.resultat, s.notes, s.source || 'BOAMP', s.idweb, s.url, ((s.links || [])[0] || [])[1] || ''])];
+    const ws = XLSX.utils.aoa_to_sheet(aoa); ws['!cols'] = [8, 14, 16, 12, 60, 34, 10, 16, 12, 22, 40, 40, 9, 12, 14, 24, 40, 10, 12, 30, 30].map(w => ({ wch: w }));
+    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Suivi'); XLSX.writeFile(wb, `TerraSourcing suivi ${stamp}.xlsx`); setStatus('Fichier Excel enregistré', 'ok');
+  }
+}
+async function restore(file) {
+  try {
+    const o = JSON.parse(await file.text()); if (o.app !== 'TerraSourcing') throw new Error('ce fichier n\'est pas une sauvegarde TerraSourcing');
+    const ids = new Set(st.profiles.map(p => p.id)); for (const p of o.profiles || []) { if (ids.has(p.id)) st.profiles = st.profiles.filter(x => x.id !== p.id); st.profiles.push(p); }
+    Object.assign(st.suivi, o.suivi || {}); Object.assign(st.seen, o.seen || {}); Object.assign(st.refus, o.refus || {}); saveRefus();
+    saveProfiles(); saveSuivi(); LS.set('seen', st.seen); setStatus(`Sauvegarde restaurée : ${(o.profiles || []).length} veille(s), ${Object.keys(o.suivi || {}).length} ligne(s) de suivi`, 'ok'); render(); refreshCounts();
+  } catch (e) { setStatus('Restauration impossible : ' + e.message, 'err'); }
+}
+
+/* ================= Démarrage ================= */
+async function loadDescOpts() {
+  const c = LS.get('desc-cache', null); if (c && Date.now() - c.at < 7 * 864e5) { st.descOpts = c.v; return; }
+  try {
+    const fc = await boampFacets(['descripteur_libelle'], `dateparution >= date'${isoDay(addDays(-365))}' AND (type_marche_facette="Services" OR descripteur_libelle IN ("Bâtiment","Maîtrise d'oeuvre"))`);
+    const v = (fc.descripteur_libelle || []).map(x => x.v);
+    const pref = DESC_DEFAULT.filter(d => v.includes(d)); st.descOpts = [...new Set([...pref, ...v])];
+    LS.set('desc-cache', { at: Date.now(), v: st.descOpts }); LS.set('desc-opts', st.descOpts);
+    if (st.tab === 'search') renderFilters();
+  } catch (e) {}
+}
+/* ===== Accueil de TerraSourcing : que faire en arrivant ===== */
+function renderHome() {
+  const act = Object.values(st.suivi).filter(s => ACTIFS.has(s.statut)).sort((a, b) => String(a.dl || '9').localeCompare(String(b.dl || '9')));
+  Ori.render($('#view'), {
+    titre: 'TerraSourcing',
+    lead: 'Veille sur les appels d\'offres publics de maîtrise d\'œuvre : BOAMP en direct et plateformes (AWS) collectées chaque matin, veilles enregistrées, suivi des réponses jusqu\'au résultat, attributions des concurrents.',
+    reprendre: act.length ? { t: `${act.length} réponse(s) en cours`, s: act[0].dl ? 'Prochaine échéance : ' + act[0].objet.slice(0, 80) + ' (' + new Date(act[0].dl).toLocaleDateString('fr-FR') + ')' : '', go: () => setTab('suivi') } : null,
+    actions: [
+      { ic: 'search', pri: true, t: 'Chercher des appels d\'offres', s: 'Mots-clés, départements, procédure, montant ; BOAMP et plateformes.', go: () => setTab('search') },
+      { ic: 'star', t: 'Mes veilles', s: st.profiles.length ? `${st.profiles.length} recherche(s) enregistrée(s), nouveaux avis comptés à l\'ouverture.` : 'Enregistrez une recherche pour être averti des nouveaux avis.', go: () => setTab('veille') },
+      { ic: 'proj', t: 'Suivi des réponses', s: 'Go / no-go, visite, équipe, pièces, dépôt, résultat ; export Excel.', go: () => setTab('suivi') },
+      { ic: 'chart', t: 'Attributions', s: 'Marchés attribués et attributaires fréquents : qui gagne quoi.', go: () => setTab('attrib') },
+      { ic: 'save', t: 'Sauvegarder', s: 'Veilles, suivi, refusés en un fichier .json (pour l\'autre poste).', go: () => saveAct('backup') }
+    ],
+    liste: { titre: 'Réponses en cours', recherche: true, vide: 'Aucune réponse en cours : ajoutez un avis au suivi depuis la recherche.', items: act.map(s => ({ c: (STATUT[s.statut] || {}).l || '', t: s.objet || s.idweb, s: [s.acheteur, s.dl ? new Date(s.dl).toLocaleDateString('fr-FR') : ''].filter(Boolean).join(' · '), go: () => setTab('suivi') })) },
+    etapes: ['<b>Cherchez</b> avec vos critères, ou ouvrez une <b>veille</b> enregistrée.', '<b>Ajoutez au suivi</b> les avis intéressants ; écartez les autres (« Pas intéressé »).', '<b>Suivez</b> la réponse : go / no-go, visite, équipe, pièces, dépôt.', '<b>Notez le résultat</b> ; un marché gagné devient un projet de l\'agence (TerraContacts, onglet Projets).'],
+    pied: st.plat ? `Plateformes : collecte du ${new Date(st.plat.at).toLocaleString('fr-FR')} (${st.plat.avis.length} avis).` : 'Plateformes : pas de fichier de collecte, seul le BOAMP est interrogé.'
+  });
+}
+function init() {
+  $('#ver').textContent = 'v' + APP_VERSION + ' bêta';
+  if (location.protocol !== 'file:') { const h = $('#homeLink'); if (h) h.remove(); }
+  loadPlat();
+  $$('.tabs button').forEach(b => b.onclick = () => setTab(b.dataset.tab));
+  $('#bSave').onclick = e => { e.stopPropagation(); const m = $('#saveMenu'); m.hidden = !m.hidden; };
+  document.addEventListener('click', e => { if (!e.target.closest('#saveMenu')) $('#saveMenu').hidden = true; });
+  $$('#saveMenu [data-act]').forEach(b => b.onclick = () => { $('#saveMenu').hidden = true; saveAct(b.dataset.act); });
+  $('#jsonIn').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (f) restore(f); });
+  render(); search(); loadDescOpts(); refreshCounts(); platBoampCheck();
+}
+window.TS = { st, parseRec, whereOf, search, platRec };
+init();
+
+</script>
+</body>
+</html>
