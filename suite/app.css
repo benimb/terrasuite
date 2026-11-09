@@ -147,3 +147,29 @@ table.t td input:hover,table.t td select:hover,table.t td input:focus,table.t td
 .icon-btn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .toast{position:fixed;left:50%;bottom:calc(24px + var(--bottom));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 15px;border-radius:8px;z-index:80;font-size:14px;box-shadow:var(--shadow);max-width:90vw}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ---------- accueil ---------- */
+.home{padding-top:calc(34px + var(--safe-t))}
+.hhead{display:flex;align-items:center;gap:16px;margin-bottom:22px}
+.hhead h1{font-size:32px}
+.hhead .k{font-size:13px;color:var(--muted);font-weight:600}
+.hlogo:empty{display:none}
+.hlogo img{max-height:56px;max-width:180px;display:block}
+.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.choice{display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:26px 24px;min-height:190px;text-decoration:none;color:inherit;cursor:pointer;font:inherit}
+.choice:hover{border-color:var(--accent);box-shadow:var(--shadow)}
+.choice .ci{width:52px;height:52px;border-radius:14px;display:grid;place-items:center}
+.choice .ci svg{width:26px;height:26px}
+.choice .ct{font:700 22px "Space Grotesk",sans-serif}
+.choice .cd{color:var(--muted);font-size:14px}
+.note{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px;border-color:#ecc9b8;background:var(--accent-soft)}
+.note .muted{font-size:13.5px;margin-top:2px}
+.hlinks{display:flex;gap:22px;flex-wrap:wrap;margin-top:26px;font-size:14px;font-weight:600}
+@media (max-width:899px){.home{padding-top:calc(20px + var(--safe-t))}.hhead h1{font-size:26px}.choice{min-height:0;padding:20px;flex-direction:row;align-items:center;flex-wrap:wrap}.choice .ct{font-size:19px}.choice .cd{flex-basis:100%}}
+/* fiche de l'agence (formulaire commun avec TerraContacts) */
+.fsec{font-size:15px;margin:2px 0}
+.bar{display:flex;align-items:center;gap:10px}
+.grow{flex:1}
+.small{font-size:13px}
+.card.pers{padding:12px;background:var(--sunk)}
+#pList{gap:10px}

@@ -3,11 +3,11 @@
    plus le planning et la fiche, transversaux. Les modules existants (TerraGeo, TerraEstim, TerraPlanning, TerraChantier,
    TerraDocs, TerraContacts) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
    Les bibliothèques communes à tous les projets (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont à part. */
-const TS_VERSION = '0.1';
+const TS_VERSION = '0.2';
 const TSApp = (() => {
   const SVG = {
     back: '<path d="M15 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
-    list: '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>', lib: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5V21h16"/>',
+    list: '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>', home: '<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>', lib: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5V21h16"/>',
     user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>', ext: '<path d="M14 4h6v6M20 4l-9 9M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/>',
     reload: '<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>'
   };
@@ -110,14 +110,14 @@ const TSApp = (() => {
       <nav class="plist" aria-label="Projets">${act.map(item).join('') || '<div class="empty" style="padding:8px 12px">Aucun projet</div>'}${old.length ? `<details style="margin-top:6px"><summary class="hint" style="padding:6px 12px;cursor:pointer">Terminés, archivés (${old.length})</summary>${old.map(item).join('')}</details>` : ''}</nav>
       <div class="libs"><span class="cap">Commun à tous les projets</span>${LIBS.map(b => `<a class="litem${curL === b.id ? ' on' : ''}" href="#/b/${b.id}"><span class="dot" style="background:${b.c}"></span>${E(b.nom)}<span class="n">${E(st.counts[b.id] ?? '')}</span></a>`).join('')}</div>
       <div class="side-f"><a class="sync" id="syncSt" href="#/compte"><span id="syncTx">Synchronisation</span></a><a href="#/compte">Compte</a></div>`;
-    const qi = document.getElementById('pq'); qi.oninput = () => { st.q = qi.value; const pos = qi.selectionStart; drawSide(); const n = document.getElementById('pq'); n.focus(); n.setSelectionRange(pos, pos); if (!st.route[0] && matchMedia('(max-width:899px)').matches) draw(); };
+    const qi = document.getElementById('pq'); qi.oninput = () => { st.q = qi.value; const pos = qi.selectionStart; drawSide(); const n = document.getElementById('pq'); n.focus(); n.setSelectionRange(pos, pos); if (st.route[0] === 'projets') drawHome(); };
     document.getElementById('newP').onclick = newProject;
     paintSync();
   }
   function drawBottom() {
     const r = st.route[0] || '';
     const a = (h, n, i, on, cls = '') => `<a href="${h}" class="${on ? 'on ' : ''}${cls}">${ico(i)}${n}</a>`;
-    document.getElementById('bottom').innerHTML = a('#/', 'Projets', 'list', r === '' || r === 'p') + a('#/photo', 'Photo', 'cam', false, 'photo') + a('#/b', 'Bibliothèques', 'lib', r === 'b') + a('#/compte', 'Compte', 'user', r === 'compte');
+    document.getElementById('bottom').innerHTML = a('#/', 'Accueil', 'home', r === '' || r === 'agence' || r === 'compte') + a('#/projets', 'Projets', 'list', r === 'projets' || r === 'p') + a('#/photo', 'Photo', 'cam', false, 'photo') + a('#/b', 'Bibliothèques', 'lib', r === 'b');
   }
   function paintSync() {
     const el = document.getElementById('syncSt'); if (!el || typeof Sync === 'undefined') return; Sync.paint();
@@ -126,16 +126,53 @@ const TSApp = (() => {
     el.title = s.msg || '';
   }
 
-  /* ---------- accueil : liste des projets ---------- */
+  /* ---------- accueil : travailler sur un projet ou créer un projet ---------- */
+  async function drawAccueil() {
+    const ag = typeof Carnet !== 'undefined' ? Carnet.agence() : null, arch = ag && typeof Carnet !== 'undefined' ? Carnet.architecte() : null, et = TSA.etat();
+    const act = st.projets.filter(p => p.statut !== 'archive' && p.statut !== 'termine');
+    const rec = (LS.get('ts-recents', []) || []).map(id => st.projets.find(p => p.id === id)).filter(Boolean).slice(0, 4);
+    const quick = (rec.length ? rec : act.slice(0, 4));
+    const hello = arch && arch.prenom ? 'Bonjour ' + arch.prenom : 'Bonjour';
+    $m().innerHTML = `<div class="body home"><div class="wrap" style="max-width:980px">
+      <div class="hhead"><span id="agLogoH" class="hlogo"></span><div><div class="k">${E(ag && ag.nom ? ag.nom : 'TerraSuite')}</div><h1>${E(hello)}</h1></div></div>
+      ${!et.pret ? `<div class="card note"><div><b>Connectez-vous à votre compte TerraSuite</b><div class="muted">Pour retrouver vos projets et leur contenu sur le PC, la tablette et le téléphone.</div></div><a class="btn pri" href="#/compte">Se connecter</a></div>` : ''}
+      ${!ag && !LS.get('ts-agence-plus-tard', false) ? `<div class="card note"><div><b>Première connexion : renseignez le profil de votre agence</b><div class="muted">Nom, adresse, logo, architectes : en tête des comptes-rendus, des PV et des documents. Une fois pour toute l'agence.</div></div><div class="row"><button class="btn" id="agLater">Plus tard</button><a class="btn pri" href="#/agence">Renseigner</a></div></div>` : ''}
+      <div class="choices">
+        <a class="choice" href="#/projets"><span class="ci" style="background:#f6e9e3;color:#8f3f22">${ico('list')}</span><span class="ct">Travailler sur un projet</span><span class="cd">${act.length ? act.length + ' projet(s) en cours' : 'Aucun projet en cours'}</span></a>
+        <button class="choice" id="newP3"><span class="ci" style="background:#b5532f;color:#fff">${ico('plus')}</span><span class="ct">Créer un projet</span><span class="cd">Code, nom, phase : le reste se complète au fil des phases</span></button>
+      </div>
+      ${quick.length ? `<div class="cap" style="margin:22px 0 8px">${rec.length ? 'Ouverts récemment' : 'Projets en cours'}</div><div class="grid">${quick.map(p => `<a class="card pcard" href="#/p/${p.id}" style="min-height:0"><span class="h"><span class="dot" style="background:${(tabOf(PH2TAB[p.phase]) || TABS[0]).c}"></span>${E(p.code || '—')}<span class="hint" style="margin-left:auto">${E(p.phase || '')}</span></span><span class="d" style="color:var(--ink);font-size:14px">${E(p.nom || '')}</span></a>`).join('')}</div>` : ''}
+      <div class="hlinks"><a href="#/agence">${ag ? "Compléter ou corriger le profil de l'agence" : "Profil de l'agence"}</a><a href="#/b">Bibliothèques</a><a href="#/compte">Compte et appareils</a></div>
+    </div></div>`;
+    document.getElementById('newP3').onclick = newProject;
+    const later = document.getElementById('agLater'); if (later) later.onclick = () => { LS.set('ts-agence-plus-tard', true); drawAccueil(); };
+    if (ag && ag.logoId && typeof BlobURL === 'function') BlobURL(ag.logoId).then(u => { const el = document.getElementById('agLogoH'); if (u && el) el.innerHTML = `<img src="${u}" alt="Logo de l'agence">`; });
+  }
+
+  /* ---------- profil de l'agence (fiche commune avec TerraContacts : en tête des CR, des PV et des documents) ---------- */
+  async function drawAgence() {
+    if (typeof Carnet === 'undefined') { $m().innerHTML = '<div class="body"><p class="empty">Profil indisponible.</p></div>'; return; }
+    await Carnet.load();
+    const pr = TSA.etat().profil;
+    const ag = Carnet.agence() ? JSON.parse(JSON.stringify(Carnet.agence())) : { id: DB.uid(), agence: true, role: 'MOE', nom: (pr && pr.agence && pr.agence.nom) || '', adresse: '', cp: '', ville: '', tel: '', email: '', site: '', siret: '', ordre: '', notes: '', lots: [], logoId: '', personnes: [{ id: DB.uid(), civ: '', prenom: '', nom: '', fonction: 'Architecte', mobile: '', tel: '', email: (pr && pr.email) || '', principal: true }] };
+    const isNew = !Carnet.agence();
+    $m().innerHTML = `<div class="phead"><div class="t"><a class="btn icon back" href="#/" aria-label="Accueil">${ico('back')}</a><div style="flex:1"><div class="k">${isNew ? 'Première connexion' : 'Agence'}</div><h1>Profil de l'agence</h1><div class="w">En tête des comptes-rendus, des listes de réserves, des PV et des documents. L'architecte par défaut signe les CR et les photos. Commun à toute l'agence et à tous ses appareils.</div></div></div><div style="height:14px"></div></div>
+      <div class="body"><div class="wrap" style="max-width:980px"><div class="card" id="agF" style="display:flex;flex-direction:column;gap:12px">${Carnet.formHTML(ag, { isAg: true })}</div>
+      <div class="row" style="justify-content:flex-end;margin-top:12px"><a class="btn" href="#/">Annuler</a><button class="btn pri" id="agOk">Enregistrer</button></div></div></div>`;
+    const form = document.getElementById('agF'); let collect = Carnet.bindForm(form, ag, { isAg: true });
+    form.addEventListener('redraw', () => { form.innerHTML = Carnet.formHTML(ag, { isAg: true }); collect = Carnet.bindForm(form, ag, { isAg: true }); });
+    document.getElementById('agOk').onclick = async () => { collect(); if (!ag.nom) return toast("Indiquez le nom de l'agence"); ag.personnes = ag.personnes.filter(p => p.nom || p.prenom || p.email); ag.agence = true; await Carnet.put(ag); toast('Profil de l’agence enregistré'); go('#/'); };
+  }
+
+  /* ---------- liste des projets ---------- */
   async function drawHome() {
     const q = norm(st.q), L = st.projets.filter(p => p.statut !== 'archive' && (!q || norm([p.code, p.nom, p.ville].join(' ')).includes(q)));
     const tabNom = p => { const t = tabOf(PH2TAB[p.phase]); return t ? t.nom : (p.phase || ''); };
-    $m().innerHTML = `<div class="phead"><div class="t"><div><div class="k">TerraSuite</div><h1>Projets</h1><div class="w">${st.projets.length} projet(s) de l'agence</div></div><div class="acts"><button class="btn pri" id="newP2">${ico('plus')}Nouveau projet</button></div></div><div style="height:14px"></div></div>
+    $m().innerHTML = `<div class="phead"><div class="t"><a class="btn icon back" href="#/" aria-label="Accueil">${ico('back')}</a><div style="flex:1"><div class="k">Travailler sur un projet</div><h1>Projets</h1><div class="w">${st.projets.length} projet(s) de l'agence</div></div><div class="acts"><button class="btn pri" id="newP2">${ico('plus')}Nouveau projet</button></div></div><div style="height:14px"></div></div>
       <div class="body"><div class="wrap">
         <div class="pl-mobile"><input class="inp" id="pq2" type="search" placeholder="Chercher un projet" value="${E(st.q)}" aria-label="Chercher un projet" style="margin-bottom:12px">
           ${L.map(p => `<a class="mitem" href="#/p/${p.id}"><span><b>${E(p.code || '—')}</b><span class="nm">${E(p.nom || '')}${p.ville ? ' · ' + E(p.ville) : ''}</span></span><span class="ph">${E(tabNom(p) || '—')}</span></a>`).join('') || '<p class="empty">Aucun projet. Créez-en un avec « Nouveau projet ».</p>'}</div>
         <div class="pl-desk grid">${L.map(p => `<a class="card pcard" href="#/p/${p.id}"><span class="h"><span class="dot" style="background:${(tabOf(PH2TAB[p.phase]) || TABS[0]).c}"></span>${E(p.code || '—')}</span><span class="v">${E(p.nom || 'Projet sans nom')}</span><span class="d">${E([p.ville, tabNom(p), (TSP.STATUTS.find(s => s[0] === p.statut) || [, ''])[1]].filter(Boolean).join(' · '))}</span></a>`).join('') || '<p class="empty">Aucun projet. Créez-en un avec « Nouveau projet ».</p>'}</div>
-        ${!TSA.etat().pret ? `<div class="card" style="margin-top:18px"><h2>Mêmes projets sur tous vos appareils</h2><p class="muted" style="margin:0 0 10px">Connectez-vous à votre compte TerraSuite : projets, estimations, CCTP, plannings, études de site, comptes-rendus et photos suivent sur le PC, la tablette et le téléphone.</p><a class="btn pri" href="#/compte">Se connecter</a></div>` : ''}
       </div></div>`;
     document.getElementById('newP2').onclick = newProject;
     const q2 = document.getElementById('pq2'); if (q2) q2.oninput = () => { st.q = q2.value; const pos = q2.selectionStart; drawHome().then(() => { const n = document.getElementById('pq2'); if (n) { n.focus(); n.setSelectionRange(pos, pos); } }); };
@@ -145,7 +182,7 @@ const TSApp = (() => {
   async function drawProject(id, tabId, subId) {
     const p = st.projets.find(x => x.id === id) || await TSP.get(id);
     if (!p) { $m().innerHTML = `<div class="body"><p class="empty">Projet introuvable sur cet appareil. Il apparaîtra après la synchronisation s'il a été créé ailleurs.</p><a class="btn" href="#/">Projets</a></div>`; return; }
-    LS.set('ts-last-projet', p.id);
+    LS.set('ts-last-projet', p.id); LS.set('ts-recents', [p.id, ...(LS.get('ts-recents', []) || []).filter(x => x !== p.id)].slice(0, 8));
     const curTab = PH2TAB[p.phase] || '', curIdx = PHASE_ORDER.indexOf(curTab);
     if (!tabId) { const last = LS.get('ts-tab-' + p.id, null); tabId = last || 'apercu'; }
     const tab = tabOf(tabId) || TABS[0], sub = tab.subs.find(s => s[0] === subId) || tab.subs[0];
@@ -277,6 +314,7 @@ const TSApp = (() => {
   function drawCompte() {
     $m().innerHTML = `<div class="phead"><div class="t"><div><div class="k">TerraSuite ${TS_VERSION} bêta</div><h1>Compte et appareils</h1></div></div><div style="height:14px"></div></div>
       <div class="body"><div class="wrap" style="max-width:860px;display:flex;flex-direction:column;gap:14px">
+        <div class="card note"><div><b>Profil de l'agence</b><div class="muted">Nom, adresse, logo, architectes : en tête des CR, des PV et des documents.</div></div><a class="btn" href="#/agence">Compléter ou corriger</a></div>
         <div id="tsaBox"></div>
         <div class="card"><h2>Synchronisation</h2><p class="muted" style="margin:0 0 10px" id="syMsg"></p><div class="row"><button class="btn pri" id="syNow">Synchroniser maintenant</button></div>
           <p class="hint" style="margin:10px 0 0">Projets, estimations, DPGF, CCTP, plannings, études de site, produits, contacts, chantiers et photos sont enregistrés sur cet appareil et sur le serveur de l'agence. Hors réseau, tout reste utilisable ; l'envoi reprend au retour du réseau.</p></div>
@@ -320,7 +358,9 @@ const TSApp = (() => {
     if (r[0] === 'p' && r[1]) return drawProject(r[1], r[2], r[3]);
     if (r[0] === 'b') return drawLib(r[1]);
     if (r[0] === 'compte') return drawCompte();
-    return drawHome();
+    if (r[0] === 'agence') return drawAgence();
+    if (r[0] === 'projets') return drawHome();
+    return drawAccueil();
   }
 
   async function start() {
@@ -330,13 +370,14 @@ const TSApp = (() => {
       navigator.serviceWorker.register('sw.js').then(r => r.update()).catch(e => console.warn('SW', e));
     }
     addEventListener('beforeinstallprompt', e => { e.preventDefault(); st.installEvt = e; if (st.route[0] === 'compte') drawCompte(); });
-    await loadProjets(); await counts();
+    await loadProjets(); await counts(); try { if (typeof Carnet !== 'undefined') await Carnet.load(); } catch (e) {}
     addEventListener('hashchange', draw);
     draw();
-    TSP.onChange(async () => { await loadProjets(); drawSide(); if (!st.route[0]) drawHome(); });
-    try { TSA.onChange(() => { paintSync(); }); } catch (e) {}
+    const reHome = () => { if (!st.route[0]) drawAccueil(); else if (st.route[0] === 'projets') drawHome(); };
+    TSP.onChange(async () => { await loadProjets(); drawSide(); reHome(); });
+    try { TSA.onChange(() => { paintSync(); reHome(); }); } catch (e) {}
     if (typeof Sync !== 'undefined') {
-      Sync.onReceive(async got => { paintSync(); if (!got) return; cacheEst = null; await loadProjets(); await counts(); drawSide(); const r = st.route; if (!r[0]) drawHome(); else if (r[0] === 'p' && (!r[2] || r[2] === 'apercu')) drawProject(r[1], r[2], r[3]); });
+      Sync.onReceive(async got => { paintSync(); if (!got) return; cacheEst = null; if (typeof Carnet !== 'undefined') await Carnet.load(true); await loadProjets(); await counts(); drawSide(); const r = st.route; if (!r[0]) drawAccueil(); else if (r[0] === 'projets') drawHome(); else if (r[0] === 'p' && (!r[2] || r[2] === 'apercu')) drawProject(r[1], r[2], r[3]); });
       Sync.start(); setInterval(paintSync, 3000);
     }
   }
