@@ -3,7 +3,7 @@
    plus le planning et la fiche, transversaux. Les modules existants (TerraGeo, TerraEstim, TerraPlanning, TerraChantier,
    TerraDocs, TerraContacts) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
    Les bibliothèques communes à tous les projets (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont à part. */
-const TS_VERSION = '0.2';
+const TS_VERSION = '0.3';
 const TSApp = (() => {
   const SVG = {
     back: '<path d="M15 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
@@ -20,13 +20,13 @@ const TSApp = (() => {
   const TABS = [
     { id: 'apercu', nom: "Vue d'ensemble", c: '#b5532f', subs: [['apercu', "Vue d'ensemble", 'native']] },
     { id: 'esq', nom: 'ESQ', c: '#8a5a12', subs: [['site', 'Site', 'frame', T_GEO], ['m3d', 'Maquette 3D', 'soon'], ['esq', 'Estimation sommaire', 'soon']] },
-    { id: 'avp', nom: 'AVP', c: '#a16207', subs: [['plans', 'Plans et notice', 'soon'], ['estimA', 'Estimation', 'frame', T_EST], ['auto', 'PC, DP, modificatifs', 'native']] },
-    { id: 'pro', nom: 'PRO / DCE', c: '#2f8f5b', subs: [['estim', 'Estimation', 'frame', T_EST], ['desc', 'Descriptif (CCTP)', 'frame', T_EST, '[data-tab=cctp]'], ['produits', 'Produits', 'frame', p => `TerraDocs/TerraDocs.html#projet=${p.id}`], ['dce', 'Dossier DCE', 'soon']] },
+    { id: 'avp', nom: 'AVP', c: '#a16207', subs: [['plans', 'Plans et notice', 'native'], ['estimA', 'Estimation', 'frame', T_EST], ['auto', 'PC, DP, modificatifs', 'native']] },
+    { id: 'pro', nom: 'PRO / DCE', c: '#2f8f5b', subs: [['estim', 'Estimation', 'frame', T_EST], ['desc', 'Descriptif (CCTP)', 'frame', T_EST, '[data-tab=cctp]'], ['produits', 'Produits', 'frame', p => `TerraDocs/TerraDocs.html#projet=${p.id}`], ['dce', 'Dossier DCE', 'native']] },
     { id: 'act', nom: 'Analyse des offres', c: '#0f766e', subs: [['offres', 'Offres reçues', 'frame', p => `TerraEstim/TerraEstim.html#dpgf=${p.id}`], ['rapport', "Rapport d'analyse", 'soon'], ['marches', 'Marchés', 'soon']] },
-    { id: 'chantier', nom: 'Chantier', c: '#7a4fb0', subs: [['chantier', 'Visites et CR', 'frame', T_CH], ['os', 'Ordres de service', 'soon'], ['situations', 'Situations', 'soon']] },
-    { id: 'opr', nom: 'OPR', c: '#c2410c', subs: [['opr', 'Réserves', 'frame', T_CH], ['pvopr', "PV d'OPR", 'soon']] },
-    { id: 'recep', nom: 'Réception', c: '#b45309', subs: [['pv', 'PV de réception, levée des réserves', 'soon'], ['doe', 'DOE, DIUO', 'soon']] },
-    { id: 'gpa', nom: 'GPA', c: '#6b7280', subs: [['gpa', 'Désordres signalés', 'soon'], ['fingpa', 'Fin de GPA', 'soon']] },
+    { id: 'chantier', nom: 'Chantier', c: '#7a4fb0', subs: [['chantier', 'Visites et CR', 'frame', T_CH], ['os', 'Ordres de service', 'native'], ['situations', 'Situations', 'native']] },
+    { id: 'opr', nom: 'OPR', c: '#c2410c', subs: [['opr', 'Réserves', 'frame', T_CH], ['pvopr', "PV d'OPR", 'native']] },
+    { id: 'recep', nom: 'Réception', c: '#b45309', subs: [['pv', 'PV de réception, levée des réserves', 'native'], ['doe', 'DOE, DIUO', 'native']] },
+    { id: 'gpa', nom: 'GPA', c: '#6b7280', subs: [['gpa', 'Désordres signalés', 'native'], ['fingpa', 'Fin de GPA', 'native']] },
     { id: 'planning', nom: 'Planning', c: '#2f6fb5', tr: true, subs: [['planning', 'Planning', 'frame', p => `TerraPlanning/TerraPlanning.html#projet=${p.id}`]] },
     { id: 'projet', nom: 'Fiche et intervenants', c: '#9a3b6b', tr: true, subs: [['fiche', 'Fiche', 'native'], ['inter', 'Intervenants, lots du marché', 'frame', p => `TerraChantier/contacts.html#/projets/${p.id}`]] }
   ];
@@ -93,8 +93,10 @@ const TSApp = (() => {
     let chs = [], vis = [], res = [];
     try { chs = (await DB.all('chantiers')).filter(c => c.projetId === p.id); for (const c of chs) { vis.push(...await DB.all('visites', c.id)); res.push(...await DB.all('reserves', c.id)); } } catch (e) {}
     vis.sort((a, b) => String(b.date || b.updatedAt || '').localeCompare(String(a.date || a.updatedAt || '')));
-    const recent = mine.slice().sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt))).slice(0, 8);
-    return { geo, plan, est, src, prods, chs, vis, res, recent };
+    const recent = mine.filter(d => d.app !== 'suite').sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt))).slice(0, 8);
+    const pvs = mine.filter(d => d.app === 'suite' && d.coll === 'pv').map(d => d.data), recep = pvs.filter(r => /^Réception/.test(r.type || '') && r.date).sort((a, b) => String(a.date).localeCompare(String(b.date)))[0] || null;
+    const gpaO = mine.filter(d => d.app === 'suite' && d.coll === 'gpa' && d.data && d.data.etat !== 'Réglé').length;
+    return { geo, plan, est, src, prods, chs, vis, res, recent, pvs, recep, gpaO };
   }
 
   /* ---------- colonne de gauche ---------- */
@@ -132,7 +134,9 @@ const TSApp = (() => {
     const act = st.projets.filter(p => p.statut !== 'archive' && p.statut !== 'termine');
     const rec = (LS.get('ts-recents', []) || []).map(id => st.projets.find(p => p.id === id)).filter(Boolean).slice(0, 4);
     const quick = (rec.length ? rec : act.slice(0, 4));
-    const hello = arch && arch.prenom ? 'Bonjour ' + arch.prenom : 'Bonjour';
+    /* le prénom vient du compte connecté (sinon on ne sait pas qui utilise l'appareil) */
+    const who = et.connecte && et.profil ? (et.profil.nom || '').trim().split(/\s+/)[0] || ((arch && et.profil.email && arch.email && arch.email.toLowerCase() === et.profil.email.toLowerCase()) ? arch.prenom : '') : '';
+    const hello = who ? 'Bonjour ' + who : 'Bonjour';
     $m().innerHTML = `<div class="body home"><div class="wrap" style="max-width:980px">
       <div class="hhead"><span id="agLogoH" class="hlogo"></span><div><div class="k">${E(ag && ag.nom ? ag.nom : 'TerraSuite')}</div><h1>${E(hello)}</h1></div></div>
       ${!et.pret ? `<div class="card note"><div><b>Connectez-vous à votre compte TerraSuite</b><div class="muted">Pour retrouver vos projets et leur contenu sur le PC, la tablette et le téléphone.</div></div><a class="btn pri" href="#/compte">Se connecter</a></div>` : ''}
@@ -199,6 +203,7 @@ const TSApp = (() => {
     const body = document.getElementById('pbody');
     if (sub[2] === 'frame') { body.className = 'body frame'; mountFrame(body, url, sub[4]); const rf = document.getElementById('reF'); if (rf) rf.onclick = () => { st.frames.delete(url); mountFrame(body, url, sub[4], true); }; return; }
     if (sub[2] === 'soon') { const s = SOON[sub[0]] || [sub[1], '']; body.innerHTML = `<div class="card soonbox"><div class="hint">Prévu dans une prochaine version</div><h2 style="margin-top:4px">${E(s[0])}</h2><p class="muted">${E(s[1])}</p></div>`; return; }
+    if (typeof TSMod !== 'undefined' && TSMod.MODS[sub[0]]) return TSMod.MODS[sub[0]](p, body);
     if (sub[0] === 'apercu') return drawOverview(p, body, curTab);
     if (sub[0] === 'fiche') return drawFiche(p, body);
     if (sub[0] === 'auto') return drawAuto(p, body);
@@ -231,8 +236,8 @@ const TSApp = (() => {
       act: [D.src.size ? n(D.src.size, 'offre reçue', 'offres reçues') : 'Aucune offre', 'DPGF des entreprises, marchés', 'offres'],
       chantier: [D.vis.length ? n(D.vis.length, 'visite', 'visites') : (D.chs.length ? 'Chantier ouvert' : 'Pas de chantier'), D.vis[0] ? 'dernière : ' + (fmtD(D.vis[0].date || D.vis[0].updatedAt) || '') : 'visites, CR, photos sur plans', 'chantier'],
       opr: [D.res.length ? `${resO} ouverte(s), ${resL} levée(s)` : 'Aucune réserve', 'réserves localisées sur les plans', 'opr'],
-      recep: ['À venir', 'PV de réception, levée des réserves, DOE', 'pv'],
-      gpa: ['À venir', 'désordres, fin de garantie', 'gpa'],
+      recep: [D.recep ? 'Réception le ' + fmtD(D.recep.date) : (D.pvs.length ? D.pvs.length + ' PV' : 'Pas encore'), 'PV de réception, levée des réserves, DOE', 'pv'],
+      gpa: [D.gpaO ? D.gpaO + ' désordre(s) en cours' : (D.recep ? 'Aucun désordre en cours' : 'Après la réception'), 'désordres, fin de garantie', D.gpaO ? 'gpa' : 'fingpa'],
       planning: [D.plan.size ? n(D.plan.size, 'planning', 'plannings') : 'Pas de planning', 'études et travaux', 'planning'],
       projet: [n((p.intervenants || []).length, 'intervenant', 'intervenants') || 'Intervenants à saisir', [p.moa, n((p.lots || []).length, 'lot du marché', 'lots du marché')].filter(Boolean).join(' · ') || 'MOA, lots, entreprises', 'fiche']
     };
