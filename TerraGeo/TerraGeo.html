@@ -201,9 +201,11 @@ body.wide3d .work{grid-template-columns:1fr} body.wide3d .side{display:none}
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/exporters/GLTFExporter.js"></script>
 <script src="../TerraChantier/projets-api.js" onerror="this.remove()"></script>
+<script src="../TerraChantier/ts-link.js" onerror="this.remove()"></script>
+<style>.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn{display:none!important}</style>
 <script src="../TerraChantier/terrasuite-compte.js" onerror="this.remove()"></script>
 <script>
-const APP_VERSION = '0.18';
+const APP_VERSION = '0.19';
 /* ================= Outils ================= */
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -264,7 +266,10 @@ const LINKS = f => {
 const st = { fiches: new Map(), cur: null, addMode: false, base: 'plan', showCad: true, showPlu: true, showOsm: false, osmHide: [], busy: false };
 function loadAll() { try { const a = JSON.parse(localStorage.getItem('tg-fiches') || '[]'); a.forEach(f => st.fiches.set(f.id, f)); st.cur = localStorage.getItem('tg-cur'); } catch (e) {} if (!st.fiches.has(st.cur)) st.cur = null; }
 let saveT = null;
-function save() { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem('tg-fiches', JSON.stringify([...st.fiches.values()])); localStorage.setItem('tg-cur', st.cur || st.lastCur || ''); } catch (e) { setStatus('Enregistrement impossible dans ce navigateur : ' + e.message, 'err'); } }, 250); }
+function save() { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem('tg-fiches', JSON.stringify([...st.fiches.values()])); localStorage.setItem('tg-cur', st.cur || st.lastCur || ''); } catch (e) { setStatus('Enregistrement impossible dans ce navigateur : ' + e.message, 'err'); } geoPush(); }, 250); }
+/* synchronisation des fiches entre les appareils de l'agence (TerraSuite, ts-link.js) */
+function geoPush() { if (typeof TSLink !== 'undefined') TSLink.push('geo', 'fiches', st.fiches, { projet: f => f.projet || null }); }
+async function geoPull() { if (typeof TSLink === 'undefined') return 0; const r = await TSLink.pull('geo', 'fiches', st.fiches); if (r.changed) { st.fiches = r.recs; if (st.cur && !st.fiches.has(st.cur)) st.cur = null; try { localStorage.setItem('tg-fiches', JSON.stringify([...st.fiches.values()])); } catch (e) {} } return r.changed; }
 const F = () => st.fiches.get(st.cur);
 function newFiche(name) { const f = { id: uid(), nom: name || 'Nouvelle fiche', created: Date.now(), updated: Date.now(), parcelles: [], res: {}, notes: {} }; st.fiches.set(f.id, f); st.cur = f.id; save(); return f; }
 
@@ -1727,6 +1732,7 @@ function bindCams() {
 st.projets = [];
 const projG = f => f && f.projet && typeof TSP !== 'undefined' ? (st.projets || []).find(p => p.id === f.projet) || null : null;
 async function projetsInit() {
+  if (st.linkP) await st.linkP;
   if (typeof TSP === 'undefined' || !(await TSP.ok())) return;
   st.projets = await TSP.all();
   TSP.onChange(async () => { const L = await TSP.all(); if (JSON.stringify(L) !== JSON.stringify(st.projets)) { st.projets = L; renderAll(); } });
@@ -1857,6 +1863,10 @@ function renderHomeGeo(side) {
 (function init() {
   if (location.protocol !== 'file:') { const h = $('#homeLink'); if (h) h.remove(); }
   loadAll(); st.lastCur = st.cur; if (!/fiche=|projet=/.test(location.hash)) st.cur = null; // accueil à l'arrivée ; « Reprendre » rouvre la dernière fiche
+  /* fiches des autres appareils (avant la carte : la reprise ne dépend pas des fonds de plan) */
+  const geoRe = () => { try { renderAll(); drawFiche(); } catch (e) {} };
+  st.linkP = geoPull().then(n => { if (n) geoRe(); geoPush(); });
+  if (typeof TSLink !== 'undefined') TSLink.onRemote(async () => { if (await geoPull()) geoRe(); });
   loadLayerPrefs(); initMap(); applyLayers(); renderAll(); drawFiche(); setTimeout(fitFiche, 50);
   projetsInit();
   $('#go').onclick = () => doSearch($('#q').value);

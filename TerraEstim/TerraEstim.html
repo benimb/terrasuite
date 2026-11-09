@@ -193,6 +193,8 @@ input.bad{border-color:var(--err);box-shadow:0 0 0 1px var(--err)}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script src="../TerraChantier/projets-api.js" onerror="this.remove()"></script>
+<script src="../TerraChantier/ts-link.js" onerror="this.remove()"></script>
+<style>.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn{display:none!important}</style>
 <script src="../TerraChantier/terrasuite-compte.js" onerror="this.remove()"></script>
 <script src="TerraEstim-donnees.js"></script>
 <script>
@@ -375,7 +377,7 @@ function migrateLots(D) {
 }
 /* index par défaut de chaque lot (modifiable dans Indices et réglages) */
 const LOT_INDEX = Object.fromEntries(NOMENCLATURE.map(([c, , i]) => [c, i]));
-const APP_VERSION = '0.20';
+const APP_VERSION = '0.21';
 const LOTS_DEFAULT = NOMENCLATURE.map(([code, nom]) => ({ code, nom, indice: '' }));
 const SETTINGS_DEFAULT = { lots: LOTS_DEFAULT, stat: 'median', partFixe: 0, retenuesOnly: false, defIndex: 'BT01', tva: 20, aleas: 5, locNorm: true };
 
@@ -442,8 +444,10 @@ const Store = {
       if (this.migrated) { for (const c of COLS) await this.saveLocal(c); if (!this.saveErr) COLS.forEach(c => { try { localStorage.removeItem('te-' + c); } catch (e) {} }); }
       { const mg = this.runLotMigration(); if (mg) { for (const c of Object.keys(mg)) if (mg[c].size) await this.saveLocal(c); if (!this.saveErr) this.lotMsg = 'Lots renumérotés selon la nomenclature TerraSuite (00 à 20)'; } }
       await this.applySeed();
+      await this.linkPull(true);
       this.mirror();
       onData('*');
+      if (typeof TSLink !== 'undefined') TSLink.onRemote(async () => { if (await this.linkPull(false)) { this.mirror(); onData('*'); } });
     }
   },
   /* renumérotation des lots selon la nomenclature TerraSuite, une seule fois (repère dans les réglages) */
@@ -485,11 +489,28 @@ const Store = {
     try { localStorage.setItem('te-seeds', JSON.stringify([...done, D.stamp])); } catch (e) {}
     this.seedMsg = n ? `${n} éléments ajoutés depuis le fichier de données (${D.label || D.stamp})` : '';
   },
-  async saveLocal(c) {
+  /* synchronisation entre les appareils de l'agence (TerraSuite, ts-link.js) : estimations, DPGF, articles, prestations, indices (les réglages restent propres à l'appareil) */
+  LINK: ['estimations', 'sources', 'articles', 'prestations', 'indices'],
+  async linkPull(all) {
+    if (typeof TSLink === 'undefined' || this.kind !== 'local') return 0; let n = 0;
+    for (const c of this.LINK) { const r = await TSLink.pull('estim', c, st.data[c]); if (r.changed) { st.data[c] = new Map([...r.recs].map(([k, v]) => [k, fixUnits(c, v)])); if (c === 'articles') st.artCache = null; await this.saveLocal(c, true); n += r.changed; } }
+    if (n) { st.obsCache = null; st.tokCache = new Map(); }
+    if (all) this.LINK.forEach(c => this.linkPush(c));
+    return n;
+  },
+  linkPush(c) {
+    if (typeof TSLink === 'undefined' || this.kind !== 'local' || !this.LINK.includes(c)) return;
+    this.lt = this.lt || {}; clearTimeout(this.lt[c]);
+    this.lt[c] = setTimeout(() => { const D = window.TE_DONNEES, sh = this.seedH || (this.seedH = {});
+      if (D && D[c] && !sh[c]) sh[c] = TSLink.seedHashes(Object.fromEntries(Object.entries(D[c]).map(([k, v]) => [k, fixUnits(c, JSON.parse(JSON.stringify(v)))])));
+      TSLink.push('estim', c, st.data[c], { projet: v => (v && (v.projet || v.projetId)) || null, skip: (rid, h) => !!(sh[c] && sh[c].get(rid) === h) }); }, 800);
+  },
+  async saveLocal(c, fromLink) {
     const o = Object.fromEntries(st.data[c]);
     try {
       if (this.idb) await IDB.set('te-' + c, o); else localStorage.setItem('te-' + c, JSON.stringify(o));
       if (c === 'articles') this.mirror();
+      if (!fromLink) this.linkPush(c);
     } catch (e) { this.saveErr = true; setStatus('Enregistrement impossible : stockage du navigateur plein ou bloqué. Exportez une sauvegarde.', 'err'); }
   },
   /* copie légère des articles pour TerraDocs (carte « Articles du CCTP »), qui lit le stockage du navigateur */

@@ -16,7 +16,7 @@ insert into storage.buckets (id, name, public) values ('tc-blobs', 'tc-blobs', f
 drop policy if exists tc_blobs_team on storage.objects;
 create policy tc_blobs_team on storage.objects for all to authenticated using (bucket_id = 'tc-blobs') with check (bucket_id = 'tc-blobs');`;
 
-const DB_SCHEMA = 3; // v3 : projets
+const DB_SCHEMA = 4; // v3 : projets ; v4 : données des applications (docs)
 const Sync = (() => {
   let sb = null, cfg = null, state = 'off', msg = 'Synchronisation non configurée', timer = null, busy = false, again = false;
   const set = (s, m) => { state = s; msg = m; paint(); };
@@ -64,13 +64,18 @@ const Sync = (() => {
       await DB.meta('syncAt', new Date().toISOString());
       set('ok', `Synchronisé à ${new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}${sent || got ? ` (${sent} envoyée(s), ${got} reçue(s))` : ''}`);
       if (got && typeof Carnet !== 'undefined') await Carnet.load(true);
-      if (got && typeof render === 'function' && !document.querySelector('.sheet-bg') && !/\/v\/|\/r\//.test(location.hash)) { S._fresh = false; render(); } else if (got) S._fresh = false;
+      if (got && typeof TSLink !== 'undefined') TSLink.received(got);
+      recv.forEach(f => { try { f(got); } catch (x) {} });
+      if (typeof S !== 'undefined' && S && typeof render === 'function') { if (got && !document.querySelector('.sheet-bg') && !/\/v\/|\/r\//.test(location.hash)) { S._fresh = false; render(); } else if (got) S._fresh = false; }
     } catch (e) { console.warn('sync', e); set('err', 'Synchronisation interrompue : ' + (e.message || e)); }
     finally { busy = false; if (again) { again = false; setTimeout(run, 500); } }
   }
   /* image absente de l'appareil : téléchargée à la demande */
   async function fetchBlob(id) { const c = await client(); if (!c || !(await session())) return null; const { data, error } = await c.storage.from('tc-blobs').download(id); if (error || !data) return null; await DB.putBlob(data, id); await DB.markBlob(id, 1); return data; }
+  const recv = new Set();
   function soon() { clearTimeout(timer); timer = setTimeout(run, 2500); }
+  /* fiches des applications modifiées dans un autre onglet ou cadre : envoi rapide */
+  try { const ch = new BroadcastChannel('terrasuite-docs'); ch.onmessage = e => { if (e.data && e.data.type === 'dirty') soon(); }; } catch (e) {}
   function start() { run(); setInterval(run, 60000); addEventListener('online', run); document.addEventListener('visibilitychange', () => { if (!document.hidden) run(); }); }
   /* réglages : compte TerraSuite (serveur central) ; l'ancien réglage d'un serveur propre à l'agence reste accessible */
   function formHTML(c) {
@@ -94,5 +99,5 @@ const Sync = (() => {
     q('syNow').onclick = async () => { await keep(); await run(); note(msg); };
     q('syCopy').onclick = () => { navigator.clipboard.writeText(SYNC_SQL).then(() => toast('Texte copié')); };
   }
-  return { run, soon, start, paint, config, formHTML, bindForm, fetchBlob, SQL: SYNC_SQL };
+  return { run, soon, start, paint, config, formHTML, bindForm, fetchBlob, SQL: SYNC_SQL, onReceive: f => recv.add(f), state: () => ({ state, msg }) };
 })();

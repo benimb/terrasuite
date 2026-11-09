@@ -2,7 +2,7 @@
    Chaque fiche porte un identifiant unique, sa date de mise à jour et un drapeau « à synchroniser ».
    Une suppression est un marquage (deleted), pour qu'elle se propage aux autres appareils. */
 const DB = (() => {
-  const NAME = 'terrachantier', VER = 3, STORES = ['chantiers', 'plans', 'photos', 'visites', 'reserves', 'contacts', 'projets']; // « contacts » : carnet TerraContacts (v2) ; « projets » : projets de l'agence (v3)
+  const NAME = 'terrachantier', VER = 4, STORES = ['chantiers', 'plans', 'photos', 'visites', 'reserves', 'contacts', 'projets', 'docs']; // « contacts » : carnet TerraContacts (v2) ; « projets » : projets de l'agence (v3) ; « docs » : données des autres applications (v4, ts-link.js)
   let dbp = null;
   const open = () => dbp || (dbp = new Promise((ok, ko) => {
     const r = indexedDB.open(NAME, VER);

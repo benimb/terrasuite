@@ -1,7 +1,7 @@
 /* TerraSuite en ligne (TerraChantier, TerraContacts) : fonctionnement hors réseau.
    L'application (pages, scripts, bibliothèques) est mise en cache à l'installation ; les données restent dans la base du navigateur (IndexedDB). */
-const VERSION = 'tc-0.13';
-const SHELL = ['./', 'index.html', 'contacts.html', 'terrasuite.html', 'style.css', 'common.js', 'carnet.js', 'projets-api.js', 'terrasuite-compte.js', 'projets.js', 'ori.js', 'contacts-app.js', 'app.js', 'db.js', 'plan.js', 'export.js', 'camera.js', 'sync.js', 'manifest.webmanifest',
+const VERSION = 'tc-0.14';
+const SHELL = ['./', 'index.html', 'contacts.html', 'terrasuite.html', 'style.css', 'common.js', 'carnet.js', 'projets-api.js', 'terrasuite-compte.js', 'projets.js', 'ori.js', 'contacts-app.js', 'app.js', 'db.js', 'plan.js', 'export.js', 'camera.js', 'sync.js', 'ts-link.js', 'manifest.webmanifest',
   'vendor/pdf.min.js', 'vendor/pdf.worker.min.js', 'vendor/jspdf.umd.min.js', 'vendor/xlsx.full.min.js', 'vendor/supabase.js',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png', 'icons/apple-touch-icon.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL.map(u => new Request(u, { cache: 'reload' })))).then(() => self.skipWaiting())); }); // fichiers frais, sans le cache du navigateur

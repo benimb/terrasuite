@@ -188,7 +188,7 @@ dialog .act{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
 <div id="app">
   <header class="top">
     <a class="btn sm" id="back" href="../terrasuite.html" title="Page d'accueil TerraSuite">← TerraSuite</a>
-    <div class="brand">TerraDocs <span class="ver">v0.11</span><small>Produits et documentation par lot</small></div>
+    <div class="brand">TerraDocs <span class="ver">v0.12</span><small>Produits et documentation par lot</small></div>
     <nav class="tabs" role="tablist">
       <button role="tab" data-tab="accueil" aria-selected="false">Accueil</button>
       <button role="tab" data-tab="produits" aria-selected="true">Produits</button>
@@ -294,6 +294,8 @@ dialog .act{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
 <input type="file" id="fileIn" hidden>
 
 <script src="../TerraChantier/projets-api.js" onerror="this.remove()"></script>
+<script src="../TerraChantier/ts-link.js" onerror="this.remove()"></script>
+<style>.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn{display:none!important}</style>
 <script src="../TerraChantier/terrasuite-compte.js" onerror="this.remove()"></script>
 <script src="TerraDocs-donnees.js" onerror="this.remove()"></script>
 <script>
@@ -417,6 +419,7 @@ const sortedLots = () => [...D.lots].sort((a,b)=>a.code.localeCompare(b.code,'fr
 let saveT = null, fileHandle = null;
 function save(){
   try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch(e){ setStatus('Enregistrement local impossible : '+e.message,'err'); }
+  docsPush();
   clearTimeout(saveT); saveT = setTimeout(writeFile, 800);
 }
 async function writeFile(){
@@ -1167,7 +1170,16 @@ window.addEventListener('storage', e=>{ if(e.key==='te-articles' && sel) renderD
 $('#back').addEventListener('click', e=>{ if(window.opener){ e.preventDefault(); window.close(); } });
 window.addEventListener('storage', e=>{ if(e.key===KEY && e.newValue){ try{ D = JSON.parse(e.newValue); fixup(); renderAll(); }catch{} } });
 
-load(); { const msg = applySeed(); renderAll(); if(msg) setStatus(msg,'ok'); } resumeFile(); if(!/[#&](p|projet)=/.test(location.hash)) goTabDocs('accueil'); openFromHash(); loadProj();
+/* synchronisation de la bibliothèque entre les appareils de l'agence (TerraSuite, ts-link.js) : produits, lots, sociétés */
+let docsPushT = null;
+function docsPush(){ if(typeof TSLink==='undefined') return; clearTimeout(docsPushT); docsPushT = setTimeout(()=>{ TSLink.push('docs','produits',D.produits); TSLink.push('docs','lots',D.lots); TSLink.push('docs','societes',D.societes||{}); }, 800); }
+async function docsPull(){ if(typeof TSLink==='undefined') return 0; let n = 0;
+  const a = await TSLink.pull('docs','produits',D.produits); if(a.changed){ D.produits=[...a.recs.values()]; n+=a.changed; }
+  const b = await TSLink.pull('docs','lots',D.lots); if(b.changed){ D.lots=[...b.recs.values()]; n+=b.changed; }
+  const c = await TSLink.pull('docs','societes',D.societes||{}); if(c.changed){ D.societes=Object.fromEntries(c.recs); n+=c.changed; }
+  if(n){ fixup(); try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch{} renderAll(); }
+  return n; }
+load(); { const msg = applySeed(); renderAll(); if(msg) setStatus(msg,'ok'); } docsPull().then(()=>docsPush()); if(typeof TSLink!=='undefined') TSLink.onRemote(()=>docsPull()); resumeFile(); if(!/[#&](p|projet)=/.test(location.hash)) goTabDocs('accueil'); openFromHash(); loadProj();
 </script>
 </body>
 </html>

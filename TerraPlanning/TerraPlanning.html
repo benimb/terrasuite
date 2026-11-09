@@ -216,7 +216,7 @@ textarea{width:100%;resize:vertical}
 <div id="app">
   <header class="top">
     <a class="btn" href="../terrasuite.html" style="text-decoration:none;color:inherit" id="homeLink">← TerraSuite</a>
-    <div class="brand">TerraPlanning <span class="ver" title="Version bêta">v0.14 bêta</span><small>Plannings de projet</small></div>
+    <div class="brand">TerraPlanning <span class="ver" title="Version bêta">v0.15 bêta</span><small>Plannings de projet</small></div>
     <button class="btn icon" id="btnMenu" aria-label="Menu">☰</button>
     <div class="projsel"><label for="projSel" class="lbl">Planning</label><select id="projSel"></select></div>
     <div class="topacts" style="display:flex;gap:6px;flex-wrap:wrap">
@@ -248,6 +248,8 @@ textarea{width:100%;resize:vertical}
   <input type="file" id="fileIn" accept=".json,.xml,.mpx,.gan,.mpp,.csv,.tsv,.txt,.md,.xlsx,.xls,.ods,application/json,text/xml" hidden>
   <input type="file" id="logoIn" accept="image/png,image/jpeg" hidden>
   <script src="../TerraChantier/projets-api.js" onerror="this.remove()"></script>
+  <script src="../TerraChantier/ts-link.js" onerror="this.remove()"></script>
+  <style>.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn{display:none!important}</style>
   <script src="../TerraChantier/terrasuite-compte.js" onerror="this.remove()"></script>
   <input type="file" id="carnetIn" accept=".json,application/json" hidden>
   <input type="file" id="lotsIn" accept=".json,application/json" hidden>
@@ -1588,7 +1590,10 @@ const Store = {
     }
   },
   localAll() { try { const m = JSON.parse(localStorage.getItem('tf-plannings') || '{}'); return Object.entries(m).map(([id, v]) => ({ id, ...v })); } catch (e) { return []; } },
-  localSet(id, v) { try { const m = JSON.parse(localStorage.getItem('tf-plannings') || '{}'); if (v) m[id] = v; else delete m[id]; localStorage.setItem('tf-plannings', JSON.stringify(m)); } catch (e) { throw { code: 'local' }; } },
+  localSet(id, v) { let m; try { m = JSON.parse(localStorage.getItem('tf-plannings') || '{}'); if (v) m[id] = v; else delete m[id]; localStorage.setItem('tf-plannings', JSON.stringify(m)); } catch (e) { throw { code: 'local' }; } this.linkPush(m); },
+  /* synchronisation des plannings entre les appareils de l'agence (TerraSuite, ts-link.js) */
+  linkPush(m) { if (typeof TSLink === 'undefined' || this.kind !== 'local') return; try { m = m || JSON.parse(localStorage.getItem('tf-plannings') || '{}'); } catch (e) { return; } TSLink.push('planning', 'plannings', m, { projet: v => (v && v.project && v.project.projet) || null }); },
+  async linkPull() { if (typeof TSLink === 'undefined' || this.kind !== 'local') return 0; let m = {}; try { m = JSON.parse(localStorage.getItem('tf-plannings') || '{}'); } catch (e) {} const r = await TSLink.pull('planning', 'plannings', m); if (r.changed) { try { localStorage.setItem('tf-plannings', JSON.stringify(Object.fromEntries(r.recs))); } catch (e) {} this.onList && this.onList(this.localAll()); } return r.changed; },
   async put(id, data) {
     if (this.kind === 'db') { await this.col.doc(id).set(data); return; }
     this.localSet(id, data); this.onList && this.onList(this.localAll());
@@ -3601,6 +3606,7 @@ bind();
 renderAll();
 Store.start(onList).then(async () => {
   if (Store.kind === 'local') setStatus('Enregistrement dans ce navigateur uniquement');
+  try { await Store.linkPull(); Store.linkPush(); if (typeof TSLink !== 'undefined') TSLink.onRemote(async () => { if (await Store.linkPull() && st.curId && !st.undo.length) openProject(st.curId, true); }); } catch (e) { console.warn('synchronisation', e); }
   try { await loadProjets(); await openProjetHash(); renderAll(); if (TSP_OK()) TSP.onChange(async () => { if (await loadProjets() && !['edit', 'view'].includes(st.tab)) renderAll(); }); } catch (e) { console.warn('projets', e); }
 });
 window.addEventListener('hashchange', () => { openProjetHash(); });

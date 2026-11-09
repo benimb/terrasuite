@@ -3,7 +3,7 @@
    avec les contacts et les chantiers, et synchronisés entre appareils par TerraContacts et TerraChantier.
    Ce fichier est autonome : TerraEstim, TerraPlanning, TerraGeo l'utilisent depuis ../TerraChantier/projets-api.js. */
 const TSP = (() => {
-  const NAME = 'terrachantier', STORES = ['chantiers', 'plans', 'photos', 'visites', 'reserves', 'contacts', 'projets'];
+  const NAME = 'terrachantier', STORES = ['chantiers', 'plans', 'photos', 'visites', 'reserves', 'contacts', 'projets', 'docs'];
   const PHASES = ['Faisabilité', 'ESQ', 'APS', 'APD', 'PC', 'PRO', 'DCE', 'ACT', 'VISA', 'DET', 'AOR', 'GPA'];
   /* typologie, pour comparer les projets entre eux dans la base commune */
   const TYPES = ['Logement collectif', 'Logement individuel', 'Bureaux', 'Enseignement', 'Petite enfance', 'Santé, médico-social', 'Équipement sportif', 'Culture, loisirs', 'Commerce', 'Hôtellerie, restauration', 'Administration, services publics', 'Industrie, logistique', 'Patrimoine, monument', 'Autre'];
@@ -25,7 +25,7 @@ const TSP = (() => {
       if (!self.indexedDB) return ko(new Error('base du navigateur indisponible'));
       const r = indexedDB.open(NAME);
       r.onupgradeneeded = () => upgrade(r.result);
-      r.onsuccess = () => { const d = r.result; if (d.objectStoreNames.contains('projets')) { d.onversionchange = () => { d.close(); dbp = null; }; return ok(d); }
+      r.onsuccess = () => { const d = r.result; if (STORES.every(s => d.objectStoreNames.contains(s))) { d.onversionchange = () => { d.close(); dbp = null; }; return ok(d); }
         const v = d.version + 1; d.close(); const r2 = indexedDB.open(NAME, v); r2.onupgradeneeded = () => upgrade(r2.result);
         r2.onsuccess = () => { r2.result.onversionchange = () => { r2.result.close(); dbp = null; }; ok(r2.result); }; r2.onerror = () => ko(r2.error); r2.onblocked = () => ko(new Error('base occupée par une autre page')); };
       r.onerror = () => ko(r.error);

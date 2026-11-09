@@ -44,7 +44,7 @@ function goSuite() {
   if (window.opener && !window.opener.closed) { try { window.opener.focus(); } catch (e) {} window.close(); }
   setTimeout(() => { location.href = 'terrasuite.html'; }, 250);
 }
-const suiteBtn = () => `<button class="btn sm suite-btn" onclick="goSuite()" title="Accueil TerraSuite">← TerraSuite</button>`;
+const suiteBtn = () => (window.self !== window.top) ? '' : `<button class="btn sm suite-btn" onclick="goSuite()" title="Accueil TerraSuite">← TerraSuite</button>`;
 /* enregistrement d'un service worker commun (mise à jour automatique) */
 function registerSW() {
   if (!('serviceWorker' in navigator) || !location.protocol.startsWith('http')) return;
