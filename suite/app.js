@@ -3,7 +3,7 @@
    plus le planning et la fiche, transversaux. Les modules existants (TerraGeo, TerraEstim, TerraPlanning, TerraChantier,
    TerraDocs, TerraContacts) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
    Les bibliothèques communes à tous les projets (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont à part. */
-const TS_VERSION = '0.3';
+const TS_VERSION = '0.4';
 const TSApp = (() => {
   const SVG = {
     back: '<path d="M15 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
@@ -11,6 +11,10 @@ const TSApp = (() => {
     user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>', ext: '<path d="M14 4h6v6M20 4l-9 9M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/>',
     reload: '<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>'
   };
+  /* maison pleine : un projet existant ; la même en pointillé : un projet à créer */
+  const HOUSE = dash => `<svg class="house" viewBox="0 0 64 64" aria-hidden="true">${dash
+    ? '<path d="M10 30 L32 11 L54 30 V54 H10 Z" fill="none" stroke="#b5532f" stroke-width="3" stroke-dasharray="6 5" stroke-linejoin="round"/><path d="M32 33 V47 M25 40 H39" stroke="#b5532f" stroke-width="3" stroke-linecap="round"/>'
+    : '<path d="M10 30 L32 11 L54 30 V54 H10 Z" fill="#b5532f" stroke="#b5532f" stroke-width="3" stroke-linejoin="round"/><rect x="27" y="38" width="10" height="16" rx="1.5" fill="#fff"/>'}</svg>`;
   const ico = n => `<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${SVG[n] || ''}</svg>`;
   const E = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const LS = { get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
@@ -142,8 +146,8 @@ const TSApp = (() => {
       ${!et.pret ? `<div class="card note"><div><b>Connectez-vous à votre compte TerraSuite</b><div class="muted">Pour retrouver vos projets et leur contenu sur le PC, la tablette et le téléphone.</div></div><a class="btn pri" href="#/compte">Se connecter</a></div>` : ''}
       ${!ag && !LS.get('ts-agence-plus-tard', false) ? `<div class="card note"><div><b>Première connexion : renseignez le profil de votre agence</b><div class="muted">Nom, adresse, logo, architectes : en tête des comptes-rendus, des PV et des documents. Une fois pour toute l'agence.</div></div><div class="row"><button class="btn" id="agLater">Plus tard</button><a class="btn pri" href="#/agence">Renseigner</a></div></div>` : ''}
       <div class="choices">
-        <a class="choice" href="#/projets"><span class="ci" style="background:#f6e9e3;color:#8f3f22">${ico('list')}</span><span class="ct">Travailler sur un projet</span><span class="cd">${act.length ? act.length + ' projet(s) en cours' : 'Aucun projet en cours'}</span></a>
-        <button class="choice" id="newP3"><span class="ci" style="background:#b5532f;color:#fff">${ico('plus')}</span><span class="ct">Créer un projet</span><span class="cd">Code, nom, phase : le reste se complète au fil des phases</span></button>
+        <a class="choice" href="#/projets"><span class="ci">${HOUSE(false)}</span><span class="ct">Travailler sur un projet</span><span class="cd">${act.length ? act.length + ' projet(s) en cours' : 'Aucun projet en cours'}</span></a>
+        <button class="choice" id="newP3"><span class="ci">${HOUSE(true)}</span><span class="ct">Créer un projet</span><span class="cd">Code, nom, phase : le reste se complète au fil des phases</span></button>
       </div>
       ${quick.length ? `<div class="cap" style="margin:22px 0 8px">${rec.length ? 'Ouverts récemment' : 'Projets en cours'}</div><div class="grid">${quick.map(p => `<a class="card pcard" href="#/p/${p.id}" style="min-height:0"><span class="h"><span class="dot" style="background:${(tabOf(PH2TAB[p.phase]) || TABS[0]).c}"></span>${E(p.code || '—')}<span class="hint" style="margin-left:auto">${E(p.phase || '')}</span></span><span class="d" style="color:var(--ink);font-size:14px">${E(p.nom || '')}</span></a>`).join('')}</div>` : ''}
       <div class="hlinks"><a href="#/agence">${ag ? "Compléter ou corriger le profil de l'agence" : "Profil de l'agence"}</a><a href="#/b">Bibliothèques</a><a href="#/compte">Compte et appareils</a></div>
@@ -192,12 +196,12 @@ const TSApp = (() => {
     const tab = tabOf(tabId) || TABS[0], sub = tab.subs.find(s => s[0] === subId) || tab.subs[0];
     LS.set('ts-tab-' + p.id, tab.id);
     const statut = (TSP.STATUTS.find(s => s[0] === p.statut) || [, ''])[1];
-    const tabsH = TABS.map(t => { const i = PHASE_ORDER.indexOf(t.id), b = i < 0 || curIdx < 0 ? '' : i < curIdx ? '<span class="badge">fait</span>' : i === curIdx ? '<span class="badge cur">en cours</span>' : '';
-      return `<a class="tab${t.id === tab.id ? ' on' : ''}${t.tr ? ' tr' : ''}" href="#/p/${p.id}/${t.id}" style="${t.id === tab.id ? `border-bottom-color:${t.c}` : ''}"><span class="dot" style="background:${t.c}"></span>${E(t.nom)}${b}</a>`; }).join('');
+    const tabsH = TABS.map(t => { const i = PHASE_ORDER.indexOf(t.id), b = i < 0 || curIdx < 0 ? '' : i < curIdx ? '<span class="badge done" title="Phase faite">✓</span>' : i === curIdx ? '<span class="badge cur">en cours</span>' : '';
+      return `<a class="tab${t.id === tab.id ? ' on' : ''}${t.tr ? ' tr' : ''}" href="#/p/${p.id}/${t.id}" style="--c:${t.c}"><span class="dot" style="background:${t.c}"></span>${E(t.nom)}${b}</a>`; }).join('');
     const subsH = tab.subs.length > 1 ? `<nav class="subs" aria-label="Sous-onglets">${tab.subs.map(s => `<a class="sub${s[0] === sub[0] ? ' on' : ''}" href="#/p/${p.id}/${tab.id}/${s[0]}" style="${s[0] === sub[0] ? `background:${tab.c};border-color:${tab.c}` : ''}">${E(s[1])}${s[2] === 'soon' ? '<span class="soon">à venir</span>' : ''}</a>`).join('')}</nav>` : '<div style="height:10px"></div>';
     const url = sub[2] === 'frame' ? sub[3](p) : '';
     $m().innerHTML = `<div class="phead"><div class="t"><a class="btn icon back" href="#/" aria-label="Projets">${ico('back')}</a><div style="flex:1;min-width:0"><div class="k">Projet${statut ? ' · ' + E(statut) : ''}${p.phase ? ' · phase ' + E(p.phase) : ''}</div><h1>${E(p.code || '—')} · ${E(p.nom || 'Projet sans nom')}</h1><div class="w">${E([p.adresse, [p.cp, p.ville].filter(Boolean).join(' ')].filter(Boolean).join(', ') || 'Adresse à renseigner dans la fiche')}</div></div>
-        <div class="acts">${url ? `<a class="btn sm wide" href="${E(url)}" target="_blank" rel="noopener" title="Ouvrir dans un nouvel onglet">${ico('ext')}Plein écran</a><button class="btn sm" id="reF" title="Recharger le module" aria-label="Recharger le module">${ico('reload')}</button>` : `<a class="btn sm wide" href="#/p/${p.id}/projet/fiche">Fiche</a>`}<a class="btn sm" href="#/p/${p.id}/chantier/chantier" style="color:#7a4fb0">${ico('cam')}<span class="wide">Visite de chantier</span></a></div></div>
+        <div class="acts"><a class="btn sm desk${tab.id === 'planning' ? ' on' : ''}" href="#/p/${p.id}/planning" style="--c:#2f6fb5"><span class="dot" style="background:#2f6fb5"></span>Planning</a><a class="btn sm desk${tab.id === 'projet' ? ' on' : ''}" href="#/p/${p.id}/projet" style="--c:#9a3b6b"><span class="dot" style="background:#9a3b6b"></span>Fiche et intervenants</a>${url ? `<a class="btn sm wide" href="${E(url)}" target="_blank" rel="noopener" title="Ouvrir dans un nouvel onglet">${ico('ext')}Plein écran</a><button class="btn sm" id="reF" title="Recharger le module" aria-label="Recharger le module">${ico('reload')}</button>` : ''}<a class="btn sm" href="#/p/${p.id}/chantier/chantier" style="color:#7a4fb0">${ico('cam')}<span class="wide">Visite de chantier</span></a></div></div>
       <nav class="tabs" aria-label="Phases du projet">${tabsH}</nav>${subsH}</div><div class="body" id="pbody"></div>`;
     const sel = document.querySelector('.tab.on'); if (sel) sel.scrollIntoView({ block: 'nearest', inline: 'center' });
     const body = document.getElementById('pbody');

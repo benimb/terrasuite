@@ -65,15 +65,18 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .phead .w{color:var(--muted);font-size:13.5px}
 .acts{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .btn.back{display:none}
-.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin-top:10px}
+.tabs{display:flex;flex-wrap:wrap;gap:4px 3px;margin-top:12px;border-bottom:1px solid var(--line);padding-left:2px}
 .tabs::-webkit-scrollbar{display:none}
-.tab{display:flex;align-items:center;gap:6px;height:42px;padding:0 9px;text-decoration:none;color:var(--muted);font-weight:600;font-size:14px;border-bottom:3px solid transparent;white-space:nowrap}
-.tab.on{color:var(--ink)}
-.tab.tr{margin-left:auto}
-.tab.tr ~ .tab.tr{margin-left:0}
+.tab{display:flex;align-items:center;gap:6px;height:40px;padding:0 11px;text-decoration:none;color:var(--muted);font-weight:600;font-size:14px;white-space:nowrap;background:var(--sunk);border:1px solid var(--line);border-bottom:0;border-radius:10px 10px 0 0;margin-bottom:-1px;position:relative}
+.tab:hover{color:var(--ink);background:var(--surface)}
+.tab.on{color:var(--ink);background:var(--surface);box-shadow:inset 0 3px 0 var(--c,var(--accent));z-index:1;border-bottom:1px solid var(--surface);height:41px;margin-bottom:-1px}
+.tab.tr{display:none}
+.btn.desk.on{box-shadow:inset 0 -3px 0 var(--c);border-color:var(--c)}
+@media (max-width:899px){.tab.tr{display:flex}.btn.desk{display:none}}
 .badge{font-size:10.5px;font-weight:700;padding:2px 6px;border-radius:4px;background:#ecd9cf;color:#6b3a24}
 .badge.cur{background:var(--accent);color:#fff}
-.subs{display:flex;gap:8px;padding:10px 0 12px;border-top:1px solid var(--line2);overflow-x:auto;scrollbar-width:none}
+.badge.done{background:transparent;color:var(--ok);font-size:13px;padding:0}
+.subs{display:flex;gap:8px;padding:12px 0 12px;overflow-x:auto;scrollbar-width:none}
 .subs::-webkit-scrollbar{display:none}
 .sub{height:32px;display:inline-flex;align-items:center;padding:0 13px;border-radius:16px;border:1px solid var(--line);background:var(--surface);color:var(--ink);text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap}
 .sub.on{color:#fff}
@@ -81,6 +84,10 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke
 @media (max-width:899px){
   .phead{padding:calc(10px + var(--safe-t)) 14px 0}
   .phead h1{font-size:19px}
+  .tab{height:36px;padding:0 9px;font-size:13px;gap:5px}
+  .tab.on{height:37px}
+  .tab .badge{font-size:9.5px;padding:1px 4px}
+  .tab.tr{margin-left:0}
   .btn.back{display:inline-flex}
   .acts .wide{display:none}
 }
@@ -158,14 +165,14 @@ table.t td input:hover,table.t td select:hover,table.t td input:focus,table.t td
 .choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
 .choice{display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:26px 24px;min-height:190px;text-decoration:none;color:inherit;cursor:pointer;font:inherit}
 .choice:hover{border-color:var(--accent);box-shadow:var(--shadow)}
-.choice .ci{width:52px;height:52px;border-radius:14px;display:grid;place-items:center}
-.choice .ci svg{width:26px;height:26px}
+.choice .ci{width:72px;height:72px;display:grid;place-items:center}
+.choice .ci svg.house{width:72px;height:72px}
 .choice .ct{font:700 22px "Space Grotesk",sans-serif}
 .choice .cd{color:var(--muted);font-size:14px}
 .note{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px;border-color:#ecc9b8;background:var(--accent-soft)}
 .note .muted{font-size:13.5px;margin-top:2px}
 .hlinks{display:flex;gap:22px;flex-wrap:wrap;margin-top:26px;font-size:14px;font-weight:600}
-@media (max-width:899px){.home{padding-top:calc(20px + var(--safe-t))}.hhead h1{font-size:26px}.choice{min-height:0;padding:20px;flex-direction:row;align-items:center;flex-wrap:wrap}.choice .ct{font-size:19px}.choice .cd{flex-basis:100%}}
+@media (max-width:899px){.home{padding-top:calc(20px + var(--safe-t))}.hhead h1{font-size:26px}.choice .ci,.choice .ci svg.house{width:56px;height:56px}.choice{min-height:0;padding:20px;flex-direction:row;align-items:center;flex-wrap:wrap}.choice .ct{font-size:19px}.choice .cd{flex-basis:100%}}
 /* fiche de l'agence (formulaire commun avec TerraContacts) */
 .fsec{font-size:15px;margin:2px 0}
 .bar{display:flex;align-items:center;gap:10px}
