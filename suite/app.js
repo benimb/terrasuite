@@ -3,7 +3,7 @@
    plus le planning et la fiche, transversaux. Les modules existants (TerraGeo, TerraEstim, TerraPlanning, TerraChantier,
    TerraDocs, TerraContacts) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
    Les bibliothèques communes à tous les projets (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont à part. */
-const TS_VERSION = '0.4';
+const TS_VERSION = '0.5';
 const TSApp = (() => {
   const SVG = {
     back: '<path d="M15 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
@@ -110,7 +110,7 @@ const TSApp = (() => {
     const act = L.filter(p => p.statut !== 'archive' && p.statut !== 'termine'), old = L.filter(p => p.statut === 'archive' || p.statut === 'termine');
     const item = p => `<a class="pitem${p.id === curP ? ' on' : ''}${p.statut === 'archive' ? ' arch' : ''}" href="#/p/${p.id}"><span class="l1"><b>${E(p.code || '—')}</b><span class="ph">${E(p.phase || '')}</span></span><span class="nm">${E(p.nom || 'Projet sans nom')}</span></a>`;
     document.getElementById('side').innerHTML = `
-      <a class="brand" href="#/"><span class="logo">T</span><b>TerraSuite</b><span class="ver">${TS_VERSION} bêta</span></a>
+      <a class="brand" href="#/"><img class="logo" src="suite/logo.svg" alt=""><b>Terra<span>Suite</span></b><span class="ver">${TS_VERSION} bêta</span></a>
       <div class="search"><label class="hint" for="pq">Chercher un projet</label><input id="pq" type="search" placeholder="Code, nom, commune" value="${E(st.q)}"></div>
       <div class="side-h"><span class="cap">Projets</span><button class="btn sm pri" id="newP">${ico('plus')}Projet</button></div>
       <nav class="plist" aria-label="Projets">${act.map(item).join('') || '<div class="empty" style="padding:8px 12px">Aucun projet</div>'}${old.length ? `<details style="margin-top:6px"><summary class="hint" style="padding:6px 12px;cursor:pointer">Terminés, archivés (${old.length})</summary>${old.map(item).join('')}</details>` : ''}</nav>
@@ -142,7 +142,8 @@ const TSApp = (() => {
     const who = et.connecte && et.profil ? (et.profil.nom || '').trim().split(/\s+/)[0] || ((arch && et.profil.email && arch.email && arch.email.toLowerCase() === et.profil.email.toLowerCase()) ? arch.prenom : '') : '';
     const hello = who ? 'Bonjour ' + who : 'Bonjour';
     $m().innerHTML = `<div class="body home"><div class="wrap" style="max-width:980px">
-      <div class="hhead"><span id="agLogoH" class="hlogo"></span><div><div class="k">${E(ag && ag.nom ? ag.nom : 'TerraSuite')}</div><h1>${E(hello)}</h1></div></div>
+      <div class="suite-id"><img src="suite/logo.svg" alt="" width="64" height="64"><div><div class="wm">Terra<span>Suite</span></div><div class="tag">Le projet d'architecture, de l'esquisse à la garantie de parfait achèvement</div></div></div>
+      <div class="hhead"><span id="agLogoH" class="hlogo"></span><div>${ag && ag.nom ? `<div class="k">${E(ag.nom)}</div>` : ''}<h1>${E(hello)}</h1></div></div>
       ${!et.pret ? `<div class="card note"><div><b>Connectez-vous à votre compte TerraSuite</b><div class="muted">Pour retrouver vos projets et leur contenu sur le PC, la tablette et le téléphone.</div></div><a class="btn pri" href="#/compte">Se connecter</a></div>` : ''}
       ${!ag && !LS.get('ts-agence-plus-tard', false) ? `<div class="card note"><div><b>Première connexion : renseignez le profil de votre agence</b><div class="muted">Nom, adresse, logo, architectes : en tête des comptes-rendus, des PV et des documents. Une fois pour toute l'agence.</div></div><div class="row"><button class="btn" id="agLater">Plus tard</button><a class="btn pri" href="#/agence">Renseigner</a></div></div>` : ''}
       <div class="choices">
