@@ -206,3 +206,6 @@ table.t td input:hover,table.t td select:hover,table.t td input:focus,table.t td
   #tsPrint tr{break-inside:avoid}
 }
 tfoot td{border-top:2px solid var(--line)}
+/* édition plein écran (maquette 3D sur téléphone et tablette) */
+.ts.immersive .phead,.ts.immersive .ts-bottom{display:none}
+.ts.immersive .ts-main{padding-bottom:0}

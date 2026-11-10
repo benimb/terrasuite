@@ -3,7 +3,7 @@
    plus le planning et la fiche, transversaux. Les modules existants (TerraGeo, TerraEstim, TerraPlanning, TerraChantier,
    TerraDocs, TerraContacts, TerraModel) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
    Les bibliothèques communes à tous les projets (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont à part. */
-const TS_VERSION = '0.6';
+const TS_VERSION = '0.6.1';
 const TSApp = (() => {
   const SVG = {
     back: '<path d="M15 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
@@ -209,6 +209,7 @@ const TSApp = (() => {
       <nav class="tabs" aria-label="Phases du projet">${tabsH}</nav>${subsH}</div><div class="body" id="pbody"></div>`;
     const sel = document.querySelector('.tab.on'); if (sel) sel.scrollIntoView({ block: 'nearest', inline: 'center' });
     const body = document.getElementById('pbody');
+    st.imm = IMMERSIVE.has(sub[0]); setImm(false);
     if (sub[2] === 'frame') { body.className = 'body frame'; mountFrame(body, url, sub[4]); const rf = document.getElementById('reF'); if (rf) rf.onclick = () => { st.frames.delete(url); mountFrame(body, url, sub[4], true); }; return; }
     if (sub[2] === 'soon') { const s = SOON[sub[0]] || [sub[1], '']; body.innerHTML = `<div class="card soonbox"><div class="hint">Prévu dans une prochaine version</div><h2 style="margin-top:4px">${E(s[0])}</h2><p class="muted">${E(s[1])}</p></div>`; return; }
     if (typeof TSMod !== 'undefined' && TSMod.MODS[sub[0]]) return TSMod.MODS[sub[0]](p, body);
@@ -217,6 +218,20 @@ const TSApp = (() => {
     if (sub[0] === 'auto') return drawAuto(p, body);
   }
 
+  /* mode plein écran sur téléphone et tablette : pendant l'édition dans un module (maquette 3D), l'en-tête du projet,
+     les onglets et la barre du bas se masquent ; le bouton ☰ du module les fait revenir */
+  const IMMERSIVE = new Set(['m3d']), SMALL = matchMedia('(max-width: 899px), (max-height: 560px)');
+  function setImm(on) {
+    on = !!on; const ts = document.getElementById('ts'); if (!ts || ts.classList.contains('immersive') === on) return;
+    ts.classList.toggle('immersive', on);
+    for (const f of st.frames.values()) try { f.contentWindow.postMessage({ ts: 'immersive', on }, '*'); } catch (e) {}
+  }
+  addEventListener('message', e => {
+    const d = e.data; if (!d || typeof d !== 'object') return;
+    if (d.ts === 'edit' && st.imm && SMALL.matches) setImm(true);
+    else if (d.ts === 'menus') setImm(false);
+  });
+  addEventListener('hashchange', () => setImm(false));
   /* modules ouverts dans un cadre ; les derniers ouverts restent chargés (retour instantané) */
   function mountFrame(body, url, click, fresh) {
     let f = st.frames.get(url);

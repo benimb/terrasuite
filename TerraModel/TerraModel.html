@@ -41,6 +41,18 @@ a.btn{text-decoration:none;color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 #proj{max-width:260px}
 html.ts-embed .brand small{display:none}
+#bMenus{font-size:15px;padding:3px 10px}
+/* dans TerraSuite sur téléphone : barre du haut sur une ligne, fichiers en plein écran seulement */
+@media (max-width:760px), (max-height:560px){
+  html.ts-embed .top{padding:5px 8px;gap:4px 6px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  html.ts-embed .top::-webkit-scrollbar{display:none}
+  html.ts-embed .brand, html.ts-embed #gFile, html.ts-embed .top .grow{display:none}
+  html.ts-embed .status{flex:1;min-width:0}
+  html.ts-embed .bar{padding:4px 8px;gap:6px;flex-wrap:nowrap}
+  html.ts-embed .hint{flex:1 1 0} html.ts-embed #vcbL{display:none} html.ts-embed #vcb{width:110px}
+  html.ts-embed .tools{gap:1px;padding:3px 4px} html.ts-embed .tb{width:36px;height:36px;flex:none}
+  html.ts-embed .viewbar .btn{padding:2px 6px;font-size:11.5px}
+}
 .status{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:320px}
 .status.err{color:var(--err)} .status.ok{color:var(--ok)}
 .work{flex:1;min-height:0;display:flex}
@@ -78,10 +90,11 @@ html.ts-embed .brand small{display:none}
 <body>
 <div id="app">
   <header class="top">
+    <button class="btn" id="bMenus" hidden title="Afficher les menus de TerraSuite" aria-label="Afficher les menus de TerraSuite">☰</button>
     <a class="btn" href="../terrasuite.html" id="homeLink">← TerraSuite</a>
     <div class="brand">TerraModel <span class="ver" id="ver"></span><small>Maquette 3D, pousser/tirer</small></div>
     <select class="btn" id="proj" hidden aria-label="Projet de la maquette" title="Projet de la maquette"></select>
-    <div class="grp">
+    <div class="grp" id="gFile">
       <button class="btn" id="bNew" title="Nouvelle maquette">Nouveau</button>
       <button class="btn" id="bOpen" title="Ouvrir une maquette (.json)">Ouvrir</button>
       <button class="btn" id="bSave" title="Enregistrer la maquette (.json)">Enregistrer</button>
@@ -435,7 +448,7 @@ function modelEdges(M) {
 
 </script>
 <script>
-const APP_VERSION = '0.2';
+const APP_VERSION = '0.2.1';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const NF2 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const fmtL = x => NF2.format(x) + ' m', fmtA = x => NF2.format(x) + ' m²', fmtV = x => NF2.format(x) + ' m³';
@@ -1072,6 +1085,13 @@ const HELP = `<h3>Tracer</h3><table>
   $('#fileIn').addEventListener('change', async e => { const f = e.target.files[0]; e.target.value = ''; if (!f) return; try { const before = JSON.stringify(M); loadData(JSON.parse(await f.text())); ST.undo.push(before); changed(); setStatus('Maquette ouverte : ' + f.name, 'ok'); } catch (err) { setStatus('Fichier illisible : ' + err.message, 'err'); } });
   $('#segs').addEventListener('change', e => { const t = ST.tool; if (t !== 'circle' && t !== 'poly') return; ST.segs[t] = Math.max(3, Math.min(128, Math.round(+e.target.value) || ST.segs[t])); e.target.value = ST.segs[t]; save(); cv.focus(); });
   $('#help').innerHTML = HELP; $('#bHelp').onclick = () => { const h = $('#help'); h.hidden = !h.hidden; $('#bHelp').setAttribute('aria-expanded', String(!h.hidden)); $('#bHelp').classList.toggle('on', !h.hidden); };
+  /* dans TerraSuite : la suite masque ses menus pendant l'édition (téléphone, tablette) ; ☰ les fait revenir */
+  if (HAS_LINK && TSLink.embedded) {
+    let lastEdit = 0; const edit = () => { const t = Date.now(); if (t - lastEdit < 1500) return; lastEdit = t; try { parent.postMessage({ ts: 'edit' }, '*'); } catch (e) {} };
+    cv.addEventListener('pointerdown', edit); $$('.tb').forEach(b => b.addEventListener('click', edit));
+    window.addEventListener('message', e => { const d = e.data; if (d && d.ts === 'immersive') { $('#bMenus').hidden = !d.on; setTimeout(resize, 50); } });
+    $('#bMenus').onclick = () => { try { parent.postMessage({ ts: 'menus' }, '*'); } catch (e) {} };
+  }
   setTool('rect'); cv.focus();
   window.TM = { G, PR, openRid, setProjection, isO, get camera() { return camera; }, get M() { return M; }, set M(v) { M = v; changed(); }, ST, TOOLS, setTool, snap, pickFace, toScreen, req, show, rebuild, frameView, bounds, setView, closedVolume };
 })();
