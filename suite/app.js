@@ -3,7 +3,7 @@
    plus le planning et la fiche, transversaux. Les modules existants (TerraGeo, TerraEstim, TerraPlanning, TerraChantier,
    TerraDocs, TerraContacts, TerraModel) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
    Les bibliothèques communes à tous les projets (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont à part. */
-const TS_VERSION = '0.6.2';
+const TS_VERSION = '0.6.3';
 const TSApp = (() => {
   const SVG = {
     back: '<path d="M15 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
@@ -232,11 +232,13 @@ const TSApp = (() => {
     else if (d.ts === 'menus') setImm(false);
   });
   addEventListener('hashchange', () => setImm(false));
+  /* adresse du module marquée de la version de la suite : après une mise à jour, le module est rechargé et non repris d'un cache */
+  const withV = u => u.replace(/^([^#?]*)(\?[^#]*)?/, (m, a, q) => a + (q ? q + '&' : '?') + 'v=' + TS_VERSION);
   /* modules ouverts dans un cadre ; les derniers ouverts restent chargés (retour instantané) */
   function mountFrame(body, url, click, fresh) {
     let f = st.frames.get(url);
     if (!f || fresh) {
-      f = document.createElement('iframe'); f.src = url; f.title = 'Module TerraSuite'; f.setAttribute('allow', 'camera; microphone; geolocation; clipboard-write; fullscreen');
+      f = document.createElement('iframe'); f.src = withV(url); f.title = 'Module TerraSuite'; f.setAttribute('allow', 'camera; microphone; geolocation; clipboard-write; fullscreen');
       if (click) f.addEventListener('load', () => { let n = 0; const t = setInterval(() => { try { const b = f.contentDocument && f.contentDocument.querySelector(click); if (b) { b.click(); clearInterval(t); } } catch (e) { clearInterval(t); } if (++n > 40) clearInterval(t); }, 250); }, { once: true });
       st.frames.set(url, f);
       while (st.frames.size > 4) { const k = st.frames.keys().next().value; st.frames.get(k).remove(); st.frames.delete(k); }
