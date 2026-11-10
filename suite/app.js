@@ -3,7 +3,7 @@
    plus le planning et la fiche, transversaux. Les modules existants (TerraGeo, TerraEstim, TerraPlanning, TerraChantier,
    TerraDocs, TerraContacts, TerraModel) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
    Les bibliothèques communes à tous les projets (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont à part. */
-const TS_VERSION = '0.6.1';
+const TS_VERSION = '0.6.2';
 const TSApp = (() => {
   const SVG = {
     back: '<path d="M15 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
@@ -218,9 +218,9 @@ const TSApp = (() => {
     if (sub[0] === 'auto') return drawAuto(p, body);
   }
 
-  /* mode plein écran sur téléphone et tablette : pendant l'édition dans un module (maquette 3D), l'en-tête du projet,
+  /* mode plein écran sur téléphone et tablette (petit écran ou écran tactile, en portrait comme en paysage) : pendant l'édition dans un module (maquette 3D), l'en-tête du projet,
      les onglets et la barre du bas se masquent ; le bouton ☰ du module les fait revenir */
-  const IMMERSIVE = new Set(['m3d']), SMALL = matchMedia('(max-width: 899px), (max-height: 560px)');
+  const IMMERSIVE = new Set(['m3d']), SMALL = matchMedia('(max-width: 899px), (max-height: 560px), (pointer: coarse), (hover: none)');
   function setImm(on) {
     on = !!on; const ts = document.getElementById('ts'); if (!ts || ts.classList.contains('immersive') === on) return;
     ts.classList.toggle('immersive', on);
