@@ -1,0 +1,1081 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TerraModel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* TerraModel : modeleur 3D de type pousser/tirer. Même famille visuelle que les autres applications TerraSuite, accent ocre. */
+:root{
+  --bg:#F0EEEA; --panel:#FFFFFF; --sunk:#F7F5F1; --ink:#22201C; --muted:#6A655C; --line:#DAD4CA; --line2:#E9E4DC;
+  --accent:#8A5A12; --accent-ink:#FFFFFF; --accent-soft:#F3E6CF; --sel:#F6ECDA; --err:#B3261E; --ok:#2E6B3F;
+  --view:#E6E9EB; --face:#F2EFE9; --back:#A9B7C6; --edge:#2A2723; --grid:#C9CDD0;
+  --f-ui:"IBM Plex Sans","Segoe UI",system-ui,sans-serif; --f-cond:"IBM Plex Sans Condensed","Arial Narrow","IBM Plex Sans",sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#171614; --panel:#1F1D1A; --sunk:#1A1917; --ink:#ECE7DF; --muted:#A39C90; --line:#3A362F; --line2:#2C2925;
+  --accent:#E0B062; --accent-ink:#1C1608; --accent-soft:#3A2F1C; --sel:#30281A; --err:#F08A80; --ok:#7CC48F;
+  --view:#2A2D30; --face:#D9D5CE; --back:#6F8296; --edge:#141310; --grid:#43474B; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#171614; --panel:#1F1D1A; --sunk:#1A1917; --ink:#ECE7DF; --muted:#A39C90; --line:#3A362F; --line2:#2C2925;
+  --accent:#E0B062; --accent-ink:#1C1608; --accent-soft:#3A2F1C; --sel:#30281A; --err:#F08A80; --ok:#7CC48F;
+  --view:#2A2D30; --face:#D9D5CE; --back:#6F8296; --edge:#141310; --grid:#43474B; color-scheme:dark }
+[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:13px;line-height:1.45;overflow:hidden}
+*{box-sizing:border-box}
+button,input,select{font:inherit;color:inherit}
+#app{display:flex;flex-direction:column;height:100%;min-height:0}
+.top{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:8px 14px;background:var(--panel);border-bottom:1px solid var(--line)}
+.brand{font-family:var(--f-cond);font-weight:600;font-size:15px;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:baseline;gap:8px;white-space:nowrap}
+.brand small{font-family:var(--f-ui);font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted);font-size:12px}
+.ver{font-family:var(--f-mono);font-size:11px;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:0 7px;letter-spacing:0;text-transform:none}
+.grow{flex:1}
+.grp{display:flex;gap:4px;align-items:center}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:6px;padding:4px 9px;cursor:pointer;white-space:nowrap;line-height:1.3}
+.btn:hover{border-color:var(--muted)} .btn:disabled{opacity:.45;cursor:default}
+.btn.on{background:var(--accent-soft);border-color:var(--accent)}
+a.btn{text-decoration:none;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+#proj{max-width:260px}
+html.ts-embed .brand small{display:none}
+.status{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:320px}
+.status.err{color:var(--err)} .status.ok{color:var(--ok)}
+.work{flex:1;min-height:0;display:flex}
+.tools{display:flex;flex-direction:column;gap:3px;padding:8px 6px;background:var(--panel);border-right:1px solid var(--line);overflow:auto}
+.tools .sep{height:1px;background:var(--line);margin:4px 2px}
+.tb{width:40px;height:40px;border:1px solid transparent;border-radius:7px;background:transparent;cursor:pointer;display:grid;place-items:center;color:var(--ink);position:relative}
+.tb:hover{border-color:var(--line)} .tb.on{background:var(--accent-soft);border-color:var(--accent)}
+.tb svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.tb kbd{position:absolute;right:2px;bottom:1px;font-family:var(--f-mono);font-size:9px;color:var(--muted)}
+.view{position:relative;flex:1;min-width:0;background:var(--view)}
+#cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;outline:none}
+.viewbar{position:absolute;top:8px;right:8px;display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100% - 16px)}
+.viewbar .btn{box-shadow:0 1px 3px rgba(0,0,0,.15);font-size:12px;padding:3px 8px}
+.info{position:absolute;left:8px;bottom:8px;background:color-mix(in srgb,var(--panel) 90%,transparent);border:1px solid var(--line);border-radius:7px;padding:6px 9px;font-size:12px;max-width:min(380px,calc(100% - 16px));pointer-events:none}
+.info b{font-weight:600} .info .mono{font-family:var(--f-mono);font-size:11.5px}
+#snapMk{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;pointer-events:none;border:2px solid #2E8B3A;border-radius:50%;background:rgba(255,255,255,.6)}
+#snapMk.mid{border-color:#1C8FB0} #snapMk.edge{border-color:#C0392B;border-radius:2px} #snapMk.face{border-color:#2F5FD0;transform:rotate(45deg);border-radius:2px}
+#snapMk.axis0{border-color:#D02020} #snapMk.axis1{border-color:#1E9A2E} #snapMk.axis2{border-color:#2040D0}
+#snapLb{position:absolute;pointer-events:none;font-size:11.5px;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 5px;white-space:nowrap;color:var(--ink)}
+.bar{display:flex;align-items:center;gap:10px;padding:5px 12px;background:var(--panel);border-top:1px solid var(--line);flex-wrap:wrap}
+.hint{color:var(--muted);font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 260px}
+.bar label{display:flex;gap:6px;align-items:center;color:var(--muted);font-size:12px}
+.bar input{background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:3px 7px;font-family:var(--f-mono);font-size:12px}
+#vcb{width:150px;text-align:right} #vcb.flash{border-color:var(--accent);background:var(--accent-soft)}
+#segs{width:56px}
+.help{position:absolute;top:44px;right:8px;width:min(400px,calc(100% - 16px));max-height:calc(100% - 56px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.15);padding:10px 14px;font-size:12.5px}
+.help h3{font-family:var(--f-cond);font-size:13px;letter-spacing:.05em;text-transform:uppercase;margin:8px 0 4px}
+.help table{border-collapse:collapse;width:100%} .help td{padding:2px 4px;vertical-align:top;border-bottom:1px solid var(--line2)} .help td:first-child{white-space:nowrap;font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
+@media (max-width:760px){
+  .work{flex-direction:column-reverse} .tools{flex-direction:row;border-right:0;border-top:1px solid var(--line);padding:4px 6px} .tools .sep{width:1px;height:auto;margin:2px 4px}
+  .tb kbd{display:none} .status{max-width:100%} .brand small{display:none} #vcb{width:120px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <a class="btn" href="../terrasuite.html" id="homeLink">← TerraSuite</a>
+    <div class="brand">TerraModel <span class="ver" id="ver"></span><small>Maquette 3D, pousser/tirer</small></div>
+    <select class="btn" id="proj" hidden aria-label="Projet de la maquette" title="Projet de la maquette"></select>
+    <div class="grp">
+      <button class="btn" id="bNew" title="Nouvelle maquette">Nouveau</button>
+      <button class="btn" id="bOpen" title="Ouvrir une maquette (.json)">Ouvrir</button>
+      <button class="btn" id="bSave" title="Enregistrer la maquette (.json)">Enregistrer</button>
+      <button class="btn" id="bObj" title="Exporter en OBJ (Blender, SketchUp, Twinmotion…)">Export OBJ</button>
+    </div>
+    <div class="grp">
+      <button class="btn" id="bUndo" title="Annuler (Ctrl+Z)">↶ Annuler</button>
+      <button class="btn" id="bRedo" title="Rétablir (Ctrl+Y)">↷ Rétablir</button>
+    </div>
+    <span class="grow"></span>
+    <span class="status" id="status" role="status"></span>
+    <button class="btn" id="bHelp" aria-expanded="false">Aide</button>
+  </header>
+  <div class="work">
+    <nav class="tools" aria-label="Outils">
+      <button class="tb" data-tool="select" title="Sélection (Espace)"><svg viewBox="0 0 24 24"><path d="M6 3l12 9-5.5 1.2L15 19l-2.4 1.1-2.6-5.8L6 18z"/></svg><kbd>␣</kbd></button>
+      <button class="tb" data-tool="erase" title="Gomme (E) : clic sur une arête ou une face"><svg viewBox="0 0 24 24"><path d="M4 16l9-9 7 7-5 5H8z"/><path d="M9 11l7 7"/><path d="M8 19h12"/></svg><kbd>E</kbd></button>
+      <div class="sep"></div>
+      <button class="tb" data-tool="line" title="Ligne (L)"><svg viewBox="0 0 24 24"><path d="M5 19L19 5"/><circle cx="5" cy="19" r="1.6"/><circle cx="19" cy="5" r="1.6"/></svg><kbd>L</kbd></button>
+      <button class="tb" data-tool="rect" title="Rectangle (R)"><svg viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12"/></svg><kbd>R</kbd></button>
+      <button class="tb" data-tool="circle" title="Cercle (C)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 12h8"/></svg><kbd>C</kbd></button>
+      <button class="tb" data-tool="poly" title="Polygone (G)"><svg viewBox="0 0 24 24"><path d="M12 3.5l7.4 4.25v8.5L12 20.5l-7.4-4.25v-8.5z"/></svg><kbd>G</kbd></button>
+      <div class="sep"></div>
+      <button class="tb" data-tool="push" title="Pousser/tirer (P)"><svg viewBox="0 0 24 24"><path d="M4 15l8-4 8 4-8 4z"/><path d="M12 11V3"/><path d="M9 6l3-3 3 3"/></svg><kbd>P</kbd></button>
+      <button class="tb" data-tool="move" title="Déplacer (M) ; Ctrl : copier"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3"/><circle cx="12" cy="12" r="2.2"/></svg><kbd>M</kbd></button>
+      <div class="sep"></div>
+      <button class="tb" data-tool="orbit" title="Orbite (O) ; aussi bouton du milieu de la souris"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="4.5"/><path d="M12 3v18"/><path d="M18 5.5l2.2 2.4-3 .9"/></svg><kbd>O</kbd></button>
+      <button class="tb" data-tool="pan" title="Panoramique (H) ; aussi Maj + bouton du milieu, ou clic droit"><svg viewBox="0 0 24 24"><path d="M8 13V6.5a1.5 1.5 0 0 1 3 0V12M11 11V4.5a1.5 1.5 0 0 1 3 0V11M14 11V5.5a1.5 1.5 0 0 1 3 0V13M17 10.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1.5a6 6 0 0 1-4.6-2.2L4.5 14.6a1.5 1.5 0 0 1 2.3-1.9L8 14"/></svg><kbd>H</kbd></button>
+      <button class="tb" id="tZoomExt" title="Zoom étendu (Maj+Z)"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><rect x="9" y="9" width="6" height="6"/></svg></button>
+    </nav>
+    <div class="view" id="view">
+      <canvas id="cv" tabindex="0" aria-label="Vue 3D de la maquette"></canvas>
+      <div id="snapMk" hidden></div><div id="snapLb" hidden></div>
+      <div class="viewbar">
+        <button class="btn" data-view="iso" title="Vue isométrique">Iso</button>
+        <button class="btn" data-view="top" title="Vue de dessus">Dessus</button>
+        <button class="btn" data-view="front" title="Vue de face (depuis le sud)">Face</button>
+        <button class="btn" data-view="right" title="Vue de droite (depuis l'est)">Droite</button>
+        <button class="btn" data-view="back" title="Vue arrière (depuis le nord)">Arrière</button>
+        <button class="btn" data-view="left" title="Vue de gauche (depuis l'ouest)">Gauche</button>
+        <button class="btn" id="bProj" title="Perspective ou vue parallèle (projection orthogonale, pour les plans et élévations)">Perspective</button>
+        <button class="btn" id="bCenter" title="Centrer la vue sur la sélection, ou sur toute la maquette">Centrer</button>
+      </div>
+      <div class="info" id="info"></div>
+      <div class="help" id="help" hidden></div>
+    </div>
+  </div>
+  <footer class="bar">
+    <span class="hint" id="hint"></span>
+    <label id="segsL" hidden><span id="segsT">Segments</span><input type="number" id="segs" min="3" max="128" step="1"></label>
+    <label for="vcb" id="vcbL">Mesures</label><input type="text" id="vcb" autocomplete="off" spellcheck="false" aria-label="Saisie des cotes">
+  </footer>
+</div>
+<input type="file" id="fileIn" accept=".json,application/json" hidden>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="../TerraChantier/projets-api.js"></script>
+<script src="../TerraChantier/ts-link.js"></script>
+<script>
+/* ================= TerraModel : noyau géométrique =================
+   Modèle : sommets partagés M.v[id] = [x, y, z] (mètres, Z vers le haut),
+   faces planes M.f[id] = { o: [ids] contour extérieur, h: [[ids]] trous },
+   le contour extérieur tourne dans le sens direct autour de la normale de la face (les trous en sens inverse),
+   traits libres M.l[id] = [a, b].
+   Règles d'usage type SketchUp :
+   - une forme tracée dans une face s'y imprime (la face reçoit un trou, la forme devient une face) ;
+   - un trait d'un bord à l'autre d'une face la divise en deux ;
+   - pousser/tirer : une face posée seule donne un volume ; une face prise dans un volume donne une excroissance (vers l'extérieur)
+     ou un creux (vers l'intérieur), et un percement quand le creux atteint la face opposée ;
+   - deux faces confondues de sens opposés s'annulent (percement, volumes accolés qui fusionnent),
+     deux faces coplanaires de même sens créées par une extrusion fusionnent (pas d'arête inutile). */
+const TOL = 1e-5;
+const vsub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]], vadd = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
+const vmul = (a, s) => [a[0] * s, a[1] * s, a[2] * s], vdot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+const vcross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+const vlen = a => Math.hypot(a[0], a[1], a[2]), vnorm = a => { const l = vlen(a) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
+const vdist = (a, b) => vlen(vsub(a, b));
+
+function newModel() { return { v: {}, f: {}, l: {}, n: 1 }; }
+const cloneModel = M => JSON.parse(JSON.stringify(M));
+function addV(M, p) { for (const k in M.v) if (vdist(M.v[k], p) < TOL) return +k; const id = M.n++; M.v[id] = [p[0], p[1], p[2]]; return id; }
+function addF(M, f) { const id = M.n++; M.f[id] = { o: f.o.slice(), h: (f.h || []).map(x => x.slice()) }; return id; }
+const loopsOf = f => [f.o, ...f.h];
+const revF = f => ({ o: f.o.slice().reverse(), h: f.h.map(x => x.slice().reverse()) });
+const ekey = (a, b) => a < b ? a + '|' + b : b + '|' + a;
+
+function newell(M, L) {
+  const n = [0, 0, 0];
+  for (let i = 0; i < L.length; i++) { const a = M.v[L[i]], b = M.v[L[(i + 1) % L.length]]; n[0] += (a[1] - b[1]) * (a[2] + b[2]); n[1] += (a[2] - b[2]) * (a[0] + b[0]); n[2] += (a[0] - b[0]) * (a[1] + b[1]); }
+  return n;
+}
+const faceN = (M, f) => vnorm(newell(M, f.o));
+const faceArea = (M, f) => (vlen(newell(M, f.o)) - f.h.reduce((s, h) => s + vlen(newell(M, h)), 0)) / 2;
+/* repère du plan : u horizontal si possible (X pour un plan horizontal), v = n × u */
+function basis(n) {
+  let u; if (Math.abs(n[2]) > 0.9) u = vnorm(vsub([1, 0, 0], vmul(n, n[0]))); else u = vnorm(vcross([0, 0, 1], n));
+  return { u, v: vcross(n, u) };
+}
+function frame(M, f) { const n = faceN(M, f), b = basis(n); return { o: M.v[f.o[0]], n, u: b.u, v: b.v }; }
+const to2 = (fr, p) => { const d = vsub(p, fr.o); return [vdot(d, fr.u), vdot(d, fr.v)]; };
+function pip(p, r) { let c = false; for (let i = 0, j = r.length - 1; i < r.length; j = i++) { const a = r[i], b = r[j]; if ((a[1] > p[1]) !== (b[1] > p[1]) && p[0] < (b[0] - a[0]) * (p[1] - a[1]) / (b[1] - a[1]) + a[0]) c = !c; } return c; }
+function dseg2(p, a, b) { const dx = b[0] - a[0], dy = b[1] - a[1], L = dx * dx + dy * dy; let t = L ? ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / L : 0; t = Math.max(0, Math.min(1, t)); return Math.hypot(p[0] - a[0] - t * dx, p[1] - a[1] - t * dy); }
+/* position d'un point du plan par rapport à une région (contour + trous) : 'in', 'on' (sur un bord), 'out' */
+function classify2(p, loops2, tol = 1e-6) {
+  for (const r of loops2) for (let i = 0; i < r.length; i++) if (dseg2(p, r[i], r[(i + 1) % r.length]) < tol) return 'on';
+  return pip(p, loops2[0]) && !loops2.slice(1).some(h => pip(p, h)) ? 'in' : 'out';
+}
+const loops2Of = (M, f, fr) => loopsOf(f).map(L => L.map(id => to2(fr, M.v[id])));
+function classifyPoint(M, f, p, tol) { const fr = frame(M, f); return classify2(to2(fr, p), loops2Of(M, f, fr), tol); }
+function coplanar(M, A, B) {
+  const nA = faceN(M, A), nB = faceN(M, B), c = vdot(nA, nB); if (Math.abs(c) < 1 - 1e-6) return 0;
+  if (Math.abs(vdot(nB, vsub(M.v[A.o[0]], M.v[B.o[0]]))) > TOL) return 0;
+  for (const id of A.o) if (Math.abs(vdot(nB, vsub(M.v[id], M.v[B.o[0]]))) > TOL * 10) return 0;
+  return c > 0 ? 1 : -1;
+}
+/* A (coplanaire) est-elle entièrement dans B ? */
+function contained(M, A, B) {
+  const fr = frame(M, B), L2 = loops2Of(M, B, fr), nA = faceN(M, A), e = 1e-4;
+  for (const L of loopsOf(A)) for (let i = 0; i < L.length; i++) {
+    const a = M.v[L[i]], b = M.v[L[(i + 1) % L.length]];
+    if (classify2(to2(fr, a), L2) === 'out' || classify2(to2(fr, vmul(vadd(a, b), .5)), L2) === 'out') return false;
+  }
+  for (let i = 0; i < A.o.length; i++) { // à l'intérieur de A, juste à gauche de chaque côté
+    const a = M.v[A.o[i]], b = M.v[A.o[(i + 1) % A.o.length]], q = vadd(vmul(vadd(a, b), .5), vmul(vnorm(vcross(nA, vsub(b, a))), e));
+    if (classify2(to2(fr, q), L2, 1e-7) !== 'in') return false;
+  }
+  if (B.h.length) { // A ne doit pas recouvrir un trou de B
+    const fa = frame(M, A), LA = loops2Of(M, A, fa), nB = fr.n;
+    for (const H of B.h) { const a = M.v[H[0]], b = M.v[H[1]], q = vadd(vmul(vadd(a, b), .5), vmul(vnorm(vcross(vsub(b, a), nB)), e)); if (classify2(to2(fa, q), LA, 1e-7) === 'in') return false; }
+  }
+  return faceArea(M, A) <= faceArea(M, B) + 1e-9;
+}
+/* réunion des arêtes orientées de plusieurs faces coplanaires ; les arêtes parcourues dans les deux sens s'annulent ;
+   les boucles restantes sont rangées en contours (sens direct autour de nRef) et en trous */
+function combine(M, faces, nRef) {
+  const cnt = new Map(), K = (a, b) => a + '>' + b;
+  for (const f of faces) for (const L of loopsOf(f)) for (let i = 0; i < L.length; i++) {
+    const a = L[i], b = L[(i + 1) % L.length], r = K(b, a);
+    if (cnt.get(r) > 0) cnt.set(r, cnt.get(r) - 1); else cnt.set(K(a, b), (cnt.get(K(a, b)) || 0) + 1);
+  }
+  const E = []; for (const [k, c] of cnt) for (let i = 0; i < c; i++) { const [a, b] = k.split('>').map(Number); E.push([a, b]); }
+  const out = new Map(); E.forEach((e, i) => { if (!out.has(e[0])) out.set(e[0], []); out.get(e[0]).push(i); });
+  const b0 = basis(nRef), P2 = id => { const p = M.v[id]; return [vdot(p, b0.u), vdot(p, b0.v)]; };
+  const used = new Set(), loops = [];
+  for (let s = 0; s < E.length; s++) {
+    if (used.has(s)) continue; const L = [], start = E[s][0]; let cur = s, ok = false;
+    for (let guard = 0; guard < E.length + 2; guard++) {
+      used.add(cur); const [a, b] = E[cur]; L.push(a);
+      if (b === start) { ok = true; break; }
+      const cand = (out.get(b) || []).filter(i => !used.has(i)); if (!cand.length) break;
+      if (cand.length === 1) { cur = cand[0]; continue; }
+      const pa = P2(a), pb = P2(b), din = [pb[0] - pa[0], pb[1] - pa[1]]; let best = cand[0], ba = -Infinity;
+      for (const c of cand) { const pc = P2(E[c][1]), dout = [pc[0] - pb[0], pc[1] - pb[1]], ang = Math.atan2(din[0] * dout[1] - din[1] * dout[0], din[0] * dout[0] + din[1] * dout[1]); if (ang > ba) { ba = ang; best = c; } }
+      cur = best;
+    }
+    if (ok && L.length >= 3) loops.push(L);
+  }
+  const outers = [], holes = [];
+  for (const L of loops) { const s = vdot(newell(M, L), nRef); if (s > 1e-10) outers.push({ o: L, h: [], a: s }); else if (s < -1e-10) holes.push(L); }
+  for (const H of holes) {
+    let best = null;
+    for (const F of outers) { const fr = frame(M, F), r = F.o.map(id => to2(fr, M.v[id]));
+      if (H.some(id => { const p = to2(fr, M.v[id]); return classify2(p, [r]) === 'in'; }) && (!best || F.a < best.a)) best = F; }
+    if (best) best.h.push(H);
+  }
+  return outers.map(F => ({ o: F.o, h: F.h }));
+}
+/* ---- nettoyage ---- */
+function usedVerts(M) { const s = new Set(); for (const k in M.f) for (const L of loopsOf(M.f[k])) for (const id of L) s.add(id); for (const k in M.l) { s.add(M.l[k][0]); s.add(M.l[k][1]); } return s; }
+function weld(M) {
+  const C = 1e-4, g = new Map(), map = new Map(), key = (x, y, z) => x + ',' + y + ',' + z;
+  for (const k in M.v) {
+    const id = +k, p = M.v[k], cx = Math.floor(p[0] / C), cy = Math.floor(p[1] / C), cz = Math.floor(p[2] / C); let hit = null;
+    for (let i = -1; i <= 1 && !hit; i++) for (let j = -1; j <= 1 && !hit; j++) for (let l = -1; l <= 1 && !hit; l++) for (const o of g.get(key(cx + i, cy + j, cz + l)) || []) if (vdist(M.v[o], p) < TOL) { hit = o; break; }
+    if (hit !== null) map.set(id, hit); else { const kk = key(cx, cy, cz); if (!g.has(kk)) g.set(kk, []); g.get(kk).push(id); }
+  }
+  if (!map.size) return;
+  const r = id => map.has(id) ? map.get(id) : id;
+  for (const k in M.f) { const f = M.f[k]; f.o = f.o.map(r); f.h = f.h.map(L => L.map(r)); }
+  for (const k in M.l) M.l[k] = M.l[k].map(r);
+  for (const id of map.keys()) delete M.v[id];
+}
+function normLoop(L) {
+  let A = L.filter((id, i) => id !== L[(i + 1) % L.length]);
+  for (let ch = true; ch && A.length >= 3;) { ch = false; for (let i = 0; i < A.length; i++) { const p = A[(i - 1 + A.length) % A.length], n = A[(i + 1) % A.length]; if (p === n) { A.splice(i, 1); A = A.filter((id, j) => id !== A[(j + 1) % A.length]); ch = true; break; } } }
+  return A;
+}
+function normFaces(M) {
+  for (const k in M.f) {
+    const f = M.f[k]; f.o = normLoop(f.o); f.h = f.h.map(normLoop).filter(h => h.length >= 3 && vlen(newell(M, h)) > 1e-9);
+    if (f.o.length < 3 || vlen(newell(M, f.o)) < 1e-9) delete M.f[k];
+  }
+  for (const k in M.l) if (M.l[k][0] === M.l[k][1]) delete M.l[k];
+}
+/* sommet posé sur une arête (jonction en T) : inséré dans l'arête, pour que les faces voisines partagent les mêmes sommets */
+function fixT(M) {
+  const ids = [...usedVerts(M)], P = ids.map(id => M.v[id]);
+  const split = L => {
+    const out = [];
+    for (let i = 0; i < L.length; i++) {
+      const a = L[i], b = L[(i + 1) % L.length], pa = M.v[a], pb = M.v[b], d = vsub(pb, pa), l2 = vdot(d, d); out.push(a); if (l2 < TOL * TOL) continue;
+      const lo = [Math.min(pa[0], pb[0]) - TOL, Math.min(pa[1], pb[1]) - TOL, Math.min(pa[2], pb[2]) - TOL], hi = [Math.max(pa[0], pb[0]) + TOL, Math.max(pa[1], pb[1]) + TOL, Math.max(pa[2], pb[2]) + TOL], ins = [];
+      for (let k = 0; k < ids.length; k++) { const w = ids[k], p = P[k]; if (w === a || w === b || p[0] < lo[0] || p[0] > hi[0] || p[1] < lo[1] || p[1] > hi[1] || p[2] < lo[2] || p[2] > hi[2]) continue;
+        const t = vdot(vsub(p, pa), d) / l2; if (t <= 1e-9 || t >= 1 - 1e-9) continue; if (vdist(p, vadd(pa, vmul(d, t))) < TOL) ins.push([t, w]); }
+      ins.sort((x, y) => x[0] - y[0]); for (const [, w] of ins) if (out[out.length - 1] !== w) out.push(w);
+    }
+    return out;
+  };
+  for (const k in M.f) { const f = M.f[k]; f.o = split(f.o); f.h = f.h.map(split); }
+  for (const k in M.l) { // trait libre coupé aux sommets posés dessus
+    const [a, b] = M.l[k], q = split([a, b]), chain = q.slice(0, q.indexOf(b) + 1); if (chain.length <= 2) continue; delete M.l[k];
+    for (let i = 0; i < chain.length - 1; i++) M.l[M.n++] = [chain[i], chain[i + 1]];
+  }
+}
+function dirEdges(f) { const s = new Set(); for (const L of loopsOf(f)) for (let i = 0; i < L.length; i++) s.add(L[i] + '>' + L[(i + 1) % L.length]); return s; }
+function sharesEdge(A, B) { const s = dirEdges(A); for (const L of loopsOf(B)) for (let i = 0; i < L.length; i++) if (s.has(L[(i + 1) % L.length] + '>' + L[i])) return true; return false; }
+function cleanup(M, fresh = new Set()) {
+  weld(M); normFaces(M); fixT(M); normFaces(M);
+  for (let guard = 0, ch = true; ch && guard < 400; guard++) {
+    ch = false; const ids = Object.keys(M.f), N = ids.map(k => faceN(M, M.f[k])), D = ids.map((k, i) => vdot(N[i], M.v[M.f[k].o[0]]));
+    loop: for (let i = 0; i < ids.length; i++) for (let j = i + 1; j < ids.length; j++) {
+      const c = vdot(N[i], N[j]); if (Math.abs(c) < 1 - 1e-6 || Math.abs(D[i] - Math.sign(c) * D[j]) > TOL * 10) continue;
+      const A = M.f[ids[i]], B = M.f[ids[j]]; if (!coplanar(M, A, B)) continue;
+      let res = null, nR, keepNew = false;
+      if (c < 0) { if (contained(M, A, B)) { res = combine(M, [B, A], N[j]); } else if (contained(M, B, A)) { res = combine(M, [A, B], N[i]); } nR = true; }
+      else if ((fresh.has(ids[i]) || fresh.has(ids[j])) && sharesEdge(A, B)) { res = combine(M, [A, B], N[i]); keepNew = true; }
+      if (!res) continue;
+      delete M.f[ids[i]]; delete M.f[ids[j]];
+      for (const f of res) { const id = addF(M, f); if (keepNew) fresh.add(String(id)); }
+      normFaces(M); ch = true; break loop;
+    }
+  }
+  // traits confondus avec une arête de face : retirés
+  const es = new Set(); for (const k in M.f) for (const L of loopsOf(M.f[k])) for (let i = 0; i < L.length; i++) es.add(ekey(L[i], L[(i + 1) % L.length]));
+  const seen = new Set(); for (const k in M.l) { const e = ekey(...M.l[k]); if (es.has(e) || seen.has(e)) delete M.l[k]; else seen.add(e); }
+  const u = usedVerts(M); for (const k in M.v) if (!u.has(+k)) delete M.v[k];
+  return M;
+}
+/* ---- opérations ---- */
+function edgeFaces(M) { const m = new Map(); for (const k in M.f) for (const L of loopsOf(M.f[k])) for (let i = 0; i < L.length; i++) { const e = ekey(L[i], L[(i + 1) % L.length]); if (!m.has(e)) m.set(e, []); m.get(e).push(k); } return m; }
+/* pousser/tirer la face fid de d mètres le long de sa normale */
+function pushPull(M, fid, d) {
+  const f = M.f[fid]; if (!f || Math.abs(d) < TOL) return M;
+  const n = faceN(M, f), loops = loopsOf(f), ef = edgeFaces(M), vs = new Set(loops.flat());
+  const allShared = loops.every(L => L.every((a, i) => (ef.get(ekey(a, L[(i + 1) % L.length])) || []).some(g => g !== String(fid))));
+  if (allShared) { // face d'un volume dont toutes les faces voisines contiennent la direction de poussée : on déplace la face (le volume s'allonge)
+    let movable = true;
+    for (const k in M.f) { if (k === String(fid)) continue; const g = M.f[k]; if (!loopsOf(g).some(L => L.some(id => vs.has(id)))) continue; if (Math.abs(vdot(faceN(M, g), n)) > 1e-6) { movable = false; break; } }
+    if (movable) { for (const id of vs) M.v[id] = vadd(M.v[id], vmul(n, d)); return cleanup(M); }
+  }
+  const off = vmul(n, d), map = new Map(); for (const id of vs) map.set(id, addV(M, vadd(M.v[id], off)));
+  const m = id => map.get(id), fresh = new Set();
+  let top = { o: f.o.map(m), h: f.h.map(L => L.map(m)) }; const sides = [];
+  for (const L of loops) for (let i = 0; i < L.length; i++) { const a = L[i], b = L[(i + 1) % L.length]; sides.push({ o: [a, b, m(b), m(a)], h: [] }); }
+  if (allShared) delete M.f[fid];                     // excroissance ou creux : la face part avec la poussée
+  else if (d > 0) { M.f[fid] = revF(f); fresh.add(String(fid)); } // volume vers le haut : la face reste comme fond
+  else { top = revF(top); sides.forEach((s, i) => sides[i] = revF(s)); } // volume sous la face
+  fresh.add(String(addF(M, top))); for (const s of sides) fresh.add(String(addF(M, s)));
+  return cleanup(M, fresh);
+}
+/* face tracée (rectangle, cercle, polygone, contour fermé de traits) ; imprimée dans la face cible si elle y est contenue */
+function addShape(M, pts, nHint, target) {
+  let ids = pts.map(p => addV(M, p)); ids = normLoop(ids); if (ids.length < 3) return null;
+  let f = { o: ids, h: [] }; if (vdot(newell(M, ids), nHint) < 0) f = revF(f);
+  if (vlen(newell(M, f.o)) < 1e-9) return null;
+  const fid = addF(M, f); fixT(M);
+  const T = target != null && M.f[target];
+  if (T && coplanar(M, M.f[fid], T) && contained(M, M.f[fid], T)) {
+    const S = M.f[fid], nT = faceN(M, T), res = combine(M, [T, revF(S)], nT);
+    delete M.f[target]; for (const g of res) addF(M, g);
+  }
+  cleanup(M); return fid;
+}
+/* chemin de traits d'un bord à l'autre d'une face : la face est divisée en deux */
+function splitByPath(M, path) {
+  if (path.length < 2) return false;
+  const a = path[0], b = path[path.length - 1]; if (a === b) return false;
+  { const have = new Set(Object.values(M.l).map(l => ekey(...l))); for (let i = 0; i < path.length - 1; i++) if (!have.has(ekey(path[i], path[i + 1]))) M.l[M.n++] = [path[i], path[i + 1]]; }
+  fixT(M);
+  for (const k in M.f) {
+    const f = M.f[k], fr = frame(M, f); if (path.some(id => Math.abs(vdot(fr.n, vsub(M.v[id], fr.o))) > TOL * 10)) continue;
+    const ia = f.o.indexOf(a), ib = f.o.indexOf(b); if (ia < 0 || ib < 0) continue;
+    const n = f.o.length; if (path.length === 2 && ((ia + 1) % n === ib || (ib + 1) % n === ia)) continue;
+    const L2 = loops2Of(M, f, fr);
+    const inside = path.slice(1, -1).every(id => classify2(to2(fr, M.v[id]), L2) === 'in') && path.slice(0, -1).every((id, i) => classify2(to2(fr, vmul(vadd(M.v[id], M.v[path[i + 1]]), .5)), L2) === 'in');
+    if (!inside) continue;
+    const l1 = [], l2 = [];
+    for (let i = ia; i !== ib; i = (i + 1) % n) l1.push(f.o[i]); l1.push(b); for (let i = path.length - 2; i >= 1; i--) l1.push(path[i]);
+    for (let i = ib; i !== ia; i = (i + 1) % n) l2.push(f.o[i]); l2.push(a); for (let i = 1; i <= path.length - 2; i++) l2.push(path[i]);
+    const F1 = { o: l1, h: [] }, F2 = { o: l2, h: [] };
+    for (const H of f.h) { const fr1 = frame(M, F1), r1 = F1.o.map(id => to2(fr1, M.v[id])); (H.some(id => classify2(to2(fr1, M.v[id]), [r1]) === 'in') ? F1 : F2).h.push(H); }
+    delete M.f[k]; addF(M, F1); addF(M, F2);
+    const pe = new Set(); for (let i = 0; i < path.length - 1; i++) pe.add(ekey(path[i], path[i + 1]));
+    for (const lk in M.l) if (pe.has(ekey(...M.l[lk]))) delete M.l[lk];
+    cleanup(M); return true;
+  }
+  return false;
+}
+/* suppression d'une face : ses arêtes restent en traits */
+function deleteFace(M, fid) {
+  const f = M.f[fid]; if (!f) return; delete M.f[fid]; const ef = edgeFaces(M);
+  for (const L of loopsOf(f)) for (let i = 0; i < L.length; i++) { const a = L[i], b = L[(i + 1) % L.length]; if (!ef.has(ekey(a, b))) M.l[M.n++] = [a, b]; }
+}
+/* suppression d'une arête : deux faces coplanaires de part et d'autre fusionnent, sinon les faces qui la bordent disparaissent */
+function deleteEdge(M, a, b) {
+  const e = ekey(a, b), fs = edgeFaces(M).get(e) || [];
+  for (const k in M.l) if (ekey(...M.l[k]) === e) delete M.l[k];
+  if (fs.length === 2 && coplanar(M, M.f[fs[0]], M.f[fs[1]]) === 1) { const res = combine(M, [M.f[fs[0]], M.f[fs[1]]], faceN(M, M.f[fs[0]])); delete M.f[fs[0]]; delete M.f[fs[1]]; for (const g of res) addF(M, g); }
+  else for (const k of fs) deleteFace(M, k);
+  for (const k in M.l) if (ekey(...M.l[k]) === e) delete M.l[k];
+  cleanup(M);
+}
+/* face fid posée dans une face coplanaire de même sens qui la contient : la face hôte reçoit un trou */
+function imprint(M, fid) {
+  const S = M.f[fid]; if (!S) return false; fixT(M);
+  for (const k in M.f) { if (k === String(fid)) continue; const T = M.f[k]; if (coplanar(M, S, T) !== 1 || !contained(M, S, T)) continue;
+    const res = combine(M, [T, revF(S)], faceN(M, T)); delete M.f[k]; for (const g of res) addF(M, g); return true; }
+  return false;
+}
+/* faces reliées à fid par leurs arêtes (un volume entier) */
+function connected(M, fid) {
+  const ef = edgeFaces(M), out = new Set([String(fid)]), st = [String(fid)];
+  while (st.length) { const k = st.pop(), f = M.f[k]; if (!f) continue; for (const L of loopsOf(f)) for (let i = 0; i < L.length; i++) for (const g of ef.get(ekey(L[i], L[(i + 1) % L.length])) || []) if (!out.has(g)) { out.add(g); st.push(g); } }
+  return out;
+}
+function selVerts(M, t) { const s = new Set(); for (const k of t.f || []) if (M.f[k]) for (const L of loopsOf(M.f[k])) L.forEach(id => s.add(id)); for (const e of t.e || []) String(e).split('|').forEach(id => { if (M.v[id]) s.add(+id); }); return s; }
+/* déplacement des sommets de la sélection ; refusé si une face voisine ne resterait pas plane */
+function moveSel(M, t, d) {
+  const vs = selVerts(M, t); if (!vs.size) return false;
+  for (const id of vs) M.v[id] = vadd(M.v[id], d);
+  for (const k in M.f) { const f = M.f[k], all = loopsOf(f).flat(); if (!all.some(id => vs.has(id)) || all.every(id => vs.has(id))) continue;
+    const n = vnorm(newell(M, f.o)), p0 = M.v[f.o[0]]; if (all.some(id => Math.abs(vdot(n, vsub(M.v[id], p0))) > 1e-5)) return false; }
+  cleanup(M); return true;
+}
+/* copie de la sélection décalée de d ; une face copiée dans une face qui la contient s'y imprime, une arête copiée en travers d'une face la divise */
+function copySel(M, t, d) {
+  const map = new Map(), m = id => { if (!map.has(id)) map.set(id, addV(M, vadd(M.v[id], d))); return map.get(id); }, made = [];
+  const src = (t.f || []).filter(k => M.f[k]).map(k => M.f[k]), edges = (t.e || []).map(e => String(e).split('|').map(Number)).filter(([a, b]) => M.v[a] && M.v[b]);
+  for (const f of src) { const id = addF(M, { o: f.o.map(m), h: f.h.map(L => L.map(m)) }); made.push(id); }
+  const lines = []; for (const [a, b] of edges) { const A = m(a), B = m(b); M.l[M.n++] = [A, B]; lines.push([A, B]); }
+  if (made.length === 1) imprint(M, made[0]);
+  cleanup(M);
+  for (const [A, B] of lines) if (M.v[A] && M.v[B]) splitByPath(M, [A, B]);
+  return true;
+}
+function modelEdges(M) {
+  const m = new Map();
+  for (const k in M.f) for (const L of loopsOf(M.f[k])) for (let i = 0; i < L.length; i++) { const a = L[i], b = L[(i + 1) % L.length], e = ekey(a, b); if (!m.has(e)) m.set(e, [a, b]); }
+  for (const k in M.l) { const [a, b] = M.l[k], e = ekey(a, b); if (!m.has(e)) m.set(e, [a, b]); }
+  return [...m.values()];
+}
+
+</script>
+<script>
+const APP_VERSION = '0.2';
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const NF2 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmtL = x => NF2.format(x) + ' m', fmtA = x => NF2.format(x) + ' m²', fmtV = x => NF2.format(x) + ' m³';
+function setStatus(t, cls) { const el = $('#status'); el.textContent = t || ''; el.className = 'status' + (cls ? ' ' + cls : ''); }
+
+/* ================= État, annulation, enregistrement ================= */
+let M = newModel();
+const ST = { tool: 'select', sel: { f: new Set(), e: new Set() }, undo: [], redo: [], segs: { circle: 24, poly: 6 }, last: null, lastPP: null, focus: [0, 0, 0] };
+/* ---- une maquette par projet TerraSuite (#projet=…), plus une « maquette sans projet » ; gardées dans ce navigateur et synchronisées entre appareils ---- */
+const KEY = 'terramodel-maquettes', OLDKEY = 'terramodel', LIBRE = 'libre';
+const HAS_TSP = typeof TSP !== 'undefined', HAS_LINK = typeof TSLink !== 'undefined';
+const PR = { rid: LIBRE, projet: null, recs: {}, pushT: null };
+function loadRecs() {
+  try { PR.recs = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { PR.recs = {}; }
+  if (!Object.keys(PR.recs).length) { try { const o = JSON.parse(localStorage.getItem(OLDKEY) || 'null'); if (o && o.model) PR.recs[LIBRE] = { id: LIBRE, projetId: null, nom: 'Maquette sans projet', model: o.model, cam: o.cam, segs: o.segs }; } catch (e) {} }
+}
+function storeRecs() { try { localStorage.setItem(KEY, JSON.stringify(PR.recs)); } catch (e) { setStatus('Enregistrement automatique impossible dans ce navigateur', 'err'); } }
+/* surfaces de la maquette, reprises plus tard par l'estimation sommaire */
+function surfaces(m) { let total = 0, up = 0, vert = 0; for (const k in m.f) { const f = m.f[k], a = faceArea(m, f), n = faceN(m, f); total += a; if (n[2] > 0.999) up += a; else if (Math.abs(n[2]) < 1e-3) vert += a; } const r = x => Math.round(x * 100) / 100, v = closedVolume(m); return { total: r(total), horizontales: r(up), verticales: r(vert), volume: v == null ? null : r(v) }; }
+/* ce qui part au serveur : sans la position de la caméra (propre à chaque appareil) */
+const syncView = () => Object.fromEntries(Object.entries(PR.recs).map(([k, r]) => [k, { ...r, cam: undefined }]));
+let saveT = null;
+function save() {
+  clearTimeout(saveT); saveT = setTimeout(() => {
+    const old = PR.recs[PR.rid];
+    PR.recs[PR.rid] = { id: PR.rid, projetId: PR.rid === LIBRE ? null : PR.rid, nom: PR.projet ? projLabel(PR.projet) : (old && old.nom) || 'Maquette sans projet', version: APP_VERSION, model: M, segs: ST.segs, surf: surfaces(M), cam: camJSON() };
+    storeRecs(); if (HAS_LINK) { clearTimeout(PR.pushT); PR.pushT = setTimeout(() => TSLink.push('terramodel', 'maquettes', syncView(), { projet: r => r.projetId }), 1500); }
+  }, 300);
+}
+const projLabel = p => HAS_TSP && TSP.label ? TSP.label(p) : (p.nom || p.code || 'Projet');
+/* fiches reçues d'un autre appareil */
+async function pullRemote() {
+  if (!HAS_LINK) return; let res; try { res = await TSLink.pull('terramodel', 'maquettes', syncView()); } catch (e) { return; } if (!res || !res.changed) return;
+  const before = JSON.stringify(M);
+  for (const [rid, data] of res.recs) PR.recs[rid] = { ...data, cam: PR.recs[rid] && PR.recs[rid].cam };
+  for (const rid of res.removed || []) delete PR.recs[rid];
+  storeRecs(); const cur = PR.recs[PR.rid];
+  if (cur && JSON.stringify(cur.model) !== before) { const T = TOOLS[ST.tool]; if (T && T.busy && T.busy()) cancelTool(); M = cur.model; M.l = M.l || {}; ST.undo.push(before); ST.redo.length = 0; ST.last = null; clearSel(); changed(); setStatus('Maquette mise à jour depuis un autre appareil', 'ok'); }
+}
+/* ouverture de la maquette d'un projet */
+async function openRid(rid) {
+  rid = rid || LIBRE; if (PR.rid === rid && PR.opened) return; clearTimeout(saveT); cancelTool();
+  if (PR.opened) PR.recs[PR.rid] = { ...(PR.recs[PR.rid] || {}), id: PR.rid, model: M, cam: camJSON(), segs: ST.segs };
+  PR.rid = rid; PR.opened = true; PR.projet = rid !== LIBRE && HAS_TSP ? await TSP.get(rid) : null;
+  const rec = PR.recs[rid];
+  if (rec && rec.model) { try { loadData(rec); } catch (e) { M = newModel(); changed(); setView('iso'); } }
+  else { M = newModel(); ST.undo.length = 0; ST.redo.length = 0; ST.last = null; clearSel(); changed(); frameView({ c: [0, 0, 1], r: 7 }, VIEWS.iso); }
+  projUI();
+}
+async function projUI() {
+  const sel = $('#proj'); if (!sel) return;
+  if (!HAS_TSP || (HAS_LINK && TSLink.embedded)) { sel.hidden = true; return; }
+  const list = await TSP.all(); sel.hidden = false;
+  sel.innerHTML = TSP.options(PR.rid === LIBRE ? '' : PR.rid, list, { none: 'Maquette sans projet', create: false });
+  if (PR.rid !== LIBRE && !list.some(p => p.id === PR.rid)) sel.insertAdjacentHTML('beforeend', `<option value="${PR.rid}" selected>Projet ${PR.rid}</option>`);
+}
+function doOp(fn) { const before = JSON.stringify(M), m = JSON.parse(before); const r = fn(m); if (r === false) return r; pushUndo(before); M = m; changed(); return r; }
+function pushUndo(before) { ST.undo.push(before); if (ST.undo.length > 200) ST.undo.shift(); ST.redo.length = 0; }
+function undo() { cancelTool(); if (!ST.undo.length) return; ST.redo.push(JSON.stringify(M)); M = JSON.parse(ST.undo.pop()); ST.last = null; clearSel(); changed(); }
+function redo() { cancelTool(); if (!ST.redo.length) return; ST.undo.push(JSON.stringify(M)); M = JSON.parse(ST.redo.pop()); ST.last = null; clearSel(); changed(); }
+function changed() { for (const k of [...ST.sel.f]) if (!M.f[k]) ST.sel.f.delete(k); for (const e of [...ST.sel.e]) { const [a, b] = e.split('|'); if (!M.v[a] || !M.v[b]) ST.sel.e.delete(e); } rebuild(); save(); info(); $('#bUndo').disabled = !ST.undo.length; $('#bRedo').disabled = !ST.redo.length; }
+
+/* ================= Scène 3D ================= */
+const cv = $('#cv'), view = $('#view');
+const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+const scene = new THREE.Scene();
+/* deux caméras : perspective, et parallèle (projection orthogonale, placée loin en arrière, champ réglé par le zoom) */
+const camP = new THREE.PerspectiveCamera(35, 1, 0.02, 20000), camO = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 60000), ORTHO_D = 4000;
+camP.up.set(0, 0, 1); camO.up.set(0, 0, 1);
+let camera = camP; const isO = () => camera === camO;
+scene.add(new THREE.HemisphereLight(0xffffff, 0xb4ada2, 0.92));
+const sun = new THREE.DirectionalLight(0xffffff, 0.38); sun.position.set(-0.6, -1, 1.3); scene.add(sun);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const mat = {
+  front: new THREE.MeshLambertMaterial({ side: THREE.FrontSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 }),
+  back: new THREE.MeshLambertMaterial({ side: THREE.BackSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 }),
+  pick: new THREE.MeshBasicMaterial({ side: THREE.DoubleSide }),
+  edge: new THREE.LineBasicMaterial(),
+  hover: new THREE.MeshBasicMaterial({ color: 0xC98A1E, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }),
+  sel: new THREE.MeshBasicMaterial({ color: 0x2F6FD0, transparent: true, opacity: 0.28, side: THREE.DoubleSide, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }),
+  selEdge: new THREE.LineBasicMaterial({ color: 0x2F6FD0 }),
+  hoverEdge: new THREE.LineBasicMaterial({ color: 0xC98A1E }),
+  rubber: new THREE.LineBasicMaterial({ color: 0x8A5A12, depthTest: false }),
+  dash: new THREE.LineDashedMaterial({ color: 0x8A5A12, dashSize: 0.2, gapSize: 0.12, depthTest: false })
+};
+function applyTheme() {
+  scene.background = new THREE.Color(css('--view') || '#E6E9EB'); mat.front.color.set(css('--face') || '#F2EFE9'); mat.back.color.set(css('--back') || '#A9B7C6'); mat.edge.color.set(css('--edge') || '#2A2723');
+  buildGrid(); req();
+}
+/* sol : grille de 1 m (traits de 10 m plus marqués) et axes rouge (X), vert (Y), bleu (Z) */
+let gridObj = null;
+function buildGrid() {
+  if (gridObj) scene.remove(gridObj); const g = new THREE.Group(), mn = [], mj = [], R = 60;
+  for (let i = -R; i <= R; i++) { if (!i) continue; (i % 10 ? mn : mj).push(-R, i, 0, R, i, 0, i, -R, 0, i, R, 0); }
+  const gc = new THREE.Color(css('--grid') || '#C9CDD0');
+  const L = (arr, c, op) => { const ge = new THREE.BufferGeometry(); ge.setAttribute('position', new THREE.Float32BufferAttribute(arr, 3)); return new THREE.LineSegments(ge, new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: op })); };
+  g.add(L(mn, gc, .55)); g.add(L(mj, gc, 1));
+  const ax = (a, b, c, dashed) => { const ge = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...a), new THREE.Vector3(...b)]); const l = new THREE.Line(ge, dashed ? new THREE.LineDashedMaterial({ color: c, dashSize: .4, gapSize: .3 }) : new THREE.LineBasicMaterial({ color: c })); if (dashed) l.computeLineDistances(); return l; };
+  g.add(ax([0, 0, 0], [500, 0, 0], 0xC62828)); g.add(ax([0, 0, 0], [-500, 0, 0], 0xC62828, true));
+  g.add(ax([0, 0, 0], [0, 500, 0], 0x2E7D32)); g.add(ax([0, 0, 0], [0, -500, 0], 0x2E7D32, true));
+  g.add(ax([0, 0, 0], [0, 0, 500], 0x1F4FC4)); g.add(ax([0, 0, 0], [0, 0, -500], 0x1F4FC4, true));
+  g.position.z = -0.002; g.renderOrder = -1; gridObj = g; scene.add(g);
+}
+let rq = false; function req() { if (rq) return; rq = true; requestAnimationFrame(() => { rq = false; renderer.render(scene, camera); }); }
+function resize() { const w = view.clientWidth, h = view.clientHeight; if (!w || !h) return; renderer.setSize(w, h, false); camP.aspect = w / h; camP.updateProjectionMatrix(); camO.left = -w / h; camO.right = w / h; camO.top = 1; camO.bottom = -1; camO.updateProjectionMatrix(); req(); }
+new ResizeObserver(resize).observe(view);
+
+/* ================= Maillage d'affichage ================= */
+const G = { group: null, pick: null, tf: [], E: [], V: [] };
+function triFace(m, f) {
+  const fr = frame(m, f), loops = loopsOf(f), L2 = loops.map(L => L.map(id => to2(fr, m.v[id])));
+  let tris = []; try { tris = THREE.ShapeUtils.triangulateShape(L2[0].map(p => new THREE.Vector2(p[0], p[1])), L2.slice(1).map(h => h.map(p => new THREE.Vector2(p[0], p[1])))); } catch (e) { console.warn(e); }
+  return { tris, ids: loops.flat(), n: fr.n };
+}
+function faceGeo(m, keys) {
+  const pos = [], nor = [], tf = [];
+  for (const k of keys) { const f = m.f[k]; if (!f) continue; const { tris, ids, n } = triFace(m, f);
+    for (const t of tris) { let a = m.v[ids[t[0]]], b = m.v[ids[t[1]]], c = m.v[ids[t[2]]]; if (vdot(vcross(vsub(b, a), vsub(c, a)), n) < 0) [b, c] = [c, b]; pos.push(...a, ...b, ...c); for (let i = 0; i < 3; i++) nor.push(...n); tf.push(k); } }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3)); return { g, tf };
+}
+function linesGeo(m, edges) { const p = []; for (const [a, b] of edges) p.push(...m.v[a], ...m.v[b]); const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(p, 3)); return g; }
+/* arêtes adoucies : entre deux faces presque dans le prolongement (facettes d'un cylindre), l'arête n'est pas dessinée */
+function visibleEdges(m) {
+  const ef = edgeFaces(m), N = {}; for (const k in m.f) N[k] = faceN(m, m.f[k]);
+  return modelEdges(m).filter(([a, b]) => { const fs = ef.get(ekey(a, b)); if (!fs || fs.length !== 2) return true; const c = vdot(N[fs[0]], N[fs[1]]); return !(c > Math.cos(25 * Math.PI / 180) && c < 1 - 1e-6); });
+}
+function show(m) {
+  if (G.group) { scene.remove(G.group); G.group.traverse(o => o.geometry && o.geometry.dispose()); }
+  const { g } = faceGeo(m, Object.keys(m.f)), grp = new THREE.Group();
+  grp.add(new THREE.Mesh(g, mat.front), new THREE.Mesh(g, mat.back), new THREE.LineSegments(linesGeo(m, visibleEdges(m)), mat.edge));
+  G.group = grp; scene.add(grp); req();
+}
+function rebuild() {
+  show(M);
+  if (G.pick) G.pick.geometry.dispose(); const { g, tf } = faceGeo(M, Object.keys(M.f)); G.pick = new THREE.Mesh(g, mat.pick); G.tf = tf;
+  G.E = modelEdges(M).map(([a, b]) => ({ a, b, pa: M.v[a], pb: M.v[b], k: ekey(a, b) })); G.V = Object.keys(M.v).map(Number);
+  drawSel(); hover(null);
+}
+/* surbrillance : face ou arête survolée, sélection */
+let hoverObj = null, selObj = null, hovKey = '';
+function hover(h) {
+  const k = h ? (h.fid ? 'f' + h.fid : 'e' + h.e.k) : ''; if (k === hovKey) return; hovKey = k;
+  if (hoverObj) { scene.remove(hoverObj); hoverObj.geometry.dispose(); hoverObj = null; }
+  if (h && h.fid && M.f[h.fid]) hoverObj = new THREE.Mesh(faceGeo(M, [h.fid]).g, mat.hover);
+  else if (h && h.e) hoverObj = new THREE.LineSegments(linesGeo(M, [[h.e.a, h.e.b]]), mat.hoverEdge);
+  if (hoverObj) { hoverObj.renderOrder = 2; scene.add(hoverObj); } req();
+}
+function drawSel() {
+  if (selObj) { scene.remove(selObj); selObj.traverse(o => o.geometry && o.geometry.dispose()); selObj = null; }
+  if (!ST.sel.f.size && !ST.sel.e.size) { req(); return; }
+  const g = new THREE.Group(); g.add(new THREE.Mesh(faceGeo(M, [...ST.sel.f]).g, mat.sel));
+  const es = [...ST.sel.e].map(k => k.split('|').map(Number)).filter(([a, b]) => M.v[a] && M.v[b]);
+  for (const k of ST.sel.f) if (M.f[k]) for (const L of loopsOf(M.f[k])) for (let i = 0; i < L.length; i++) es.push([L[i], L[(i + 1) % L.length]]);
+  g.add(new THREE.LineSegments(linesGeo(M, es), mat.selEdge)); g.renderOrder = 3; selObj = g; scene.add(g); req();
+}
+const clearSel = () => { ST.sel.f.clear(); ST.sel.e.clear(); drawSel(); info(); };
+/* tracé provisoire : polyligne, ligne d'inférence pointillée */
+let rubberObj = null, guideObj = null;
+function rubber(pts, closed, color) {
+  if (rubberObj) { scene.remove(rubberObj); rubberObj.geometry.dispose(); rubberObj = null; }
+  if (pts && pts.length >= 2) { const g = new THREE.BufferGeometry().setFromPoints(pts.map(p => new THREE.Vector3(...p))); rubberObj = closed ? new THREE.LineLoop(g, mat.rubber.clone()) : new THREE.Line(g, mat.rubber.clone()); if (color) rubberObj.material.color.set(color); rubberObj.renderOrder = 5; scene.add(rubberObj); }
+  req();
+}
+function guide(a, b, color) {
+  if (guideObj) { scene.remove(guideObj); guideObj.geometry.dispose(); guideObj = null; }
+  if (a && b) { const g = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...a), new THREE.Vector3(...b)]); const m2 = mat.dash.clone(); m2.color.set(color || 0x8A5A12); const d = worldPx(a) * 600; m2.dashSize = d * .012; m2.gapSize = d * .008; guideObj = new THREE.Line(g, m2); guideObj.computeLineDistances(); guideObj.renderOrder = 4; scene.add(guideObj); }
+  req();
+}
+
+/* ================= Caméra : orbite autour du point visé, panoramique, zoom vers le curseur ================= */
+const camPos = () => camera.position.toArray(), fwd = () => { const d = new THREE.Vector3(); camera.getWorldDirection(d); return d.toArray(); };
+const Z = new THREE.Vector3(0, 0, 1);
+function lookFrom(pos, at, upHint) { camera.position.set(...pos); camera.up.set(...(upHint || [0, 0, 1])); camera.lookAt(...at); camera.up.set(0, 0, 1); camera.updateMatrixWorld(); ST.focus = at.slice(); req(); }
+function orbit(dx, dy, pivot) {
+  const P = new THREE.Vector3(...pivot), q1 = new THREE.Quaternion().setFromAxisAngle(Z, -dx * 0.0075);
+  camera.position.sub(P).applyQuaternion(q1).add(P); camera.quaternion.premultiply(q1);
+  const right = new THREE.Vector3(1, 0, 0).applyQuaternion(camera.quaternion), q2 = new THREE.Quaternion().setFromAxisAngle(right, -dy * 0.0075);
+  const nq = camera.quaternion.clone().premultiply(q2), f = new THREE.Vector3(0, 0, -1).applyQuaternion(nq), up = new THREE.Vector3(0, 1, 0).applyQuaternion(nq);
+  if (Math.abs(f.z) < 0.9995 && up.z > 0.0005) { camera.position.sub(P).applyQuaternion(q2).add(P); camera.quaternion.copy(nq); }
+  camera.updateMatrixWorld(); req();
+}
+/* taille d'un pixel à l'écran, en mètres, à la profondeur du point p */
+function worldPx(p) { if (isO()) return 2 / camO.zoom / view.clientHeight; const d = Math.max(0.05, p ? vdot(vsub(p, camPos()), fwd()) : vdist(camPos(), ST.focus)); return 2 * d * Math.tan(camP.fov * Math.PI / 360) / view.clientHeight; }
+function pan(dx, dy, ref) {
+  const k = worldPx(ref);
+  const right = new THREE.Vector3(1, 0, 0).applyQuaternion(camera.quaternion), up = new THREE.Vector3(0, 1, 0).applyQuaternion(camera.quaternion);
+  camera.position.addScaledVector(right, -dx * k).addScaledVector(up, dy * k); camera.updateMatrixWorld(); req();
+}
+function zoomAt(sx, sy, factor) {
+  if (isO()) { const n = new THREE.Vector3(sx / view.clientWidth * 2 - 1, -sy / view.clientHeight * 2 + 1, 0), before = n.clone().unproject(camO);
+    camO.zoom = Math.max(1e-4, Math.min(1e4, camO.zoom / (1 - Math.max(-4, Math.min(0.9, factor))))); camO.updateProjectionMatrix(); const after = n.clone().unproject(camO); camO.position.add(before.sub(after)); camO.updateMatrixWorld(); req(); return; }
+  const P = pointUnder(sx, sy), c = camPos(), d = vsub(P, c), L = vlen(d);
+  let s = factor; if (L * (1 - s) < 0.05 && s > 0) s = Math.max(0, 1 - 0.05 / L);
+  camera.position.set(...vadd(c, vmul(d, s))); camera.updateMatrixWorld(); req();
+}
+/* point de la maquette sous le curseur, sinon le sol, sinon un point à la distance du point visé */
+function pointUnder(sx, sy) {
+  const h = pickFace(sx, sy); if (h) return h.p;
+  const r = setRay(sx, sy), g = rayPlane(r.o, r.d, [0, 0, 0], [0, 0, 1]); if (g && vdist(g, camPos()) < 9000) return g;
+  return vadd(r.o, vmul(r.d, Math.max(1, vdist(camPos(), ST.focus))));
+}
+function bounds(keys) {
+  const ids = new Set(); if (keys) { for (const k of keys.f) if (M.f[k]) for (const L of loopsOf(M.f[k])) L.forEach(i => ids.add(i)); for (const e of keys.e) e.split('|').forEach(i => ids.add(+i)); } else Object.keys(M.v).forEach(i => ids.add(+i));
+  const P = [...ids].map(i => M.v[i]).filter(Boolean); if (!P.length) return null;
+  const lo = [0, 1, 2].map(i => Math.min(...P.map(p => p[i]))), hi = [0, 1, 2].map(i => Math.max(...P.map(p => p[i]))), c = vmul(vadd(lo, hi), .5);
+  return { c, r: Math.max(0.5, vdist(lo, hi) / 2) };
+}
+function frameView(b, dir) {
+  b = b || { c: [0, 0, 0], r: 8 }; const f = dir ? vnorm(dir) : fwd(), up = Math.abs(f[2]) > 0.999 ? [0, 1, 0] : [0, 0, 1], asp = view.clientWidth / Math.max(1, view.clientHeight);
+  if (isO()) { camO.zoom = Math.min(1, asp) / (b.r * 1.08); camO.updateProjectionMatrix(); lookFrom(vsub(b.c, vmul(f, ORTHO_D)), b.c, up); return; }
+  const vf = camP.fov * Math.PI / 180, hf = 2 * Math.atan(Math.tan(vf / 2) * asp), dist = b.r / Math.sin(Math.min(vf, hf) / 2) * 1.08;
+  lookFrom(vsub(b.c, vmul(f, dist)), b.c, up);
+}
+/* perspective ou vue parallèle : même cadrage autour du point au centre de l'écran */
+function setProjection(ortho) {
+  if (ortho !== isO()) {
+    const P = pointUnder(view.clientWidth / 2, view.clientHeight / 2), f = fwd(), t = Math.tan(camP.fov * Math.PI / 360);
+    if (ortho) { const d = Math.max(0.5, vdot(vsub(P, camPos()), f)); camO.zoom = 1 / (d * t); camO.quaternion.copy(camP.quaternion); camO.position.set(...vsub(P, vmul(f, ORTHO_D))); camO.updateProjectionMatrix(); camera = camO; }
+    else { const d = 1 / camO.zoom / t; camP.quaternion.copy(camO.quaternion); camP.position.set(...vsub(P, vmul(f, d))); camera = camP; }
+    camera.updateMatrixWorld(); ST.focus = P;
+  }
+  const b = $('#bProj'); if (b) { b.classList.toggle('on', isO()); b.textContent = isO() ? 'Parallèle' : 'Perspective'; }
+  hover(null); req(); save();
+}
+const VIEWS = { iso: [1, 1.25, -0.95], top: [0, 0.0001, -1], front: [0, 1, 0], back: [0, -1, 0], right: [-1, 0, 0], left: [1, 0, 0] };
+function setView(k) { frameView(bounds(), VIEWS[k]); save(); }
+function centerView() { const has = ST.sel.f.size || ST.sel.e.size; frameView(has ? bounds(ST.sel) : bounds()); save(); }
+function recenterOn(p) { const f = fwd(), c = camPos(), d = isO() ? ORTHO_D : vdot(vsub(p, c), f); camera.position.set(...vsub(p, vmul(f, Math.max(0.5, d)))); camera.updateMatrixWorld(); ST.focus = p.slice(); req(); save(); }
+function camJSON() { return { p: camPos(), q: camera.quaternion.toArray(), f: ST.focus, o: isO(), z: camO.zoom }; }
+
+/* ================= Rayons, projection, inférences ================= */
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+function setRay(sx, sy) { ndc.set(sx / view.clientWidth * 2 - 1, -sy / view.clientHeight * 2 + 1); ray.setFromCamera(ndc, camera); return { o: ray.ray.origin.toArray(), d: ray.ray.direction.toArray() }; }
+function pickFace(sx, sy) { if (!G.pick) return null; setRay(sx, sy); const h = ray.intersectObject(G.pick, false)[0]; return h ? { fid: G.tf[h.faceIndex], p: h.point.toArray(), dist: h.distance } : null; }
+function toScreen(p) { const v = new THREE.Vector3(...p).project(camera); if (v.z > 1 || v.z < -1) return null; return [(v.x + 1) / 2 * view.clientWidth, (1 - v.y) / 2 * view.clientHeight]; }
+function rayPlane(o, d, p0, n) { const den = vdot(d, n); if (Math.abs(den) < 1e-9) return null; const t = vdot(vsub(p0, o), n) / den; return t > 0 ? vadd(o, vmul(d, t)) : null; }
+/* paramètre s du point P0 + s·u le plus proche de la droite o + t·d */
+function lineRay(P0, u, o, d) { const w = vsub(P0, o), a = vdot(u, u), b = vdot(u, d), c = vdot(d, d), dd = vdot(u, w), e = vdot(d, w), den = a * c - b * b; return Math.abs(den) < 1e-12 ? 0 : (b * e - c * dd) / den; }
+const AXES = [[1, 0, 0], [0, 1, 0], [0, 0, 1]], AXC = ['#D02020', '#1E9A2E', '#2040D0'], AXN = ['Axe rouge', 'Axe vert', 'Axe bleu'];
+const SNAPLAB = { end: 'Extrémité', mid: 'Milieu', edge: 'Sur l\'arête', face: 'Sur la face', ground: '', plane: '' };
+/* o.from : point de départ (inférences d'axe) ; o.plane : {o, n} plan de tracé imposé ; o.excl : sommets ignorés */
+function snap(sx, sy, o = {}) {
+  const r = setRay(sx, sy), hit = pickFace(sx, sy);
+  const vis = p => !hit || vdot(vsub(p, r.o), r.d) <= hit.dist * 1.003 + 0.01, onPl = p => !o.plane || Math.abs(vdot(vsub(p, o.plane.o), o.plane.n)) < 1e-4;
+  const proj = p => o.plane ? vsub(p, vmul(o.plane.n, vdot(vsub(p, o.plane.o), o.plane.n))) : p;
+  let best = null, bd = 10;
+  for (const id of G.V) { if (o.excl && o.excl.has(id)) continue; const p = M.v[id], s = toScreen(p); if (!s) continue; const d = Math.hypot(s[0] - sx, s[1] - sy); if (d < bd && vis(p)) { bd = d; best = { p, type: 'end', id }; } }
+  if (best) return { ...best, p: proj(best.p), fid: hit && hit.fid };
+  bd = 9; for (const e of G.E) { const p = vmul(vadd(e.pa, e.pb), .5), s = toScreen(p); if (!s) continue; const d = Math.hypot(s[0] - sx, s[1] - sy); if (d < bd && vis(p)) { bd = d; best = { p, type: 'mid', e }; } }
+  if (best) return { ...best, p: proj(best.p), fid: hit && hit.fid };
+  let eb = null; bd = 7;
+  for (const e of G.E) { const u = vsub(e.pb, e.pa), L = vlen(u); if (L < 1e-9) continue; const un = vmul(u, 1 / L); let s = Math.max(0, Math.min(L, lineRay(e.pa, un, r.o, r.d))); const p = vadd(e.pa, vmul(un, s)), sp = toScreen(p); if (!sp) continue; const d = Math.hypot(sp[0] - sx, sp[1] - sy); if (d < bd && vis(p) && onPl(p)) { bd = d; eb = { p, type: 'edge', e }; } }
+  let ab = null;
+  if (o.from && !o.noAxis) { bd = 11;
+    for (let i = 0; i < 3; i++) { const ax = AXES[i]; if (o.plane && Math.abs(vdot(ax, o.plane.n)) > 1e-6) continue; const s = lineRay(o.from, ax, r.o, r.d), p = vadd(o.from, vmul(ax, s)), sp = toScreen(p); if (!sp || Math.abs(s) < 1e-6) continue; const d = Math.hypot(sp[0] - sx, sp[1] - sy); if (d < bd) { bd = d; ab = { p, type: 'axis', axis: i }; } }
+    if (ab && eb) { // axe et arête : point de l'arête sur l'axe
+      const u = vsub(eb.e.pb, eb.e.pa), L = vlen(u), un = vmul(u, 1 / L), ax = AXES[ab.axis], w = vsub(eb.e.pa, o.from), b = vdot(un, ax), den = 1 - b * b;
+      if (den > 1e-9) { const s = (b * vdot(ax, w) - vdot(un, w)) / den, t = vdot(ax, vadd(w, vmul(un, s))), q = vadd(eb.e.pa, vmul(un, s)); if (s >= -1e-6 && s <= L + 1e-6 && vdist(q, vadd(o.from, vmul(ax, t))) < 1e-4) return { p: q, type: 'axis', axis: ab.axis, onEdge: true, fid: hit && hit.fid }; }
+    }
+  }
+  if (ab) return { ...ab, p: proj(ab.p), fid: hit && hit.fid };
+  if (eb) return { ...eb, p: proj(eb.p), fid: hit && hit.fid };
+  if (hit && (!o.plane || onPl(hit.p))) return { p: hit.p, type: 'face', fid: hit.fid };
+  if (o.plane) { const q = rayPlane(r.o, r.d, o.plane.o, o.plane.n); if (q) return { p: q, type: 'plane' }; return null; }
+  const q = rayPlane(r.o, r.d, [0, 0, 0], [0, 0, 1]); return q ? { p: q, type: 'ground' } : null;
+}
+function marker(s, extra) {
+  const mk = $('#snapMk'), lb = $('#snapLb');
+  if (!s || s.type === 'ground' || s.type === 'plane') { mk.hidden = true; lb.hidden = !extra; if (extra && s) { const sp = toScreen(s.p); if (sp) { lb.style.left = sp[0] + 14 + 'px'; lb.style.top = sp[1] + 10 + 'px'; lb.textContent = extra; } else lb.hidden = true; } return; }
+  const sp = toScreen(s.p); if (!sp) { mk.hidden = lb.hidden = true; return; }
+  mk.hidden = false; mk.className = s.type === 'axis' ? 'axis' + s.axis : s.type; mk.style.left = sp[0] + 'px'; mk.style.top = sp[1] + 'px';
+  const t = [s.type === 'axis' ? AXN[s.axis] + (s.onEdge ? ', sur l\'arête' : '') : SNAPLAB[s.type], extra].filter(Boolean).join(' · ');
+  lb.hidden = !t; lb.textContent = t; lb.style.left = sp[0] + 14 + 'px'; lb.style.top = sp[1] + 10 + 'px';
+}
+/* plan de tracé : face visée, sinon le sol, sinon un plan horizontal passant par le point */
+function planeAt(s) {
+  let fid = s.fid; if (fid && M.f[fid]) { const f = M.f[fid], n = faceN(M, f); if (Math.abs(vdot(n, vsub(s.p, M.v[f.o[0]]))) < 1e-4) { const b = basis(n); return { o: s.p, n, u: b.u, v: b.v, fid }; } }
+  if (s.type === 'end' || s.type === 'mid' || s.type === 'edge') { // sommet ou arête : une face qui le contient et qui fait face à la caméra
+    const c = isO() ? vsub(s.p, vmul(fwd(), 100)) : camPos(); let best = null;
+    for (const k in M.f) { const f = M.f[k], n = faceN(M, f); if (Math.abs(vdot(n, vsub(s.p, M.v[f.o[0]]))) > 1e-4 || classifyPoint(M, f, s.p, 1e-4) === 'out') continue; const sc = vdot(n, vnorm(vsub(c, s.p))); if (!best || sc > best.sc) best = { k, n, sc }; }
+    if (best && best.sc > 0.05) { const b = basis(best.n); return { o: s.p, n: best.n, u: b.u, v: b.v, fid: best.k }; }
+  }
+  return { o: s.p, n: [0, 0, 1], u: [1, 0, 0], v: [0, 1, 0], fid: null };
+}
+
+/* ================= Saisie des cotes ================= */
+function parseLen(s) { const m = /^\s*([-+]?\d*[.,]?\d+)\s*(mm|cm|m)?\s*$/i.exec(s || ''); if (!m) return NaN; const v = parseFloat(m[1].replace(',', '.')); return v * ({ mm: .001, cm: .01, m: 1 }[(m[2] || 'm').toLowerCase()]); }
+function parseTwo(s) { const p = String(s).split(/[;x×*]/i); if (p.length !== 2) return null; const a = parseLen(p[0]), b = parseLen(p[1]); return isFinite(a) && isFinite(b) ? [a, b] : null; }
+const vcb = $('#vcb');
+function vcbShow(label, val) { $('#vcbL').textContent = label; if (document.activeElement !== vcb || !vcb.value) vcb.value = val == null ? '' : val; }
+function vcbApply() {
+  const t = vcb.value.trim(); if (!t) return; const T = TOOLS[ST.tool];
+  let done = false;
+  if (T && T.vcb && T.busy && T.busy()) done = T.vcb(t);
+  else if (ST.last) { const v = ST.last.parse(t); if (v != null) { M = JSON.parse(ST.last.before); ST.last.apply(M, v); changed(); done = true; } }
+  vcb.value = ''; cv.focus();
+  if (!done) setStatus('Saisie non comprise : « ' + t + ' »', 'err'); else { setStatus(''); vcb.classList.add('flash'); setTimeout(() => vcb.classList.remove('flash'), 300); }
+}
+/* opération corrigeable : une nouvelle saisie juste après la refait avec la nouvelle valeur */
+function commitFrom(before, parse, apply, v) { const m = JSON.parse(before); apply(m, v); pushUndo(before); M = m; ST.last = { before, parse, apply }; changed(); }
+
+/* ================= Outils ================= */
+/* point libre (sans accroche) : cotes arrondies au millimètre */
+const FREE = new Set(['plane', 'face', 'ground']), mm = x => Math.round(x * 1000) / 1000;
+function roundFrom(s, from) { if (!s || !from || !FREE.has(s.type)) return s; const d = vsub(s.p, from), L = vlen(d); if (L < 1e-9) return s; return { ...s, p: vadd(from, vmul(d, mm(L) / L)) }; }
+const hintEl = $('#hint'); const hint = t => { hintEl.textContent = t; };
+let mouse = [0, 0];
+const TOOLS = {};
+TOOLS.select = {
+  hint: () => 'Clic : sélectionner une face ou une arête · double-clic : tout le volume · Maj ou Ctrl : ajouter, retirer · Suppr : effacer la sélection · Échap : tout désélectionner',
+  label: 'Mesures',
+  move(sx, sy) { hover(pickEdgeOrFace(sx, sy)); },
+  down(sx, sy, ev) {
+    const h = pickEdgeOrFace(sx, sy), add = ev.shiftKey || ev.ctrlKey || ev.metaKey; if (!add) { ST.sel.f.clear(); ST.sel.e.clear(); }
+    if (h) { const set = h.fid ? ST.sel.f : ST.sel.e, k = h.fid || h.e.k; if (add && set.has(k)) set.delete(k); else set.add(k); }
+    drawSel(); info();
+  },
+  dbl(sx, sy) { const h = pickFace(sx, sy); if (!h) return; for (const k of connected(M, h.fid)) ST.sel.f.add(k); drawSel(); info(); }
+};
+function pickEdgeOrFace(sx, sy) {
+  const hit = pickFace(sx, sy), r = setRay(sx, sy); let best = null, bd = 6;
+  for (const e of G.E) { const u = vsub(e.pb, e.pa), L = vlen(u); if (L < 1e-9) continue; const un = vmul(u, 1 / L), s = Math.max(0, Math.min(L, lineRay(e.pa, un, r.o, r.d))), p = vadd(e.pa, vmul(un, s)), sp = toScreen(p); if (!sp) continue; const d = Math.hypot(sp[0] - sx, sp[1] - sy); if (d < bd && (!hit || vdot(vsub(p, r.o), r.d) <= hit.dist * 1.003 + 0.01)) { bd = d; best = { e }; } }
+  return best || (hit ? { fid: hit.fid } : null);
+}
+TOOLS.erase = {
+  hint: () => 'Clic sur une arête : elle disparaît (deux faces coplanaires de part et d\'autre se réunissent) · clic sur une face : la face disparaît, ses arêtes restent',
+  label: 'Mesures',
+  move(sx, sy) { hover(pickEdgeOrFace(sx, sy)); },
+  down(sx, sy) { const h = pickEdgeOrFace(sx, sy); if (!h) return; if (h.e) doOp(m => deleteEdge(m, h.e.a, h.e.b)); else doOp(m => { deleteFace(m, h.fid); cleanup(m); }); }
+};
+/* ---- ligne ---- */
+TOOLS.line = {
+  s: null,
+  hint() { return this.s ? 'Clic : point suivant · tapez une longueur puis Entrée · revenir au point de départ ferme la forme · Échap ou double-clic : terminer' : 'Clic : point de départ de la ligne. Un trait d\'un bord à l\'autre d\'une face la divise en deux'; },
+  label: 'Longueur',
+  busy() { return !!this.s; },
+  reset() { this.s = null; rubber(); guide(); },
+  cur: null,
+  move(sx, sy) {
+    const s = roundFrom(snap(sx, sy, this.s ? { from: this.s.p0 } : {}), this.s && this.s.p0); this.cur = s; if (!s) { marker(null); return; }
+    if (this.s) { const L = vdist(this.s.p0, s.p); marker(s, fmtL(L)); rubber([this.s.p0, s.p], false, s.type === 'axis' ? AXC[s.axis] : null); vcbShow('Longueur', NF2.format(L)); if (s.type === 'end' && vdist(s.p, this.s.first) < 1e-6 && this.s.chain.length >= 3) $('#snapLb').textContent = 'Fermer la forme'; }
+    else marker(s);
+  },
+  down(sx, sy) {
+    const s = roundFrom(snap(sx, sy, this.s ? { from: this.s.p0 } : {}), this.s && this.s.p0); if (!s) return;
+    if (!this.s) { const pl = planeAt(s); this.s = { p0: s.p, first: s.p, chain: [s.p], face0: pl.fid, n: pl.n }; hint(this.hint()); return; }
+    this.segment(s.p);
+  },
+  dbl() { this.reset(); hint(this.hint()); },
+  vcb(t) { const L = parseLen(t); if (!isFinite(L) || !this.s || !this.cur) return false; const d = vsub(this.cur.p, this.s.p0); if (vlen(d) < 1e-9) return false; this.segment(vadd(this.s.p0, vmul(vnorm(d), L))); return true; },
+  segment(q) {
+    const S = this.s, p = S.p0; if (vdist(p, q) < TOL) return;
+    const closing = vdist(q, S.first) < 1e-6 && S.chain.length >= 3;
+    let ended = false;
+    doOp(m => {
+      const a = addV(m, p), b = addV(m, q); m.l[m.n++] = [a, b];
+      if (closing) { // contour fermé : nouvelle face (imprimée dans la face de départ si elle y est)
+        const pts = S.chain; let n = vnorm(newell({ v: Object.fromEntries(pts.map((x, i) => [i, x])) }, pts.map((_, i) => i)));
+        const ref = S.face0 && m.f[S.face0] ? faceN(m, m.f[S.face0]) : (Math.abs(n[2]) > 0.999 ? [0, 0, 1] : vsub(camPos(), pts[0]));
+        if (vdot(n, ref) < 0) n = vmul(n, -1);
+        addShape(m, pts, n, S.face0 && m.f[S.face0] ? S.face0 : null); ended = true; return;
+      }
+      fixT(m); const ids = [...S.chain, q].map(x => addV(m, x));
+      for (let k = ids.length - 2; k >= 0; k--) if (splitByPath(m, ids.slice(k))) { S.chain = [q]; S.first = q; return; }
+      S.chain.push(q); cleanup(m);
+    });
+    if (ended) { this.reset(); hint(this.hint()); return; }
+    S.p0 = q; rubber(); guide(); ST.last = null;
+  }
+};
+/* ---- rectangle ---- */
+TOOLS.rect = {
+  s: null, cur: null,
+  hint() { return this.s ? 'Clic : coin opposé · tapez longueur;largeur (ex. 4;2,5) puis Entrée · Échap : annuler' : 'Clic : premier coin, sur le sol ou sur une face'; },
+  label: 'Dimensions',
+  busy() { return !!this.s; }, reset() { this.s = null; rubber(); },
+  dims(p, free) { const S = this.s, d = vsub(p, S.pl.o); let a = vdot(d, S.pl.u), b = vdot(d, S.pl.v), sq = false; if (free) { a = mm(a); b = mm(b); } if (Math.abs(a) > 1e-6 && Math.abs(Math.abs(a) - Math.abs(b)) < 0.015 * Math.max(Math.abs(a), Math.abs(b))) { b = Math.sign(b || 1) * Math.abs(a); sq = true; } return { a, b, sq }; },
+  pts(a, b) { const { o, u, v } = this.s.pl; return [o, vadd(o, vmul(u, a)), vadd(vadd(o, vmul(u, a)), vmul(v, b)), vadd(o, vmul(v, b))]; },
+  move(sx, sy) {
+    if (!this.s) { const s = snap(sx, sy); marker(s); return; }
+    const s = snap(sx, sy, { plane: this.s.pl, noAxis: true }); this.cur = s; if (!s) return; const { a, b, sq } = this.dims(s.p, FREE.has(s.type));
+    rubber(this.pts(a, b), true); marker(s, (sq ? 'Carré · ' : '') + NF2.format(Math.abs(a)) + ' × ' + NF2.format(Math.abs(b))); vcbShow('Dimensions', NF2.format(Math.abs(a)) + ';' + NF2.format(Math.abs(b)));
+  },
+  down(sx, sy) {
+    if (!this.s) { const s = snap(sx, sy); if (!s) return; this.s = { pl: planeAt(s) }; hint(this.hint()); return; }
+    const s = snap(sx, sy, { plane: this.s.pl, noAxis: true }); if (!s) return; const { a, b } = this.dims(s.p, FREE.has(s.type)); this.make(a, b);
+  },
+  make(a, b) {
+    if (Math.abs(a) < TOL || Math.abs(b) < TOL) return; const pl = this.s.pl, sa = Math.sign(a), sb = Math.sign(b);
+    const apply = (m, v) => addShape(m, this.ptsOf(pl, v[0], v[1]), pl.n, pl.fid && m.f[pl.fid] ? pl.fid : null);
+    commitFrom(JSON.stringify(M), t => { const v = parseTwo(t); return v ? [sa * Math.abs(v[0]), sb * Math.abs(v[1])] : null; }, apply, [a, b]);
+    this.reset(); hint(this.hint());
+  },
+  ptsOf(pl, a, b) { const { o, u, v } = pl; return [o, vadd(o, vmul(u, a)), vadd(vadd(o, vmul(u, a)), vmul(v, b)), vadd(o, vmul(v, b))]; },
+  vcb(t) { const v = parseTwo(t); if (!v || !this.cur) return false; const { a, b } = this.dims(this.cur.p); this.make((Math.sign(a) || 1) * Math.abs(v[0]), (Math.sign(b) || 1) * Math.abs(v[1])); return true; }
+};
+/* ---- cercle et polygone ---- */
+function roundTool(kind) {
+  return {
+    s: null, cur: null, kind,
+    hint() { return this.s ? `Clic : rayon · tapez le rayon puis Entrée · ${kind === 'circle' ? 'segments' : 'côtés'} réglables en bas · Échap : annuler` : 'Clic : centre, sur le sol ou sur une face'; },
+    label: 'Rayon',
+    busy() { return !!this.s; }, reset() { this.s = null; rubber(); guide(); },
+    ptsOf(pl, r, a0) { const N = ST.segs[kind], out = []; for (let i = 0; i < N; i++) { const t = a0 + i * 2 * Math.PI / N; out.push(vadd(pl.o, vadd(vmul(pl.u, r * Math.cos(t)), vmul(pl.v, r * Math.sin(t))))); } return out; },
+    geom(p, free) { const d = vsub(p, this.s.pl.o); return { r: free ? mm(vlen(d)) : vlen(d), a0: Math.atan2(vdot(d, this.s.pl.v), vdot(d, this.s.pl.u)) }; },
+    move(sx, sy) {
+      if (!this.s) { marker(snap(sx, sy)); return; }
+      const s = snap(sx, sy, { plane: this.s.pl, noAxis: true }); this.cur = s; if (!s) return; const { r, a0 } = this.geom(s.p, FREE.has(s.type));
+      rubber(this.ptsOf(this.s.pl, r, a0), true); guide(this.s.pl.o, s.p); marker(s, 'R ' + NF2.format(r)); vcbShow('Rayon', NF2.format(r));
+    },
+    down(sx, sy) {
+      if (!this.s) { const s = snap(sx, sy); if (!s) return; this.s = { pl: planeAt(s) }; hint(this.hint()); return; }
+      const s = snap(sx, sy, { plane: this.s.pl, noAxis: true }); if (!s) return; const { r, a0 } = this.geom(s.p, FREE.has(s.type)); this.make(r, a0);
+    },
+    make(r, a0) {
+      if (r < TOL) return; const pl = this.s.pl;
+      commitFrom(JSON.stringify(M), t => { const v = parseLen(t); return isFinite(v) && v > 0 ? v : null; }, (m, v) => addShape(m, this.ptsOf(pl, v, a0), pl.n, pl.fid && m.f[pl.fid] ? pl.fid : null), r);
+      this.reset(); hint(this.hint());
+    },
+    vcb(t) { const v = parseLen(t); if (!(v > 0) || !this.cur) return false; this.make(v, this.geom(this.cur.p).a0); return true; }
+  };
+}
+TOOLS.circle = roundTool('circle'); TOOLS.poly = roundTool('poly');
+/* ---- pousser/tirer ---- */
+TOOLS.push = {
+  s: null,
+  hint() { return this.s ? 'Déplacez puis cliquez · tapez la distance puis Entrée · visez un sommet pour aller à son niveau · Échap : annuler' : 'Clic sur une face, déplacez, recliquez · double-clic sur une face : refait la dernière distance (' + (ST.lastPP != null ? fmtL(ST.lastPP) : '—') + ')'; },
+  label: 'Distance',
+  busy() { return !!this.s; },
+  reset() { if (this.s) { this.s = null; show(M); } guide(); },
+  move(sx, sy) {
+    if (!this.s) { const h = pickFace(sx, sy); hover(h ? { fid: h.fid } : null); marker(null); return; }
+    const S = this.s, r = setRay(sx, sy); let d = lineRay(S.p0, S.n, r.o, r.d), lab = '';
+    let bd = 10; for (const id of G.V) { if (S.own.has(id)) continue; const sp = toScreen(M.v[id]); if (!sp) continue; const dd = Math.hypot(sp[0] - sx, sp[1] - sy); if (dd < bd) { bd = dd; d = vdot(vsub(M.v[id], S.p0), S.n); lab = 'Au niveau du sommet'; } }
+    d = Math.round(d * 1000) / 1000; S.d = d;
+    const m = JSON.parse(S.base); pushPull(m, S.fid, d); show(m); hover(null);
+    const q = vadd(S.p0, vmul(S.n, d)); guide(S.p0, q); marker({ p: q, type: 'plane' }, (lab ? lab + ' · ' : '') + fmtL(d)); vcbShow('Distance', NF2.format(d));
+  },
+  down(sx, sy) {
+    if (!this.s) { const h = pickFace(sx, sy); if (!h) return; const f = M.f[h.fid]; this.s = { fid: h.fid, p0: h.p, n: faceN(M, f), base: JSON.stringify(M), d: 0, own: new Set(loopsOf(f).flat()) }; hover(null); hint(this.hint()); return; }
+    this.make(this.s.d);
+  },
+  make(d) {
+    const S = this.s; this.s = null; guide(); marker(null);
+    if (Math.abs(d) < TOL) { show(M); hint(this.hint()); return; }
+    const sg = Math.sign(d) || 1, fid = S.fid;
+    commitFrom(S.base, t => { const v = parseLen(t); return isFinite(v) ? sg * v : null; }, (m, v) => { pushPull(m, fid, v); ST.lastPP = v; }, d);
+    hint(this.hint());
+  },
+  dbl(sx, sy) { if (this.s || ST.lastPP == null) return; const h = pickFace(sx, sy); if (!h) return; const v0 = ST.lastPP, fid = h.fid; commitFrom(JSON.stringify(M), t => { const v = parseLen(t); return isFinite(v) ? v : null; }, (m, v) => { pushPull(m, fid, v); ST.lastPP = v; }, v0); },
+  vcb(t) { const v = parseLen(t); if (!isFinite(v) || !this.s) return false; this.make((Math.sign(this.s.d) || 1) * v); return true; }
+};
+/* ---- déplacer (Ctrl : copier) ---- */
+TOOLS.move = {
+  s: null, cur: null,
+  hint() { return this.s ? 'Clic : point d\'arrivée · tapez la distance puis Entrée · Ctrl enfoncé : copie · Échap : annuler' : 'Clic sur un point de départ : déplace la sélection, à défaut la face ou l\'arête visée (pour un volume entier : double-clic avec la sélection) · Ctrl : copier'; },
+  label: 'Distance',
+  busy() { return !!this.s; },
+  reset() { if (this.s) { this.s = null; show(M); } guide(); },
+  target(sx, sy) { if (ST.sel.f.size || ST.sel.e.size) return { f: [...ST.sel.f], e: [...ST.sel.e] }; const h = pickEdgeOrFace(sx, sy); return !h ? null : h.fid ? { f: [h.fid], e: [] } : { f: [], e: [h.e.k] }; },
+  at(sx, sy) { return roundFrom(snap(sx, sy, { from: this.s.p0, excl: this.s.vs }), this.s.p0); },
+  move(sx, sy, ev) {
+    if (!this.s) { hover(ST.sel.f.size || ST.sel.e.size ? null : pickEdgeOrFace(sx, sy)); marker(snap(sx, sy)); return; }
+    const s = this.at(sx, sy); if (!s) return; this.cur = s; const d = vsub(s.p, this.s.p0), copy = this.s.copy || !!(ev && (ev.ctrlKey || ev.metaKey));
+    const m = JSON.parse(this.s.base), ok = vlen(d) < TOL || (copy ? copySel(m, this.s.t, d) : moveSel(m, this.s.t, d)); show(ok ? m : M);
+    guide(this.s.p0, s.p, s.type === 'axis' ? AXC[s.axis] : null); marker(s, ok ? (copy ? 'Copie · ' : '') + fmtL(vlen(d)) : 'Impossible : une face ne resterait pas plane'); vcbShow('Distance', NF2.format(vlen(d)));
+  },
+  down(sx, sy, ev) {
+    if (!this.s) { const t = this.target(sx, sy), s = snap(sx, sy); if (!t || !s) return; this.s = { t, p0: s.p, base: JSON.stringify(M), vs: selVerts(M, t), copy: ev.ctrlKey || ev.metaKey }; hover(null); hint(this.hint()); return; }
+    const s = this.at(sx, sy); if (!s) return; this.make(vsub(s.p, this.s.p0), this.s.copy || ev.ctrlKey || ev.metaKey);
+  },
+  make(d, copy) {
+    const S = this.s; this.s = null; guide(); marker(null); if (vlen(d) < TOL) { show(M); hint(this.hint()); return; }
+    const t = S.t, dir = vnorm(d), fn = (m, v) => copy ? copySel(m, t, vmul(dir, v)) : moveSel(m, t, vmul(dir, v));
+    if (!fn(JSON.parse(S.base), vlen(d))) { show(M); setStatus('Déplacement impossible : une face voisine ne resterait pas plane', 'err'); hint(this.hint()); return; }
+    commitFrom(S.base, txt => { const v = parseLen(txt); return isFinite(v) ? v : null; }, fn, vlen(d)); clearSel(); setStatus(''); hint(this.hint());
+  },
+  vcb(txt) { const v = parseLen(txt); if (!isFinite(v) || !this.s || !this.cur) return false; const d = vsub(this.cur.p, this.s.p0); if (vlen(d) < 1e-9) return false; this.make(vmul(vnorm(d), v), this.s.copy); return true; }
+};
+TOOLS.orbit = { hint: () => 'Glisser : tourner autour du point visé · double-clic : centrer la vue sur ce point', label: 'Mesures', nav: 'orbit' };
+TOOLS.pan = { hint: () => 'Glisser : déplacer la vue · double-clic : centrer la vue sur ce point', label: 'Mesures', nav: 'pan' };
+function cancelTool() { const T = TOOLS[ST.tool]; if (T && T.reset) T.reset(); marker(null); rubber(); guide(); }
+function setTool(t) {
+  if (!TOOLS[t]) return; cancelTool(); ST.tool = t; $$('.tb[data-tool]').forEach(b => b.classList.toggle('on', b.dataset.tool === t));
+  const T = TOOLS[t]; hint(T.hint()); vcbShow(T.label || 'Mesures', '');
+  const sg = t === 'circle' || t === 'poly'; $('#segsL').hidden = !sg; if (sg) { $('#segsT').textContent = t === 'circle' ? 'Segments' : 'Côtés'; $('#segs').value = ST.segs[t]; }
+  cv.style.cursor = t === 'orbit' || t === 'pan' ? 'grab' : t === 'select' ? 'default' : 'crosshair'; hover(null);
+}
+
+/* ================= Souris, toucher ================= */
+const ptr = new Map(); let drag = null, lastDown = null, lastMid = 0;
+const loc = ev => { const b = cv.getBoundingClientRect(); return [ev.clientX - b.left, ev.clientY - b.top]; };
+cv.addEventListener('contextmenu', e => e.preventDefault());
+cv.addEventListener('pointerdown', ev => {
+  cv.focus(); cv.setPointerCapture(ev.pointerId); const [sx, sy] = loc(ev); ptr.set(ev.pointerId, [sx, sy]);
+  if (ptr.size === 2) { cancelTool(); drag = { mode: 'pinch', ...pinchState() }; return; }
+  const navMode = ev.button === 1 ? (ev.shiftKey ? 'pan' : 'orbit') : ev.button === 2 ? 'pan' : TOOLS[ST.tool].nav;
+  if (navMode) {
+    if (ev.button === 1) { const now = performance.now(); if (now - lastMid < 350) { recenterOn(pointUnder(sx, sy)); lastMid = 0; return; } lastMid = now; }
+    drag = { mode: navMode, x: sx, y: sy, pivot: navMode === 'orbit' ? pointUnder(sx, sy) : null, ref: navMode === 'pan' ? pointUnder(sx, sy) : null };
+    if (navMode !== TOOLS[ST.tool].nav) drag.temp = true; cv.style.cursor = 'grabbing'; marker(null); return;
+  }
+  if (ev.button !== 0) return;
+  lastDown = { x: sx, y: sy, t: performance.now(), wasBusy: !!(TOOLS[ST.tool].busy && TOOLS[ST.tool].busy()) };
+  TOOLS[ST.tool].down && TOOLS[ST.tool].down(sx, sy, ev);
+});
+cv.addEventListener('pointermove', ev => {
+  const [sx, sy] = loc(ev); mouse = [sx, sy]; if (ptr.has(ev.pointerId)) ptr.set(ev.pointerId, [sx, sy]);
+  if (drag && drag.mode === 'pinch') { if (ptr.size >= 2) pinchMove(); return; }
+  if (drag) { const dx = sx - drag.x, dy = sy - drag.y; drag.x = sx; drag.y = sy; if (drag.mode === 'orbit') orbit(dx, dy, drag.pivot); else pan(dx, dy, drag.ref); return; }
+  const T = TOOLS[ST.tool]; T.move && T.move(sx, sy, ev);
+});
+function endPtr(ev) {
+  const [sx, sy] = loc(ev); ptr.delete(ev.pointerId);
+  if (drag) { if (drag.mode === 'pinch') { if (ptr.size < 2) drag = null; return; } drag = null; cv.style.cursor = ST.tool === 'orbit' || ST.tool === 'pan' ? 'grab' : ST.tool === 'select' ? 'default' : 'crosshair'; save(); return; }
+  // tracé par glisser-relâcher (souris ou doigt) : le relâchement vaut second clic
+  const T = TOOLS[ST.tool];
+  if (lastDown && ev.button === 0 && !lastDown.wasBusy && T.busy && T.busy() && Math.hypot(sx - lastDown.x, sy - lastDown.y) > 8 && ST.tool !== 'line') { T.move && T.move(sx, sy); T.down(sx, sy, ev); }
+  lastDown = null;
+}
+cv.addEventListener('pointerup', endPtr); cv.addEventListener('pointercancel', endPtr);
+cv.addEventListener('dblclick', ev => { const [sx, sy] = loc(ev); const T = TOOLS[ST.tool]; if (T.nav) { recenterOn(pointUnder(sx, sy)); return; } T.dbl && T.dbl(sx, sy, ev); });
+cv.addEventListener('wheel', ev => { ev.preventDefault(); const [sx, sy] = loc(ev), k = Math.max(-3, Math.min(3, ev.deltaY / (ev.deltaMode ? 1 : 100))); zoomAt(sx, sy, k < 0 ? 1 - Math.pow(0.8, -k) : -(Math.pow(1.25, k) - 1)); const T = TOOLS[ST.tool]; T.move && T.move(sx, sy); clearTimeout(cv._zt); cv._zt = setTimeout(save, 400); }, { passive: false });
+cv.addEventListener('pointerleave', () => { if (!drag) { marker(null); if (ST.tool === 'select' || ST.tool === 'erase' || (ST.tool === 'push' && !TOOLS.push.s)) hover(null); } });
+function pinchState() { const [a, b] = [...ptr.values()]; return { d: Math.hypot(a[0] - b[0], a[1] - b[1]), c: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+function pinchMove() { const p = pinchState(); if (drag.d > 0 && p.d > 0) zoomAt(p.c[0], p.c[1], 1 - drag.d / p.d); pan(p.c[0] - drag.c[0], p.c[1] - drag.c[1]); drag.d = p.d; drag.c = p.c; }
+
+/* ================= Clavier ================= */
+document.addEventListener('keydown', ev => {
+  const tg = ev.target, inField = tg && (tg.tagName === 'INPUT' || tg.tagName === 'TEXTAREA' || tg.tagName === 'SELECT');
+  if (tg === vcb) { if (ev.key === 'Enter') { ev.preventDefault(); vcbApply(); } else if (ev.key === 'Escape') { vcb.value = ''; cv.focus(); } return; }
+  if (inField) return;
+  const k = ev.key, ctrl = ev.ctrlKey || ev.metaKey;
+  if (ctrl && (k === 'z' || k === 'Z')) { ev.preventDefault(); ev.shiftKey ? redo() : undo(); return; }
+  if (ctrl && (k === 'y' || k === 'Y')) { ev.preventDefault(); redo(); return; }
+  if (ctrl && (k === 's' || k === 'S')) { ev.preventDefault(); saveFile(); return; }
+  if (ctrl && (k === 'a' || k === 'A')) { ev.preventDefault(); setTool('select'); Object.keys(M.f).forEach(f => ST.sel.f.add(f)); drawSel(); info(); return; }
+  if (ctrl) return;
+  // chiffres, signe, séparateurs : saisie des cotes, comme dans SketchUp (on tape sans cliquer dans la case)
+  if (/^[0-9.,;\-+]$/.test(k)) { ev.preventDefault(); if (document.activeElement !== vcb) vcb.value = ''; vcb.focus(); vcb.value += k; return; }
+  if (k === 'Escape') { const T = TOOLS[ST.tool]; if (T.busy && T.busy()) cancelTool(); else clearSel(); hint(T.hint()); return; }
+  if (k === 'Delete' || k === 'Backspace') { ev.preventDefault(); delSel(); return; }
+  if (k === 'Z' && ev.shiftKey) { frameView(bounds()); save(); return; }
+  const map = { ' ': 'select', m: 'move', l: 'line', r: 'rect', c: 'circle', g: 'poly', p: 'push', o: 'orbit', h: 'pan', e: 'erase' }, t = map[k.toLowerCase()];
+  if (t && !ev.shiftKey) { ev.preventDefault(); setTool(t); }
+});
+function delSel() {
+  if (!ST.sel.f.size && !ST.sel.e.size) return; const fs = [...ST.sel.f], es = [...ST.sel.e].map(k => k.split('|').map(Number));
+  doOp(m => { for (const f of fs) deleteFace(m, f); for (const [a, b] of es) if (m.v[a] && m.v[b]) deleteEdge(m, a, b); cleanup(m); }); clearSel();
+}
+
+/* ================= Informations ================= */
+function info() {
+  const el = $('#info'), fs = [...ST.sel.f].filter(k => M.f[k]), es = [...ST.sel.e];
+  const nF = Object.keys(M.f).length, nL = Object.keys(M.l).length;
+  let s = '';
+  if (fs.length || es.length) {
+    const A = fs.reduce((t, k) => t + faceArea(M, M.f[k]), 0), L = es.reduce((t, k) => { const [a, b] = k.split('|'); return t + (M.v[a] && M.v[b] ? vdist(M.v[a], M.v[b]) : 0); }, 0);
+    s += `<div><b>Sélection</b> · ${fs.length ? fs.length + ' face' + (fs.length > 1 ? 's' : '') + ' <span class="mono">' + fmtA(A) + '</span>' : ''}${fs.length && es.length ? ' · ' : ''}${es.length ? es.length + ' arête' + (es.length > 1 ? 's' : '') + ' <span class="mono">' + fmtL(L) + '</span>' : ''}</div>`;
+  }
+  if (nF || nL) {
+    let up = 0, vert = 0, tot = 0; for (const k in M.f) { const f = M.f[k], a = faceArea(M, f), n = faceN(M, f); tot += a; if (n[2] > 0.999) up += a; else if (Math.abs(n[2]) < 1e-3) vert += a; }
+    const vol = closedVolume(M);
+    s += `<div>${nF} face${nF > 1 ? 's' : ''}${nL ? ', ' + nL + ' trait' + (nL > 1 ? 's' : '') + ' libre' + (nL > 1 ? 's' : '') : ''} · surfaces <span class="mono">${fmtA(tot)}</span>, dont horizontales vers le haut <span class="mono">${fmtA(up)}</span>, verticales <span class="mono">${fmtA(vert)}</span>${vol != null ? ' · volume fermé <span class="mono">' + fmtV(vol) + '</span>' : ''}</div>`;
+  } else s = '<div>Maquette vide. Tracez un rectangle (R) sur le sol, puis tirez-le avec Pousser/tirer (P).</div>';
+  el.innerHTML = s;
+}
+/* volume si la maquette est fermée (chaque arête bordée par deux faces de sens opposés) */
+function closedVolume(m) {
+  const d = new Map(); for (const k in m.f) for (const L of loopsOf(m.f[k])) for (let i = 0; i < L.length; i++) { const e = L[i] + '>' + L[(i + 1) % L.length]; d.set(e, (d.get(e) || 0) + 1); }
+  if (!d.size) return null; for (const [e, c] of d) { const [a, b] = e.split('>'); if (c !== 1 || d.get(b + '>' + a) !== 1) return null; }
+  return Object.values(m.f).reduce((s, f) => s + faceArea(m, f) * vdot(faceN(m, f), m.v[f.o[0]]) / 3, 0);
+}
+
+/* ================= Fichiers ================= */
+const stamp = () => new Date().toISOString().slice(0, 10);
+function dl(name, text, type) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+function saveFile() { dl(`TerraModel ${stamp()}.json`, JSON.stringify({ app: 'TerraModel', version: APP_VERSION, model: M, cam: camJSON(), segs: ST.segs }), 'application/json'); setStatus('Maquette enregistrée', 'ok'); }
+function loadData(d) {
+  if (!d || !d.model || !d.model.v || !d.model.f) throw new Error('fichier TerraModel attendu');
+  M = d.model; M.l = M.l || {}; ST.undo.length = 0; ST.redo.length = 0; ST.last = null; if (d.segs) Object.assign(ST.segs, d.segs);
+  clearSel(); changed();
+  if (d.cam && d.cam.p) { camera = d.cam.o ? camO : camP; if (d.cam.o && d.cam.z) { camO.zoom = d.cam.z; camO.updateProjectionMatrix(); } setProjection(isO()); camera.position.set(...d.cam.p); camera.quaternion.fromArray(d.cam.q); camera.updateMatrixWorld(); ST.focus = d.cam.f || [0, 0, 0]; req(); } else setView('iso');
+}
+function exportOBJ() {
+  let s = `# TerraModel ${APP_VERSION}\n# Unité : mètre. Repère : X est, Y nord, Z vers le haut.\no TerraModel\n`, base = 1;
+  for (const k in M.f) { const f = M.f[k], { tris, ids, n } = triFace(M, f); s += `g face_${k}\n`; for (const id of ids) { const p = M.v[id]; s += `v ${p[0].toFixed(4)} ${p[1].toFixed(4)} ${p[2].toFixed(4)}\n`; }
+    for (const t of tris) { let [a, b, c] = t; const A = M.v[ids[a]], B = M.v[ids[b]], C = M.v[ids[c]]; if (vdot(vcross(vsub(B, A), vsub(C, A)), n) < 0) [b, c] = [c, b]; s += `f ${base + a} ${base + b} ${base + c}\n`; }
+    base += ids.length; }
+  dl(`TerraModel ${stamp()}.obj`, s, 'model/obj');
+}
+const HELP = `<h3>Tracer</h3><table>
+<tr><td>R</td><td>Rectangle : deux clics (ou glisser). Tapez 4;2,5 puis Entrée pour les cotes exactes.</td></tr>
+<tr><td>C · G</td><td>Cercle, polygone : centre puis rayon. Nombre de segments ou de côtés en bas à droite.</td></tr>
+<tr><td>L</td><td>Ligne : clics successifs, longueur tapée au clavier. Un trait d'un bord à l'autre d'une face la divise en deux ; revenir au départ ferme une face.</td></tr>
+<tr><td>Inférences</td><td>Extrémité (vert), milieu (bleu clair), sur l'arête (rouge), sur la face (bleu), axes rouge, vert, bleu.</td></tr></table>
+<h3>Volumes</h3><table>
+<tr><td>P</td><td>Pousser/tirer : clic sur une face, déplacez, recliquez (ou tapez la distance). Viser un sommet aligne sur son niveau.</td></tr>
+<tr><td>Dans un volume</td><td>Une forme tracée sur une face s'y imprime : tirée vers l'extérieur elle fait une excroissance, poussée vers l'intérieur un creux, et un percement quand elle atteint la face opposée.</td></tr>
+<tr><td>Double-clic</td><td>Refait la dernière distance de pousser/tirer sur la face cliquée.</td></tr>
+<tr><td>M</td><td>Déplacer : la sélection, ou la face ou l'arête visée. Monter le dessus allonge le volume, monter une arête fait un toit en pente. Ctrl : copier (une fenêtre copiée sur le même mur s'y imprime). Double-clic avec la sélection : tout le volume.</td></tr>
+<tr><td>Correction</td><td>Juste après un rectangle, un cercle ou un pousser/tirer, une nouvelle saisie au clavier corrige la cote.</td></tr></table>
+<h3>Vue</h3><table>
+<tr><td>Bouton du milieu</td><td>Orbite autour du point visé (Maj : panoramique). Double-clic du milieu : centrer sur ce point.</td></tr>
+<tr><td>Clic droit</td><td>Panoramique. Molette : zoom vers le curseur. Deux doigts : zoom et déplacement.</td></tr>
+<tr><td>Maj+Z</td><td>Zoom étendu. « Centrer » : sur la sélection, sinon toute la maquette.</td></tr>
+<tr><td>Parallèle</td><td>Vue sans perspective (projection orthogonale) : avec Dessus, Face, Droite… donne plans et élévations.</td></tr></table>
+<h3>Divers</h3><table>
+<tr><td>Espace · E</td><td>Sélection, gomme. Suppr : effacer la sélection.</td></tr>
+<tr><td>Ctrl+Z · Ctrl+Y</td><td>Annuler, rétablir. Ctrl+S : enregistrer le fichier.</td></tr>
+<tr><td>Faces</td><td>Face avant claire, face arrière bleutée (comme SketchUp). Une maquette par projet TerraSuite, gardée dans ce navigateur et synchronisée entre les appareils de l'agence.</td></tr></table>`;
+
+/* ================= Démarrage ================= */
+(function init() {
+  $('#ver').textContent = 'v' + APP_VERSION + ' bêta';
+  if (location.protocol !== 'file:' || (HAS_LINK && TSLink.embedded)) { const h = $('#homeLink'); if (h) h.remove(); }
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme); applyTheme();
+  resize(); loadRecs();
+  openRid(HAS_TSP ? TSP.fromHash() : ((location.hash.match(/projet=([\w-]+)/) || [])[1] || '')).then(pullRemote);
+  if (HAS_LINK) TSLink.onRemote(pullRemote);
+  if (HAS_TSP && TSP.onChange) TSP.onChange(projUI);
+  window.addEventListener('hashchange', () => openRid(HAS_TSP ? TSP.fromHash() : ((location.hash.match(/projet=([\w-]+)/) || [])[1] || '')));
+  { const sel = $('#proj'); if (sel) sel.onchange = () => { location.hash = sel.value ? '#projet=' + sel.value : ''; cv.focus(); }; }
+  $('#bProj').onclick = () => setProjection(!isO());
+  $$('.tb[data-tool]').forEach(b => b.onclick = () => { setTool(b.dataset.tool); cv.focus(); });
+  $('#tZoomExt').onclick = () => { frameView(bounds()); save(); };
+  $$('[data-view]').forEach(b => b.onclick = () => setView(b.dataset.view));
+  $('#bCenter').onclick = centerView;
+  $('#bUndo').onclick = undo; $('#bRedo').onclick = redo;
+  $('#bNew').onclick = () => { if (Object.keys(M.f).length + Object.keys(M.l).length && !confirm('Effacer la maquette en cours ? (Ctrl+Z permet de revenir en arrière)')) return; doOp(m => { m.v = {}; m.f = {}; m.l = {}; }); clearSel(); };
+  $('#bSave').onclick = saveFile; $('#bObj').onclick = exportOBJ;
+  $('#bOpen').onclick = () => $('#fileIn').click();
+  $('#fileIn').addEventListener('change', async e => { const f = e.target.files[0]; e.target.value = ''; if (!f) return; try { const before = JSON.stringify(M); loadData(JSON.parse(await f.text())); ST.undo.push(before); changed(); setStatus('Maquette ouverte : ' + f.name, 'ok'); } catch (err) { setStatus('Fichier illisible : ' + err.message, 'err'); } });
+  $('#segs').addEventListener('change', e => { const t = ST.tool; if (t !== 'circle' && t !== 'poly') return; ST.segs[t] = Math.max(3, Math.min(128, Math.round(+e.target.value) || ST.segs[t])); e.target.value = ST.segs[t]; save(); cv.focus(); });
+  $('#help').innerHTML = HELP; $('#bHelp').onclick = () => { const h = $('#help'); h.hidden = !h.hidden; $('#bHelp').setAttribute('aria-expanded', String(!h.hidden)); $('#bHelp').classList.toggle('on', !h.hidden); };
+  setTool('rect'); cv.focus();
+  window.TM = { G, PR, openRid, setProjection, isO, get camera() { return camera; }, get M() { return M; }, set M(v) { M = v; changed(); }, ST, TOOLS, setTool, snap, pickFace, toScreen, req, show, rebuild, frameView, bounds, setView, closedVolume };
+})();
+
+</script>
+</body>
+</html>

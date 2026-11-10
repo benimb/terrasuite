@@ -1,9 +1,9 @@
 /* TerraSuite : application unique, le projet au centre.
    Un projet s'ouvre sur ses onglets de phases (ESQ, AVP, PRO / DCE, analyse des offres, chantier, OPR, réception, GPA),
    plus le planning et la fiche, transversaux. Les modules existants (TerraGeo, TerraEstim, TerraPlanning, TerraChantier,
-   TerraDocs, TerraContacts) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
+   TerraDocs, TerraContacts, TerraModel) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
    Les bibliothèques communes à tous les projets (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont à part. */
-const TS_VERSION = '0.5';
+const TS_VERSION = '0.6';
 const TSApp = (() => {
   const SVG = {
     back: '<path d="M15 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
@@ -20,10 +20,10 @@ const TSApp = (() => {
   const LS = { get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
 
   /* ---------- onglets du projet : phases de la mission ---------- */
-  const T_GEO = p => `TerraGeo/TerraGeo.html#projet=${p.id}`, T_EST = p => `TerraEstim/TerraEstim.html#projet=${p.id}`, T_CH = p => `TerraChantier/index.html#/projet/${p.id}`;
+  const T_GEO = p => `TerraGeo/TerraGeo.html#projet=${p.id}`, T_EST = p => `TerraEstim/TerraEstim.html#projet=${p.id}`, T_CH = p => `TerraChantier/index.html#/projet/${p.id}`, T_MOD = p => `TerraModel/TerraModel.html#projet=${p.id}`;
   const TABS = [
     { id: 'apercu', nom: "Vue d'ensemble", c: '#b5532f', subs: [['apercu', "Vue d'ensemble", 'native']] },
-    { id: 'esq', nom: 'ESQ', c: '#8a5a12', subs: [['site', 'Site', 'frame', T_GEO], ['m3d', 'Maquette 3D', 'soon'], ['esq', 'Estimation sommaire', 'soon']] },
+    { id: 'esq', nom: 'ESQ', c: '#8a5a12', subs: [['site', 'Site', 'frame', T_GEO], ['m3d', 'Maquette 3D', 'frame', T_MOD], ['esq', 'Estimation sommaire', 'soon']] },
     { id: 'avp', nom: 'AVP', c: '#a16207', subs: [['plans', 'Plans et notice', 'native'], ['estimA', 'Estimation', 'frame', T_EST], ['auto', 'PC, DP, modificatifs', 'native']] },
     { id: 'pro', nom: 'PRO / DCE', c: '#2f8f5b', subs: [['estim', 'Estimation', 'frame', T_EST], ['desc', 'Descriptif (CCTP)', 'frame', T_EST, '[data-tab=cctp]'], ['produits', 'Produits', 'frame', p => `TerraDocs/TerraDocs.html#projet=${p.id}`], ['dce', 'Dossier DCE', 'native']] },
     { id: 'act', nom: 'Analyse des offres', c: '#0f766e', subs: [['offres', 'Offres reçues', 'frame', p => `TerraEstim/TerraEstim.html#dpgf=${p.id}`], ['rapport', "Rapport d'analyse", 'soon'], ['marches', 'Marchés', 'soon']] },
@@ -100,7 +100,10 @@ const TSApp = (() => {
     const recent = mine.filter(d => d.app !== 'suite').sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt))).slice(0, 8);
     const pvs = mine.filter(d => d.app === 'suite' && d.coll === 'pv').map(d => d.data), recep = pvs.filter(r => /^Réception/.test(r.type || '') && r.date).sort((a, b) => String(a.date).localeCompare(String(b.date)))[0] || null;
     const gpaO = mine.filter(d => d.app === 'suite' && d.coll === 'gpa' && d.data && d.data.etat !== 'Réglé').length;
-    return { geo, plan, est, src, prods, chs, vis, res, recent, pvs, recep, gpaO };
+    /* maquette 3D (TerraModel) : une par projet, gardée dans le navigateur et synchronisée */
+    const mods = byKey('terramodel', 'maquettes'); { const lm = (LS.get('terramodel-maquettes', {}) || {})[p.id]; if (lm) mods.set(p.id, lm); }
+    const mod = mods.get(p.id) || [...mods.values()][0] || null;
+    return { mod, geo, plan, est, src, prods, chs, vis, res, recent, pvs, recep, gpaO };
   }
 
   /* ---------- colonne de gauche ---------- */
@@ -226,6 +229,12 @@ const TSApp = (() => {
     body.appendChild(f);
   }
 
+  /* résumé de la maquette 3D : surfaces horizontales (planchers, toitures), verticales (façades), volume */
+  const NFm = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 });
+  function modTxt(m) {
+    const s = m && m.surf; if (!s || !s.total) return '';
+    return 'Maquette 3D : ' + [s.horizontales ? NFm.format(s.horizontales) + ' m² horizontaux' : '', s.verticales ? NFm.format(s.verticales) + ' m² de façades' : '', s.volume ? NFm.format(s.volume) + ' m³' : ''].filter(Boolean).join(', ');
+  }
   /* ---------- vue d'ensemble ---------- */
   async function drawOverview(p, body, curTab) {
     body.innerHTML = '<div class="hint">Lecture des données du projet…</div>';
@@ -235,7 +244,7 @@ const TSApp = (() => {
     const resO = D.res.filter(r => !r.deleted && r.statut !== 'levee' && !r.levee).length, resL = D.res.length - resO;
     const n = (x, s, pl) => x ? `${x} ${x > 1 ? pl : s}` : '';
     const C = {
-      esq: [D.geo.size ? n(D.geo.size, 'étude de site', 'études de site') : 'Site à étudier', 'site, maquette 3D, estimation sommaire', 'site'],
+      esq: [D.geo.size ? n(D.geo.size, 'étude de site', 'études de site') : 'Site à étudier', modTxt(D.mod) || 'site, maquette 3D, estimation sommaire', 'site'],
       avp: [lastAuto ? `${lastAuto.type || 'Dossier'} : ${lastAuto.etat || '—'}` : (D.est.size ? n(D.est.size, 'estimation', 'estimations') : 'Plans, estimation, PC'), 'plans, estimation, PC, DP et modificatifs', lastAuto ? 'auto' : 'estimA'],
       pro: [D.est.size ? n(D.est.size, 'estimation', 'estimations') : 'Estimation à faire', [n(D.prods.size, 'produit prescrit', 'produits prescrits'), 'CCTP, DCE'].filter(Boolean).join(' · '), 'estim'],
       act: [D.src.size ? n(D.src.size, 'offre reçue', 'offres reçues') : 'Aucune offre', 'DPGF des entreprises, marchés', 'offres'],
@@ -246,8 +255,8 @@ const TSApp = (() => {
       planning: [D.plan.size ? n(D.plan.size, 'planning', 'plannings') : 'Pas de planning', 'études et travaux', 'planning'],
       projet: [n((p.intervenants || []).length, 'intervenant', 'intervenants') || 'Intervenants à saisir', [p.moa, n((p.lots || []).length, 'lot du marché', 'lots du marché')].filter(Boolean).join(' · ') || 'MOA, lots, entreprises', 'fiche']
     };
-    const LBL = { 'geo|fiches': 'Étude de site', 'planning|plannings': 'Planning', 'estim|estimations': 'Estimation', 'estim|sources': 'Offre (DPGF)', 'estim|articles': 'Article de CCTP', 'docs|produits': 'Produit' };
-    const act = [...D.recent.map(d => ({ t: d.updatedAt, s: (LBL[d.app + '|' + d.coll] || 'Donnée') + ' : ' + (d.data && (d.data.title || d.data.nom || (d.data.project && d.data.project.name) || d.data.titre) || ''), c: (tabOf(d.app === 'geo' ? 'esq' : d.app === 'planning' ? 'planning' : d.coll === 'sources' ? 'act' : 'pro') || TABS[0]).c })),
+    const LBL = { 'geo|fiches': 'Étude de site', 'planning|plannings': 'Planning', 'estim|estimations': 'Estimation', 'estim|sources': 'Offre (DPGF)', 'estim|articles': 'Article de CCTP', 'docs|produits': 'Produit', 'terramodel|maquettes': 'Maquette 3D' };
+    const act = [...D.recent.map(d => ({ t: d.updatedAt, s: (LBL[d.app + '|' + d.coll] || 'Donnée') + ' : ' + (d.data && (d.data.title || d.data.nom || (d.data.project && d.data.project.name) || d.data.titre) || ''), c: (tabOf(d.app === 'geo' || d.app === 'terramodel' ? 'esq' : d.app === 'planning' ? 'planning' : d.coll === 'sources' ? 'act' : 'pro') || TABS[0]).c })),
       ...D.vis.slice(0, 5).map(v => ({ t: v.date || v.updatedAt, s: `Visite de chantier${v.num ? ' n° ' + v.num : ''}`, c: '#7a4fb0' }))].sort((a, b) => String(b.t).localeCompare(String(a.t))).slice(0, 8);
     body.innerHTML = `<div class="wrap">
       <div class="grid">${TABS.filter(t => t.id !== 'apercu').map(t => { const c = C[t.id]; const i = PHASE_ORDER.indexOf(t.id), ci = PHASE_ORDER.indexOf(curTab);
