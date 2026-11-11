@@ -143,6 +143,7 @@ html.ts-embed .brand small{display:none}
           <optgroup label="Géométraux, sans perspective"><option value="top">Plan (vue de dessus)</option><option value="front">Élévation sud</option><option value="right">Élévation est</option><option value="back">Élévation nord</option><option value="left">Élévation ouest</option><option value="bottom">Vue de dessous</option></optgroup>
         </select>
         <button class="btn" id="bProj" title="Perspective ou vue parallèle (projection orthogonale)">Perspective</button>
+        <button class="btn" id="bImg" title="Enregistrer la vue actuelle en image (PNG)">Image</button>
         <button class="btn" id="bCenter" title="Centrer la vue sur la sélection, ou sur toute la maquette">Centrer</button>
       </div>
       <div class="info" id="info"></div>
@@ -776,7 +777,7 @@ const escH = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;'
 function renderScenes() {
   const el = $('#scenes'); if (!el) return;
   el.innerHTML = ST.scenes.map(sc => `<span class="stab${sc.id === ST.scene ? ' on' : ''}" data-id="${sc.id}"><button class="sgo" title="Aller à cette vue · double-clic : renommer">${escH(sc.nom)}</button>${sc.id === ST.scene ? '<button class="sact" data-a="upd" title="Mettre à jour avec la vue actuelle">⟳</button><button class="sact" data-a="del" title="Supprimer cette vue">×</button>' : ''}</span>`).join('')
-    + '<button class="stab sadd" id="sAdd" title="Enregistrer la vue actuelle dans un nouvel onglet">+ Vue</button>';
+    + '<button class="stab sadd" id="sAdd" title="Enregistrer la vue actuelle dans un nouvel onglet">' + (ST.scenes.length ? '+ Vue' : '+ Enregistrer la vue') + '</button>';
 }
 function sceneAdd() {
   let i = ST.scenes.length + 1; const names = new Set(ST.scenes.map(s => s.nom)); while (names.has('Vue ' + i)) i++;
@@ -1205,6 +1206,13 @@ function loadData(d) {
   clearSel(); changed();
   if (d.cam && d.cam.p) applyCam(d.cam); else setView('iso');
 }
+/* image de la vue actuelle (PNG), nommée d'après l'onglet actif ou la vue choisie */
+function saveImage() {
+  if (hoverObj) hover(null); const keep = [rubberObj, guideObj].filter(Boolean); keep.forEach(o => o.visible = false);
+  renderer.render(scene, camera); const sc = ST.scenes.find(s => s.id === ST.scene), vn = $('#vSel') && $('#vSel').selectedOptions[0];
+  const nom = (sc ? sc.nom : ST.view && vn ? vn.textContent : 'Vue').replace(/[\\/:*?"<>|]/g, '-');
+  cv.toBlob(b => { keep.forEach(o => o.visible = true); req(); if (!b) { setStatus('Image impossible dans ce navigateur', 'err'); return; } const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `TerraModel ${nom} ${stamp()}.png`; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 800); setStatus('Image enregistrée : ' + nom, 'ok'); }, 'image/png');
+}
 function exportOBJ() {
   let s = `# TerraModel ${APP_VERSION}\n# Unité : mètre. Repère : X est, Y nord, Z vers le haut.\no TerraModel\n`, base = 1;
   for (const k in M.f) { const f = M.f[k], { tris, ids, n } = triFace(M, f); s += `g face_${k}\n`; for (const id of ids) { const p = M.v[id]; s += `v ${p[0].toFixed(4)} ${p[1].toFixed(4)} ${p[2].toFixed(4)}\n`; }
@@ -1229,6 +1237,7 @@ const HELP = `<h3>Unités</h3><table>
 <h3>Vue</h3><table>
 <tr><td>Vue</td><td>Perspective, axonométrie, et géométraux sans perspective : plan (dessus), élévations sud, est, nord, ouest, dessous. Tourner autour de la maquette quitte le géométral (vue libre).</td></tr>
 <tr><td>Onglets</td><td>« + Vue » enregistre le point de vue (position, projection, zoom) dans un onglet au-dessus de la maquette, comme les scènes de SketchUp. Clic : y revenir ; ⟳ : remplacer par la vue actuelle ; × : supprimer ; double-clic : renommer ; Page suivante, Page précédente : onglet suivant, précédent. Les vues sont gardées avec la maquette.</td></tr>
+<tr><td>Image</td><td>Enregistre la vue actuelle en image PNG (dans les téléchargements du téléphone ou de l'ordinateur).</td></tr>
 <tr><td>Bouton du milieu</td><td>Orbite autour du point visé (Maj : panoramique). Double-clic du milieu : centrer sur ce point.</td></tr>
 <tr><td>Clic droit</td><td>Panoramique. Molette : zoom vers le curseur. Deux doigts : zoom et déplacement.</td></tr>
 <tr><td>Maj+Z</td><td>Zoom étendu. « Centrer » : sur la sélection, sinon toute la maquette.</td></tr>
@@ -1256,7 +1265,7 @@ const HELP = `<h3>Unités</h3><table>
   $('#unit').onchange = e => { setUnit(e.target.value); cv.focus(); };
   { const el = $('#scenes'); renderScenes();
     el.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; if (b.id === 'sAdd') sceneAdd(); else { const id = b.closest('.stab').dataset.id; if (b.dataset.a) sceneAct(id, b.dataset.a); else if (e.detail === 2) sceneAct(id, 'ren'); else if (e.detail < 2) sceneGo(id); } cv.focus(); }); }
-  $('#bCenter').onclick = centerView;
+  $('#bCenter').onclick = centerView; $('#bImg').onclick = () => { saveImage(); cv.focus(); };
   $('#bUndo').onclick = undo; $('#bRedo').onclick = redo;
   $('#bNew').onclick = () => { if (Object.keys(M.f).length + Object.keys(M.l).length && !confirm('Effacer la maquette en cours ? (Ctrl+Z permet de revenir en arrière)')) return; doOp(m => { m.v = {}; m.f = {}; m.l = {}; }); clearSel(); };
   $('#bSave').onclick = saveFile; $('#bObj').onclick = exportOBJ;

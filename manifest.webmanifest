@@ -10,12 +10,12 @@
   "background_color": "#f4f2ee",
   "theme_color": "#b5532f",
   "icons": [
-    { "src": "suite/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "suite/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "suite/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "suite/icons/tsv2-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "suite/icons/tsv2-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "suite/icons/tsv2-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
-    { "name": "Visite de chantier", "short_name": "Photo", "url": "./#/photo", "icons": [{ "src": "suite/icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Bibliothèques", "short_name": "Bibliothèques", "url": "./#/b", "icons": [{ "src": "suite/icons/icon-192.png", "sizes": "192x192" }] }
+    { "name": "Visite de chantier", "short_name": "Photo", "url": "./#/photo", "icons": [{ "src": "suite/icons/tsv2-192.png", "sizes": "192x192" }] },
+    { "name": "Bibliothèques", "short_name": "Bibliothèques", "url": "./#/b", "icons": [{ "src": "suite/icons/tsv2-192.png", "sizes": "192x192" }] }
   ]
 }
