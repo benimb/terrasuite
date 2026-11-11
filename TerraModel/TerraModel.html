@@ -70,7 +70,7 @@ html.ts-embed .brand small{display:none}
 .stab button{border:0;background:transparent;cursor:pointer;padding:3px 9px;white-space:nowrap;max-width:180px;overflow:hidden;text-overflow:ellipsis}
 .stab .sact{padding:3px 5px;color:var(--muted)} .stab .sact:hover{color:var(--ink)}
 .stab.sadd{padding:3px 9px;cursor:pointer;color:var(--muted);border-style:dashed} .stab.sadd:hover{color:var(--ink);border-color:var(--muted)}
-@media (max-width:760px){ .scenes{right:8px;top:44px} }
+@media (max-width:760px){ .scenes{right:8px;top:46px} }
 .vpanel{position:absolute;top:44px;right:8px;bottom:8px;width:min(340px,calc(100% - 16px));overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:8px 10px;z-index:3;display:flex;flex-direction:column;gap:6px}
 .vpanel .vhead{display:flex;align-items:center;justify-content:space-between}
 .vpanel .r{display:flex;align-items:center;gap:5px;flex-wrap:wrap} .vpanel .grow{flex:1}
@@ -83,6 +83,25 @@ html.ts-embed .brand small{display:none}
 .vcard input,.vcard select{border:1px solid var(--line);border-radius:5px;padding:2px 5px;background:var(--panel);font-size:12px}
 .vcard input[type=number]{width:58px} .vcard label{font-size:12px;color:var(--muted);display:flex;gap:4px;align-items:center}
 .vcard .mono{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.stab.dirty .sgo{font-style:italic} .stab.dirty .sgo::after{content:" •";color:var(--accent)}
+.supd{flex:none;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:6px;padding:3px 10px;font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.2);white-space:nowrap}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.vth{width:80px;height:50px;object-fit:cover;border-radius:4px;border:1px solid var(--line);flex:none;background:var(--sunk)} .vth[data-empty]{visibility:hidden}
+.vtx{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0} .vtx input{width:100%}
+.btn .ic{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linejoin:round;vertical-align:-3px;margin-right:4px}
+.btn .sh{display:none}
+/* téléphone et tablette : cibles plus grandes, barre de vue en icônes, panneau des vues en bas d'écran */
+@media (pointer:coarse){
+  .tb{width:44px;height:44px} .stab button{padding:7px 11px} .stab.sadd{padding:7px 11px} .supd{padding:7px 12px}
+  .viewbar .btn,#vSel{padding:6px 9px} .btn.sm{padding:6px 10px} .vcard input,.vcard select{padding:5px 6px;font-size:14px}
+}
+@media (max-width:760px){
+  .viewbar .btn .lg{display:none} .viewbar .btn .sh{display:inline} .viewbar .btn .ic{margin-right:0} #vSel{max-width:150px}
+  .viewbar{flex-wrap:nowrap}
+  .info{font-size:11px;padding:4px 7px;max-width:calc(100% - 16px)} .info .unit{display:none}
+  .vpanel{top:auto;left:0;right:0;bottom:0;width:auto;max-height:68%;border-radius:12px 12px 0 0;border-bottom:0}
+  .vpanel #vplan{width:min(100%,220px);align-self:center}
+}
 .stab.sadd.on{background:var(--accent-soft);border-color:var(--accent);border-style:solid;color:var(--ink)}
 .viewbar{position:absolute;top:8px;right:8px;display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100% - 16px)}
 .viewbar .btn{box-shadow:0 1px 3px rgba(0,0,0,.15);font-size:12px;padding:3px 8px}
@@ -155,9 +174,9 @@ html.ts-embed .brand small{display:none}
           <optgroup label="Vues 3D"><option value="iso">Perspective</option><option value="axo">Axonométrie</option></optgroup>
           <optgroup label="Géométraux, sans perspective"><option value="top">Plan (vue de dessus)</option><option value="front">Élévation sud</option><option value="right">Élévation est</option><option value="back">Élévation nord</option><option value="left">Élévation ouest</option><option value="bottom">Vue de dessous</option></optgroup>
         </select>
-        <button class="btn" id="bProj" title="Perspective ou vue parallèle (projection orthogonale)">Perspective</button>
-        <button class="btn" id="bImg" title="Enregistrer la vue actuelle en image (PNG)">Image</button>
-        <button class="btn" id="bCenter" title="Centrer la vue sur la sélection, ou sur toute la maquette">Centrer</button>
+        <button class="btn" id="bProj" title="Perspective ou vue parallèle (projection orthogonale)"><span class="lg">Perspective</span><span class="sh">Persp.</span></button>
+        <button class="btn" id="bImg" title="Enregistrer la vue actuelle en image (PNG)"><svg class="ic" viewBox="0 0 16 16"><path d="M2 4.5h2.5l1.2-1.8h4.6l1.2 1.8H14v8.3H2z"/><circle cx="8" cy="8.5" r="2.4"/></svg><span class="lg">Image</span></button>
+        <button class="btn" id="bCenter" title="Centrer la vue sur la sélection, ou sur toute la maquette"><svg class="ic" viewBox="0 0 16 16"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"/><circle cx="8" cy="8" r="1.6"/></svg><span class="lg">Centrer</span></button>
       </div>
       <aside class="vpanel" id="vpanel" hidden aria-label="Vues et caméras">
         <div class="vhead"><b>Vues et caméras</b><button class="btn sm" id="vClose">Fermer ×</button></div>
@@ -540,7 +559,7 @@ function modelEdges(M) {
 
 </script>
 <script>
-const APP_VERSION = '0.3.1';
+const APP_VERSION = '0.3.2';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const NF2 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 /* unités : la maquette est en mètres ; les longueurs s'affichent et se saisissent dans l'unité choisie (m, cm, mm) ; surfaces en m², volumes en m³ */
@@ -726,7 +745,7 @@ function orbit(dx, dy, pivot) {
   const right = new THREE.Vector3(1, 0, 0).applyQuaternion(camera.quaternion), q2 = new THREE.Quaternion().setFromAxisAngle(right, -dy * 0.0075);
   const nq = camera.quaternion.clone().premultiply(q2), f = new THREE.Vector3(0, 0, -1).applyQuaternion(nq), up = new THREE.Vector3(0, 1, 0).applyQuaternion(nq);
   if (Math.abs(f.z) < 0.9995 && up.z > 0.0005) { camera.position.sub(P).applyQuaternion(q2).add(P); camera.quaternion.copy(nq); }
-  if (ST.view && (dx || dy)) viewSel('');
+  if (ST.view && (dx || dy)) viewSel(''); if (dx || dy) markDirty();
   camera.updateMatrixWorld(); req();
 }
 /* taille d'un pixel à l'écran, en mètres, à la profondeur du point p */
@@ -734,9 +753,10 @@ function worldPx(p) { if (isO()) return 2 / camO.zoom / view.clientHeight; const
 function pan(dx, dy, ref) {
   const k = worldPx(ref);
   const right = new THREE.Vector3(1, 0, 0).applyQuaternion(camera.quaternion), up = new THREE.Vector3(0, 1, 0).applyQuaternion(camera.quaternion);
-  camera.position.addScaledVector(right, -dx * k).addScaledVector(up, dy * k); camera.updateMatrixWorld(); req();
+  camera.position.addScaledVector(right, -dx * k).addScaledVector(up, dy * k); camera.updateMatrixWorld(); if (dx || dy) markDirty(); req();
 }
 function zoomAt(sx, sy, factor) {
+  markDirty();
   if (isO()) { const n = new THREE.Vector3(sx / view.clientWidth * 2 - 1, -sy / view.clientHeight * 2 + 1, 0), before = n.clone().unproject(camO);
     camO.zoom = Math.max(1e-4, Math.min(1e4, camO.zoom / (1 - Math.max(-4, Math.min(0.9, factor))))); camO.updateProjectionMatrix(); const after = n.clone().unproject(camO); camO.position.add(before.sub(after)); camO.updateMatrixWorld(); req(); return; }
   const P = pointUnder(sx, sy), c = camPos(), d = vsub(P, c), L = vlen(d);
@@ -756,6 +776,7 @@ function bounds(keys) {
   return { c, r: Math.max(0.5, vdist(lo, hi) / 2) };
 }
 function frameView(b, dir) {
+  markDirty();
   b = b || { c: [0, 0, 0], r: 8 }; const f = dir ? vnorm(dir) : fwd(), up = Math.abs(f[2]) > 0.999 ? [0, 1, 0] : [0, 0, 1], asp = view.clientWidth / Math.max(1, view.clientHeight);
   if (isO()) { camO.zoom = Math.min(1, asp) / (b.r * 1.08); camO.updateProjectionMatrix(); lookFrom(vsub(b.c, vmul(f, ORTHO_D)), b.c, up); return; }
   const vf = camP.fov * Math.PI / 180, hf = 2 * Math.atan(Math.tan(vf / 2) * asp), dist = b.r / Math.sin(Math.min(vf, hf) / 2) * 1.08;
@@ -769,7 +790,7 @@ function setProjection(ortho, fromView) {
     else { const d = 1 / camO.zoom / t; camP.quaternion.copy(camO.quaternion); camP.position.set(...vsub(P, vmul(f, d))); camera = camP; }
     camera.updateMatrixWorld(); ST.focus = P;
   }
-  const b = $('#bProj'); if (b) { b.classList.toggle('on', isO()); b.textContent = isO() ? 'Parallèle' : 'Perspective'; }
+  const b = $('#bProj'); if (b) { b.classList.toggle('on', isO()); b.innerHTML = isO() ? '<span class="lg">Parallèle</span><span class="sh">Par.</span>' : '<span class="lg">Perspective</span><span class="sh">Persp.</span>'; }
   if (!fromView) viewSel(ST.view === 'iso' && isO() ? 'axo' : ST.view === 'axo' && !isO() ? 'iso' : isO() ? ST.view : '');
   hover(null); req(); save();
 }
@@ -778,13 +799,14 @@ const VIEWS = { iso: [1, 1.25, -0.95], axo: [1, 1.25, -0.95], top: [0, 0.0001, -
 const viewSel = k => { const s = $('#vSel'); if (s) s.value = k || ''; ST.view = k || ''; };
 function setView(k) { if (!VIEWS[k]) return; const ortho = k !== 'iso'; if (ortho !== isO()) setProjection(ortho, true); frameView(bounds(), VIEWS[k]); viewSel(k); save(); }
 function centerView() { const has = ST.sel.f.size || ST.sel.e.size; frameView(has ? bounds(ST.sel) : bounds()); save(); }
-function recenterOn(p) { const f = fwd(), c = camPos(), d = isO() ? ORTHO_D : vdot(vsub(p, c), f); camera.position.set(...vsub(p, vmul(f, Math.max(0.5, d)))); camera.updateMatrixWorld(); ST.focus = p.slice(); req(); save(); }
+function recenterOn(p) { markDirty(); const f = fwd(), c = camPos(), d = isO() ? ORTHO_D : vdot(vsub(p, c), f); camera.position.set(...vsub(p, vmul(f, Math.max(0.5, d)))); camera.updateMatrixWorld(); ST.focus = p.slice(); req(); save(); }
 /* point de vue enregistré (position, orientation, point visé, projection, zoom, champ) remis en place ; anim : transition douce */
 let camAnim = null;
-function applyCam(c, anim) {
-  cancelAnimationFrame(camAnim); const ortho = !!c.o;
+let camBusy = false;
+function applyCam(c, anim, done) {
+  cancelAnimationFrame(camAnim); const ortho = !!c.o; camBusy = true;
   const end = () => { if (ortho && c.z) { camO.zoom = c.z; camO.updateProjectionMatrix(); } if (c.fov && Math.abs(camP.fov - c.fov) > 1e-6) { camP.fov = c.fov; camP.updateProjectionMatrix(); }
-    camera.position.set(...c.p); camera.quaternion.fromArray(c.q); camera.updateMatrixWorld(); ST.focus = (c.f || [0, 0, 0]).slice(); viewSel(c.vue || ''); hover(null); req(); };
+    camera.position.set(...c.p); camera.quaternion.fromArray(c.q); camera.updateMatrixWorld(); ST.focus = (c.f || [0, 0, 0]).slice(); viewSel(c.vue || ''); hover(null); req(); camBusy = false; ST.dirty = false; if (done) done(); };
   if (!anim || ortho !== isO()) { if (ortho !== isO()) { camera = ortho ? camO : camP; } setProjection(isO(), true); end(); return; }
   const p0 = camera.position.clone(), q0 = camera.quaternion.clone(), z0 = camO.zoom, p1 = new THREE.Vector3(...c.p), q1 = new THREE.Quaternion().fromArray(c.q), t0 = performance.now(), D = 450;
   const step = now => { const t = Math.min(1, (now - t0) / D), e = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
@@ -802,7 +824,7 @@ const isCam = sc => sc && sc.type === 'camera';
 const newId = () => 's' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
 function camView(c) { // point de vue d'une caméra
   const asp = view.clientWidth / Math.max(1, view.clientHeight), t = new THREE.PerspectiveCamera(), h = +c.h || 1.6;
-  t.position.set(c.x, c.y, h); t.up.set(0, 0, 1); t.lookAt(c.tx, c.ty, h); t.updateMatrixWorld();
+  const D = Math.hypot(c.tx - c.x, c.ty - c.y) || 10; t.position.set(c.x, c.y, h); t.up.set(0, 0, 1); t.lookAt(c.tx, c.ty, h + D * Math.tan((+c.t || 0) * Math.PI / 180)); t.updateMatrixWorld();
   const fov = 2 * Math.atan(Math.tan(hfovOf(+c.f || 24) / 2) / asp) * 180 / Math.PI;
   return { p: [c.x, c.y, h], q: t.quaternion.toArray(), f: [c.tx, c.ty, h], o: false, fov, vue: '' };
 }
@@ -811,12 +833,13 @@ function camFromView(nom) {
   const p = camPos(), d = fwd(), L = Math.hypot(d[0], d[1]) || 1, dir = L < 1e-3 ? [0, 1] : [d[0] / L, d[1] / L], h = Math.max(0.5, +p[2].toFixed(2));
   const asp = view.clientWidth / Math.max(1, view.clientHeight), hf = isO() ? hfovOf(24) : 2 * Math.atan(Math.tan(camP.fov * Math.PI / 360) * asp);
   const f = FOCALES.reduce((b, x) => Math.abs(hfovOf(x) - hf) < Math.abs(hfovOf(b) - hf) ? x : b, 24), r = x => Math.round(x * 100) / 100;
-  return { type: 'camera', nom, x: r(p[0]), y: r(p[1]), tx: r(p[0] + dir[0] * 10), ty: r(p[1] + dir[1] * 10), f, h };
+  let t = Math.round(Math.atan2(d[2], L) * 360 / Math.PI) / 2; if (Math.abs(t) < 3 || L < 1e-3) t = 0; // presque horizontale : redressée (verticales droites)
+  return { type: 'camera', nom, x: r(p[0]), y: r(p[1]), tx: r(p[0] + dir[0] * 10), ty: r(p[1] + dir[1] * 10), f, h, t };
 }
 const SVG_CAM = '<svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true" style="vertical-align:-2px;margin-right:4px"><path d="M2 5h8v6H2zM10 7l4-2v6l-4-2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>';
 function renderScenes() {
   const el = $('#scenes'); if (!el) return;
-  el.innerHTML = ST.scenes.map(sc => `<span class="stab${sc.id === ST.scene ? ' on' : ''}" data-id="${sc.id}"><button class="sgo" title="Aller à cette ${isCam(sc) ? 'caméra' : 'vue'} · double-clic : renommer">${isCam(sc) ? SVG_CAM : ''}${escH(sc.nom)}</button>${sc.id === ST.scene ? '<button class="sact" data-a="upd" title="Remplacer par la vue actuelle">⟳</button>' : ''}</span>`).join('')
+  el.innerHTML = ST.scenes.map(sc => `<span class="stab${sc.id === ST.scene ? ' on' : ''}${sc.id === ST.scene && ST.dirty ? ' dirty' : ''}" data-id="${sc.id}"><button class="sgo" title="Aller à cette ${isCam(sc) ? 'caméra' : 'vue'} · double-clic : renommer">${isCam(sc) ? SVG_CAM : ''}${escH(sc.nom)}</button></span>${sc.id === ST.scene && ST.dirty ? `<button class="supd" data-id="${sc.id}" title="Enregistrer la vue actuelle dans « ${escH(sc.nom)} »">⟳ Mettre à jour</button>` : ''}`).join('')
     + '<button class="stab sadd" id="sAdd" title="Enregistrer la vue actuelle dans un nouvel onglet">' + (ST.scenes.length ? '+ Vue' : '+ Enregistrer la vue') + '</button>'
     + `<button class="stab sadd${$('#vpanel') && !$('#vpanel').hidden ? ' on' : ''}" id="sMgr" title="Gérer les vues et les caméras : renommer, modifier, ordonner, supprimer, poser des caméras sur le plan">Vues et caméras…</button>`;
   renderPanel();
@@ -825,14 +848,14 @@ function uniqName(base) { const names = new Set(ST.scenes.map(s => s.nom)); let 
 function sceneAdd() {
   const VN = { iso: 'Perspective', axo: 'Axonométrie', top: 'Plan', front: 'Élévation sud', right: 'Élévation est', back: 'Élévation nord', left: 'Élévation ouest', bottom: 'Dessous' };
   const nom = ST.view && VN[ST.view] ? uniqName(VN[ST.view]) : uniqName('');
-  const sc = { id: newId(), nom, cam: camJSON() }; ST.scenes.push(sc); ST.scene = sc.id; renderScenes(); save(); setStatus('Vue « ' + nom + ' » enregistrée', 'ok');
+  const sc = { id: newId(), nom, cam: camJSON(), img: thumb() }; ST.scenes.push(sc); ST.scene = sc.id; ST.dirty = false; renderScenes(); save(); setStatus('Vue « ' + nom + ' » enregistrée', 'ok');
 }
-function cameraAdd(c) { const sc = { id: newId(), ...(c || camFromView(uniqName('Caméra'))) }; if (!sc.nom) sc.nom = uniqName('Caméra'); ST.scenes.push(sc); ST.scene = sc.id; renderScenes(); save(); return sc; }
-function sceneGo(id, noAnim) { const sc = ST.scenes.find(s => s.id === id); if (!sc) return; ST.scene = id; renderScenes(); applyCam(isCam(sc) ? camView(sc) : sc.cam, !noAnim); setTimeout(save, 500); }
+function cameraAdd(c) { const sc = { id: newId(), ...(c || camFromView(uniqName('Caméra'))) }; if (!sc.nom) sc.nom = uniqName('Caméra'); ST.scenes.push(sc); ST.scene = sc.id; ST.dirty = false; renderScenes(); save(); return sc; }
+function sceneGo(id, noAnim, shot) { const sc = ST.scenes.find(s => s.id === id); if (!sc) return; ST.scene = id; ST.dirty = false; renderScenes(); applyCam(isCam(sc) ? camView(sc) : sc.cam, !noAnim, () => { if (shot || !sc.img) { sc.img = thumb(); renderPanel(); } renderScenes(); save(); }); }
 function sceneStep(k) { const n = ST.scenes.length; if (!n) return; const i = ST.scenes.findIndex(s => s.id === ST.scene); sceneGo(ST.scenes[i < 0 ? (k > 0 ? 0 : n - 1) : (i + k + n) % n].id); }
 function sceneAct(id, a) {
   const i = ST.scenes.findIndex(s => s.id === id); if (i < 0) return; const sc = ST.scenes[i];
-  if (a === 'upd') { if (isCam(sc)) { const c = camFromView(sc.nom); Object.assign(sc, c); sceneGo(id, true); } else sc.cam = camJSON(); setStatus('« ' + sc.nom + ' » remplacée par la vue actuelle', 'ok'); }
+  if (a === 'upd') { if (isCam(sc)) { Object.assign(sc, camFromView(sc.nom)); sceneGo(id, true, true); } else { sc.cam = camJSON(); sc.img = thumb(); ST.scene = id; ST.dirty = false; } setStatus('« ' + sc.nom + ' » mise à jour', 'ok'); }
   else if (a === 'del') { if (!confirm('Supprimer « ' + sc.nom + ' » ?')) return; ST.scenes.splice(i, 1); if (ST.scene === id) ST.scene = null; }
   else if (a === 'ren') { const n = prompt('Nom', sc.nom); if (!n || !n.trim()) return; sc.nom = n.trim().slice(0, 60); }
   else if (a === 'up' || a === 'down') { const j = i + (a === 'up' ? -1 : 1); if (j < 0 || j >= ST.scenes.length) return; ST.scenes.splice(i, 1); ST.scenes.splice(j, 0, sc); }
@@ -879,18 +902,26 @@ function planPointer(ev, type) {
   }
   const d = PL.drag; if (!d) return; const sc = ST.scenes.find(s => s.id === d.id); if (!sc) { PL.drag = null; return; }
   if (type === 'move') { if (d.mode === 'move') { sc.x = r(mx); sc.y = r(my); sc.tx = r(mx + d.dx); sc.ty = r(my + d.dy); } else if (Math.hypot(mx - sc.x, my - sc.y) > 0.05) { const a = Math.atan2(my - sc.y, mx - sc.x), D = Math.max(10, Math.hypot(sc.tx - sc.x, sc.ty - sc.y)); sc.tx = r(sc.x + Math.cos(a) * D); sc.ty = r(sc.y + Math.sin(a) * D); } d.moved = true; drawPlan(); return; }
-  if (type === 'up') { PL.drag = null; renderScenes(); sceneGo(sc.id, true); save(); }
+  if (type === 'up') { PL.drag = null; renderScenes(); sceneGo(sc.id, true, true); save(); }
 }
 function renderPanel() {
   const box = $('#vlist'); if (!box || $('#vpanel').hidden) return;
   box.innerHTML = ST.scenes.map((sc, i) => `<div class="vcard${sc.id === ST.scene ? ' cur' : ''}${sc.id === PL.sel ? ' sel' : ''}" data-id="${sc.id}">
-    <div class="r"><span class="k">${isCam(sc) ? SVG_CAM + 'Caméra' : 'Vue'}</span><input type="text" data-k="nom" value="${escH(sc.nom)}" aria-label="Nom"></div>
-    ${isCam(sc) ? `<div class="r"><label>Focale <select data-k="f">${FOCALES.map(f => `<option value="${f}"${+sc.f === f ? ' selected' : ''}>${f} mm</option>`).join('')}</select></label><label>Hauteur d'œil <input type="number" step="0.1" min="0" data-k="h" value="${sc.h}"> m</label></div>
+    <div class="r"><img class="vth" alt="" src="${sc.img || ''}"${sc.img ? '' : ' data-empty'}><div class="vtx"><span class="k">${isCam(sc) ? SVG_CAM + 'Caméra' : 'Vue'}</span><input type="text" data-k="nom" value="${escH(sc.nom)}" aria-label="Nom"></div></div>
+    ${isCam(sc) ? `<div class="r"><label>Focale <select data-k="f">${FOCALES.map(f => `<option value="${f}"${+sc.f === f ? ' selected' : ''}>${f} mm</option>`).join('')}</select></label><label>Hauteur d'œil <input type="number" step="0.1" min="0" data-k="h" value="${sc.h}"> m</label><label title="0° : visée horizontale, verticales droites ; positif vers le haut">Inclinaison <input type="number" step="1" min="-80" max="80" data-k="t" value="${+sc.t || 0}"> °</label></div>
     <div class="r mono">X ${NF2.format(sc.x)} · Y ${NF2.format(sc.y)} m, visée ${Math.round((90 - Math.atan2(sc.ty - sc.y, sc.tx - sc.x) * 180 / Math.PI + 360) % 360)}° (nord 0°, est 90°)</div>` : `<div class="r mono">${sc.cam && sc.cam.o ? 'Vue parallèle' : 'Perspective'}${sc.cam && sc.cam.vue ? ' · ' + escH(($('#vSel option[value="' + sc.cam.vue + '"]') || {}).textContent || '') : ''}</div>`}
-    <div class="r"><button class="btn sm" data-a="go">Voir</button><button class="btn sm" data-a="upd" title="Remplacer par le point de vue actuel">Prendre la vue actuelle</button>${isCam(sc) ? '' : '<button class="btn sm" data-a="tocam" title="Transformer en caméra (visée horizontale, focale, hauteur d\'œil)">En caméra</button>'}<span class="grow"></span><button class="btn sm" data-a="up" title="Monter" ${i ? '' : 'disabled'}>↑</button><button class="btn sm" data-a="down" title="Descendre" ${i < ST.scenes.length - 1 ? '' : 'disabled'}>↓</button><button class="btn sm danger" data-a="del" title="Supprimer">×</button></div></div>`).join('') || '<div class="hint0">Aucune vue. « + Vue actuelle » garde le point de vue de l\'écran ; sur le plan, cliquez-glissez pour poser une caméra.</div>';
+    <div class="r"><button class="btn sm" data-a="go">Voir</button><button class="btn sm pri" data-a="upd" title="Enregistrer le point de vue actuel dans cette vue">Mettre à jour</button>${isCam(sc) ? '' : '<button class="btn sm" data-a="tocam" title="Transformer en caméra (focale, hauteur d\'œil, inclinaison)">En caméra</button>'}<span class="grow"></span><button class="btn sm" data-a="up" title="Monter" ${i ? '' : 'disabled'}>↑</button><button class="btn sm" data-a="down" title="Descendre" ${i < ST.scenes.length - 1 ? '' : 'disabled'}>↓</button><button class="btn sm danger" data-a="del" title="Supprimer">×</button></div></div>`).join('') || '<div class="hint0">Aucune vue. « + Vue actuelle » garde le point de vue de l\'écran ; sur le plan, cliquez-glissez pour poser une caméra.</div>';
   drawPlan();
 }
 function openPanel(on) { const p = $('#vpanel'); p.hidden = on === undefined ? !p.hidden : !on; if (!p.hidden) { PL.fit = null; PL.sel = PL.sel || ST.scene; } renderScenes(); }
+/* vue modifiée depuis l'onglet actif : l'onglet propose « Mettre à jour » */
+function markDirty() { if (camBusy || !ST.scene || ST.dirty) return; ST.dirty = true; renderScenes(); }
+/* vignette de la vue actuelle (JPEG 160 × 100) */
+function thumb() {
+  try { [hoverObj, rubberObj, guideObj, selObj].forEach(o => o && (o.visible = false)); renderer.render(scene, camera);
+    const c = document.createElement('canvas'); c.width = 160; c.height = 100; const g = c.getContext('2d'), W = cv.width, H = cv.height, k = Math.max(160 / W, 100 / H), w = 160 / k, h = 100 / k;
+    g.drawImage(cv, (W - w) / 2, (H - h) / 2, w, h, 0, 0, 160, 100); [hoverObj, rubberObj, guideObj, selObj].forEach(o => o && (o.visible = true)); req(); return c.toDataURL('image/jpeg', .62); } catch (e) { return null; }
+}
 function camJSON() { return { p: camPos(), q: camera.quaternion.toArray(), f: ST.focus, o: isO(), z: camO.zoom, fov: camP.fov, vue: ST.view || '' }; }
 
 /* ================= Rayons, projection, inférences ================= */
@@ -1207,6 +1238,7 @@ cv.addEventListener('contextmenu', e => e.preventDefault());
 cv.addEventListener('pointerdown', ev => {
   cv.focus(); cv.setPointerCapture(ev.pointerId); const [sx, sy] = loc(ev); ptr.set(ev.pointerId, [sx, sy]);
   if (ptr.size === 2) { cancelTool(); drag = { mode: 'pinch', ...pinchState() }; return; }
+  if (ev.pointerType === 'touch' && ST.tool === 'select') { drag = { mode: 'orbit', pending: true, x: sx, y: sy, x0: sx, y0: sy, pivot: pointUnder(sx, sy), ev }; return; } // un doigt : tourner ; toucher : sélectionner
   const navMode = ev.button === 1 ? (ev.shiftKey ? 'pan' : 'orbit') : ev.button === 2 ? 'pan' : TOOLS[ST.tool].nav;
   if (navMode) {
     if (ev.button === 1) { const now = performance.now(); if (now - lastMid < 350) { recenterOn(pointUnder(sx, sy)); lastMid = 0; return; } lastMid = now; }
@@ -1220,11 +1252,13 @@ cv.addEventListener('pointerdown', ev => {
 cv.addEventListener('pointermove', ev => {
   const [sx, sy] = loc(ev); mouse = [sx, sy]; if (ptr.has(ev.pointerId)) ptr.set(ev.pointerId, [sx, sy]);
   if (drag && drag.mode === 'pinch') { if (ptr.size >= 2) pinchMove(); return; }
+  if (drag && drag.pending) { if (Math.hypot(sx - drag.x0, sy - drag.y0) < 8) return; drag.pending = false; drag.x = sx; drag.y = sy; return; }
   if (drag) { const dx = sx - drag.x, dy = sy - drag.y; drag.x = sx; drag.y = sy; if (drag.mode === 'orbit') orbit(dx, dy, drag.pivot); else pan(dx, dy, drag.ref); return; }
   const T = TOOLS[ST.tool]; T.move && T.move(sx, sy, ev);
 });
 function endPtr(ev) {
   const [sx, sy] = loc(ev); ptr.delete(ev.pointerId);
+  if (drag && drag.pending) { const d0 = drag; drag = null; TOOLS.select.down(d0.x0, d0.y0, d0.ev); return; }
   if (drag) { if (drag.mode === 'pinch') { if (ptr.size < 2) drag = null; return; } drag = null; cv.style.cursor = ST.tool === 'orbit' || ST.tool === 'pan' ? 'grab' : ST.tool === 'select' ? 'default' : 'crosshair'; save(); return; }
   // tracé par glisser-relâcher (souris ou doigt) : le relâchement vaut second clic
   const T = TOOLS[ST.tool];
@@ -1334,9 +1368,10 @@ const HELP = `<h3>Unités</h3><table>
 <h3>Vue</h3><table>
 <tr><td>Vue</td><td>Perspective, axonométrie, et géométraux sans perspective : plan (dessus), élévations sud, est, nord, ouest, dessous. Tourner autour de la maquette quitte le géométral (vue libre).</td></tr>
 <tr><td>Onglets</td><td>« + Vue » enregistre le point de vue (position, projection, zoom) dans un onglet au-dessus de la maquette, comme les scènes de SketchUp. Clic : y revenir ; ⟳ : remplacer par la vue actuelle ; × : supprimer ; double-clic : renommer ; Page suivante, Page précédente : onglet suivant, précédent. Les vues sont gardées avec la maquette.</td></tr>
-<tr><td>Caméras</td><td>« Vues et caméras… » ouvre la liste des vues : renommer, voir, « Prendre la vue actuelle » pour la modifier, monter, descendre, supprimer. Caméras au format de TerraGeo (position, point visé, focale 24×36, hauteur d'œil), visée horizontale : sur le petit plan, cliquez-glissez pour poser une caméra et l'orienter ; glissez une caméra pour la déplacer, la poignée blanche pour la tourner. « + Caméra » la pose à l'endroit de la vue actuelle.</td></tr>
+<tr><td>Caméras</td><td>Après avoir bougé la vue depuis un onglet, « ⟳ Mettre à jour » à côté de l'onglet l'enregistre d'un geste. « Vues et caméras… » ouvre la liste des vues avec vignettes : renommer, voir, mettre à jour, monter, descendre, supprimer. Caméras au format de TerraGeo (position, point visé, focale 24×36, hauteur d'œil), inclinaison 0° par défaut (visée horizontale, verticales droites) : sur le petit plan, cliquez-glissez pour poser une caméra et l'orienter ; glissez une caméra pour la déplacer, la poignée blanche pour la tourner. « + Caméra » la pose à l'endroit de la vue actuelle.</td></tr>
 <tr><td>Image</td><td>Enregistre la vue actuelle en image PNG (dans les téléchargements du téléphone ou de l'ordinateur).</td></tr>
 <tr><td>Bouton du milieu</td><td>Orbite autour du point visé (Maj : panoramique). Double-clic du milieu : centrer sur ce point.</td></tr>
+<tr><td>Téléphone</td><td>Outil Sélection : un doigt fait tourner la vue, un toucher sélectionne ; deux doigts : zoom et déplacement. Autres outils : un doigt dessine.</td></tr>
 <tr><td>Clic droit</td><td>Panoramique. Molette : zoom vers le curseur. Deux doigts : zoom et déplacement.</td></tr>
 <tr><td>Maj+Z</td><td>Zoom étendu. « Centrer » : sur la sélection, sinon toute la maquette.</td></tr>
 <tr><td>Parallèle</td><td>Passe la vue en projection parallèle (orthogonale) ou en perspective.</td></tr></table>
@@ -1367,12 +1402,12 @@ const HELP = `<h3>Unités</h3><table>
       if (b) { if (b.dataset.a === 'go') { PL.sel = id; sceneGo(id); } else sceneAct(id, b.dataset.a); return; }
       if (!e.target.closest('input,select')) { PL.sel = id; sceneGo(id); } });
     vl.addEventListener('change', e => { const card = e.target.closest('.vcard'), k = e.target.dataset.k; if (!card || !k) return; const sc = ST.scenes.find(s => s.id === card.dataset.id); if (!sc) return;
-      if (k === 'nom') sc.nom = e.target.value.trim().slice(0, 60) || sc.nom; else if (k === 'f') sc.f = +e.target.value; else if (k === 'h') sc.h = Math.max(0, parseFloat(String(e.target.value).replace(',', '.')) || 1.6);
-      save(); renderScenes(); if (k !== 'nom') sceneGo(sc.id, true); });
+      if (k === 'nom') sc.nom = e.target.value.trim().slice(0, 60) || sc.nom; else if (k === 'f') sc.f = +e.target.value; else if (k === 'h') sc.h = Math.max(0, parseFloat(String(e.target.value).replace(',', '.')) || 1.6); else if (k === 't') sc.t = Math.max(-80, Math.min(80, parseFloat(String(e.target.value).replace(',', '.')) || 0));
+      save(); renderScenes(); if (k !== 'nom') sceneGo(sc.id, true, true); });
     pc.addEventListener('pointerdown', e => planPointer(e, 'down')); pc.addEventListener('pointermove', e => planPointer(e, 'move')); pc.addEventListener('pointerup', e => planPointer(e, 'up')); pc.addEventListener('pointercancel', e => planPointer(e, 'up'));
     new ResizeObserver(() => drawPlan()).observe(pc); }
   { const el = $('#scenes'); renderScenes();
-    el.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; if (b.id === 'sAdd') sceneAdd(); else if (b.id === 'sMgr') openPanel(); else { const id = b.closest('.stab').dataset.id; if (b.dataset.a) sceneAct(id, b.dataset.a); else if (e.detail === 2) sceneAct(id, 'ren'); else if (e.detail < 2) sceneGo(id); } cv.focus(); }); }
+    el.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; if (b.id === 'sAdd') sceneAdd(); else if (b.id === 'sMgr') openPanel(); else if (b.classList.contains('supd')) sceneAct(b.dataset.id, 'upd'); else { const id = b.closest('.stab').dataset.id; if (b.dataset.a) sceneAct(id, b.dataset.a); else if (e.detail === 2) sceneAct(id, 'ren'); else if (e.detail < 2) sceneGo(id); } cv.focus(); }); }
   $('#bCenter').onclick = centerView; $('#bImg').onclick = () => { saveImage(); cv.focus(); };
   $('#bUndo').onclick = undo; $('#bRedo').onclick = redo;
   $('#bNew').onclick = () => { if (Object.keys(M.f).length + Object.keys(M.l).length && !confirm('Effacer la maquette en cours ? (Ctrl+Z permet de revenir en arrière)')) return; doOp(m => { m.v = {}; m.f = {}; m.l = {}; }); clearSel(); };
