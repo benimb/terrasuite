@@ -71,6 +71,19 @@ html.ts-embed .brand small{display:none}
 .stab .sact{padding:3px 5px;color:var(--muted)} .stab .sact:hover{color:var(--ink)}
 .stab.sadd{padding:3px 9px;cursor:pointer;color:var(--muted);border-style:dashed} .stab.sadd:hover{color:var(--ink);border-color:var(--muted)}
 @media (max-width:760px){ .scenes{right:8px;top:44px} }
+.vpanel{position:absolute;top:44px;right:8px;bottom:8px;width:min(340px,calc(100% - 16px));overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:8px 10px;z-index:3;display:flex;flex-direction:column;gap:6px}
+.vpanel .vhead{display:flex;align-items:center;justify-content:space-between}
+.vpanel .r{display:flex;align-items:center;gap:5px;flex-wrap:wrap} .vpanel .grow{flex:1}
+.btn.sm{padding:2px 7px;font-size:12px} .btn.danger{color:var(--err)}
+#vplan{width:100%;aspect-ratio:1;border:1px solid var(--line);border-radius:6px;touch-action:none;cursor:crosshair;flex:none}
+.hint0{color:var(--muted);font-size:11.5px}
+.vcard{border:1px solid var(--line);border-radius:7px;padding:6px 7px;display:flex;flex-direction:column;gap:4px;cursor:pointer}
+.vcard.cur{border-color:var(--accent);background:var(--accent-soft)} .vcard.sel{box-shadow:0 0 0 1px var(--accent)}
+.vcard .k{font-size:11px;color:var(--muted);min-width:62px} .vcard input[type=text]{flex:1;min-width:0}
+.vcard input,.vcard select{border:1px solid var(--line);border-radius:5px;padding:2px 5px;background:var(--panel);font-size:12px}
+.vcard input[type=number]{width:58px} .vcard label{font-size:12px;color:var(--muted);display:flex;gap:4px;align-items:center}
+.vcard .mono{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.stab.sadd.on{background:var(--accent-soft);border-color:var(--accent);border-style:solid;color:var(--ink)}
 .viewbar{position:absolute;top:8px;right:8px;display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100% - 16px)}
 .viewbar .btn{box-shadow:0 1px 3px rgba(0,0,0,.15);font-size:12px;padding:3px 8px}
 .info{position:absolute;left:8px;bottom:8px;background:color-mix(in srgb,var(--panel) 90%,transparent);border:1px solid var(--line);border-radius:7px;padding:6px 9px;font-size:12px;max-width:min(380px,calc(100% - 16px));pointer-events:none}
@@ -146,6 +159,13 @@ html.ts-embed .brand small{display:none}
         <button class="btn" id="bImg" title="Enregistrer la vue actuelle en image (PNG)">Image</button>
         <button class="btn" id="bCenter" title="Centrer la vue sur la sélection, ou sur toute la maquette">Centrer</button>
       </div>
+      <aside class="vpanel" id="vpanel" hidden aria-label="Vues et caméras">
+        <div class="vhead"><b>Vues et caméras</b><button class="btn sm" id="vClose">Fermer ×</button></div>
+        <div class="r"><button class="btn sm" id="vAddView" title="Enregistrer le point de vue de l'écran">+ Vue actuelle</button><button class="btn sm" id="vAddCam" title="Poser une caméra à l'endroit de la vue actuelle, visée horizontale">+ Caméra</button></div>
+        <canvas id="vplan" aria-label="Plan des caméras"></canvas>
+        <div class="hint0">Plan : cliquez-glissez pour poser une caméra et l'orienter ; glissez une caméra pour la déplacer, la poignée blanche pour la tourner.</div>
+        <div id="vlist"></div>
+      </aside>
       <div class="info" id="info"></div>
       <div class="help" id="help" hidden></div>
     </div>
@@ -520,7 +540,7 @@ function modelEdges(M) {
 
 </script>
 <script>
-const APP_VERSION = '0.3';
+const APP_VERSION = '0.3.1';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const NF2 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 /* unités : la maquette est en mètres ; les longueurs s'affichent et se saisissent dans l'unité choisie (m, cm, mm) ; surfaces en m², volumes en m³ */
@@ -586,7 +606,7 @@ function doOp(fn) { const before = JSON.stringify(M), m = JSON.parse(before); co
 function pushUndo(before) { ST.undo.push(before); if (ST.undo.length > 200) ST.undo.shift(); ST.redo.length = 0; }
 function undo() { cancelTool(); if (!ST.undo.length) return; ST.redo.push(JSON.stringify(M)); M = JSON.parse(ST.undo.pop()); ST.last = null; clearSel(); changed(); }
 function redo() { cancelTool(); if (!ST.redo.length) return; ST.undo.push(JSON.stringify(M)); M = JSON.parse(ST.redo.pop()); ST.last = null; clearSel(); changed(); }
-function changed() { for (const k of [...ST.sel.f]) if (!M.f[k]) ST.sel.f.delete(k); for (const e of [...ST.sel.e]) { const [a, b] = e.split('|'); if (!M.v[a] || !M.v[b]) ST.sel.e.delete(e); } rebuild(); save(); info(); $('#bUndo').disabled = !ST.undo.length; $('#bRedo').disabled = !ST.redo.length; }
+function changed() { PL.fit = null; for (const k of [...ST.sel.f]) if (!M.f[k]) ST.sel.f.delete(k); for (const e of [...ST.sel.e]) { const [a, b] = e.split('|'); if (!M.v[a] || !M.v[b]) ST.sel.e.delete(e); } rebuild(); save(); info(); $('#bUndo').disabled = !ST.undo.length; $('#bRedo').disabled = !ST.redo.length; }
 
 /* ================= Scène 3D ================= */
 const cv = $('#cv'), view = $('#view');
@@ -774,26 +794,103 @@ function applyCam(c, anim) {
 }
 /* ---- vues enregistrées (scènes), en onglets au-dessus de la vue, comme dans SketchUp ; gardées avec la maquette ---- */
 const escH = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+/* Deux sortes de vues, en onglets : la vue libre (point de vue tel qu'enregistré : cam) et la caméra, au format de TerraGeo
+   { type: 'camera', nom, x, y : position, tx, ty : point visé, f : focale en mm (24×36, champ horizontal), h : hauteur d'œil en m },
+   dans le repère de la maquette (mètres, X est, Y nord) ; la visée est horizontale, les verticales restent verticales. */
+const FOCALES = [16, 20, 24, 28, 35, 50, 85], hfovOf = f => 2 * Math.atan(36 / (2 * f));
+const isCam = sc => sc && sc.type === 'camera';
+const newId = () => 's' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+function camView(c) { // point de vue d'une caméra
+  const asp = view.clientWidth / Math.max(1, view.clientHeight), t = new THREE.PerspectiveCamera(), h = +c.h || 1.6;
+  t.position.set(c.x, c.y, h); t.up.set(0, 0, 1); t.lookAt(c.tx, c.ty, h); t.updateMatrixWorld();
+  const fov = 2 * Math.atan(Math.tan(hfovOf(+c.f || 24) / 2) / asp) * 180 / Math.PI;
+  return { p: [c.x, c.y, h], q: t.quaternion.toArray(), f: [c.tx, c.ty, h], o: false, fov, vue: '' };
+}
+/* caméra tirée de la vue actuelle : même position, visée ramenée à l'horizontale, focale la plus proche */
+function camFromView(nom) {
+  const p = camPos(), d = fwd(), L = Math.hypot(d[0], d[1]) || 1, dir = L < 1e-3 ? [0, 1] : [d[0] / L, d[1] / L], h = Math.max(0.5, +p[2].toFixed(2));
+  const asp = view.clientWidth / Math.max(1, view.clientHeight), hf = isO() ? hfovOf(24) : 2 * Math.atan(Math.tan(camP.fov * Math.PI / 360) * asp);
+  const f = FOCALES.reduce((b, x) => Math.abs(hfovOf(x) - hf) < Math.abs(hfovOf(b) - hf) ? x : b, 24), r = x => Math.round(x * 100) / 100;
+  return { type: 'camera', nom, x: r(p[0]), y: r(p[1]), tx: r(p[0] + dir[0] * 10), ty: r(p[1] + dir[1] * 10), f, h };
+}
+const SVG_CAM = '<svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true" style="vertical-align:-2px;margin-right:4px"><path d="M2 5h8v6H2zM10 7l4-2v6l-4-2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>';
 function renderScenes() {
   const el = $('#scenes'); if (!el) return;
-  el.innerHTML = ST.scenes.map(sc => `<span class="stab${sc.id === ST.scene ? ' on' : ''}" data-id="${sc.id}"><button class="sgo" title="Aller à cette vue · double-clic : renommer">${escH(sc.nom)}</button>${sc.id === ST.scene ? '<button class="sact" data-a="upd" title="Mettre à jour avec la vue actuelle">⟳</button><button class="sact" data-a="del" title="Supprimer cette vue">×</button>' : ''}</span>`).join('')
-    + '<button class="stab sadd" id="sAdd" title="Enregistrer la vue actuelle dans un nouvel onglet">' + (ST.scenes.length ? '+ Vue' : '+ Enregistrer la vue') + '</button>';
+  el.innerHTML = ST.scenes.map(sc => `<span class="stab${sc.id === ST.scene ? ' on' : ''}" data-id="${sc.id}"><button class="sgo" title="Aller à cette ${isCam(sc) ? 'caméra' : 'vue'} · double-clic : renommer">${isCam(sc) ? SVG_CAM : ''}${escH(sc.nom)}</button>${sc.id === ST.scene ? '<button class="sact" data-a="upd" title="Remplacer par la vue actuelle">⟳</button>' : ''}</span>`).join('')
+    + '<button class="stab sadd" id="sAdd" title="Enregistrer la vue actuelle dans un nouvel onglet">' + (ST.scenes.length ? '+ Vue' : '+ Enregistrer la vue') + '</button>'
+    + `<button class="stab sadd${$('#vpanel') && !$('#vpanel').hidden ? ' on' : ''}" id="sMgr" title="Gérer les vues et les caméras : renommer, modifier, ordonner, supprimer, poser des caméras sur le plan">Vues et caméras…</button>`;
+  renderPanel();
 }
+function uniqName(base) { const names = new Set(ST.scenes.map(s => s.nom)); let i = ST.scenes.length + 1; if (base && !names.has(base)) return base; while (names.has((base || 'Vue') + ' ' + i)) i++; return (base || 'Vue') + ' ' + i; }
 function sceneAdd() {
-  let i = ST.scenes.length + 1; const names = new Set(ST.scenes.map(s => s.nom)); while (names.has('Vue ' + i)) i++;
   const VN = { iso: 'Perspective', axo: 'Axonométrie', top: 'Plan', front: 'Élévation sud', right: 'Élévation est', back: 'Élévation nord', left: 'Élévation ouest', bottom: 'Dessous' };
-  const nom = ST.view && VN[ST.view] && !names.has(VN[ST.view]) ? VN[ST.view] : 'Vue ' + i;
-  const sc = { id: 's' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), nom, cam: camJSON() }; ST.scenes.push(sc); ST.scene = sc.id; renderScenes(); save(); setStatus('Vue « ' + nom + ' » enregistrée', 'ok');
+  const nom = ST.view && VN[ST.view] ? uniqName(VN[ST.view]) : uniqName('');
+  const sc = { id: newId(), nom, cam: camJSON() }; ST.scenes.push(sc); ST.scene = sc.id; renderScenes(); save(); setStatus('Vue « ' + nom + ' » enregistrée', 'ok');
 }
-function sceneGo(id) { const sc = ST.scenes.find(s => s.id === id); if (!sc) return; ST.scene = id; renderScenes(); applyCam(sc.cam, true); setTimeout(save, 500); }
+function cameraAdd(c) { const sc = { id: newId(), ...(c || camFromView(uniqName('Caméra'))) }; if (!sc.nom) sc.nom = uniqName('Caméra'); ST.scenes.push(sc); ST.scene = sc.id; renderScenes(); save(); return sc; }
+function sceneGo(id, noAnim) { const sc = ST.scenes.find(s => s.id === id); if (!sc) return; ST.scene = id; renderScenes(); applyCam(isCam(sc) ? camView(sc) : sc.cam, !noAnim); setTimeout(save, 500); }
 function sceneStep(k) { const n = ST.scenes.length; if (!n) return; const i = ST.scenes.findIndex(s => s.id === ST.scene); sceneGo(ST.scenes[i < 0 ? (k > 0 ? 0 : n - 1) : (i + k + n) % n].id); }
 function sceneAct(id, a) {
   const i = ST.scenes.findIndex(s => s.id === id); if (i < 0) return; const sc = ST.scenes[i];
-  if (a === 'upd') { sc.cam = camJSON(); setStatus('Vue « ' + sc.nom + ' » mise à jour', 'ok'); }
-  else if (a === 'del') { if (!confirm('Supprimer la vue « ' + sc.nom + ' » ?')) return; ST.scenes.splice(i, 1); if (ST.scene === id) ST.scene = null; }
-  else if (a === 'ren') { const n = prompt('Nom de la vue', sc.nom); if (!n || !n.trim()) return; sc.nom = n.trim().slice(0, 60); }
+  if (a === 'upd') { if (isCam(sc)) { const c = camFromView(sc.nom); Object.assign(sc, c); sceneGo(id, true); } else sc.cam = camJSON(); setStatus('« ' + sc.nom + ' » remplacée par la vue actuelle', 'ok'); }
+  else if (a === 'del') { if (!confirm('Supprimer « ' + sc.nom + ' » ?')) return; ST.scenes.splice(i, 1); if (ST.scene === id) ST.scene = null; }
+  else if (a === 'ren') { const n = prompt('Nom', sc.nom); if (!n || !n.trim()) return; sc.nom = n.trim().slice(0, 60); }
+  else if (a === 'up' || a === 'down') { const j = i + (a === 'up' ? -1 : 1); if (j < 0 || j >= ST.scenes.length) return; ST.scenes.splice(i, 1); ST.scenes.splice(j, 0, sc); }
+  else if (a === 'tocam') { sceneGo(id, true); Object.assign(sc, camFromView(sc.nom)); delete sc.cam; sceneGo(id, true); }
   renderScenes(); save();
 }
+/* ---- panneau « Vues et caméras » : liste modifiable et plan de pose des caméras ---- */
+const PL = { sel: null, drag: null, fit: null };
+function planFit() {
+  const P = Object.values(M.v).map(p => [p[0], p[1]]); for (const sc of ST.scenes) if (isCam(sc)) P.push([sc.x, sc.y], [sc.tx, sc.ty]);
+  if (!P.length) P.push([-10, -10], [10, 10]);
+  let x0 = Math.min(...P.map(p => p[0])), x1 = Math.max(...P.map(p => p[0])), y0 = Math.min(...P.map(p => p[1])), y1 = Math.max(...P.map(p => p[1]));
+  const c = [(x0 + x1) / 2, (y0 + y1) / 2], R = Math.max(8, (x1 - x0) / 2, (y1 - y0) / 2) * 1.35; PL.fit = { c, R };
+}
+function planXf() { const cv = $('#vplan'), W = cv.width, k = W / (2 * PL.fit.R), c = PL.fit.c; return { W, k, toPx: (x, y) => [W / 2 + (x - c[0]) * k, W / 2 - (y - c[1]) * k], toM: (px, py) => [c[0] + (px - W / 2) / k, c[1] - (py - W / 2) / k] }; }
+function drawPlan() {
+  const cv = $('#vplan'); if (!cv || $('#vpanel').hidden) return; const dpr = Math.min(2, window.devicePixelRatio || 1), w = cv.clientWidth; if (cv.width !== Math.round(w * dpr)) { cv.width = cv.height = Math.round(w * dpr); }
+  if (!PL.fit) planFit(); const X = planXf(), W = X.W, ctx = cv.getContext('2d'), u = W / 300;
+  ctx.fillStyle = css('--sunk') || '#f7f5f1'; ctx.fillRect(0, 0, W, W);
+  ctx.strokeStyle = css('--line') || '#ddd'; ctx.lineWidth = 1; const step = PL.fit.R > 60 ? 10 : PL.fit.R > 15 ? 5 : 1, [mx0, my1] = X.toM(0, 0), [mx1, my0] = X.toM(W, W);
+  ctx.beginPath(); for (let x = Math.ceil(mx0 / step) * step; x <= mx1; x += step) { const [px] = X.toPx(x, 0); ctx.moveTo(px, 0); ctx.lineTo(px, W); } for (let y = Math.ceil(my0 / step) * step; y <= my1; y += step) { const [, py] = X.toPx(0, y); ctx.moveTo(0, py); ctx.lineTo(W, py); } ctx.stroke();
+  // maquette vue de dessus : faces horizontales pleines, arêtes
+  ctx.fillStyle = 'rgba(160,150,135,.28)'; for (const k in M.f) { const f = M.f[k]; if (Math.abs(faceN(M, f)[2]) < .5) continue; ctx.beginPath(); for (const L of loopsOf(f)) L.forEach((id, i) => { const [x, y] = X.toPx(M.v[id][0], M.v[id][1]); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.closePath(); ctx.fill('evenodd'); }
+  ctx.strokeStyle = css('--edge') || '#333'; ctx.lineWidth = Math.max(1, u * .8); ctx.beginPath(); for (const [a, b] of modelEdges(M)) { const A = X.toPx(M.v[a][0], M.v[a][1]), B = X.toPx(M.v[b][0], M.v[b][1]); if (Math.hypot(A[0] - B[0], A[1] - B[1]) < .5) continue; ctx.moveTo(...A); ctx.lineTo(...B); } ctx.stroke();
+  const [ox, oy] = X.toPx(0, 0); ctx.lineWidth = u; ctx.strokeStyle = '#C62828'; ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(ox + 14 * u, oy); ctx.stroke(); ctx.strokeStyle = '#2E7D32'; ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(ox, oy - 14 * u); ctx.stroke();
+  // caméras
+  ST.scenes.forEach((sc, i) => { if (!isCam(sc)) return; const on = sc.id === PL.sel, [x, y] = X.toPx(sc.x, sc.y), a = Math.atan2(sc.ty - sc.y, sc.tx - sc.x), hh = hfovOf(sc.f) / 2, L = W * .2;
+    ctx.fillStyle = on ? 'rgba(194,65,12,.22)' : 'rgba(138,90,18,.14)'; ctx.strokeStyle = on ? '#C2410C' : '#8A5A12'; ctx.lineWidth = Math.max(1.5, u);
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + L * Math.cos(a - hh), y - L * Math.sin(a - hh)); ctx.lineTo(x + L * Math.cos(a + hh), y - L * Math.sin(a + hh)); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.arc(x, y, 4.5 * u, 0, 7); ctx.fillStyle = ctx.strokeStyle; ctx.fill();
+    if (on) { const hx = x + L * Math.cos(a), hy = y - L * Math.sin(a); ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(hx, hy); ctx.stroke(); ctx.beginPath(); ctx.arc(hx, hy, 5.5 * u, 0, 7); ctx.fillStyle = '#fff'; ctx.fill(); ctx.stroke(); }
+    ctx.font = `${11 * u}px IBM Plex Sans, sans-serif`; ctx.fillStyle = ctx.strokeStyle; ctx.fillText(sc.nom, x + 7 * u, y - 7 * u); });
+  ctx.fillStyle = css('--ink') || '#333'; ctx.font = `${11 * u}px IBM Plex Sans, sans-serif`; ctx.fillText('N ↑', W - 30 * u, 16 * u);
+  const sb = step * (PL.fit.R > 60 ? 2 : 1); ctx.fillRect(10 * u, W - 14 * u, sb * X.k, 2.5 * u); ctx.fillText(sb + ' m', 10 * u, W - 19 * u);
+}
+function camHandles(sc) { const X = planXf(), [x, y] = X.toPx(sc.x, sc.y), a = Math.atan2(sc.ty - sc.y, sc.tx - sc.x), L = X.W * .2; return { p: [x, y], h: [x + L * Math.cos(a), y - L * Math.sin(a)] }; }
+function planPointer(ev, type) {
+  const cv = $('#vplan'), b = cv.getBoundingClientRect(), k = cv.width / b.width, px = (ev.clientX - b.left) * k, py = (ev.clientY - b.top) * k, X = planXf(), [mx, my] = X.toM(px, py), r = (x => Math.round(x * 100) / 100), tol = 12 * k;
+  if (type === 'down') {
+    cv.setPointerCapture(ev.pointerId); const sel = ST.scenes.find(s => s.id === PL.sel && isCam(s));
+    if (sel) { const H = camHandles(sel); if (Math.hypot(H.h[0] - px, H.h[1] - py) < tol) { PL.drag = { id: sel.id, mode: 'aim' }; return; } }
+    for (const sc of [...ST.scenes].reverse()) if (isCam(sc)) { const H = camHandles(sc); if (Math.hypot(H.p[0] - px, H.p[1] - py) < tol) { PL.sel = sc.id; PL.drag = { id: sc.id, mode: 'move', dx: sc.tx - sc.x, dy: sc.ty - sc.y }; renderPanel(); return; } }
+    const sc = cameraAdd({ type: 'camera', nom: uniqName('Caméra'), x: r(mx), y: r(my), tx: r(mx), ty: r(my + 10), f: 24, h: 1.6 }); PL.sel = sc.id; PL.drag = { id: sc.id, mode: 'aim', fresh: true }; drawPlan(); return;
+  }
+  const d = PL.drag; if (!d) return; const sc = ST.scenes.find(s => s.id === d.id); if (!sc) { PL.drag = null; return; }
+  if (type === 'move') { if (d.mode === 'move') { sc.x = r(mx); sc.y = r(my); sc.tx = r(mx + d.dx); sc.ty = r(my + d.dy); } else if (Math.hypot(mx - sc.x, my - sc.y) > 0.05) { const a = Math.atan2(my - sc.y, mx - sc.x), D = Math.max(10, Math.hypot(sc.tx - sc.x, sc.ty - sc.y)); sc.tx = r(sc.x + Math.cos(a) * D); sc.ty = r(sc.y + Math.sin(a) * D); } d.moved = true; drawPlan(); return; }
+  if (type === 'up') { PL.drag = null; renderScenes(); sceneGo(sc.id, true); save(); }
+}
+function renderPanel() {
+  const box = $('#vlist'); if (!box || $('#vpanel').hidden) return;
+  box.innerHTML = ST.scenes.map((sc, i) => `<div class="vcard${sc.id === ST.scene ? ' cur' : ''}${sc.id === PL.sel ? ' sel' : ''}" data-id="${sc.id}">
+    <div class="r"><span class="k">${isCam(sc) ? SVG_CAM + 'Caméra' : 'Vue'}</span><input type="text" data-k="nom" value="${escH(sc.nom)}" aria-label="Nom"></div>
+    ${isCam(sc) ? `<div class="r"><label>Focale <select data-k="f">${FOCALES.map(f => `<option value="${f}"${+sc.f === f ? ' selected' : ''}>${f} mm</option>`).join('')}</select></label><label>Hauteur d'œil <input type="number" step="0.1" min="0" data-k="h" value="${sc.h}"> m</label></div>
+    <div class="r mono">X ${NF2.format(sc.x)} · Y ${NF2.format(sc.y)} m, visée ${Math.round((90 - Math.atan2(sc.ty - sc.y, sc.tx - sc.x) * 180 / Math.PI + 360) % 360)}° (nord 0°, est 90°)</div>` : `<div class="r mono">${sc.cam && sc.cam.o ? 'Vue parallèle' : 'Perspective'}${sc.cam && sc.cam.vue ? ' · ' + escH(($('#vSel option[value="' + sc.cam.vue + '"]') || {}).textContent || '') : ''}</div>`}
+    <div class="r"><button class="btn sm" data-a="go">Voir</button><button class="btn sm" data-a="upd" title="Remplacer par le point de vue actuel">Prendre la vue actuelle</button>${isCam(sc) ? '' : '<button class="btn sm" data-a="tocam" title="Transformer en caméra (visée horizontale, focale, hauteur d\'œil)">En caméra</button>'}<span class="grow"></span><button class="btn sm" data-a="up" title="Monter" ${i ? '' : 'disabled'}>↑</button><button class="btn sm" data-a="down" title="Descendre" ${i < ST.scenes.length - 1 ? '' : 'disabled'}>↓</button><button class="btn sm danger" data-a="del" title="Supprimer">×</button></div></div>`).join('') || '<div class="hint0">Aucune vue. « + Vue actuelle » garde le point de vue de l\'écran ; sur le plan, cliquez-glissez pour poser une caméra.</div>';
+  drawPlan();
+}
+function openPanel(on) { const p = $('#vpanel'); p.hidden = on === undefined ? !p.hidden : !on; if (!p.hidden) { PL.fit = null; PL.sel = PL.sel || ST.scene; } renderScenes(); }
 function camJSON() { return { p: camPos(), q: camera.quaternion.toArray(), f: ST.focus, o: isO(), z: camO.zoom, fov: camP.fov, vue: ST.view || '' }; }
 
 /* ================= Rayons, projection, inférences ================= */
@@ -1237,6 +1334,7 @@ const HELP = `<h3>Unités</h3><table>
 <h3>Vue</h3><table>
 <tr><td>Vue</td><td>Perspective, axonométrie, et géométraux sans perspective : plan (dessus), élévations sud, est, nord, ouest, dessous. Tourner autour de la maquette quitte le géométral (vue libre).</td></tr>
 <tr><td>Onglets</td><td>« + Vue » enregistre le point de vue (position, projection, zoom) dans un onglet au-dessus de la maquette, comme les scènes de SketchUp. Clic : y revenir ; ⟳ : remplacer par la vue actuelle ; × : supprimer ; double-clic : renommer ; Page suivante, Page précédente : onglet suivant, précédent. Les vues sont gardées avec la maquette.</td></tr>
+<tr><td>Caméras</td><td>« Vues et caméras… » ouvre la liste des vues : renommer, voir, « Prendre la vue actuelle » pour la modifier, monter, descendre, supprimer. Caméras au format de TerraGeo (position, point visé, focale 24×36, hauteur d'œil), visée horizontale : sur le petit plan, cliquez-glissez pour poser une caméra et l'orienter ; glissez une caméra pour la déplacer, la poignée blanche pour la tourner. « + Caméra » la pose à l'endroit de la vue actuelle.</td></tr>
 <tr><td>Image</td><td>Enregistre la vue actuelle en image PNG (dans les téléchargements du téléphone ou de l'ordinateur).</td></tr>
 <tr><td>Bouton du milieu</td><td>Orbite autour du point visé (Maj : panoramique). Double-clic du milieu : centrer sur ce point.</td></tr>
 <tr><td>Clic droit</td><td>Panoramique. Molette : zoom vers le curseur. Deux doigts : zoom et déplacement.</td></tr>
@@ -1263,8 +1361,18 @@ const HELP = `<h3>Unités</h3><table>
   $('#tZoomExt').onclick = () => { frameView(bounds()); save(); };
   $('#vSel').onchange = e => { setView(e.target.value); cv.focus(); };
   $('#unit').onchange = e => { setUnit(e.target.value); cv.focus(); };
+  { const vl = $('#vlist'), pc = $('#vplan');
+    $('#vClose').onclick = () => openPanel(false); $('#vAddView').onclick = sceneAdd; $('#vAddCam').onclick = () => { const sc = cameraAdd(); PL.sel = sc.id; PL.fit = null; sceneGo(sc.id, true); };
+    vl.addEventListener('click', e => { const card = e.target.closest('.vcard'); if (!card) return; const id = card.dataset.id, b = e.target.closest('button');
+      if (b) { if (b.dataset.a === 'go') { PL.sel = id; sceneGo(id); } else sceneAct(id, b.dataset.a); return; }
+      if (!e.target.closest('input,select')) { PL.sel = id; sceneGo(id); } });
+    vl.addEventListener('change', e => { const card = e.target.closest('.vcard'), k = e.target.dataset.k; if (!card || !k) return; const sc = ST.scenes.find(s => s.id === card.dataset.id); if (!sc) return;
+      if (k === 'nom') sc.nom = e.target.value.trim().slice(0, 60) || sc.nom; else if (k === 'f') sc.f = +e.target.value; else if (k === 'h') sc.h = Math.max(0, parseFloat(String(e.target.value).replace(',', '.')) || 1.6);
+      save(); renderScenes(); if (k !== 'nom') sceneGo(sc.id, true); });
+    pc.addEventListener('pointerdown', e => planPointer(e, 'down')); pc.addEventListener('pointermove', e => planPointer(e, 'move')); pc.addEventListener('pointerup', e => planPointer(e, 'up')); pc.addEventListener('pointercancel', e => planPointer(e, 'up'));
+    new ResizeObserver(() => drawPlan()).observe(pc); }
   { const el = $('#scenes'); renderScenes();
-    el.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; if (b.id === 'sAdd') sceneAdd(); else { const id = b.closest('.stab').dataset.id; if (b.dataset.a) sceneAct(id, b.dataset.a); else if (e.detail === 2) sceneAct(id, 'ren'); else if (e.detail < 2) sceneGo(id); } cv.focus(); }); }
+    el.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; if (b.id === 'sAdd') sceneAdd(); else if (b.id === 'sMgr') openPanel(); else { const id = b.closest('.stab').dataset.id; if (b.dataset.a) sceneAct(id, b.dataset.a); else if (e.detail === 2) sceneAct(id, 'ren'); else if (e.detail < 2) sceneGo(id); } cv.focus(); }); }
   $('#bCenter').onclick = centerView; $('#bImg').onclick = () => { saveImage(); cv.focus(); };
   $('#bUndo').onclick = undo; $('#bRedo').onclick = redo;
   $('#bNew').onclick = () => { if (Object.keys(M.f).length + Object.keys(M.l).length && !confirm('Effacer la maquette en cours ? (Ctrl+Z permet de revenir en arrière)')) return; doOp(m => { m.v = {}; m.f = {}; m.l = {}; }); clearSel(); };
@@ -1281,7 +1389,7 @@ const HELP = `<h3>Unités</h3><table>
     $('#bMenus').onclick = () => { try { parent.postMessage({ ts: 'menus' }, '*'); } catch (e) {} };
   }
   setTool('rect'); cv.focus();
-  window.TM = { G, PR, openRid, setProjection, isO, get camera() { return camera; }, get M() { return M; }, set M(v) { M = v; changed(); }, ST, TOOLS, setTool, snap, pickFace, toScreen, req, show, rebuild, frameView, bounds, setView, setUnit, sceneAdd, sceneGo, applyCam, closedVolume, get UNIT() { return UNIT; } };
+  window.TM = { G, PR, openRid, setProjection, isO, get camera() { return camera; }, get M() { return M; }, set M(v) { M = v; changed(); }, ST, TOOLS, setTool, snap, pickFace, toScreen, req, show, rebuild, frameView, bounds, setView, setUnit, sceneAdd, sceneGo, cameraAdd, openPanel, applyCam, closedVolume, get UNIT() { return UNIT; } };
 })();
 
 </script>
