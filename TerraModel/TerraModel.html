@@ -64,6 +64,13 @@ html.ts-embed .brand small{display:none}
 .tb kbd{position:absolute;right:2px;bottom:1px;font-family:var(--f-mono);font-size:9px;color:var(--muted)}
 .view{position:relative;flex:1;min-width:0;background:var(--view)}
 #cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;outline:none}
+.scenes{position:absolute;top:8px;left:8px;right:330px;display:flex;gap:3px;overflow-x:auto;scrollbar-width:thin;align-items:flex-start;z-index:1}
+.stab{display:inline-flex;align-items:center;flex:none;border:1px solid var(--line);background:color-mix(in srgb,var(--panel) 92%,transparent);border-radius:6px 6px 0 0;border-bottom:2px solid var(--line);box-shadow:0 1px 3px rgba(0,0,0,.12);font-size:12px}
+.stab.on{background:var(--accent-soft);border-color:var(--accent);border-bottom-color:var(--accent)}
+.stab button{border:0;background:transparent;cursor:pointer;padding:3px 9px;white-space:nowrap;max-width:180px;overflow:hidden;text-overflow:ellipsis}
+.stab .sact{padding:3px 5px;color:var(--muted)} .stab .sact:hover{color:var(--ink)}
+.stab.sadd{padding:3px 9px;cursor:pointer;color:var(--muted);border-style:dashed} .stab.sadd:hover{color:var(--ink);border-color:var(--muted)}
+@media (max-width:760px){ .scenes{right:8px;top:44px} }
 .viewbar{position:absolute;top:8px;right:8px;display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100% - 16px)}
 .viewbar .btn{box-shadow:0 1px 3px rgba(0,0,0,.15);font-size:12px;padding:3px 8px}
 .info{position:absolute;left:8px;bottom:8px;background:color-mix(in srgb,var(--panel) 90%,transparent);border:1px solid var(--line);border-radius:7px;padding:6px 9px;font-size:12px;max-width:min(380px,calc(100% - 16px));pointer-events:none}
@@ -127,6 +134,7 @@ html.ts-embed .brand small{display:none}
     </nav>
     <div class="view" id="view">
       <canvas id="cv" tabindex="0" aria-label="Vue 3D de la maquette"></canvas>
+      <div class="scenes" id="scenes" role="tablist" aria-label="Vues enregistrées"></div>
       <div id="snapMk" hidden></div><div id="snapLb" hidden></div>
       <div class="viewbar">
         <select class="btn" id="vSel" title="Vue : perspective, axonométrie ou géométral (plan, élévations, sans perspective)" aria-label="Vue">
@@ -523,7 +531,7 @@ function setStatus(t, cls) { const el = $('#status'); el.textContent = t || ''; 
 
 /* ================= État, annulation, enregistrement ================= */
 let M = newModel();
-const ST = { units: 'm', tool: 'select', sel: { f: new Set(), e: new Set() }, undo: [], redo: [], segs: { circle: 24, poly: 6 }, last: null, lastPP: null, focus: [0, 0, 0] };
+const ST = { scenes: [], scene: null, units: 'm', tool: 'select', sel: { f: new Set(), e: new Set() }, undo: [], redo: [], segs: { circle: 24, poly: 6 }, last: null, lastPP: null, focus: [0, 0, 0] };
 /* ---- une maquette par projet TerraSuite (#projet=…), plus une « maquette sans projet » ; gardées dans ce navigateur et synchronisées entre appareils ---- */
 const KEY = 'terramodel-maquettes', OLDKEY = 'terramodel', LIBRE = 'libre';
 const HAS_TSP = typeof TSP !== 'undefined', HAS_LINK = typeof TSLink !== 'undefined';
@@ -541,7 +549,7 @@ let saveT = null;
 function save() {
   clearTimeout(saveT); saveT = setTimeout(() => {
     const old = PR.recs[PR.rid];
-    PR.recs[PR.rid] = { id: PR.rid, projetId: PR.rid === LIBRE ? null : PR.rid, nom: PR.projet ? projLabel(PR.projet) : (old && old.nom) || 'Maquette sans projet', version: APP_VERSION, model: M, segs: ST.segs, units: UNIT, surf: surfaces(M), cam: camJSON() };
+    PR.recs[PR.rid] = { id: PR.rid, projetId: PR.rid === LIBRE ? null : PR.rid, nom: PR.projet ? projLabel(PR.projet) : (old && old.nom) || 'Maquette sans projet', version: APP_VERSION, model: M, segs: ST.segs, units: UNIT, scenes: ST.scenes, surf: surfaces(M), cam: camJSON() };
     storeRecs(); if (HAS_LINK) { clearTimeout(PR.pushT); PR.pushT = setTimeout(() => TSLink.push('terramodel', 'maquettes', syncView(), { projet: r => r.projetId }), 1500); }
   }, 300);
 }
@@ -553,16 +561,17 @@ async function pullRemote() {
   for (const [rid, data] of res.recs) PR.recs[rid] = { ...data, cam: PR.recs[rid] && PR.recs[rid].cam };
   for (const rid of res.removed || []) delete PR.recs[rid];
   storeRecs(); const cur = PR.recs[PR.rid];
+  if (cur && JSON.stringify(cur.scenes || []) !== JSON.stringify(ST.scenes)) { ST.scenes = cur.scenes || []; renderScenes(); }
   if (cur && JSON.stringify(cur.model) !== before) { const T = TOOLS[ST.tool]; if (T && T.busy && T.busy()) cancelTool(); M = cur.model; M.l = M.l || {}; ST.undo.push(before); ST.redo.length = 0; ST.last = null; clearSel(); changed(); setStatus('Maquette mise à jour depuis un autre appareil', 'ok'); }
 }
 /* ouverture de la maquette d'un projet */
 async function openRid(rid) {
   rid = rid || LIBRE; if (PR.rid === rid && PR.opened) return; clearTimeout(saveT); cancelTool();
-  if (PR.opened) PR.recs[PR.rid] = { ...(PR.recs[PR.rid] || {}), id: PR.rid, model: M, cam: camJSON(), segs: ST.segs };
+  if (PR.opened) PR.recs[PR.rid] = { ...(PR.recs[PR.rid] || {}), id: PR.rid, model: M, cam: camJSON(), segs: ST.segs, scenes: ST.scenes };
   PR.rid = rid; PR.opened = true; PR.projet = rid !== LIBRE && HAS_TSP ? await TSP.get(rid) : null;
   const rec = PR.recs[rid];
   if (rec && rec.model) { try { loadData(rec); } catch (e) { M = newModel(); changed(); setView('iso'); } }
-  else { M = newModel(); ST.undo.length = 0; ST.redo.length = 0; ST.last = null; clearSel(); changed(); frameView({ c: [0, 0, 1], r: 7 }, VIEWS.iso); }
+  else { M = newModel(); ST.scenes = []; ST.scene = null; renderScenes(); ST.undo.length = 0; ST.redo.length = 0; ST.last = null; clearSel(); changed(); frameView({ c: [0, 0, 1], r: 7 }, VIEWS.iso); }
   projUI();
 }
 async function projUI() {
@@ -749,6 +758,41 @@ const viewSel = k => { const s = $('#vSel'); if (s) s.value = k || ''; ST.view =
 function setView(k) { if (!VIEWS[k]) return; const ortho = k !== 'iso'; if (ortho !== isO()) setProjection(ortho, true); frameView(bounds(), VIEWS[k]); viewSel(k); save(); }
 function centerView() { const has = ST.sel.f.size || ST.sel.e.size; frameView(has ? bounds(ST.sel) : bounds()); save(); }
 function recenterOn(p) { const f = fwd(), c = camPos(), d = isO() ? ORTHO_D : vdot(vsub(p, c), f); camera.position.set(...vsub(p, vmul(f, Math.max(0.5, d)))); camera.updateMatrixWorld(); ST.focus = p.slice(); req(); save(); }
+/* point de vue enregistré (position, orientation, point visé, projection, zoom, champ) remis en place ; anim : transition douce */
+let camAnim = null;
+function applyCam(c, anim) {
+  cancelAnimationFrame(camAnim); const ortho = !!c.o;
+  const end = () => { if (ortho && c.z) { camO.zoom = c.z; camO.updateProjectionMatrix(); } if (c.fov && Math.abs(camP.fov - c.fov) > 1e-6) { camP.fov = c.fov; camP.updateProjectionMatrix(); }
+    camera.position.set(...c.p); camera.quaternion.fromArray(c.q); camera.updateMatrixWorld(); ST.focus = (c.f || [0, 0, 0]).slice(); viewSel(c.vue || ''); hover(null); req(); };
+  if (!anim || ortho !== isO()) { if (ortho !== isO()) { camera = ortho ? camO : camP; } setProjection(isO(), true); end(); return; }
+  const p0 = camera.position.clone(), q0 = camera.quaternion.clone(), z0 = camO.zoom, p1 = new THREE.Vector3(...c.p), q1 = new THREE.Quaternion().fromArray(c.q), t0 = performance.now(), D = 450;
+  const step = now => { const t = Math.min(1, (now - t0) / D), e = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    camera.position.lerpVectors(p0, p1, e); camera.quaternion.slerpQuaternions(q0, q1, e); if (ortho && c.z) { camO.zoom = z0 * Math.pow(c.z / z0, e); camO.updateProjectionMatrix(); } camera.updateMatrixWorld(); renderer.render(scene, camera);
+    if (t < 1) camAnim = requestAnimationFrame(step); else end(); };
+  camAnim = requestAnimationFrame(step);
+}
+/* ---- vues enregistrées (scènes), en onglets au-dessus de la vue, comme dans SketchUp ; gardées avec la maquette ---- */
+const escH = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function renderScenes() {
+  const el = $('#scenes'); if (!el) return;
+  el.innerHTML = ST.scenes.map(sc => `<span class="stab${sc.id === ST.scene ? ' on' : ''}" data-id="${sc.id}"><button class="sgo" title="Aller à cette vue · double-clic : renommer">${escH(sc.nom)}</button>${sc.id === ST.scene ? '<button class="sact" data-a="upd" title="Mettre à jour avec la vue actuelle">⟳</button><button class="sact" data-a="del" title="Supprimer cette vue">×</button>' : ''}</span>`).join('')
+    + '<button class="stab sadd" id="sAdd" title="Enregistrer la vue actuelle dans un nouvel onglet">+ Vue</button>';
+}
+function sceneAdd() {
+  let i = ST.scenes.length + 1; const names = new Set(ST.scenes.map(s => s.nom)); while (names.has('Vue ' + i)) i++;
+  const VN = { iso: 'Perspective', axo: 'Axonométrie', top: 'Plan', front: 'Élévation sud', right: 'Élévation est', back: 'Élévation nord', left: 'Élévation ouest', bottom: 'Dessous' };
+  const nom = ST.view && VN[ST.view] && !names.has(VN[ST.view]) ? VN[ST.view] : 'Vue ' + i;
+  const sc = { id: 's' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), nom, cam: camJSON() }; ST.scenes.push(sc); ST.scene = sc.id; renderScenes(); save(); setStatus('Vue « ' + nom + ' » enregistrée', 'ok');
+}
+function sceneGo(id) { const sc = ST.scenes.find(s => s.id === id); if (!sc) return; ST.scene = id; renderScenes(); applyCam(sc.cam, true); setTimeout(save, 500); }
+function sceneStep(k) { const n = ST.scenes.length; if (!n) return; const i = ST.scenes.findIndex(s => s.id === ST.scene); sceneGo(ST.scenes[i < 0 ? (k > 0 ? 0 : n - 1) : (i + k + n) % n].id); }
+function sceneAct(id, a) {
+  const i = ST.scenes.findIndex(s => s.id === id); if (i < 0) return; const sc = ST.scenes[i];
+  if (a === 'upd') { sc.cam = camJSON(); setStatus('Vue « ' + sc.nom + ' » mise à jour', 'ok'); }
+  else if (a === 'del') { if (!confirm('Supprimer la vue « ' + sc.nom + ' » ?')) return; ST.scenes.splice(i, 1); if (ST.scene === id) ST.scene = null; }
+  else if (a === 'ren') { const n = prompt('Nom de la vue', sc.nom); if (!n || !n.trim()) return; sc.nom = n.trim().slice(0, 60); }
+  renderScenes(); save();
+}
 function camJSON() { return { p: camPos(), q: camera.quaternion.toArray(), f: ST.focus, o: isO(), z: camO.zoom, fov: camP.fov, vue: ST.view || '' }; }
 
 /* ================= Rayons, projection, inférences ================= */
@@ -1112,6 +1156,7 @@ document.addEventListener('keydown', ev => {
   if (k === 'Escape') { const T = TOOLS[ST.tool]; if (T.busy && T.busy()) cancelTool(); else clearSel(); hint(T.hint()); return; }
   if (k === 'Delete' || k === 'Backspace') { ev.preventDefault(); delSel(); return; }
   if (k === 'Z' && ev.shiftKey) { frameView(bounds()); save(); return; }
+  if (k === 'PageDown' || k === 'PageUp') { ev.preventDefault(); sceneStep(k === 'PageDown' ? 1 : -1); return; }
   const map = { ' ': 'select', m: 'move', l: 'line', r: 'rect', c: 'circle', g: 'poly', p: 'push', o: 'orbit', h: 'pan', e: 'erase' }, t = map[k.toLowerCase()];
   if (t && !ev.shiftKey) { ev.preventDefault(); setTool(t); }
 });
@@ -1153,12 +1198,12 @@ function closedVolume(m) {
 /* ================= Fichiers ================= */
 const stamp = () => new Date().toISOString().slice(0, 10);
 function dl(name, text, type) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
-function saveFile() { dl(`TerraModel ${stamp()}.json`, JSON.stringify({ app: 'TerraModel', version: APP_VERSION, units: UNIT, model: M, cam: camJSON(), segs: ST.segs }), 'application/json'); setStatus('Maquette enregistrée', 'ok'); }
+function saveFile() { dl(`TerraModel ${stamp()}.json`, JSON.stringify({ app: 'TerraModel', version: APP_VERSION, units: UNIT, scenes: ST.scenes, model: M, cam: camJSON(), segs: ST.segs }), 'application/json'); setStatus('Maquette enregistrée', 'ok'); }
 function loadData(d) {
   if (!d || !d.model || !d.model.v || !d.model.f) throw new Error('fichier TerraModel attendu');
-  M = d.model; M.l = M.l || {}; ST.undo.length = 0; ST.redo.length = 0; ST.last = null; if (d.segs) Object.assign(ST.segs, d.segs); setUnit(d.units || 'm', true);
+  M = d.model; M.l = M.l || {}; ST.undo.length = 0; ST.redo.length = 0; ST.last = null; if (d.segs) Object.assign(ST.segs, d.segs); setUnit(d.units || 'm', true); ST.scenes = Array.isArray(d.scenes) ? d.scenes : []; ST.scene = null; renderScenes();
   clearSel(); changed();
-  if (d.cam && d.cam.p) { camera = d.cam.o ? camO : camP; if (d.cam.o && d.cam.z) { camO.zoom = d.cam.z; camO.updateProjectionMatrix(); } setProjection(isO()); camera.position.set(...d.cam.p); camera.quaternion.fromArray(d.cam.q); camera.updateMatrixWorld(); ST.focus = d.cam.f || [0, 0, 0]; viewSel(d.cam.vue || ''); req(); } else setView('iso');
+  if (d.cam && d.cam.p) applyCam(d.cam); else setView('iso');
 }
 function exportOBJ() {
   let s = `# TerraModel ${APP_VERSION}\n# Unité : mètre. Repère : X est, Y nord, Z vers le haut.\no TerraModel\n`, base = 1;
@@ -1183,6 +1228,7 @@ const HELP = `<h3>Unités</h3><table>
 <tr><td>Correction</td><td>Juste après un rectangle, un cercle ou un pousser/tirer, une nouvelle saisie au clavier corrige la cote.</td></tr></table>
 <h3>Vue</h3><table>
 <tr><td>Vue</td><td>Perspective, axonométrie, et géométraux sans perspective : plan (dessus), élévations sud, est, nord, ouest, dessous. Tourner autour de la maquette quitte le géométral (vue libre).</td></tr>
+<tr><td>Onglets</td><td>« + Vue » enregistre le point de vue (position, projection, zoom) dans un onglet au-dessus de la maquette, comme les scènes de SketchUp. Clic : y revenir ; ⟳ : remplacer par la vue actuelle ; × : supprimer ; double-clic : renommer ; Page suivante, Page précédente : onglet suivant, précédent. Les vues sont gardées avec la maquette.</td></tr>
 <tr><td>Bouton du milieu</td><td>Orbite autour du point visé (Maj : panoramique). Double-clic du milieu : centrer sur ce point.</td></tr>
 <tr><td>Clic droit</td><td>Panoramique. Molette : zoom vers le curseur. Deux doigts : zoom et déplacement.</td></tr>
 <tr><td>Maj+Z</td><td>Zoom étendu. « Centrer » : sur la sélection, sinon toute la maquette.</td></tr>
@@ -1208,6 +1254,8 @@ const HELP = `<h3>Unités</h3><table>
   $('#tZoomExt').onclick = () => { frameView(bounds()); save(); };
   $('#vSel').onchange = e => { setView(e.target.value); cv.focus(); };
   $('#unit').onchange = e => { setUnit(e.target.value); cv.focus(); };
+  { const el = $('#scenes'); renderScenes();
+    el.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; if (b.id === 'sAdd') sceneAdd(); else { const id = b.closest('.stab').dataset.id; if (b.dataset.a) sceneAct(id, b.dataset.a); else if (e.detail === 2) sceneAct(id, 'ren'); else if (e.detail < 2) sceneGo(id); } cv.focus(); }); }
   $('#bCenter').onclick = centerView;
   $('#bUndo').onclick = undo; $('#bRedo').onclick = redo;
   $('#bNew').onclick = () => { if (Object.keys(M.f).length + Object.keys(M.l).length && !confirm('Effacer la maquette en cours ? (Ctrl+Z permet de revenir en arrière)')) return; doOp(m => { m.v = {}; m.f = {}; m.l = {}; }); clearSel(); };
@@ -1224,7 +1272,7 @@ const HELP = `<h3>Unités</h3><table>
     $('#bMenus').onclick = () => { try { parent.postMessage({ ts: 'menus' }, '*'); } catch (e) {} };
   }
   setTool('rect'); cv.focus();
-  window.TM = { G, PR, openRid, setProjection, isO, get camera() { return camera; }, get M() { return M; }, set M(v) { M = v; changed(); }, ST, TOOLS, setTool, snap, pickFace, toScreen, req, show, rebuild, frameView, bounds, setView, setUnit, closedVolume, get UNIT() { return UNIT; } };
+  window.TM = { G, PR, openRid, setProjection, isO, get camera() { return camera; }, get M() { return M; }, set M(v) { M = v; changed(); }, ST, TOOLS, setTool, snap, pickFace, toScreen, req, show, rebuild, frameView, bounds, setView, setUnit, sceneAdd, sceneGo, applyCam, closedVolume, get UNIT() { return UNIT; } };
 })();
 
 </script>
