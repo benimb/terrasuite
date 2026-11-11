@@ -67,7 +67,7 @@ html.ts-embed .brand small{display:none}
 .viewbar{position:absolute;top:8px;right:8px;display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100% - 16px)}
 .viewbar .btn{box-shadow:0 1px 3px rgba(0,0,0,.15);font-size:12px;padding:3px 8px}
 .info{position:absolute;left:8px;bottom:8px;background:color-mix(in srgb,var(--panel) 90%,transparent);border:1px solid var(--line);border-radius:7px;padding:6px 9px;font-size:12px;max-width:min(380px,calc(100% - 16px));pointer-events:none}
-.info b{font-weight:600} .info .mono{font-family:var(--f-mono);font-size:11.5px}
+.info .unit{color:var(--muted);font-size:11px;margin-top:2px} .info b{font-weight:600} .info .mono{font-family:var(--f-mono);font-size:11.5px}
 #snapMk{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;pointer-events:none;border:2px solid #2E8B3A;border-radius:50%;background:rgba(255,255,255,.6)}
 #snapMk.mid{border-color:#1C8FB0} #snapMk.edge{border-color:#C0392B;border-radius:2px} #snapMk.face{border-color:#2F5FD0;transform:rotate(45deg);border-radius:2px}
 #snapMk.axis0{border-color:#D02020} #snapMk.axis1{border-color:#1E9A2E} #snapMk.axis2{border-color:#2040D0}
@@ -77,7 +77,7 @@ html.ts-embed .brand small{display:none}
 .bar label{display:flex;gap:6px;align-items:center;color:var(--muted);font-size:12px}
 .bar input{background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:3px 7px;font-family:var(--f-mono);font-size:12px}
 #vcb{width:150px;text-align:right} #vcb.flash{border-color:var(--accent);background:var(--accent-soft)}
-#segs{width:56px}
+#segs{width:56px} #unit{padding:2px 4px;font-family:var(--f-mono);font-size:12px} #vSel{font-size:12px;padding:3px 6px;box-shadow:0 1px 3px rgba(0,0,0,.15)}
 .help{position:absolute;top:44px;right:8px;width:min(400px,calc(100% - 16px));max-height:calc(100% - 56px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.15);padding:10px 14px;font-size:12.5px}
 .help h3{font-family:var(--f-cond);font-size:13px;letter-spacing:.05em;text-transform:uppercase;margin:8px 0 4px}
 .help table{border-collapse:collapse;width:100%} .help td{padding:2px 4px;vertical-align:top;border-bottom:1px solid var(--line2)} .help td:first-child{white-space:nowrap;font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
@@ -129,13 +129,12 @@ html.ts-embed .brand small{display:none}
       <canvas id="cv" tabindex="0" aria-label="Vue 3D de la maquette"></canvas>
       <div id="snapMk" hidden></div><div id="snapLb" hidden></div>
       <div class="viewbar">
-        <button class="btn" data-view="iso" title="Vue isométrique">Iso</button>
-        <button class="btn" data-view="top" title="Vue de dessus">Dessus</button>
-        <button class="btn" data-view="front" title="Vue de face (depuis le sud)">Face</button>
-        <button class="btn" data-view="right" title="Vue de droite (depuis l'est)">Droite</button>
-        <button class="btn" data-view="back" title="Vue arrière (depuis le nord)">Arrière</button>
-        <button class="btn" data-view="left" title="Vue de gauche (depuis l'ouest)">Gauche</button>
-        <button class="btn" id="bProj" title="Perspective ou vue parallèle (projection orthogonale, pour les plans et élévations)">Perspective</button>
+        <select class="btn" id="vSel" title="Vue : perspective, axonométrie ou géométral (plan, élévations, sans perspective)" aria-label="Vue">
+          <option value="" hidden>Vue libre</option>
+          <optgroup label="Vues 3D"><option value="iso">Perspective</option><option value="axo">Axonométrie</option></optgroup>
+          <optgroup label="Géométraux, sans perspective"><option value="top">Plan (vue de dessus)</option><option value="front">Élévation sud</option><option value="right">Élévation est</option><option value="back">Élévation nord</option><option value="left">Élévation ouest</option><option value="bottom">Vue de dessous</option></optgroup>
+        </select>
+        <button class="btn" id="bProj" title="Perspective ou vue parallèle (projection orthogonale)">Perspective</button>
         <button class="btn" id="bCenter" title="Centrer la vue sur la sélection, ou sur toute la maquette">Centrer</button>
       </div>
       <div class="info" id="info"></div>
@@ -146,6 +145,7 @@ html.ts-embed .brand small{display:none}
     <span class="hint" id="hint"></span>
     <label id="segsL" hidden><span id="segsT">Segments</span><input type="number" id="segs" min="3" max="128" step="1"></label>
     <label for="vcb" id="vcbL">Mesures</label><input type="text" id="vcb" autocomplete="off" spellcheck="false" aria-label="Saisie des cotes">
+    <label title="Unité des longueurs affichées et tapées (une cote tapée peut aussi porter son unité : 350cm, 3500mm)">Unité <select id="unit" class="btn"><option value="m">m</option><option value="cm">cm</option><option value="mm">mm</option></select></label>
   </footer>
 </div>
 <input type="file" id="fileIn" accept=".json,application/json" hidden>
@@ -289,8 +289,8 @@ function normFaces(M) {
   for (const k in M.l) if (M.l[k][0] === M.l[k][1]) delete M.l[k];
 }
 /* sommet posé sur une arête (jonction en T) : inséré dans l'arête, pour que les faces voisines partagent les mêmes sommets */
-function fixT(M) {
-  const ids = [...usedVerts(M)], P = ids.map(id => M.v[id]);
+function fixT(M, extra) {
+  const ids = [...new Set([...usedVerts(M), ...(extra || [])])].filter(id => M.v[id]), P = ids.map(id => M.v[id]);
   const split = L => {
     const out = [];
     for (let i = 0; i < L.length; i++) {
@@ -334,11 +334,25 @@ function cleanup(M, fresh = new Set()) {
 }
 /* ---- opérations ---- */
 function edgeFaces(M) { const m = new Map(); for (const k in M.f) for (const L of loopsOf(M.f[k])) for (let i = 0; i < L.length; i++) { const e = ekey(L[i], L[(i + 1) % L.length]); if (!m.has(e)) m.set(e, []); m.get(e).push(k); } return m; }
+/* un point à l'intérieur de la face (centre d'un triangle de bord) */
+function faceCentroidIn(M, f) { const n = faceN(M, f); for (let i = 0; i < f.o.length; i++) { const a = M.v[f.o[i]], b = M.v[f.o[(i + 1) % f.o.length]], q = vadd(vmul(vadd(a, b), .5), vmul(vnorm(vcross(n, vsub(b, a))), 1e-3)); if (classifyPoint(M, f, q, 1e-7) === 'in') return q; } return M.v[f.o[0]]; }
+/* épaisseur traversée en poussant la face fid vers l'intérieur : distance de la face opposée, parallèle, qui reçoit toute sa projection ; sinon null */
+function throughDepth(M, fid, full) {
+  const f = M.f[fid]; if (!f) return null; const n = faceN(M, f), p0 = M.v[f.o[0]], pts = [];
+  for (const L of loopsOf(f)) for (let i = 0; i < L.length; i++) { const a = M.v[L[i]], b = M.v[L[(i + 1) % L.length]]; pts.push(a, vmul(vadd(a, b), .5)); }
+  let best = null; // face la plus proche que la poussée rencontre ; elle doit recevoir toute la forme
+  for (const k in M.f) { if (k === String(fid)) continue; const g = M.f[k], ng = faceN(M, g); if (Math.abs(vdot(ng, n)) < 1 - 1e-6) continue;
+    const t = vdot(n, vsub(p0, M.v[g.o[0]])); if (t <= TOL || (best && t >= best.t - 1e-9)) continue;
+    const c = pts.map(p => classifyPoint(M, g, vsub(p, vmul(n, t)), 1e-5)); if (!c.includes('in') && !(c.every(x => x === 'on') && classifyPoint(M, g, vsub(faceCentroidIn(M, f), vmul(n, t)), 1e-5) === 'in')) continue;
+    best = { t, ok: vdot(ng, n) < 0 && !c.includes('out') && (full || c.includes('in')) }; }
+  return best && best.ok ? best.t : null;
+}
 /* pousser/tirer la face fid de d mètres le long de sa normale */
 function pushPull(M, fid, d) {
   const f = M.f[fid]; if (!f || Math.abs(d) < TOL) return M;
   const n = faceN(M, f), loops = loopsOf(f), ef = edgeFaces(M), vs = new Set(loops.flat());
   const allShared = loops.every(L => L.every((a, i) => (ef.get(ekey(a, L[(i + 1) % L.length])) || []).some(g => g !== String(fid))));
+  if (allShared && d < 0) { const t = throughDepth(M, fid, true); if (t != null && -d >= t - 1e-4) d = -t; } // poussée jusqu'à la face opposée ou au-delà : percement
   if (allShared) { // face d'un volume dont toutes les faces voisines contiennent la direction de poussée : on déplace la face (le volume s'allonge)
     let movable = true;
     for (const k in M.f) { if (k === String(fid)) continue; const g = M.f[k]; if (!loopsOf(g).some(L => L.some(id => vs.has(id)))) continue; if (Math.abs(vdot(faceN(M, g), n)) > 1e-6) { movable = false; break; } }
@@ -366,6 +380,55 @@ function addShape(M, pts, nHint, target) {
     delete M.f[target]; for (const g of res) addF(M, g);
   }
   cleanup(M); return fid;
+}
+/* croisements : les traits segs = [[a, b]] coupés là où ils croisent une arête ou un autre trait, l'un et l'autre recevant le point de croisement */
+function segX(p1, p2, q1, q2) { // points les plus proches de deux segments, paramètres s, t
+  const d1 = vsub(p2, p1), d2 = vsub(q2, q1), r = vsub(p1, q1), a = vdot(d1, d1), e = vdot(d2, d2), f = vdot(d2, r), c = vdot(d1, r), b = vdot(d1, d2), den = a * e - b * b;
+  if (a < 1e-12 || e < 1e-12 || Math.abs(den) < 1e-12 * a * e) return null; // parallèles
+  const s = (b * f - c * e) / den, t = (a * f - b * c) / den; if (s < -1e-9 || s > 1 + 1e-9 || t < -1e-9 || t > 1 + 1e-9) return null;
+  const P = vadd(p1, vmul(d1, s)), Q = vadd(q1, vmul(d2, t)); return vdist(P, Q) < TOL ? { s, t, p: vmul(vadd(P, Q), .5) } : null;
+}
+function intersectLines(M, segs) {
+  const E = modelEdges(M), made = [];
+  for (const [a, b] of segs) { if (!M.v[a] || !M.v[b]) continue; const pa = M.v[a], pb = M.v[b];
+    for (const [c, d] of E) { if (c === a || c === b || d === a || d === b) continue; const x = segX(pa, pb, M.v[c], M.v[d]); if (!x) continue;
+      const inA = x.s > 1e-6 && x.s < 1 - 1e-6, inC = x.t > 1e-6 && x.t < 1 - 1e-6; if (!inA && !inC) continue; made.push(addV(M, x.p)); } }
+  if (made.length) fixT(M, made); return made.length;
+}
+/* traits libres qui traversent une face d'un bord à l'autre (directement ou par plusieurs traits) : la face est divisée */
+function splitFacesByLines(M) {
+  let n = 0;
+  for (let guard = 0; guard < 200; guard++) {
+    const adj = new Map(); for (const k in M.l) { const [a, b] = M.l[k]; if (!adj.has(a)) adj.set(a, []); if (!adj.has(b)) adj.set(b, []); adj.get(a).push(b); adj.get(b).push(a); }
+    if (!adj.size) return n; let path = null;
+    search: for (const k in M.f) {
+      const f = M.f[k], fr = frame(M, f), L2 = loops2Of(M, f, fr), onB = new Set(f.o), onPl = id => Math.abs(vdot(fr.n, vsub(M.v[id], fr.o))) < TOL * 10;
+      const inner = id => !onB.has(id) && onPl(id) && classify2(to2(fr, M.v[id]), L2) === 'in', midIn = (a, b) => classify2(to2(fr, vmul(vadd(M.v[a], M.v[b]), .5)), L2) === 'in';
+      for (const s of f.o) { if (!adj.has(s)) continue;
+        const st = [[s, [s]]];
+        while (st.length) { const [v, P] = st.pop(); if (P.length > 64) continue;
+          for (const w of adj.get(v)) { if (P.includes(w) || !onPl(w) || !midIn(v, w)) continue;
+            if (onB.has(w)) { const p = [...P, w], i = f.o.indexOf(s), j = f.o.indexOf(w), N = f.o.length; if (p.length === 2 && ((i + 1) % N === j || (j + 1) % N === i)) continue; path = p; break search; }
+            if (inner(w)) st.push([w, [...P, w]]); } } }
+    }
+    if (!path || !splitByPath(M, path)) return n; n++;
+  }
+  return n;
+}
+/* tirer des traits (ou des arêtes de bord) : chaque segment balayé de d donne une face ; nHint oriente les faces sans voisine */
+function extrudeLines(M, segs, d, nHint) {
+  if (!segs.length || vlen(d) < TOL) return M;
+  const map = new Map(), m = id => { if (!map.has(id)) map.set(id, addV(M, vadd(M.v[id], d))); return map.get(id); }, fresh = new Set();
+  const de = new Set(); for (const k in M.f) for (const L of loopsOf(M.f[k])) for (let i = 0; i < L.length; i++) de.add(L[i] + '>' + L[(i + 1) % L.length]);
+  let flip = null;
+  for (const [a, b] of segs) {
+    let f;
+    if (de.has(a + '>' + b)) f = { o: [b, a, m(a), m(b)], h: [] }; else if (de.has(b + '>' + a)) f = { o: [a, b, m(b), m(a)], h: [] };
+    else { f = { o: [a, b, m(b), m(a)], h: [] }; if (flip === null) flip = !!nHint && vdot(newell(M, f.o), nHint) < 0; if (flip) f = revF(f); }
+    fresh.add(String(addF(M, f)));
+  }
+  const se = new Set(segs.map(([a, b]) => ekey(a, b))); for (const k in M.l) if (se.has(ekey(...M.l[k]))) delete M.l[k];
+  return cleanup(M, fresh);
 }
 /* chemin de traits d'un bord à l'autre d'une face : la face est divisée en deux */
 function splitByPath(M, path) {
@@ -448,15 +511,19 @@ function modelEdges(M) {
 
 </script>
 <script>
-const APP_VERSION = '0.2.1';
+const APP_VERSION = '0.3';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const NF2 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const fmtL = x => NF2.format(x) + ' m', fmtA = x => NF2.format(x) + ' m²', fmtV = x => NF2.format(x) + ' m³';
+/* unités : la maquette est en mètres ; les longueurs s'affichent et se saisissent dans l'unité choisie (m, cm, mm) ; surfaces en m², volumes en m³ */
+const nfU = d => new Intl.NumberFormat('fr-FR', { minimumFractionDigits: d, maximumFractionDigits: d, useGrouping: false });
+const UNITS = { m: { k: 1, nf: nfU(2), nom: 'mètres' }, cm: { k: 100, nf: nfU(1), nom: 'centimètres' }, mm: { k: 1000, nf: nfU(0), nom: 'millimètres' } };
+let UNIT = 'm'; const UN = () => UNITS[UNIT];
+const numL = x => UN().nf.format(x * UN().k), fmtL = x => numL(x) + ' ' + UNIT, fmtA = x => NF2.format(x) + ' m²', fmtV = x => NF2.format(x) + ' m³';
 function setStatus(t, cls) { const el = $('#status'); el.textContent = t || ''; el.className = 'status' + (cls ? ' ' + cls : ''); }
 
 /* ================= État, annulation, enregistrement ================= */
 let M = newModel();
-const ST = { tool: 'select', sel: { f: new Set(), e: new Set() }, undo: [], redo: [], segs: { circle: 24, poly: 6 }, last: null, lastPP: null, focus: [0, 0, 0] };
+const ST = { units: 'm', tool: 'select', sel: { f: new Set(), e: new Set() }, undo: [], redo: [], segs: { circle: 24, poly: 6 }, last: null, lastPP: null, focus: [0, 0, 0] };
 /* ---- une maquette par projet TerraSuite (#projet=…), plus une « maquette sans projet » ; gardées dans ce navigateur et synchronisées entre appareils ---- */
 const KEY = 'terramodel-maquettes', OLDKEY = 'terramodel', LIBRE = 'libre';
 const HAS_TSP = typeof TSP !== 'undefined', HAS_LINK = typeof TSLink !== 'undefined';
@@ -474,7 +541,7 @@ let saveT = null;
 function save() {
   clearTimeout(saveT); saveT = setTimeout(() => {
     const old = PR.recs[PR.rid];
-    PR.recs[PR.rid] = { id: PR.rid, projetId: PR.rid === LIBRE ? null : PR.rid, nom: PR.projet ? projLabel(PR.projet) : (old && old.nom) || 'Maquette sans projet', version: APP_VERSION, model: M, segs: ST.segs, surf: surfaces(M), cam: camJSON() };
+    PR.recs[PR.rid] = { id: PR.rid, projetId: PR.rid === LIBRE ? null : PR.rid, nom: PR.projet ? projLabel(PR.projet) : (old && old.nom) || 'Maquette sans projet', version: APP_VERSION, model: M, segs: ST.segs, units: UNIT, surf: surfaces(M), cam: camJSON() };
     storeRecs(); if (HAS_LINK) { clearTimeout(PR.pushT); PR.pushT = setTimeout(() => TSLink.push('terramodel', 'maquettes', syncView(), { projet: r => r.projetId }), 1500); }
   }, 300);
 }
@@ -629,6 +696,7 @@ function orbit(dx, dy, pivot) {
   const right = new THREE.Vector3(1, 0, 0).applyQuaternion(camera.quaternion), q2 = new THREE.Quaternion().setFromAxisAngle(right, -dy * 0.0075);
   const nq = camera.quaternion.clone().premultiply(q2), f = new THREE.Vector3(0, 0, -1).applyQuaternion(nq), up = new THREE.Vector3(0, 1, 0).applyQuaternion(nq);
   if (Math.abs(f.z) < 0.9995 && up.z > 0.0005) { camera.position.sub(P).applyQuaternion(q2).add(P); camera.quaternion.copy(nq); }
+  if (ST.view && (dx || dy)) viewSel('');
   camera.updateMatrixWorld(); req();
 }
 /* taille d'un pixel à l'écran, en mètres, à la profondeur du point p */
@@ -664,7 +732,7 @@ function frameView(b, dir) {
   lookFrom(vsub(b.c, vmul(f, dist)), b.c, up);
 }
 /* perspective ou vue parallèle : même cadrage autour du point au centre de l'écran */
-function setProjection(ortho) {
+function setProjection(ortho, fromView) {
   if (ortho !== isO()) {
     const P = pointUnder(view.clientWidth / 2, view.clientHeight / 2), f = fwd(), t = Math.tan(camP.fov * Math.PI / 360);
     if (ortho) { const d = Math.max(0.5, vdot(vsub(P, camPos()), f)); camO.zoom = 1 / (d * t); camO.quaternion.copy(camP.quaternion); camO.position.set(...vsub(P, vmul(f, ORTHO_D))); camO.updateProjectionMatrix(); camera = camO; }
@@ -672,13 +740,16 @@ function setProjection(ortho) {
     camera.updateMatrixWorld(); ST.focus = P;
   }
   const b = $('#bProj'); if (b) { b.classList.toggle('on', isO()); b.textContent = isO() ? 'Parallèle' : 'Perspective'; }
+  if (!fromView) viewSel(ST.view === 'iso' && isO() ? 'axo' : ST.view === 'axo' && !isO() ? 'iso' : isO() ? ST.view : '');
   hover(null); req(); save();
 }
-const VIEWS = { iso: [1, 1.25, -0.95], top: [0, 0.0001, -1], front: [0, 1, 0], back: [0, -1, 0], right: [-1, 0, 0], left: [1, 0, 0] };
-function setView(k) { frameView(bounds(), VIEWS[k]); save(); }
+/* vues : perspective et axonométrie ; géométraux (plan, élévations, dessous) toujours en vue parallèle, sans perspective */
+const VIEWS = { iso: [1, 1.25, -0.95], axo: [1, 1.25, -0.95], top: [0, 0.0001, -1], bottom: [0, 0.0001, 1], front: [0, 1, 0], back: [0, -1, 0], right: [-1, 0, 0], left: [1, 0, 0] };
+const viewSel = k => { const s = $('#vSel'); if (s) s.value = k || ''; ST.view = k || ''; };
+function setView(k) { if (!VIEWS[k]) return; const ortho = k !== 'iso'; if (ortho !== isO()) setProjection(ortho, true); frameView(bounds(), VIEWS[k]); viewSel(k); save(); }
 function centerView() { const has = ST.sel.f.size || ST.sel.e.size; frameView(has ? bounds(ST.sel) : bounds()); save(); }
 function recenterOn(p) { const f = fwd(), c = camPos(), d = isO() ? ORTHO_D : vdot(vsub(p, c), f); camera.position.set(...vsub(p, vmul(f, Math.max(0.5, d)))); camera.updateMatrixWorld(); ST.focus = p.slice(); req(); save(); }
-function camJSON() { return { p: camPos(), q: camera.quaternion.toArray(), f: ST.focus, o: isO(), z: camO.zoom }; }
+function camJSON() { return { p: camPos(), q: camera.quaternion.toArray(), f: ST.focus, o: isO(), z: camO.zoom, fov: camP.fov, vue: ST.view || '' }; }
 
 /* ================= Rayons, projection, inférences ================= */
 const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
@@ -736,10 +807,11 @@ function planeAt(s) {
 }
 
 /* ================= Saisie des cotes ================= */
-function parseLen(s) { const m = /^\s*([-+]?\d*[.,]?\d+)\s*(mm|cm|m)?\s*$/i.exec(s || ''); if (!m) return NaN; const v = parseFloat(m[1].replace(',', '.')); return v * ({ mm: .001, cm: .01, m: 1 }[(m[2] || 'm').toLowerCase()]); }
+/* longueur tapée : unité explicite (350cm, 3500 mm, 3,5 m) ou, sans unité, l'unité choisie en bas à droite */
+function parseLen(s) { const m = /^\s*([-+]?\d*[.,]?\d+)\s*(mm|cm|m)?\s*$/i.exec(s || ''); if (!m) return NaN; const v = parseFloat(m[1].replace(',', '.')); return v * ({ mm: .001, cm: .01, m: 1 }[(m[2] || UNIT).toLowerCase()]); }
 function parseTwo(s) { const p = String(s).split(/[;x×*]/i); if (p.length !== 2) return null; const a = parseLen(p[0]), b = parseLen(p[1]); return isFinite(a) && isFinite(b) ? [a, b] : null; }
 const vcb = $('#vcb');
-function vcbShow(label, val) { $('#vcbL').textContent = label; if (document.activeElement !== vcb || !vcb.value) vcb.value = val == null ? '' : val; }
+function vcbShow(label, val) { $('#vcbL').textContent = label + ' (' + UNIT + ')'; if (document.activeElement !== vcb || !vcb.value) vcb.value = val == null ? '' : val; }
 function vcbApply() {
   const t = vcb.value.trim(); if (!t) return; const T = TOOLS[ST.tool];
   let done = false;
@@ -783,14 +855,14 @@ TOOLS.erase = {
 /* ---- ligne ---- */
 TOOLS.line = {
   s: null,
-  hint() { return this.s ? 'Clic : point suivant · tapez une longueur puis Entrée · revenir au point de départ ferme la forme · Échap ou double-clic : terminer' : 'Clic : point de départ de la ligne. Un trait d\'un bord à l\'autre d\'une face la divise en deux'; },
+  hint() { return this.s ? 'Clic : point suivant · tapez une longueur puis Entrée · revenir au point de départ ferme la forme · Échap ou double-clic : terminer' : 'Clic : point de départ de la ligne. Un trait d\'un bord à l\'autre d\'une face la divise en deux ; deux traits qui se croisent se coupent l\'un l\'autre'; },
   label: 'Longueur',
   busy() { return !!this.s; },
   reset() { this.s = null; rubber(); guide(); },
   cur: null,
   move(sx, sy) {
     const s = roundFrom(snap(sx, sy, this.s ? { from: this.s.p0 } : {}), this.s && this.s.p0); this.cur = s; if (!s) { marker(null); return; }
-    if (this.s) { const L = vdist(this.s.p0, s.p); marker(s, fmtL(L)); rubber([this.s.p0, s.p], false, s.type === 'axis' ? AXC[s.axis] : null); vcbShow('Longueur', NF2.format(L)); if (s.type === 'end' && vdist(s.p, this.s.first) < 1e-6 && this.s.chain.length >= 3) $('#snapLb').textContent = 'Fermer la forme'; }
+    if (this.s) { const L = vdist(this.s.p0, s.p); marker(s, fmtL(L)); rubber([this.s.p0, s.p], false, s.type === 'axis' ? AXC[s.axis] : null); vcbShow('Longueur', numL(L)); if (s.type === 'end' && vdist(s.p, this.s.first) < 1e-6 && this.s.chain.length >= 3) $('#snapLb').textContent = 'Fermer la forme'; }
     else marker(s);
   },
   down(sx, sy) {
@@ -812,9 +884,9 @@ TOOLS.line = {
         if (vdot(n, ref) < 0) n = vmul(n, -1);
         addShape(m, pts, n, S.face0 && m.f[S.face0] ? S.face0 : null); ended = true; return;
       }
-      fixT(m); const ids = [...S.chain, q].map(x => addV(m, x));
-      for (let k = ids.length - 2; k >= 0; k--) if (splitByPath(m, ids.slice(k))) { S.chain = [q]; S.first = q; return; }
-      S.chain.push(q); cleanup(m);
+      fixT(m); intersectLines(m, [[a, b]]); // croisements : le nouveau trait et ceux qu'il croise sont coupés au point de croisement
+      if (splitFacesByLines(m)) { S.chain = [q]; S.first = q; } else S.chain.push(q);
+      cleanup(m);
     });
     if (ended) { this.reset(); hint(this.hint()); return; }
     S.p0 = q; rubber(); guide(); ST.last = null;
@@ -831,7 +903,7 @@ TOOLS.rect = {
   move(sx, sy) {
     if (!this.s) { const s = snap(sx, sy); marker(s); return; }
     const s = snap(sx, sy, { plane: this.s.pl, noAxis: true }); this.cur = s; if (!s) return; const { a, b, sq } = this.dims(s.p, FREE.has(s.type));
-    rubber(this.pts(a, b), true); marker(s, (sq ? 'Carré · ' : '') + NF2.format(Math.abs(a)) + ' × ' + NF2.format(Math.abs(b))); vcbShow('Dimensions', NF2.format(Math.abs(a)) + ';' + NF2.format(Math.abs(b)));
+    rubber(this.pts(a, b), true); marker(s, (sq ? 'Carré · ' : '') + numL(Math.abs(a)) + ' × ' + numL(Math.abs(b)) + ' ' + UNIT); vcbShow('Dimensions', numL(Math.abs(a)) + ';' + numL(Math.abs(b)));
   },
   down(sx, sy) {
     if (!this.s) { const s = snap(sx, sy); if (!s) return; this.s = { pl: planeAt(s) }; hint(this.hint()); return; }
@@ -858,7 +930,7 @@ function roundTool(kind) {
     move(sx, sy) {
       if (!this.s) { marker(snap(sx, sy)); return; }
       const s = snap(sx, sy, { plane: this.s.pl, noAxis: true }); this.cur = s; if (!s) return; const { r, a0 } = this.geom(s.p, FREE.has(s.type));
-      rubber(this.ptsOf(this.s.pl, r, a0), true); guide(this.s.pl.o, s.p); marker(s, 'R ' + NF2.format(r)); vcbShow('Rayon', NF2.format(r));
+      rubber(this.ptsOf(this.s.pl, r, a0), true); guide(this.s.pl.o, s.p); marker(s, 'R ' + fmtL(r)); vcbShow('Rayon', numL(r));
     },
     down(sx, sy) {
       if (!this.s) { const s = snap(sx, sy); if (!s) return; this.s = { pl: planeAt(s) }; hint(this.hint()); return; }
@@ -874,33 +946,80 @@ function roundTool(kind) {
 }
 TOOLS.circle = roundTool('circle'); TOOLS.poly = roundTool('poly');
 /* ---- pousser/tirer ---- */
+/* ---- pousser/tirer : une face donne un volume ; un trait (ou une arête de bord) donne une surface ---- */
+/* arête tirable sous le curseur : trait libre ou arête bordée par une seule face ; une arête de volume se tire par ses faces */
+function pickPullEdge(sx, sy) {
+  const hit = pickFace(sx, sy), r = setRay(sx, sy), ef = edgeFaces(M); let best = null, bd = 7;
+  for (const e of G.E) { if ((ef.get(e.k) || []).length > 1) continue; const u = vsub(e.pb, e.pa), L = vlen(u); if (L < 1e-9) continue; const un = vmul(u, 1 / L), s = Math.max(0, Math.min(L, lineRay(e.pa, un, r.o, r.d))), p = vadd(e.pa, vmul(un, s)), sp = toScreen(p); if (!sp) continue;
+    const d = Math.hypot(sp[0] - sx, sp[1] - sy); if (d < bd && (!hit || vdot(vsub(p, r.o), r.d) <= hit.dist * 1.003 + 0.01)) { bd = d; best = { e, p, free: !(ef.get(e.k) || []).length }; } }
+  return best;
+}
+/* suite de traits libres reliés bout à bout (sommets où se rejoignent exactement deux traits) */
+function lineChain(a, b) {
+  const adj = new Map(); for (const k in M.l) { const [x, y] = M.l[k]; if (!adj.has(x)) adj.set(x, []); if (!adj.has(y)) adj.set(y, []); adj.get(x).push(y); adj.get(y).push(x); }
+  const seen = new Set([a, b]), walk = (prev, cur) => { const out = []; for (let g = 0; g < 2000; g++) { const nx = adj.get(cur) || []; if (nx.length !== 2) break; const w = nx[0] === prev ? nx[1] : nx[0]; if (seen.has(w)) break; seen.add(w); out.push(w); prev = cur; cur = w; } return out; };
+  const fw = walk(a, b), bw = walk(b, a), ids = [...bw.reverse(), a, b, ...fw], last = ids[ids.length - 1];
+  const closed = ids.length > 2 && (adj.get(last) || []).includes(ids[0]);
+  const segs = []; for (let i = 0; i < ids.length - 1; i++) segs.push([ids[i], ids[i + 1]]); if (closed) segs.push([last, ids[0]]);
+  return { ids, segs };
+}
 TOOLS.push = {
   s: null,
-  hint() { return this.s ? 'Déplacez puis cliquez · tapez la distance puis Entrée · visez un sommet pour aller à son niveau · Échap : annuler' : 'Clic sur une face, déplacez, recliquez · double-clic sur une face : refait la dernière distance (' + (ST.lastPP != null ? fmtL(ST.lastPP) : '—') + ')'; },
+  hint() { return this.s ? (this.s.lines ? 'Déplacez puis cliquez : le trait balaie une surface · tapez la distance puis Entrée · axes rouge, vert, bleu · Échap : annuler' : 'Déplacez puis cliquez · tapez la distance puis Entrée · visez un sommet pour aller à son niveau · au-delà de la face opposée : percement · Échap : annuler') : 'Clic sur une face : volume, creux, percement · clic sur un trait (ou le bord d\'une face seule) : surface · double-clic sur une face : refait la dernière distance (' + (ST.lastPP != null ? fmtL(ST.lastPP) : '—') + ')'; },
   label: 'Distance',
   busy() { return !!this.s; },
   reset() { if (this.s) { this.s = null; show(M); } guide(); },
+  target(sx, sy) { const e = pickPullEdge(sx, sy); if (e) return e; const h = pickFace(sx, sy); return h ? { h } : null; },
   move(sx, sy) {
-    if (!this.s) { const h = pickFace(sx, sy); hover(h ? { fid: h.fid } : null); marker(null); return; }
+    if (!this.s) { const t = this.target(sx, sy); hover(t ? (t.e ? { e: t.e } : { fid: t.h.fid }) : null); marker(null); return; }
+    if (this.s.lines) { this.moveLines(sx, sy); return; }
     const S = this.s, r = setRay(sx, sy); let d = lineRay(S.p0, S.n, r.o, r.d), lab = '';
     let bd = 10; for (const id of G.V) { if (S.own.has(id)) continue; const sp = toScreen(M.v[id]); if (!sp) continue; const dd = Math.hypot(sp[0] - sx, sp[1] - sy); if (dd < bd) { bd = dd; d = vdot(vsub(M.v[id], S.p0), S.n); lab = 'Au niveau du sommet'; } }
-    d = Math.round(d * 1000) / 1000; S.d = d;
+    d = Math.round(d * 1000) / 1000; if (S.thru != null && d < 0 && -d >= S.thru - 1e-4) { d = -S.thru; lab = 'Percement'; } S.d = d;
     const m = JSON.parse(S.base); pushPull(m, S.fid, d); show(m); hover(null);
-    const q = vadd(S.p0, vmul(S.n, d)); guide(S.p0, q); marker({ p: q, type: 'plane' }, (lab ? lab + ' · ' : '') + fmtL(d)); vcbShow('Distance', NF2.format(d));
+    const q = vadd(S.p0, vmul(S.n, d)); guide(S.p0, q); marker({ p: q, type: 'plane' }, (lab ? lab + ' · ' : '') + fmtL(d)); vcbShow('Distance', numL(d));
+  },
+  /* tirer un trait : direction perpendiculaire au trait (trait droit), à son plan (polyligne plane), sinon libre */
+  moveLines(sx, sy) {
+    const S = this.s, r = setRay(sx, sy); let q = null, lab = '', col = null;
+    let bd = 10; for (const id of G.V) { if (S.own.has(id)) continue; const sp = toScreen(M.v[id]); if (!sp) continue; const dd = Math.hypot(sp[0] - sx, sp[1] - sy); if (dd < bd) { bd = dd; q = M.v[id]; lab = 'Au niveau du sommet'; } }
+    let d;
+    if (S.mode === 'normal') { const s = q ? vdot(vsub(q, S.p0), S.n) : lineRay(S.p0, S.n, r.o, r.d); d = vmul(S.n, s); }
+    else if (S.mode === 'perp') {
+      if (!q) { q = rayPlane(r.o, r.d, S.p0, S.u) || rayPlane(r.o, r.d, S.p0, vmul(S.u, -1)); bd = 12;
+        for (let i = 0; i < 3; i++) { const ax = AXES[i]; if (Math.abs(vdot(ax, S.u)) > 1e-3) continue; const t = lineRay(S.p0, ax, r.o, r.d), p = vadd(S.p0, vmul(ax, t)), sp = toScreen(p); if (!sp || Math.abs(t) < 1e-6) continue; const dd = Math.hypot(sp[0] - sx, sp[1] - sy); if (dd < bd) { bd = dd; q = p; lab = AXN[i]; col = AXC[i]; } }
+        if (!q) q = vadd(S.p0, vmul([0, 0, 1], lineRay(S.p0, [0, 0, 1], r.o, r.d))); }
+      const w = vsub(q, S.p0); d = vsub(w, vmul(S.u, vdot(w, S.u)));
+    } else { const s = snap(sx, sy, { from: S.p0, excl: S.own }); if (!s) return; if (s.type === 'axis') { lab = AXN[s.axis]; col = AXC[s.axis]; } d = vsub(q || s.p, S.p0); }
+    const L = mm(vlen(d)); d = L > 0 ? vmul(vnorm(d), L) : [0, 0, 0]; S.d = d;
+    const m = JSON.parse(S.base); if (L > 0) extrudeLines(m, S.segs, d, S.nHint); show(m); hover(null);
+    guide(S.p0, vadd(S.p0, d), col); marker({ p: vadd(S.p0, d), type: 'plane' }, (lab ? lab + ' · ' : '') + fmtL(L)); vcbShow('Distance', numL(L));
   },
   down(sx, sy) {
-    if (!this.s) { const h = pickFace(sx, sy); if (!h) return; const f = M.f[h.fid]; this.s = { fid: h.fid, p0: h.p, n: faceN(M, f), base: JSON.stringify(M), d: 0, own: new Set(loopsOf(f).flat()) }; hover(null); hint(this.hint()); return; }
+    if (!this.s) { const t = this.target(sx, sy); if (!t) return;
+      if (t.e) { // trait : surface balayée
+        const ch = t.free ? lineChain(t.e.a, t.e.b) : { ids: [t.e.a, t.e.b], segs: [[t.e.a, t.e.b]] }, P = ch.ids.map(id => M.v[id]), u = vnorm(vsub(t.e.pb, t.e.pa));
+        const straight = P.every(p => vlen(vcross(vsub(p, t.e.pa), u)) < 1e-4); let n = [0, 0, 0]; for (let i = 1; i < P.length - 1; i++) n = vadd(n, vcross(vsub(P[i], P[0]), vsub(P[i + 1], P[0])));
+        const planar = !straight && vlen(n) > 1e-9 && P.every(p => Math.abs(vdot(vnorm(n), vsub(p, P[0]))) < 1e-4);
+        const nHint = isO() ? vmul(fwd(), -1) : vsub(camPos(), t.p);
+        this.s = { lines: true, segs: ch.segs, own: new Set(ch.ids), p0: t.p, u, n: planar ? vnorm(n) : null, mode: straight ? 'perp' : planar ? 'normal' : 'free', nHint, base: JSON.stringify(M), d: [0, 0, 0] };
+        hover(null); hint(this.hint()); vcbShow('Distance', ''); return; }
+      const f = M.f[t.h.fid]; this.s = { fid: t.h.fid, p0: t.h.p, n: faceN(M, f), base: JSON.stringify(M), d: 0, own: new Set(loopsOf(f).flat()), thru: throughDepth(M, t.h.fid, true) }; hover(null); hint(this.hint()); return; }
     this.make(this.s.d);
   },
   make(d) {
     const S = this.s; this.s = null; guide(); marker(null);
+    if (S.lines) { const L = vlen(d); if (L < TOL) { show(M); hint(this.hint()); return; } const dir = vnorm(d), segs = S.segs, nHint = S.nHint;
+      commitFrom(S.base, t => { const v = parseLen(t); return isFinite(v) && v > 0 ? v : null; }, (m, v) => extrudeLines(m, segs, vmul(dir, v), nHint), L); hint(this.hint()); return; }
     if (Math.abs(d) < TOL) { show(M); hint(this.hint()); return; }
     const sg = Math.sign(d) || 1, fid = S.fid;
     commitFrom(S.base, t => { const v = parseLen(t); return isFinite(v) ? sg * v : null; }, (m, v) => { pushPull(m, fid, v); ST.lastPP = v; }, d);
     hint(this.hint());
   },
   dbl(sx, sy) { if (this.s || ST.lastPP == null) return; const h = pickFace(sx, sy); if (!h) return; const v0 = ST.lastPP, fid = h.fid; commitFrom(JSON.stringify(M), t => { const v = parseLen(t); return isFinite(v) ? v : null; }, (m, v) => { pushPull(m, fid, v); ST.lastPP = v; }, v0); },
-  vcb(t) { const v = parseLen(t); if (!isFinite(v) || !this.s) return false; this.make((Math.sign(this.s.d) || 1) * v); return true; }
+  vcb(t) { const v = parseLen(t); if (!isFinite(v) || !this.s) return false;
+    if (this.s.lines) { const d = this.s.d; if (vlen(d) < 1e-9 || !(v > 0)) return false; this.make(vmul(vnorm(d), v)); return true; }
+    this.make((Math.sign(this.s.d) || 1) * v); return true; }
 };
 /* ---- déplacer (Ctrl : copier) ---- */
 TOOLS.move = {
@@ -915,7 +1034,7 @@ TOOLS.move = {
     if (!this.s) { hover(ST.sel.f.size || ST.sel.e.size ? null : pickEdgeOrFace(sx, sy)); marker(snap(sx, sy)); return; }
     const s = this.at(sx, sy); if (!s) return; this.cur = s; const d = vsub(s.p, this.s.p0), copy = this.s.copy || !!(ev && (ev.ctrlKey || ev.metaKey));
     const m = JSON.parse(this.s.base), ok = vlen(d) < TOL || (copy ? copySel(m, this.s.t, d) : moveSel(m, this.s.t, d)); show(ok ? m : M);
-    guide(this.s.p0, s.p, s.type === 'axis' ? AXC[s.axis] : null); marker(s, ok ? (copy ? 'Copie · ' : '') + fmtL(vlen(d)) : 'Impossible : une face ne resterait pas plane'); vcbShow('Distance', NF2.format(vlen(d)));
+    guide(this.s.p0, s.p, s.type === 'axis' ? AXC[s.axis] : null); marker(s, ok ? (copy ? 'Copie · ' : '') + fmtL(vlen(d)) : 'Impossible : une face ne resterait pas plane'); vcbShow('Distance', numL(vlen(d)));
   },
   down(sx, sy, ev) {
     if (!this.s) { const t = this.target(sx, sy), s = snap(sx, sy); if (!t || !s) return; this.s = { t, p0: s.p, base: JSON.stringify(M), vs: selVerts(M, t), copy: ev.ctrlKey || ev.metaKey }; hover(null); hint(this.hint()); return; }
@@ -1015,7 +1134,14 @@ function info() {
     const vol = closedVolume(M);
     s += `<div>${nF} face${nF > 1 ? 's' : ''}${nL ? ', ' + nL + ' trait' + (nL > 1 ? 's' : '') + ' libre' + (nL > 1 ? 's' : '') : ''} · surfaces <span class="mono">${fmtA(tot)}</span>, dont horizontales vers le haut <span class="mono">${fmtA(up)}</span>, verticales <span class="mono">${fmtA(vert)}</span>${vol != null ? ' · volume fermé <span class="mono">' + fmtV(vol) + '</span>' : ''}</div>`;
   } else s = '<div>Maquette vide. Tracez un rectangle (R) sur le sol, puis tirez-le avec Pousser/tirer (P).</div>';
+  s += `<div class="unit">Longueurs en ${UN().nom}, surfaces en m², volumes en m³ · grille de 1 m · X est, Y nord, Z hauteur</div>`;
   el.innerHTML = s;
+}
+/* unité d'affichage et de saisie des longueurs */
+function setUnit(u, quiet) {
+  if (!UNITS[u]) u = 'm'; UNIT = ST.units = u; const sel = $('#unit'); if (sel) sel.value = u;
+  const T = TOOLS[ST.tool]; if (T) { hint(T.hint()); if (!(T.busy && T.busy())) vcbShow(T.label || 'Mesures', ''); }
+  info(); if (!quiet) save();
 }
 /* volume si la maquette est fermée (chaque arête bordée par deux faces de sens opposés) */
 function closedVolume(m) {
@@ -1027,12 +1153,12 @@ function closedVolume(m) {
 /* ================= Fichiers ================= */
 const stamp = () => new Date().toISOString().slice(0, 10);
 function dl(name, text, type) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
-function saveFile() { dl(`TerraModel ${stamp()}.json`, JSON.stringify({ app: 'TerraModel', version: APP_VERSION, model: M, cam: camJSON(), segs: ST.segs }), 'application/json'); setStatus('Maquette enregistrée', 'ok'); }
+function saveFile() { dl(`TerraModel ${stamp()}.json`, JSON.stringify({ app: 'TerraModel', version: APP_VERSION, units: UNIT, model: M, cam: camJSON(), segs: ST.segs }), 'application/json'); setStatus('Maquette enregistrée', 'ok'); }
 function loadData(d) {
   if (!d || !d.model || !d.model.v || !d.model.f) throw new Error('fichier TerraModel attendu');
-  M = d.model; M.l = M.l || {}; ST.undo.length = 0; ST.redo.length = 0; ST.last = null; if (d.segs) Object.assign(ST.segs, d.segs);
+  M = d.model; M.l = M.l || {}; ST.undo.length = 0; ST.redo.length = 0; ST.last = null; if (d.segs) Object.assign(ST.segs, d.segs); setUnit(d.units || 'm', true);
   clearSel(); changed();
-  if (d.cam && d.cam.p) { camera = d.cam.o ? camO : camP; if (d.cam.o && d.cam.z) { camO.zoom = d.cam.z; camO.updateProjectionMatrix(); } setProjection(isO()); camera.position.set(...d.cam.p); camera.quaternion.fromArray(d.cam.q); camera.updateMatrixWorld(); ST.focus = d.cam.f || [0, 0, 0]; req(); } else setView('iso');
+  if (d.cam && d.cam.p) { camera = d.cam.o ? camO : camP; if (d.cam.o && d.cam.z) { camO.zoom = d.cam.z; camO.updateProjectionMatrix(); } setProjection(isO()); camera.position.set(...d.cam.p); camera.quaternion.fromArray(d.cam.q); camera.updateMatrixWorld(); ST.focus = d.cam.f || [0, 0, 0]; viewSel(d.cam.vue || ''); req(); } else setView('iso');
 }
 function exportOBJ() {
   let s = `# TerraModel ${APP_VERSION}\n# Unité : mètre. Repère : X est, Y nord, Z vers le haut.\no TerraModel\n`, base = 1;
@@ -1041,22 +1167,26 @@ function exportOBJ() {
     base += ids.length; }
   dl(`TerraModel ${stamp()}.obj`, s, 'model/obj');
 }
-const HELP = `<h3>Tracer</h3><table>
+const HELP = `<h3>Unités</h3><table>
+<tr><td>Unité</td><td>En bas à droite : longueurs affichées et tapées en m, cm ou mm. Une cote peut porter son unité (350cm, 3500mm, 3,5m). Surfaces en m², volumes en m³. Grille de 1 m, carreaux de 10 m marqués ; X vers l'est (rouge), Y vers le nord (vert), Z la hauteur (bleu).</td></tr></table>
+<h3>Tracer</h3><table>
 <tr><td>R</td><td>Rectangle : deux clics (ou glisser). Tapez 4;2,5 puis Entrée pour les cotes exactes.</td></tr>
 <tr><td>C · G</td><td>Cercle, polygone : centre puis rayon. Nombre de segments ou de côtés en bas à droite.</td></tr>
-<tr><td>L</td><td>Ligne : clics successifs, longueur tapée au clavier. Un trait d'un bord à l'autre d'une face la divise en deux ; revenir au départ ferme une face.</td></tr>
+<tr><td>L</td><td>Ligne : clics successifs, longueur tapée au clavier. Un trait d'un bord à l'autre d'une face la divise en deux ; deux traits qui se croisent se coupent l'un l'autre au croisement ; revenir au départ ferme une face.</td></tr>
 <tr><td>Inférences</td><td>Extrémité (vert), milieu (bleu clair), sur l'arête (rouge), sur la face (bleu), axes rouge, vert, bleu.</td></tr></table>
-<h3>Volumes</h3><table>
-<tr><td>P</td><td>Pousser/tirer : clic sur une face, déplacez, recliquez (ou tapez la distance). Viser un sommet aligne sur son niveau.</td></tr>
-<tr><td>Dans un volume</td><td>Une forme tracée sur une face s'y imprime : tirée vers l'extérieur elle fait une excroissance, poussée vers l'intérieur un creux, et un percement quand elle atteint la face opposée.</td></tr>
+<h3>Volumes et surfaces</h3><table>
+<tr><td>P sur une face</td><td>Pousser/tirer : clic sur une face, déplacez, recliquez (ou tapez la distance). Viser un sommet aligne sur son niveau.</td></tr>
+<tr><td>P sur un trait</td><td>Un trait, une polyligne ou le bord d'une face seule, tiré, donne une surface (un mur à partir d'un tracé au sol). Trait droit : dans toutes les directions perpendiculaires, axes proposés ; polyligne plane : perpendiculairement à son plan.</td></tr>
+<tr><td>Dans un volume</td><td>Une forme tracée sur une face s'y imprime : tirée vers l'extérieur elle fait une excroissance, poussée vers l'intérieur un creux. Poussée jusqu'à la face opposée ou au-delà, elle troue le volume (baie dans un mur, trémie dans une dalle).</td></tr>
 <tr><td>Double-clic</td><td>Refait la dernière distance de pousser/tirer sur la face cliquée.</td></tr>
 <tr><td>M</td><td>Déplacer : la sélection, ou la face ou l'arête visée. Monter le dessus allonge le volume, monter une arête fait un toit en pente. Ctrl : copier (une fenêtre copiée sur le même mur s'y imprime). Double-clic avec la sélection : tout le volume.</td></tr>
 <tr><td>Correction</td><td>Juste après un rectangle, un cercle ou un pousser/tirer, une nouvelle saisie au clavier corrige la cote.</td></tr></table>
 <h3>Vue</h3><table>
+<tr><td>Vue</td><td>Perspective, axonométrie, et géométraux sans perspective : plan (dessus), élévations sud, est, nord, ouest, dessous. Tourner autour de la maquette quitte le géométral (vue libre).</td></tr>
 <tr><td>Bouton du milieu</td><td>Orbite autour du point visé (Maj : panoramique). Double-clic du milieu : centrer sur ce point.</td></tr>
 <tr><td>Clic droit</td><td>Panoramique. Molette : zoom vers le curseur. Deux doigts : zoom et déplacement.</td></tr>
 <tr><td>Maj+Z</td><td>Zoom étendu. « Centrer » : sur la sélection, sinon toute la maquette.</td></tr>
-<tr><td>Parallèle</td><td>Vue sans perspective (projection orthogonale) : avec Dessus, Face, Droite… donne plans et élévations.</td></tr></table>
+<tr><td>Parallèle</td><td>Passe la vue en projection parallèle (orthogonale) ou en perspective.</td></tr></table>
 <h3>Divers</h3><table>
 <tr><td>Espace · E</td><td>Sélection, gomme. Suppr : effacer la sélection.</td></tr>
 <tr><td>Ctrl+Z · Ctrl+Y</td><td>Annuler, rétablir. Ctrl+S : enregistrer le fichier.</td></tr>
@@ -1076,7 +1206,8 @@ const HELP = `<h3>Tracer</h3><table>
   $('#bProj').onclick = () => setProjection(!isO());
   $$('.tb[data-tool]').forEach(b => b.onclick = () => { setTool(b.dataset.tool); cv.focus(); });
   $('#tZoomExt').onclick = () => { frameView(bounds()); save(); };
-  $$('[data-view]').forEach(b => b.onclick = () => setView(b.dataset.view));
+  $('#vSel').onchange = e => { setView(e.target.value); cv.focus(); };
+  $('#unit').onchange = e => { setUnit(e.target.value); cv.focus(); };
   $('#bCenter').onclick = centerView;
   $('#bUndo').onclick = undo; $('#bRedo').onclick = redo;
   $('#bNew').onclick = () => { if (Object.keys(M.f).length + Object.keys(M.l).length && !confirm('Effacer la maquette en cours ? (Ctrl+Z permet de revenir en arrière)')) return; doOp(m => { m.v = {}; m.f = {}; m.l = {}; }); clearSel(); };
@@ -1093,7 +1224,7 @@ const HELP = `<h3>Tracer</h3><table>
     $('#bMenus').onclick = () => { try { parent.postMessage({ ts: 'menus' }, '*'); } catch (e) {} };
   }
   setTool('rect'); cv.focus();
-  window.TM = { G, PR, openRid, setProjection, isO, get camera() { return camera; }, get M() { return M; }, set M(v) { M = v; changed(); }, ST, TOOLS, setTool, snap, pickFace, toScreen, req, show, rebuild, frameView, bounds, setView, closedVolume };
+  window.TM = { G, PR, openRid, setProjection, isO, get camera() { return camera; }, get M() { return M; }, set M(v) { M = v; changed(); }, ST, TOOLS, setTool, snap, pickFace, toScreen, req, show, rebuild, frameView, bounds, setView, setUnit, closedVolume, get UNIT() { return UNIT; } };
 })();
 
 </script>
