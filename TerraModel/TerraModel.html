@@ -111,6 +111,7 @@ html.ts-embed .brand small{display:none}
 #snapMk{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;pointer-events:none;border:2px solid #2E8B3A;border-radius:50%;background:rgba(255,255,255,.6)}
 #snapMk.mid{border-color:#1C8FB0} #snapMk.edge{border-color:#C0392B;border-radius:2px} #snapMk.face{border-color:#2F5FD0;transform:rotate(45deg);border-radius:2px}
 #snapMk.axis0{border-color:#D02020} #snapMk.axis1{border-color:#1E9A2E} #snapMk.axis2{border-color:#2040D0}
+#selBox{position:absolute;pointer-events:none;border:1px solid #2F6FD0;background:rgba(47,111,208,.10)} #selBox.cross{border:1px dashed #2E8B3A;background:rgba(46,139,58,.10)}
 #snapLb{position:absolute;pointer-events:none;font-size:11.5px;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 5px;white-space:nowrap;color:var(--ink)}
 .bar{display:flex;align-items:center;gap:10px;padding:5px 12px;background:var(--panel);border-top:1px solid var(--line);flex-wrap:wrap}
 .hint{color:var(--muted);font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 260px}
@@ -168,7 +169,7 @@ html.ts-embed .brand small{display:none}
     <div class="view" id="view">
       <canvas id="cv" tabindex="0" aria-label="Vue 3D de la maquette"></canvas>
       <div class="scenes" id="scenes" role="tablist" aria-label="Vues enregistrées"></div>
-      <div id="snapMk" hidden></div><div id="snapLb" hidden></div>
+      <div id="snapMk" hidden></div><div id="selBox" hidden></div><div id="snapLb" hidden></div>
       <div class="viewbar">
         <select class="btn" id="vSel" title="Vue : perspective, axonométrie ou géométral (plan, élévations, sans perspective)" aria-label="Vue">
           <option value="" hidden>Vue libre</option>
@@ -560,7 +561,7 @@ function modelEdges(M) {
 
 </script>
 <script>
-const APP_VERSION = '0.3.3';
+const APP_VERSION = '0.4';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const NF2 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 /* unités : la maquette est en mètres ; les longueurs s'affichent et se saisissent dans l'unité choisie (m, cm, mm) ; surfaces en m², volumes en m³ */
@@ -1030,7 +1031,7 @@ const hintEl = $('#hint'); const hint = t => { hintEl.textContent = t; };
 let mouse = [0, 0];
 const TOOLS = {};
 TOOLS.select = {
-  hint: () => 'Clic : sélectionner une face ou une arête · double-clic : tout le volume · Maj ou Ctrl : ajouter, retirer · Suppr : effacer la sélection · Échap : tout désélectionner',
+  hint: () => 'Clic : face ou arête · glisser vers la droite : fenêtre (ce qui est entièrement dedans), vers la gauche : capture (ce qui la touche) ; au doigt : appui long puis glisser · double-clic : tout le volume · Maj ou Ctrl : ajouter · Suppr : effacer',
   label: 'Mesures',
   move(sx, sy) { hover(pickEdgeOrFace(sx, sy)); },
   down(sx, sy, ev) {
@@ -1040,6 +1041,20 @@ TOOLS.select = {
   },
   dbl(sx, sy) { const h = pickFace(sx, sy); if (!h) return; for (const k of connected(M, h.fid)) ST.sel.f.add(k); drawSel(); info(); }
 };
+/* sélection par fenêtre (de gauche à droite : entièrement dedans) ou par capture (de droite à gauche : ce qui touche le cadre), comme SketchUp */
+function selBox(d, x1, y1) { const el = $('#selBox'); if (!d) { el.hidden = true; return; } const l = Math.min(d.x0, x1), t = Math.min(d.y0, y1); el.hidden = false; el.className = x1 < d.x0 ? 'cross' : ''; el.style.cssText = `left:${l}px;top:${t}px;width:${Math.abs(x1 - d.x0)}px;height:${Math.abs(y1 - d.y0)}px`; }
+function winSelect(x0, y0, x1, y1, add) {
+  const cross = x1 < x0, L = Math.min(x0, x1), R = Math.max(x0, x1), T = Math.min(y0, y1), B = Math.max(y0, y1), inR = p => p && p[0] >= L && p[0] <= R && p[1] >= T && p[1] <= B;
+  const segHit = (a, b) => { if (!a || !b) return false; if (inR(a) || inR(b)) return true; const S = [[L, T, R, T], [R, T, R, B], [R, B, L, B], [L, B, L, T]];
+    return S.some(([c, d, e, f]) => { const den = (b[0] - a[0]) * (f - d) - (b[1] - a[1]) * (e - c); if (Math.abs(den) < 1e-9) return false; const u = ((c - a[0]) * (f - d) - (d - a[1]) * (e - c)) / den, v = ((c - a[0]) * (b[1] - a[1]) - (d - a[1]) * (b[0] - a[0])) / den; return u >= 0 && u <= 1 && v >= 0 && v <= 1; }); };
+  const P = {}, sp = id => (id in P ? P[id] : (P[id] = toScreen(M.v[id]))); if (!add) { ST.sel.f.clear(); ST.sel.e.clear(); }
+  for (const k in M.f) { const Ls = loopsOf(M.f[k]); let ok;
+    if (!cross) ok = Ls.every(Lp => Lp.every(id => inR(sp(id))));
+    else ok = Ls.some(Lp => Lp.some((id, i) => segHit(sp(id), sp(Lp[(i + 1) % Lp.length])))) || (() => { const c = [(L + R) / 2, (T + B) / 2], h = pickFace(c[0], c[1]); return h && h.fid === k; })();
+    if (ok) ST.sel.f.add(k); }
+  for (const k in M.l) { const [a, b] = M.l[k], A = sp(a), Bp = sp(b); if (cross ? segHit(A, Bp) : inR(A) && inR(Bp)) ST.sel.e.add(ekey(a, b)); }
+  drawSel(); info(); const n = ST.sel.f.size + ST.sel.e.size; setStatus(n ? `${cross ? 'Capture' : 'Fenêtre'} : ${ST.sel.f.size} face(s)${ST.sel.e.size ? ', ' + ST.sel.e.size + ' trait(s)' : ''}` : '');
+}
 function pickEdgeOrFace(sx, sy) {
   const hit = pickFace(sx, sy), r = setRay(sx, sy); let best = null, bd = 6;
   for (const e of G.E) { const u = vsub(e.pb, e.pa), L = vlen(u); if (L < 1e-9) continue; const un = vmul(u, 1 / L), s = Math.max(0, Math.min(L, lineRay(e.pa, un, r.o, r.d))), p = vadd(e.pa, vmul(un, s)), sp = toScreen(p); if (!sp) continue; const d = Math.hypot(sp[0] - sx, sp[1] - sy); if (d < bd && (!hit || vdot(vsub(p, r.o), r.d) <= hit.dist * 1.003 + 0.01)) { bd = d; best = { e }; } }
@@ -1264,7 +1279,9 @@ cv.addEventListener('contextmenu', e => e.preventDefault());
 cv.addEventListener('pointerdown', ev => {
   cv.focus(); cv.setPointerCapture(ev.pointerId); const [sx, sy] = loc(ev); ptr.set(ev.pointerId, [sx, sy]);
   if (ptr.size === 2) { cancelTool(); drag = { mode: 'pinch', ...pinchState() }; return; }
-  if (ev.pointerType === 'touch' && ST.tool === 'select') { drag = { mode: 'orbit', pending: true, x: sx, y: sy, x0: sx, y0: sy, pivot: pointUnder(sx, sy), ev }; return; } // un doigt : tourner ; toucher : sélectionner
+  if (ev.pointerType === 'touch' && ST.tool === 'select') { const d = drag = { mode: 'orbit', pending: true, x: sx, y: sy, x0: sx, y0: sy, pivot: pointUnder(sx, sy), ev };
+    d.lp = setTimeout(() => { if (drag === d && d.pending) { d.pending = false; d.mode = 'win'; selBox(d, sx + 1, sy + 1); try { navigator.vibrate && navigator.vibrate(15); } catch (e) {} } }, 450); return; } // un doigt : tourner ; appui long puis glisser : fenêtre
+  if (ev.pointerType !== 'touch' && ev.button === 0 && ST.tool === 'select' && !TOOLS.select.busy) { drag = { mode: 'win', pending: true, x0: sx, y0: sy, ev }; return; } // souris : clic, ou glisser pour une fenêtre // un doigt : tourner ; toucher : sélectionner
   const navMode = ev.button === 1 ? (ev.shiftKey ? 'pan' : 'orbit') : ev.button === 2 ? 'pan' : TOOLS[ST.tool].nav;
   if (navMode) {
     if (ev.button === 1) { const now = performance.now(); if (now - lastMid < 350) { recenterOn(pointUnder(sx, sy)); lastMid = 0; return; } lastMid = now; }
@@ -1278,13 +1295,15 @@ cv.addEventListener('pointerdown', ev => {
 cv.addEventListener('pointermove', ev => {
   const [sx, sy] = loc(ev); mouse = [sx, sy]; if (ptr.has(ev.pointerId)) ptr.set(ev.pointerId, [sx, sy]);
   if (drag && drag.mode === 'pinch') { if (ptr.size >= 2) pinchMove(); return; }
-  if (drag && drag.pending) { if (Math.hypot(sx - drag.x0, sy - drag.y0) < 8) return; drag.pending = false; drag.x = sx; drag.y = sy; return; }
+  if (drag && drag.mode === 'win') { if (drag.pending) { if (Math.hypot(sx - drag.x0, sy - drag.y0) < 5) return; drag.pending = false; } selBox(drag, sx, sy); return; }
+  if (drag && drag.pending) { if (Math.hypot(sx - drag.x0, sy - drag.y0) < 8) return; clearTimeout(drag.lp); drag.pending = false; drag.x = sx; drag.y = sy; return; }
   if (drag) { const dx = sx - drag.x, dy = sy - drag.y; drag.x = sx; drag.y = sy; if (drag.mode === 'orbit') orbit(dx, dy, drag.pivot); else pan(dx, dy, drag.ref); return; }
   const T = TOOLS[ST.tool]; T.move && T.move(sx, sy, ev);
 });
 function endPtr(ev) {
   const [sx, sy] = loc(ev); ptr.delete(ev.pointerId);
-  if (drag && drag.pending) { const d0 = drag; drag = null; TOOLS.select.down(d0.x0, d0.y0, d0.ev); return; }
+  if (drag && drag.mode === 'win') { const d0 = drag; drag = null; selBox(null); if (d0.pending) TOOLS.select.down(d0.x0, d0.y0, d0.ev); else winSelect(d0.x0, d0.y0, sx, sy, d0.ev.shiftKey || d0.ev.ctrlKey || d0.ev.metaKey); return; }
+  if (drag && drag.pending) { const d0 = drag; drag = null; clearTimeout(d0.lp); TOOLS.select.down(d0.x0, d0.y0, d0.ev); return; }
   if (drag) { if (drag.mode === 'pinch') { if (ptr.size < 2) drag = null; return; } drag = null; cv.style.cursor = ST.tool === 'orbit' || ST.tool === 'pan' ? 'grab' : ST.tool === 'select' ? 'default' : 'crosshair'; save(); return; }
   // tracé par glisser-relâcher (souris ou doigt) : le relâchement vaut second clic
   const T = TOOLS[ST.tool];
@@ -1402,7 +1421,7 @@ const HELP = `<h3>Unités</h3><table>
 <tr><td>Maj+Z</td><td>Zoom étendu. « Centrer » : sur la sélection, sinon toute la maquette.</td></tr>
 <tr><td>Parallèle</td><td>Passe la vue en projection parallèle (orthogonale) ou en perspective.</td></tr></table>
 <h3>Divers</h3><table>
-<tr><td>Espace · E</td><td>Sélection, gomme. Suppr : effacer la sélection.</td></tr>
+<tr><td>Espace · E</td><td>Sélection : clic, ou fenêtre en glissant (vers la droite : ce qui est entièrement dedans ; vers la gauche : ce qui touche le cadre) ; au doigt, appui long puis glisser. Gomme. Suppr : effacer la sélection.</td></tr>
 <tr><td>Ctrl+Z · Ctrl+Y</td><td>Annuler, rétablir. Ctrl+S : enregistrer le fichier.</td></tr>
 <tr><td>Faces</td><td>Face avant claire, face arrière bleutée (comme SketchUp). Une maquette par projet TerraSuite, gardée dans ce navigateur et synchronisée entre les appareils de l'agence.</td></tr></table>`;
 

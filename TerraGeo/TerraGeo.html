@@ -183,12 +183,12 @@ body.wide3d .work{grid-template-columns:1fr} body.wide3d .side{display:none}
       </div>
       <div class="lpanel" id="lpanel" hidden></div>
       <div id="v3d" hidden>
-        <div class="bar3"><button class="btn sm" id="b3close">← Carte</button><label class="btn sm" style="display:flex;gap:5px;align-items:center">Rayon <select id="r3d"><option value="100">100 m</option><option value="200" selected>200 m</option><option value="400">400 m</option></select></label><button class="btn sm on" id="b3terrain">Relief</button><button class="btn sm" id="b3roof" title="Formes de toiture tirées du modèle numérique de surface LiDAR HD de l'IGN">Toitures LiDAR</button><button class="btn sm" id="b3simple" title="Toitures LiDAR simplifiées en pans plans (deux pans, croupes, terrasses…), teinte unie par pan ; sinon relevé brut">Simplifiées</button><button class="btn sm" id="b3ortho" title="Photo aérienne de l'IGN plaquée sur le sol et les toitures">Photo aérienne</button><button class="btn sm" id="b3plu" title="Plaque au sol les cartes du PLU cochées dans « Calques » (zonage, prescriptions, servitudes…)">PLU au sol</button><button class="btn sm" id="b3fac" title="Photos de rue Panoramax (libres, CC-BY-SA) projetées sur les façades proches de la parcelle">Façades</button><button class="btn sm" id="b3g" title="Vue 3D photoréaliste de Google : affichage seul, rien n'est extrait ni exporté">Google 3D</button><button class="btn sm" id="b3sv" title="Photos Google Street View prises depuis la rue, au point de vue de la caméra sélectionnée (ou de la vue actuelle), avec sa focale">Vue de rue</button><button class="btn sm" id="b3flat" hidden title="Masque bâtiments et arbres Google sur les parcelles sélectionnées (pour y imaginer un projet)">Aplanir la parcelle</button><button class="btn sm" id="b3gk" hidden title="Clé Google Maps Platform">Clé…</button><button class="btn sm" id="b3tif" title="Utiliser des dalles MNS LiDAR HD (GeoTIFF) téléchargées sur le site de l'IGN">Charger un MNS…</button><input type="file" id="tifIn" accept=".tif,.tiff" multiple hidden><button class="btn sm" id="b3reload">Recharger</button><span class="grow"></span><button class="btn sm" id="b3full" title="Plein écran (Échap pour sortir)">Plein écran</button><button class="btn sm" id="b3cams">Caméras</button><button class="btn sm" id="b3exp" aria-haspopup="true">Exporter ▾</button></div>
+        <div class="bar3"><button class="btn sm" id="b3close">← Carte</button><label class="btn sm" style="display:flex;gap:5px;align-items:center">Rayon <select id="r3d"><option value="100">100 m</option><option value="200" selected>200 m</option><option value="400">400 m</option></select></label><button class="btn sm on" id="b3terrain">Relief</button><button class="btn sm" id="b3roof" title="Formes de toiture tirées du modèle numérique de surface LiDAR HD de l'IGN">Toitures LiDAR</button><button class="btn sm" id="b3simple" title="Toitures LiDAR simplifiées en pans plans (deux pans, croupes, terrasses…), teinte unie par pan ; sinon relevé brut">Simplifiées</button><button class="btn sm" id="b3ortho" title="Photo aérienne de l'IGN plaquée sur le sol et les toitures">Photo aérienne</button><button class="btn sm" id="b3plu" title="Plaque au sol les cartes du PLU cochées dans « Calques » (zonage, prescriptions, servitudes…)">PLU au sol</button><button class="btn sm" id="b3fac" title="Photos de rue Panoramax (libres, CC-BY-SA) projetées sur les façades proches de la parcelle">Façades</button><button class="btn sm" id="b3g" title="Vue 3D photoréaliste de Google : affichage seul, rien n'est extrait ni exporté">Google 3D</button><button class="btn sm" id="b3sv" title="Photos Google Street View prises depuis la rue, au point de vue de la caméra sélectionnée (ou de la vue actuelle), avec sa focale">Vue de rue</button><button class="btn sm" id="b3flat" hidden title="Masque bâtiments et arbres Google sur les parcelles sélectionnées (pour y imaginer un projet)">Aplanir la parcelle</button><button class="btn sm" id="b3gk" hidden title="Clé Google Maps Platform">Clé…</button><button class="btn sm" id="b3tif" title="Utiliser des dalles MNS LiDAR HD (GeoTIFF) téléchargées sur le site de l'IGN">Charger un MNS…</button><input type="file" id="tifIn" accept=".tif,.tiff" multiple hidden><button class="btn sm" id="b3reload">Recharger</button><span class="grow"></span><button class="btn sm" id="b3full" title="Plein écran (Échap pour sortir)">Plein écran</button><button class="btn sm" id="b3proj" title="Masquer des bâtiments existants et placer la maquette 3D du projet (TerraModel)">Projet</button><button class="btn sm" id="b3cams">Caméras</button><button class="btn sm" id="b3exp" aria-haspopup="true">Exporter ▾</button></div>
         <div class="lpanel" id="exp3" hidden style="left:auto;right:10px;width:300px"><button class="btn" id="b3dxf">DXF 3D (AutoCAD, ArchiCAD, Revit, SketchUp Pro)</button><button class="btn" id="b3glb">glTF .glb (Blender, Twinmotion, SketchUp 2024+)</button><button class="btn" id="b3obj">OBJ (repère local)</button><button class="btn" id="b3png">Image de la vue</button><span class="hint">DXF : coordonnées Lambert-93, altitudes NGF, calques BATIMENTS, TERRAIN, PARCELLES. glTF et OBJ : repère local en mètres, origine notée dans le fichier ou le nom.</span></div>
         <div class="campanel" id="cams3" hidden><div class="camhead"><b>Caméras</b><button class="btn sm" id="camClose" aria-label="Fermer le panneau des caméras">Fermer ×</button></div><div class="hint">Toucher une caméra (son point ou son champ) la sélectionne : glissez-la pour la déplacer, la poignée blanche pour la tourner, Suppr ou « Supprimer » pour l'effacer. Glisser depuis un endroit libre pose une nouvelle caméra ; un simple toucher dans le vide désélectionne.</div><canvas id="plan3" width="1000" height="1000"></canvas><div id="camList"></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn sm" id="camCur">+ Vue actuelle</button><button class="btn sm pri" id="camAll">Imprimer les planches</button></div></div>
         <div class="lpanel" id="gkey" hidden style="left:auto;right:10px;width:340px"><h4>Clé Google Maps</h4><input type="text" id="gkeyIn" placeholder="AIza…" autocomplete="off" spellcheck="false"><div style="display:flex;gap:6px"><button class="btn sm pri" id="gkeyOk">Enregistrer</button><button class="btn sm" id="gkeyDel">Effacer</button></div><span class="hint">Clé Google Maps Platform (la clé de démonstration gratuite suffit). Elle reste dans ce navigateur, elle n'est jamais écrite dans le fichier. Après un changement de clé, rechargez la page.</span></div>
         <canvas id="c3d"></canvas><div id="g3d" hidden></div><div id="gsv" hidden></div><div class="info3 ginfo" id="ginfo" hidden></div>
-        <div class="campanel" id="fac3" hidden style="width:300px;bottom:auto;max-height:calc(100% - 54px)"></div><div class="info3" id="info3"></div>
+        <div class="campanel" id="bat3" hidden style="width:320px;bottom:auto;max-height:calc(100% - 54px)"></div><div class="campanel" id="fac3" hidden style="width:300px;bottom:auto;max-height:calc(100% - 54px)"></div><div class="info3" id="info3"></div>
       </div>
     </div>
     <aside class="side" id="side"></aside>
@@ -205,7 +205,7 @@ body.wide3d .work{grid-template-columns:1fr} body.wide3d .side{display:none}
 <style>.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn{display:none!important}</style>
 <script src="../TerraChantier/terrasuite-compte.js" onerror="this.remove()"></script>
 <script>
-const APP_VERSION = '0.19.1';
+const APP_VERSION = '0.20';
 /* ================= Outils ================= */
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -1307,15 +1307,90 @@ function facPanel(e) {
   $('#fcR').onclick = () => { facCalSet(e.p.id, null); buildFac(D, v3.scene, e); facSummary(D); facPanel(e); };
   $('#fcH').onclick = () => { c.hide = true; facCalSet(e.p.id, c); buildFac(D, v3.scene, e); facSummary(D); el.hidden = true; };
 }
+/* ================= Projet dans le site : bâtiments masqués, maquette TerraModel à leur place =================
+   Fiche : f.site = { hide: [clés des bâtiments BD TOPO masqués], mq: { rid, x, y (Lambert-93 de l'origine de la maquette), rot (degrés), on } }.
+   La maquette du projet est lue dans ce navigateur (TerraModel l'y garde et la synchronise) : repère X est, Y nord, Z hauteur, en mètres, posée sur le sol. */
+const site = () => { const f = F(); if (!f) return {}; f.site = f.site || { hide: [] }; f.site.hide = f.site.hide || []; return f.site; };
+const batHidden = () => { const f = F(); return (f && f.site && f.site.hide) || []; };
+const batKey = ft => String(ft.id || (ft.properties || {}).cleabs || centroid(ft.geometry).map(v => v.toFixed(1)).join(','));
+const tmRecs = () => { try { return JSON.parse(localStorage.getItem('terramodel-maquettes') || '{}') || {}; } catch (e) { return {}; } };
+function tmRec() { const f = F(), R = tmRecs(); const r = f && f.projet && R[f.projet]; return r && r.model && Object.keys(r.model.f || {}).length ? { rid: f.projet, r } : (R.libre && R.libre.model && Object.keys(R.libre.model.f || {}).length ? { rid: 'libre', r: R.libre } : null); }
+/* triangles d'une face TerraModel (contour, trous) dans son plan */
+function tmTris(Mo, f) {
+  const loops = [f.o, ...(f.h || [])], P = id => Mo.v[id]; let n = [0, 0, 0]; const L = f.o;
+  for (let i = 0; i < L.length; i++) { const a = P(L[i]), b = P(L[(i + 1) % L.length]); n[0] += (a[1] - b[1]) * (a[2] + b[2]); n[1] += (a[2] - b[2]) * (a[0] + b[0]); n[2] += (a[0] - b[0]) * (a[1] + b[1]); }
+  const l = Math.hypot(...n) || 1; n = n.map(v => v / l); let u = Math.abs(n[2]) > .9 ? [1 - n[0] * n[0], -n[0] * n[1], -n[0] * n[2]] : [-n[1], n[0], 0]; const lu = Math.hypot(...u) || 1; u = u.map(v => v / lu); const w = [n[1] * u[2] - n[2] * u[1], n[2] * u[0] - n[0] * u[2], n[0] * u[1] - n[1] * u[0]];
+  const to2 = id => { const p = P(id); return new THREE.Vector2(p[0] * u[0] + p[1] * u[1] + p[2] * u[2], p[0] * w[0] + p[1] * w[1] + p[2] * w[2]); };
+  let tris = []; try { tris = THREE.ShapeUtils.triangulateShape(loops[0].map(to2), loops.slice(1).map(h => h.map(to2))); } catch (e) {}
+  const ids = loops.flat(); return tris.map(t => t.map(k => ids[k]));
+}
+function tmBounds(Mo) { const P = Object.values(Mo.v); return { x0: Math.min(...P.map(p => p[0])), x1: Math.max(...P.map(p => p[0])), y0: Math.min(...P.map(p => p[1])), y1: Math.max(...P.map(p => p[1])), z1: Math.max(...P.map(p => p[2])) }; }
+function addProjectModel(D, sc) {
+  const S = site(), q = S.mq; D.mq = null; if (!q || !q.on) return; const T = tmRec(); if (!T) { D.mqErr = 'maquette du projet introuvable dans ce navigateur (ouvrez-la une fois dans TerraModel)'; return; }
+  const Mo = T.r.model, pos = [], lin = [];
+  for (const k in Mo.f) { for (const t of tmTris(Mo, Mo.f[k])) for (const id of t) pos.push(...Mo.v[id]); for (const L of [Mo.f[k].o, ...(Mo.f[k].h || [])]) for (let i = 0; i < L.length; i++) lin.push(...Mo.v[L[i]], ...Mo.v[L[(i + 1) % L.length]]); }
+  for (const k in Mo.l || {}) { const [a, b] = Mo.l[k]; if (Mo.v[a] && Mo.v[b]) lin.push(...Mo.v[a], ...Mo.v[b]); }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.computeVertexNormals();
+  const z = groundAt(D, q.x, q.y) - D.zb, place = o => { o.position.set(q.x - D.o[0], q.y - D.o[1], z + .01); o.rotation.set(0, 0, (q.rot || 0) * Math.PI / 180); o.updateMatrixWorld(); return o; };
+  const mesh = place(new THREE.Mesh(g, new THREE.MeshLambertMaterial({ color: 0xf5dfb4, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1 }))); mesh.userData.projet = true; sc.add(mesh);
+  const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.Float32BufferAttribute(lin, 3)); const ls = place(new THREE.LineSegments(lg, new THREE.LineBasicMaterial({ color: 0x8a5a12 }))); ls.userData.projetL = true; sc.add(ls);
+  D.meshes.push({ g, p: {}, obj: mesh, tag: 'PROJET' }); D.mq = { nom: T.r.nom || 'maquette', n: Object.keys(Mo.f).length };
+}
+/* bâtiment sous le point cliqué (coordonnées locales de la scène) */
+function batAt(D, x, y) { const X = x + D.o[0], Y = y + D.o[1], HB = new Set(batHidden()); for (const ft of D.bat) { if (HB.has(batKey(ft))) continue; for (const poly of ringsOf(ft.geometry)) if (inPoly(X, Y, poly)) return ft; } return null; }
+function batPick(hit) { const D = v3.data; if (hit.object.userData.projet || hit.object.userData.projetL) return; const ft = batAt(D, hit.point.x, hit.point.y); D.selBat = ft ? batKey(ft) : null; if (v3.scene) batMark(D, v3.scene); batPanel(); }
+/* contour rouge du bâtiment sélectionné */
+function batMark(D, sc) { if (D._mark) { sc.remove(D._mark); D._mark.geometry.dispose(); D._mark = null; } const ft = D.selBat && D.bat.find(x => batKey(x) === D.selBat); if (!ft) return;
+  const { h } = heightOf(ft.properties || {}), pts = []; for (const poly of ringsOf(ft.geometry)) { const r = poly[0]; for (let k = 0; k < r.length - 1; k++) for (const c of [r[k], r[k + 1]]) pts.push(c[0] - D.o[0], c[1] - D.o[1], groundAt(D, c[0], c[1]) - D.zb + h + .3); }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3)); D._mark = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: 0xc2410c, depthTest: false })); D._mark.renderOrder = 9; sc.add(D._mark); }
+/* remplace le bâtiment par la maquette : centre de la maquette sur le centre de l'emprise, axes alignés sur le plus long côté */
+function batReplace(ft) {
+  const T = tmRec(); if (!T) return; const S = site(), k = batKey(ft); if (!S.hide.includes(k)) S.hide.push(k);
+  const ring = ringsOf(ft.geometry)[0][0]; let best = 0, a = 0; for (let i = 0; i < ring.length - 1; i++) { const dx = ring[i + 1][0] - ring[i][0], dy = ring[i + 1][1] - ring[i][1], L = Math.hypot(dx, dy); if (L > best) { best = L; a = Math.atan2(dy, dx); } }
+  let deg = a * 180 / Math.PI; deg = ((deg % 90) + 135) % 90 - 45; // axe de la maquette le plus proche du côté le plus long
+  const c = centroid({ type: 'Polygon', coordinates: [ring] }), B = tmBounds(T.r.model), mx = (B.x0 + B.x1) / 2, my = (B.y0 + B.y1) / 2, r = deg * Math.PI / 180;
+  S.mq = { rid: T.rid, x: c[0] - (Math.cos(r) * mx - Math.sin(r) * my), y: c[1] - (Math.sin(r) * mx + Math.cos(r) * my), rot: Math.round(deg * 10) / 10, on: true };
+  v3.data.selBat = null; save(); build3d(); batPanel();
+}
+function mqMove(dx, dy, dr) { const q = site().mq; if (!q) return; q.x += dx; q.y += dy; q.rot = Math.round(((q.rot || 0) + dr) * 10) / 10; save();
+  const D = v3.data, z = groundAt(D, q.x, q.y) - D.zb; for (const o of v3.scene.children) if (o.userData.projet || o.userData.projetL) { o.position.set(q.x - D.o[0], q.y - D.o[1], z + .01); o.rotation.set(0, 0, q.rot * Math.PI / 180); o.updateMatrixWorld(); }
+  batPanel(); if (!$('#cams3').hidden) renderCams(); }
+let mqStep = .5;
+function batPanel() {
+  const el = $('#bat3'), D = v3.data, f = F(); if (!D || !f) { el.innerHTML = '<span class="hint">Ouvrez la vue 3D d\'une fiche.</span>'; el.hidden = false; return; }
+  const S = site(), T = tmRec(), ft = D.selBat && D.bat.find(x => batKey(x) === D.selBat), p = ft ? ft.properties || {} : null, q = S.mq;
+  const step = (lab, a) => `<button class="btn sm" data-mv="${a}">${lab}</button>`;
+  el.innerHTML = `<div style="display:flex;gap:8px;align-items:center"><b style="flex:1">Projet dans le site</b><button class="btn sm" id="bpX">Fermer</button></div>
+    <div class="hint">Cliquez sur un bâtiment de la maquette pour le sélectionner.</div>
+    ${ft ? `<div class="cam on"><div><b>Bâtiment sélectionné</b> · ${NF1.format(heightOf(p).h)} m${p.nombre_d_etages ? ' · ' + p.nombre_d_etages + ' étage(s)' : ''}${p.usage_1 ? ' · ' + esc(p.usage_1) : ''}</div>
+      <div class="r"><button class="btn sm" id="bpHide">Masquer</button><button class="btn sm pri" id="bpRep"${T ? '' : ' disabled'}>Remplacer par la maquette du projet</button></div></div>` : ''}
+    ${T ? `<div class="hint">Maquette : ${esc(T.r.nom || (T.rid === 'libre' ? 'maquette sans projet' : 'projet'))} (TerraModel, ${Object.keys(T.r.model.f).length} faces)${T.rid === 'libre' && f.projet ? ' · la fiche est rattachée à un projet sans maquette : maquette sans projet proposée' : ''}.</div>` : '<div class="hint" style="color:var(--warn)">Pas de maquette du projet dans ce navigateur : ouvrez-la une fois dans TerraModel (sous-onglet Maquette 3D de l\'ESQ).</div>'}
+    ${q ? `<div class="cam"><div><b>Maquette placée</b>${D.mqErr && !D.mq ? ' · <span style="color:var(--err)">' + esc(D.mqErr) + '</span>' : ''}</div>
+      <div class="r">Déplacer ${step('← O', 'w')}${step('E →', 'e')}${step('↓ S', 's')}${step('N ↑', 'n')}<select id="bpStep">${[[.1, '0,1 m'], [.5, '0,5 m'], [2, '2 m']].map(([v, t]) => `<option value="${v}"${v === mqStep ? ' selected' : ''}>${t}</option>`).join('')}</select></div>
+      <div class="r">Tourner ${step('⟲ 15°', 'l15')}${step('⟲ 1°', 'l1')}${step('1° ⟳', 'r1')}${step('15° ⟳', 'r15')} <span class="mono">${NF1.format(q.rot || 0)}°</span></div>
+      <div class="r"><button class="btn sm" id="bpOn">${q.on ? 'Masquer la maquette' : 'Afficher la maquette'}</button><button class="btn sm danger" id="bpDel">Retirer la maquette</button></div></div>` : ''}
+    ${S.hide.length ? `<div class="r"><span class="hint">${S.hide.length} bâtiment(s) masqué(s)</span><button class="btn sm" id="bpShow">Tout réafficher</button></div>` : ''}`;
+  el.hidden = false;
+  const $$e = q2 => el.querySelector(q2);
+  $$e('#bpX').onclick = () => { el.hidden = true; $('#b3proj').classList.remove('on'); D.selBat = null; if (v3.scene) batMark(D, v3.scene); };
+  if ($$e('#bpHide')) $$e('#bpHide').onclick = () => { S.hide.push(batKey(ft)); D.selBat = null; save(); build3d(); batPanel(); };
+  if ($$e('#bpRep')) $$e('#bpRep').onclick = () => batReplace(ft);
+  if ($$e('#bpShow')) $$e('#bpShow').onclick = () => { S.hide = []; save(); build3d(); batPanel(); };
+  if ($$e('#bpOn')) $$e('#bpOn').onclick = () => { q.on = !q.on; save(); build3d(); batPanel(); };
+  if ($$e('#bpDel')) $$e('#bpDel').onclick = () => { delete S.mq; save(); build3d(); batPanel(); };
+  if ($$e('#bpStep')) $$e('#bpStep').onchange = e => { mqStep = +e.target.value; };
+  el.querySelectorAll('[data-mv]').forEach(b => b.onclick = () => { const st0 = mqStep, a = b.dataset.mv; mqMove(a === 'e' ? st0 : a === 'w' ? -st0 : 0, a === 'n' ? st0 : a === 's' ? -st0 : 0, { l15: 15, l1: 1, r1: -1, r15: -15 }[a] || 0); });
+}
 function bindFacPick() {
   const cv = $('#c3d'); let d0 = null;
   cv.addEventListener('pointerdown', ev => { d0 = [ev.clientX, ev.clientY]; });
   cv.addEventListener('pointerup', ev => {
     if (!d0 || Math.hypot(ev.clientX - d0[0], ev.clientY - d0[1]) > 4 || !v3.data || !v3.scene) return; d0 = null;
-    const D = v3.data, L = (D.facs || []).filter(e => e.mesh).map(e => e.mesh); if (!L.length) return;
+    const D = v3.data;
     const b = cv.getBoundingClientRect(), m = new THREE.Vector2((ev.clientX - b.left) / b.width * 2 - 1, -(ev.clientY - b.top) / b.height * 2 + 1), rc = new THREE.Raycaster(); rc.setFromCamera(m, v3.camera);
     const hits = rc.intersectObjects(v3.scene.children, false); const h = hits.find(x => x.object.userData && x.object.userData.facade) ;
-    if (h && hits[0].distance > h.distance - 0.5) facPanel(FAC_OF.get(h.object));
+    if (h && hits[0].distance > h.distance - 0.5) { facPanel(FAC_OF.get(h.object)); return; }
+    if (!$('#bat3').hidden && hits.length) batPick(hits[0]);
   });
 }
 function infoFac(D) { const el = $('#info3'); if (!el) return; let s = el.querySelector('.fac'); if (!s) { s = document.createElement('div'); s.className = 'fac'; el.appendChild(s); } s.textContent = 'Façades : ' + D.facInfo + '.';
@@ -1399,7 +1474,8 @@ function build3d() {
   let img = null; if (tex && tex.image && D.mns && v3.simple) { try { const im = tex.image, cv0 = document.createElement('canvas'); cv0.width = im.width; cv0.height = im.height; const cx0 = cv0.getContext('2d', { willReadFrequently: true }); cx0.drawImage(im, 0, 0); const px = cx0.getImageData(0, 0, im.width, im.height).data, IW = im.width, IH = im.height;
     img = (x, y) => { const u = Math.floor((x - o[0] + R) / (2 * R) * IW), v = Math.floor((o[1] + R - y) / (2 * R) * IH); if (u < 0 || v < 0 || u >= IW || v >= IH) return null; const k = (v * IW + u) * 4; return [px[k], px[k + 1], px[k + 2]]; }; } catch (e) { console.warn('teintes de toiture', e); } }
   const addWalls = (ws, ring) => { let a = 0; for (let k = 0; k < ring.length - 1; k++) a += ring[k][0] * ring[k + 1][1] - ring[k + 1][0] * ring[k][1]; const sgn = a >= 0 ? 1 : -1; for (const w of ws) { const dx = w.bx - w.ax, dy = w.by - w.ay, L = Math.hypot(dx, dy); if (L < 1.5) continue; w.nx = sgn * dy / L; w.ny = -sgn * dx / L; w.L = L; D.walls.push(w); } };
-  for (const ft of D.bat) {
+  const HB = new Set(batHidden());
+  for (const ft of D.bat) { if (HB.has(batKey(ft))) continue;
     const p = ft.properties || {}; const { h, src } = heightOf(p);
     for (const poly of ringsOf(ft.geometry)) {
       const outer = poly[0]; if (!outer || outer.length < 4) continue;
@@ -1432,6 +1508,7 @@ function build3d() {
   if (sIdx.length) { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(sPos, 3)); g.setAttribute('color', new THREE.Float32BufferAttribute(sCol, 3)); g.setIndex(sIdx.length > 65535 ? new THREE.Uint32BufferAttribute(sIdx, 1) : sIdx); g.computeVertexNormals();
     if (!rIdx.length) { const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.Float32BufferAttribute(rLin, 3)); sc.add(new THREE.LineSegments(lg, edges)); }
     sc.add(new THREE.Mesh(g, new THREE.MeshLambertMaterial({ vertexColors: true, side: THREE.DoubleSide }))); D.meshes.push({ g, p: {} }); }
+  addProjectModel(D, sc, zb); batMark(D, sc);
   D.nSimple = nSimple;
   v3.scene = sc; D.zb = zb; if (!$('#cams3').hidden) renderCams();
   if (D.pano && D.pano.length) applyFacades(D, sc);
@@ -1559,8 +1636,8 @@ function close3d() { if (G3.on) gClose(false); if (SV.on) svClose(false); docume
 /* exports : OBJ (repère local, Z vers le haut) et DXF 3DFACE (coordonnées Lambert-93 et altitudes NGF réelles) */
 function triangles() {
   const D = v3.data, out = []; if (!D) return out;
-  const push = (g, tag) => { const pa = g.getAttribute('position'), ix = g.getIndex(); const n = ix ? ix.count : pa.count; for (let k = 0; k < n; k += 3) { const t = []; for (let q = 0; q < 3; q++) { const i = ix ? ix.getX(k + q) : k + q; t.push([pa.getX(i), pa.getY(i), pa.getZ(i)]); } out.push({ t, tag }); } };
-  for (const m of D.meshes || []) push(m.g, 'BATIMENTS');
+  const push = (g, tag, obj) => { const pa = g.getAttribute('position'), ix = g.getIndex(), mw = obj ? (obj.updateMatrixWorld(), obj.matrixWorld) : null, V = new THREE.Vector3(); const n = ix ? ix.count : pa.count; for (let k = 0; k < n; k += 3) { const t = []; for (let q = 0; q < 3; q++) { const i = ix ? ix.getX(k + q) : k + q; V.set(pa.getX(i), pa.getY(i), pa.getZ(i)); if (mw) V.applyMatrix4(mw); t.push([V.x, V.y, V.z]); } out.push({ t, tag }); } };
+  for (const m of D.meshes || []) push(m.g, m.tag || 'BATIMENTS', m.obj);
   const terr = v3.scene && v3.scene.children.find(c => c.isMesh && !D.meshes.some(m => m.g === c.geometry)); if (terr) push(terr.geometry, 'TERRAIN');
   return out;
 }
@@ -1619,7 +1696,7 @@ function drawPlan(cv, D, camList, sel, opts = {}) {
   ctx.lineWidth = Math.max(1, W / 560); ctx.strokeStyle = '#b9b2a6';
   for (const ft of D.par) for (const poly of ringsOf(ft.geometry)) { ctx.beginPath(); path(poly[0]); ctx.stroke(); }
   ctx.fillStyle = '#d8d3ca'; ctx.strokeStyle = '#8a8378';
-  for (const ft of D.bat) for (const poly of ringsOf(ft.geometry)) { ctx.beginPath(); poly.forEach(path); ctx.fill('evenodd'); ctx.stroke(); }
+  const HB = new Set(batHidden()); for (const ft of D.bat) if (!HB.has(batKey(ft))) for (const poly of ringsOf(ft.geometry)) { ctx.beginPath(); poly.forEach(path); ctx.fill('evenodd'); ctx.stroke(); }
   ctx.strokeStyle = '#C2410C'; ctx.lineWidth = Math.max(2, W / 280);
   for (const ft of D.par) if (D.sel.includes((ft.properties || {}).idu)) for (const poly of ringsOf(ft.geometry)) { ctx.beginPath(); path(poly[0]); ctx.stroke(); }
   camList.forEach((c, i) => {
@@ -1910,6 +1987,7 @@ function renderHomeGeo(side) {
   $('#b3obj').onclick = exportOBJ; $('#b3dxf').onclick = exportDXF; $('#b3png').onclick = exportPNG; $('#b3glb').onclick = exportGLB;
   $('#b3exp').onclick = () => { const p = $('#exp3'); p.hidden = !p.hidden; $('#cams3').hidden = true; $('#b3cams').classList.remove('on'); };
   $('#exp3').addEventListener('click', e => { if (e.target.closest('.btn')) $('#exp3').hidden = true; });
+  $('#b3proj').onclick = e => { const p = $('#bat3'); if (p.hidden) { batPanel(); e.target.classList.add('on'); } else { p.hidden = true; e.target.classList.remove('on'); } };
   $('#b3cams').onclick = e => { const p = $('#cams3'); p.hidden = !p.hidden; e.target.classList.toggle('on', !p.hidden); $('#exp3').hidden = true; if (!p.hidden) renderCams(); };
   $('#camClose').onclick = () => { $('#cams3').hidden = true; $('#b3cams').classList.remove('on'); };
   bindCams();
