@@ -205,7 +205,7 @@ body.wide3d .work{grid-template-columns:1fr} body.wide3d .side{display:none}
 <style>.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn{display:none!important}</style>
 <script src="../TerraChantier/terrasuite-compte.js" onerror="this.remove()"></script>
 <script>
-const APP_VERSION = '0.21';
+const APP_VERSION = '0.21.1';
 /* ================= Outils ================= */
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -1316,7 +1316,13 @@ const isExist = () => { const f = F(); return !!(f && f.site && f.site.etat === 
 const batHidden = () => { const f = F(); return isExist() ? [] : ((f && f.site && f.site.hide) || []); };
 const batKey = ft => String(ft.id || (ft.properties || {}).cleabs || centroid(ft.geometry).map(v => v.toFixed(1)).join(','));
 const tmRecs = () => { try { return JSON.parse(localStorage.getItem('terramodel-maquettes') || '{}') || {}; } catch (e) { return {}; } };
-function tmRec() { const f = F(), R = tmRecs(); const r = f && f.projet && R[f.projet]; return r && r.model && Object.keys(r.model.f || {}).length ? { rid: f.projet, r } : (R.libre && R.libre.model && Object.keys(R.libre.model.f || {}).length ? { rid: 'libre', r: R.libre } : null); }
+/* maquette TerraModel à plat : faces des groupes (TerraModel 0.5) placées à leur position ; tracés 2D importés laissés de côté */
+function tmFlat(Mo) { const r = { v: { ...Mo.v }, f: { ...Mo.f }, l: { ...(Mo.l || {}) } }; let n = 1e9;
+  for (const gid in Mo.G || {}) { const g = Mo.G[gid], map = {}; if (!Object.keys(g.m.f || {}).length) continue; for (const k in g.m.v) { const id = n++; r.v[id] = [g.m.v[k][0] + g.t[0], g.m.v[k][1] + g.t[1], g.m.v[k][2] + g.t[2]]; map[k] = id; }
+    for (const k in g.m.f) { const f = g.m.f[k]; r.f[n++] = { o: f.o.map(i => map[i]), h: (f.h || []).map(L => L.map(i => map[i])) }; } }
+  return r; }
+const tmOk = r => r && r.model && Object.keys(tmFlat(r.model).f).length;
+function tmRec() { const f = F(), R = tmRecs(); const r = f && f.projet && R[f.projet]; return tmOk(r) ? { rid: f.projet, r } : (tmOk(R.libre) ? { rid: 'libre', r: R.libre } : null); }
 /* triangles d'une face TerraModel (contour, trous) dans son plan */
 function tmTris(Mo, f) {
   const loops = [f.o, ...(f.h || [])], P = id => Mo.v[id]; let n = [0, 0, 0]; const L = f.o;
@@ -1329,7 +1335,7 @@ function tmTris(Mo, f) {
 const mqZ = (D, q) => (q.z != null && isFinite(q.z) ? q.z : groundAt(D, q.x, q.y)) - D.zb;
 function addProjectModel(D, sc) {
   const S = site(), q = S.mq; D.mq = null; D.mqErr = ''; if (!q || !q.on || S.etat === 'existant') return; const T = tmRec(); if (!T) { D.mqErr = 'maquette du projet introuvable dans ce navigateur (ouvrez-la une fois dans TerraModel)'; return; }
-  const Mo = T.r.model, pos = [], lin = [];
+  const Mo = tmFlat(T.r.model), pos = [], lin = [];
   for (const k in Mo.f) { for (const t of tmTris(Mo, Mo.f[k])) for (const id of t) pos.push(...Mo.v[id]); for (const L of [Mo.f[k].o, ...(Mo.f[k].h || [])]) for (let i = 0; i < L.length; i++) lin.push(...Mo.v[L[i]], ...Mo.v[L[(i + 1) % L.length]]); }
   for (const k in Mo.l || {}) { const [a, b] = Mo.l[k]; if (Mo.v[a] && Mo.v[b]) lin.push(...Mo.v[a], ...Mo.v[b]); }
   const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.computeVertexNormals();
@@ -1390,7 +1396,7 @@ function batPanel() {
     ${sel.length ? `<div class="cam on"><div><b>${sel.length} bâtiment(s) sélectionné(s)</b> · ${sel.map(k => desc(byK.get(k))).join(' ; ')}</div>
       <div class="r"><button class="btn sm" id="bpHide">Masquer</button><button class="btn sm pri" id="bpRep"${T && !q ? '' : ' disabled'}>Masquer et insérer la maquette</button><button class="btn sm" id="bpUnsel">Désélectionner</button></div></div>` : ''}
     ${H.length ? `<div class="cam"><div><b>Bâtiments masqués</b> <span class="hint">(gardés, trace au sol en pointillé)</span></div>${H.map(k => `<div class="r"><span class="hint" style="flex:1">${desc(byK.get(k)) || esc(k)}</span><button class="btn sm" data-show="${esc(k)}">Réafficher</button></div>`).join('')}<div class="r"><button class="btn sm" id="bpShow">Tout réafficher</button></div></div>` : ''}
-    ${T ? `<div class="hint">Maquette : ${esc(T.r.nom || (T.rid === 'libre' ? 'maquette sans projet' : 'projet'))} (TerraModel, ${Object.keys(T.r.model.f).length} faces).</div>` : '<div class="hint" style="color:var(--warn)">Pas de maquette du projet dans ce navigateur : ouvrez-la une fois dans TerraModel (sous-onglet Maquette 3D de l\'ESQ).</div>'}
+    ${T ? `<div class="hint">Maquette : ${esc(T.r.nom || (T.rid === 'libre' ? 'maquette sans projet' : 'projet'))} (TerraModel, ${Object.keys(tmFlat(T.r.model).f).length} faces).</div>` : '<div class="hint" style="color:var(--warn)">Pas de maquette du projet dans ce navigateur : ouvrez-la une fois dans TerraModel (sous-onglet Maquette 3D de l\'ESQ).</div>'}
     ${T && !q ? `<div class="r"><button class="btn sm${D.pickIns ? ' on' : ''}" id="bpIns">${D.pickIns ? 'Cliquez le point d\'insertion…' : 'Insérer la maquette : cliquer le point d\'insertion'}</button></div>` : ''}
     ${q ? `<div class="cam"><div><b>Maquette insérée</b>${D.mqErr ? ' · <span style="color:var(--err)">' + esc(D.mqErr) + '</span>' : ''}</div>
       <div class="hint">Point d'insertion = origine Oxyz de la maquette (axes rouge X, vert Y, bleu Z).</div>

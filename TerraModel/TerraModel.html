@@ -77,6 +77,12 @@ html.ts-embed .brand small{display:none}
 .btn.sm{padding:2px 7px;font-size:12px} .btn.danger{color:var(--err)}
 #vplan{width:100%;aspect-ratio:1;border:1px solid var(--line);border-radius:6px;touch-action:none;cursor:crosshair;flex:none}
 .vsel{min-height:30px;font-size:12px} .vsel .ic,.vsel svg{vertical-align:-2px}
+.ctxbar{position:absolute;top:44px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--accent-ink);border-radius:8px;padding:4px 6px 4px 12px;font-size:12.5px;display:flex;gap:8px;align-items:center;z-index:2;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.selbar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:4px;box-shadow:0 2px 8px rgba(0,0,0,.15);z-index:2}
+.imp{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(460px,calc(100% - 16px));max-height:calc(100% - 20px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.25);padding:12px 14px;z-index:5;display:flex;flex-direction:column;gap:8px}
+.imp h3{margin:0;font-family:var(--f-cond);font-size:14px} .imp p{margin:0} .imp .r{display:flex;gap:8px;flex-wrap:wrap;align-items:center} .imp .grow{flex:1}
+.impl{display:flex;flex-direction:column;gap:2px;max-height:200px;overflow:auto;border:1px solid var(--line2);border-radius:6px;padding:4px 8px} .impl small{color:var(--muted)}
+@media (max-width:760px){ .selbar{bottom:auto;top:84px} }
 .hint0{color:var(--muted);font-size:11.5px}
 .vcard{border:1px solid var(--line);border-radius:7px;padding:6px 7px;display:flex;flex-direction:column;gap:4px;cursor:pointer}
 .vcard.cur{border-color:var(--accent);background:var(--accent-soft)} .vcard.sel{box-shadow:0 0 0 1px var(--accent)}
@@ -138,6 +144,7 @@ html.ts-embed .brand small{display:none}
     <div class="grp" id="gFile">
       <button class="btn" id="bNew" title="Nouvelle maquette">Nouveau</button>
       <button class="btn" id="bOpen" title="Ouvrir une maquette (.json)">Ouvrir</button>
+      <button class="btn" id="bImp" title="Importer un plan DXF (tracé 2D par calques) ou un modèle 3D OBJ, DAE (SketchUp), glTF">Importer</button>
       <button class="btn" id="bSave" title="Enregistrer la maquette (.json)">Enregistrer</button>
       <button class="btn" id="bObj" title="Exporter en OBJ (Blender, SketchUp, Twinmotion…)">Export OBJ</button>
     </div>
@@ -187,6 +194,7 @@ html.ts-embed .brand small{display:none}
         <div class="vsel r" id="vsel"></div>
         <div id="vlist"></div>
       </aside>
+      <div class="ctxbar" id="ctxBar" hidden></div><div class="selbar" id="selBar" hidden></div><div class="imp" id="imp" hidden></div>
       <div class="info" id="info"></div>
       <div class="help" id="help" hidden></div>
     </div>
@@ -198,6 +206,7 @@ html.ts-embed .brand small{display:none}
     <label title="Unité des longueurs affichées et tapées (une cote tapée peut aussi porter son unité : 350cm, 3500mm)">Unité <select id="unit" class="btn"><option value="m">m</option><option value="cm">cm</option><option value="mm">mm</option></select></label>
   </footer>
 </div>
+<input type="file" id="impIn" accept=".dxf,.dwg,.obj,.dae,.gltf,.glb,.skp" hidden>
 <input type="file" id="fileIn" accept=".json,application/json" hidden>
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
 <script src="../TerraChantier/projets-api.js"></script>
@@ -559,9 +568,63 @@ function modelEdges(M) {
   return [...m.values()];
 }
 
+/* ---- groupes : M.G[gid] = { nom, t: [x, y, z] position de l'origine du groupe, m: maquette du groupe (repère local), soft: arêtes adoucies (modèles importés) }
+   la géométrie d'un groupe est isolée : elle ne se fond pas avec le reste ; on l'ouvre pour la modifier ---- */
+function shiftModel(m, d) { const r = JSON.parse(JSON.stringify(m)); for (const k in r.v) r.v[k] = vadd(r.v[k], d); delete r.G; return r; }
+function groupPts(g) { return Object.values(g.m.v).map(p => vadd(p, g.t)); }
+/* maquette à plat : groupes recopiés avec leur position (surfaces, volume, exports) */
+function flatModel(m) {
+  const r = { v: { ...m.v }, f: { ...m.f }, l: { ...m.l }, n: m.n };
+  for (const gid in m.G || {}) { const g = m.G[gid], map = {}; for (const k in g.m.v) { const id = r.n++; r.v[id] = vadd(g.m.v[k], g.t); map[k] = id; }
+    for (const k in g.m.f) { const f = g.m.f[k]; r.f[r.n++] = { o: f.o.map(i => map[i]), h: (f.h || []).map(L => L.map(i => map[i])) }; }
+    for (const k in g.m.l || {}) { const [a, b] = g.m.l[k]; r.l[r.n++] = [map[a], map[b]]; } }
+  return r;
+}
+/* faces fs, traits es (clés a|b) et groupes gids réunis dans un nouveau groupe ; origine au coin bas du groupe */
+function makeGroup(M, fs, es, gids, nom) {
+  M.G = M.G || {}; const pts = [], fset = new Set(fs.map(String));
+  for (const k of fset) if (M.f[k]) for (const L of loopsOf(M.f[k])) for (const id of L) pts.push(M.v[id]);
+  const lines = []; for (const e of es) { const [a, b] = String(e).split('|').map(Number); const lk = Object.keys(M.l).find(k => ekey(...M.l[k]) === ekey(a, b)); if (lk) { lines.push(lk); pts.push(M.v[a], M.v[b]); } }
+  for (const g of gids) if (M.G[g]) pts.push(...groupPts(M.G[g]));
+  if (!pts.length) return null;
+  const t = [0, 1, 2].map(i => Math.min(...pts.map(p => p[i]))), sub = newModel(), map = new Map();
+  const vid = (key, p) => { if (!map.has(key)) { const id = sub.n++; sub.v[id] = vsub(p, t); map.set(key, id); } return map.get(key); };
+  for (const k of fset) { const f = M.f[k]; if (!f) continue; addF(sub, { o: f.o.map(i => vid(i, M.v[i])), h: f.h.map(L => L.map(i => vid(i, M.v[i]))) }); }
+  for (const lk of lines) { const [a, b] = M.l[lk]; sub.l[sub.n++] = [vid(a, M.v[a]), vid(b, M.v[b])]; }
+  let soft = false;
+  for (const g of gids) { const G0 = M.G[g]; if (!G0) continue; soft = soft || !!G0.soft; const off = vsub(G0.t, t), m2 = new Map(), v2 = k => { if (!m2.has(k)) { const id = sub.n++; sub.v[id] = vadd(G0.m.v[k], off); m2.set(k, id); } return m2.get(k); };
+    for (const k in G0.m.f) { const f = G0.m.f[k]; addF(sub, { o: f.o.map(v2), h: (f.h || []).map(L => L.map(v2)) }); }
+    for (const k in G0.m.l || {}) { const [a, b] = G0.m.l[k]; sub.l[sub.n++] = [v2(a), v2(b)]; }
+    delete M.G[g]; }
+  for (const k of fset) delete M.f[k]; for (const lk of lines) delete M.l[lk];
+  cleanup(M); weld(sub); normFaces(sub);
+  const gid = 'g' + (M.n++); M.G[gid] = { nom: nom || 'Groupe ' + (Object.keys(M.G).length + 1), t, m: sub, soft }; return gid;
+}
+/* dégrouper : la géométrie revient dans la maquette (elle se soude au reste) */
+function explodeGroup(M, gid) {
+  const g = M.G && M.G[gid]; if (!g) return false; const map = {}; for (const k in g.m.v) map[k] = addV(M, vadd(g.m.v[k], g.t));
+  for (const k in g.m.f) { const f = g.m.f[k]; addF(M, { o: f.o.map(i => map[i]), h: (f.h || []).map(L => L.map(i => map[i])) }); }
+  for (const k in g.m.l || {}) { const [a, b] = g.m.l[k]; M.l[M.n++] = [map[a], map[b]]; }
+  delete M.G[gid]; cleanup(M); return true;
+}
+/* maquette tirée de triangles (import) : sommets soudés, triangles coplanaires voisins réunis en faces */
+function meshToModel(P, T) {
+  const m = newModel(), key = p => p.map(v => Math.round(v * 1e5)).join(','), map = new Map(), ids = P.map(p => { const k = key(p); if (!map.has(k)) { const id = m.n++; m.v[id] = p.slice(); map.set(k, id); } return map.get(k); });
+  const tris = []; for (const [a, b, c] of T) { const A = ids[a], B = ids[b], C = ids[c]; if (A === B || B === C || A === C) continue; const n = vcross(vsub(m.v[B], m.v[A]), vsub(m.v[C], m.v[A])); if (vlen(n) < 1e-10) continue; tris.push({ o: [A, B, C], n: vnorm(n) }); }
+  const pk = t => { const n = t.n, d = vdot(n, m.v[t.o[0]]); return n.map(v => Math.round(v * 1e3)).join(',') + '|' + Math.round(d * 1e3); };
+  const par = tris.map((_, i) => i), find = i => { while (par[i] !== i) i = par[i] = par[par[i]]; return i; }, ed = new Map();
+  tris.forEach((t, i) => { const k = pk(t); for (let j = 0; j < 3; j++) { const a = t.o[j], b = t.o[(j + 1) % 3], e = (a < b ? a + '|' + b : b + '|' + a) + '#' + k; if (ed.has(e)) { const o = ed.get(e); par[find(i)] = find(o); } else ed.set(e, i); } });
+  const cl = new Map(); tris.forEach((t, i) => { const r = find(i); if (!cl.has(r)) cl.set(r, []); cl.get(r).push(t); });
+  for (const L of cl.values()) { if (L.length === 1) { addF(m, { o: L[0].o, h: [] }); continue; } let res = []; try { res = combine(m, L.map(t => ({ o: t.o, h: [] })), L[0].n); } catch (e) {} if (!res.length) res = L.map(t => ({ o: t.o, h: [] })); for (const f of res) addF(m, f); }
+  normFaces(m);
+  // volume fermé à l'envers (faces tournées vers l'intérieur) : retourné
+  let vol = 0; for (const k in m.f) { const f = m.f[k]; vol += faceArea(m, f) * vdot(faceN(m, f), m.v[f.o[0]]); } if (vol < -1e-9) for (const k in m.f) m.f[k] = revF(m.f[k]);
+  return m;
+}
+
 </script>
 <script>
-const APP_VERSION = '0.4';
+const APP_VERSION = '0.5';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const NF2 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 /* unités : la maquette est en mètres ; les longueurs s'affichent et se saisissent dans l'unité choisie (m, cm, mm) ; surfaces en m², volumes en m³ */
@@ -573,7 +636,7 @@ function setStatus(t, cls) { const el = $('#status'); el.textContent = t || ''; 
 
 /* ================= État, annulation, enregistrement ================= */
 let M = newModel();
-const ST = { scenes: [], scene: null, units: 'm', tool: 'select', sel: { f: new Set(), e: new Set() }, undo: [], redo: [], segs: { circle: 24, poly: 6 }, last: null, lastPP: null, focus: [0, 0, 0] };
+const ST = { ctx: null, root: null, scenes: [], scene: null, units: 'm', tool: 'select', sel: { f: new Set(), e: new Set(), g: new Set() }, undo: [], redo: [], segs: { circle: 24, poly: 6 }, last: null, lastPP: null, focus: [0, 0, 0] };
 /* ---- une maquette par projet TerraSuite (#projet=…), plus une « maquette sans projet » ; gardées dans ce navigateur et synchronisées entre appareils ---- */
 const KEY = 'terramodel-maquettes', OLDKEY = 'terramodel', LIBRE = 'libre';
 const HAS_TSP = typeof TSP !== 'undefined', HAS_LINK = typeof TSLink !== 'undefined';
@@ -591,7 +654,7 @@ let saveT = null;
 function save() {
   clearTimeout(saveT); saveT = setTimeout(() => {
     const old = PR.recs[PR.rid];
-    PR.recs[PR.rid] = { id: PR.rid, projetId: PR.rid === LIBRE ? null : PR.rid, nom: PR.projet ? projLabel(PR.projet) : (old && old.nom) || 'Maquette sans projet', version: APP_VERSION, model: M, segs: ST.segs, units: UNIT, scenes: ST.scenes, surf: surfaces(M), cam: camJSON() };
+    PR.recs[PR.rid] = { id: PR.rid, projetId: PR.rid === LIBRE ? null : PR.rid, nom: PR.projet ? projLabel(PR.projet) : (old && old.nom) || 'Maquette sans projet', version: APP_VERSION, model: rootModel(), segs: ST.segs, units: UNIT, scenes: ST.scenes, surf: surfaces(flatModel(rootModel())), cam: camJSON() };
     storeRecs(); if (HAS_LINK) { clearTimeout(PR.pushT); PR.pushT = setTimeout(() => TSLink.push('terramodel', 'maquettes', syncView(), { projet: r => r.projetId }), 1500); }
   }, 300);
 }
@@ -604,12 +667,14 @@ async function pullRemote() {
   for (const rid of res.removed || []) delete PR.recs[rid];
   storeRecs(); const cur = PR.recs[PR.rid];
   if (cur && JSON.stringify(cur.scenes || []) !== JSON.stringify(ST.scenes)) { ST.scenes = cur.scenes || []; renderScenes(); }
+  if (ST.ctx) return; // groupe ouvert : la mise à jour attend sa fermeture
   if (cur && JSON.stringify(cur.model) !== before) { const T = TOOLS[ST.tool]; if (T && T.busy && T.busy()) cancelTool(); M = cur.model; M.l = M.l || {}; ST.undo.push(before); ST.redo.length = 0; ST.last = null; clearSel(); changed(); setStatus('Maquette mise à jour depuis un autre appareil', 'ok'); }
 }
 /* ouverture de la maquette d'un projet */
 async function openRid(rid) {
   rid = rid || LIBRE; if (PR.rid === rid && PR.opened) return; clearTimeout(saveT); cancelTool();
-  if (PR.opened) PR.recs[PR.rid] = { ...(PR.recs[PR.rid] || {}), id: PR.rid, model: M, cam: camJSON(), segs: ST.segs, scenes: ST.scenes };
+  if (ST.ctx) exitGroup(true);
+  if (PR.opened) PR.recs[PR.rid] = { ...(PR.recs[PR.rid] || {}), id: PR.rid, model: rootModel(), cam: camJSON(), segs: ST.segs, scenes: ST.scenes };
   PR.rid = rid; PR.opened = true; PR.projet = rid !== LIBRE && HAS_TSP ? await TSP.get(rid) : null;
   const rec = PR.recs[rid];
   if (rec && rec.model) { try { loadData(rec); } catch (e) { M = newModel(); changed(); setView('iso'); } }
@@ -627,7 +692,7 @@ function doOp(fn) { const before = JSON.stringify(M), m = JSON.parse(before); co
 function pushUndo(before) { ST.undo.push(before); if (ST.undo.length > 200) ST.undo.shift(); ST.redo.length = 0; }
 function undo() { cancelTool(); if (!ST.undo.length) return; ST.redo.push(JSON.stringify(M)); M = JSON.parse(ST.undo.pop()); ST.last = null; clearSel(); changed(); }
 function redo() { cancelTool(); if (!ST.redo.length) return; ST.undo.push(JSON.stringify(M)); M = JSON.parse(ST.redo.pop()); ST.last = null; clearSel(); changed(); }
-function changed() { PL.fit = null; for (const k of [...ST.sel.f]) if (!M.f[k]) ST.sel.f.delete(k); for (const e of [...ST.sel.e]) { const [a, b] = e.split('|'); if (!M.v[a] || !M.v[b]) ST.sel.e.delete(e); } rebuild(); save(); info(); $('#bUndo').disabled = !ST.undo.length; $('#bRedo').disabled = !ST.redo.length; }
+function changed() { PL.fit = null; for (const g of [...ST.sel.g]) if (!M.G || !M.G[g]) ST.sel.g.delete(g); ctxBar(); selBar(); for (const k of [...ST.sel.f]) if (!M.f[k]) ST.sel.f.delete(k); for (const e of [...ST.sel.e]) { const [a, b] = e.split('|'); if (!M.v[a] || !M.v[b]) ST.sel.e.delete(e); } rebuild(); save(); info(); $('#bUndo').disabled = !ST.undo.length; $('#bRedo').disabled = !ST.redo.length; }
 
 /* ================= Scène 3D ================= */
 const cv = $('#cv'), view = $('#view');
@@ -646,6 +711,8 @@ const mat = {
   back: new THREE.MeshLambertMaterial({ side: THREE.BackSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 }),
   pick: new THREE.MeshBasicMaterial({ side: THREE.DoubleSide }),
   edge: new THREE.LineBasicMaterial(),
+  ghost: new THREE.MeshBasicMaterial({ color: 0x9aa0a6, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false }),
+  ghostEdge: new THREE.LineBasicMaterial({ color: 0x8a8f94, transparent: true, opacity: 0.45 }),
   hover: new THREE.MeshBasicMaterial({ color: 0xC98A1E, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }),
   sel: new THREE.MeshBasicMaterial({ color: 0x2F6FD0, transparent: true, opacity: 0.28, side: THREE.DoubleSide, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }),
   selEdge: new THREE.LineBasicMaterial({ color: 0x2F6FD0 }),
@@ -682,27 +749,39 @@ function triFace(m, f) {
   let tris = []; try { tris = THREE.ShapeUtils.triangulateShape(L2[0].map(p => new THREE.Vector2(p[0], p[1])), L2.slice(1).map(h => h.map(p => new THREE.Vector2(p[0], p[1])))); } catch (e) { console.warn(e); }
   return { tris, ids: loops.flat(), n: fr.n };
 }
-function faceGeo(m, keys) {
-  const pos = [], nor = [], tf = [];
+function faceGeo(m, keys, tag, acc) {
+  const pos = acc ? acc.pos : [], nor = acc ? acc.nor : [], tf = acc ? acc.tf : [];
   for (const k of keys) { const f = m.f[k]; if (!f) continue; const { tris, ids, n } = triFace(m, f);
-    for (const t of tris) { let a = m.v[ids[t[0]]], b = m.v[ids[t[1]]], c = m.v[ids[t[2]]]; if (vdot(vcross(vsub(b, a), vsub(c, a)), n) < 0) [b, c] = [c, b]; pos.push(...a, ...b, ...c); for (let i = 0; i < 3; i++) nor.push(...n); tf.push(k); } }
+    for (const t of tris) { let a = m.v[ids[t[0]]], b = m.v[ids[t[1]]], c = m.v[ids[t[2]]]; if (vdot(vcross(vsub(b, a), vsub(c, a)), n) < 0) [b, c] = [c, b]; pos.push(...a, ...b, ...c); for (let i = 0; i < 3; i++) nor.push(...n); tf.push(tag || k); } }
+  if (acc) return;
   const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3)); return { g, tf };
 }
 function linesGeo(m, edges) { const p = []; for (const [a, b] of edges) p.push(...m.v[a], ...m.v[b]); const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(p, 3)); return g; }
 /* arêtes adoucies : entre deux faces presque dans le prolongement (facettes d'un cylindre), l'arête n'est pas dessinée */
-function visibleEdges(m) {
+function visibleEdges(m, soft) {
   const ef = edgeFaces(m), N = {}; for (const k in m.f) N[k] = faceN(m, m.f[k]);
-  return modelEdges(m).filter(([a, b]) => { const fs = ef.get(ekey(a, b)); if (!fs || fs.length !== 2) return true; const c = vdot(N[fs[0]], N[fs[1]]); return !(c > Math.cos(25 * Math.PI / 180) && c < 1 - 1e-6); });
+  return modelEdges(m).filter(([a, b]) => { const fs = ef.get(ekey(a, b)); if (!fs || fs.length !== 2) return true; const c = vdot(N[fs[0]], N[fs[1]]); return !(c > Math.cos(25 * Math.PI / 180) && (soft || c < 1 - 1e-6)); });
 }
+/* groupes : géométrie placée (cache par groupe) */
+const GC = new Map();
+function gWorld(g) { const k = JSON.stringify(g.t) + '|' + g.m.n + '|' + Object.keys(g.m.f).length + '|' + Object.keys(g.m.l || {}).length; const c = GC.get(g); if (c && c.k === k) return c.w; const w = shiftModel(g.m, g.t); w.l = w.l || {}; GC.set(g, { k, w }); return w; }
+const isG = fid => typeof fid === 'string' && fid.startsWith('g:');
+function rootModel() { if (!ST.ctx) return M; const r = JSON.parse(JSON.stringify(ST.root)), g = r.G[ST.ctx]; g.m = shiftModel(M, vmul(g.t, -1)); g.m.l = g.m.l || {}; return r; }
 function show(m) {
   if (G.group) { scene.remove(G.group); G.group.traverse(o => o.geometry && o.geometry.dispose()); }
   const { g } = faceGeo(m, Object.keys(m.f)), grp = new THREE.Group();
   grp.add(new THREE.Mesh(g, mat.front), new THREE.Mesh(g, mat.back), new THREE.LineSegments(linesGeo(m, visibleEdges(m)), mat.edge));
+  for (const gid in m.G || {}) { const w = gWorld(m.G[gid]), fg = faceGeo(w, Object.keys(w.f)).g; grp.add(new THREE.Mesh(fg, mat.front), new THREE.Mesh(fg, mat.back), new THREE.LineSegments(linesGeo(w, visibleEdges(w, m.G[gid].soft)), mat.edge)); }
+  if (ST.ctx && ST.root) { // groupe ouvert : le reste de la maquette en grisé
+    const r = ST.root, rg = faceGeo(r, Object.keys(r.f)).g; grp.add(new THREE.Mesh(rg, mat.ghost), new THREE.LineSegments(linesGeo(r, visibleEdges(r)), mat.ghostEdge));
+    for (const gid in r.G || {}) { if (gid === ST.ctx) continue; const w = gWorld(r.G[gid]); grp.add(new THREE.Mesh(faceGeo(w, Object.keys(w.f)).g, mat.ghost), new THREE.LineSegments(linesGeo(w, visibleEdges(w, r.G[gid].soft)), mat.ghostEdge)); } }
   G.group = grp; scene.add(grp); req();
 }
 function rebuild() {
   show(M);
-  if (G.pick) G.pick.geometry.dispose(); const { g, tf } = faceGeo(M, Object.keys(M.f)); G.pick = new THREE.Mesh(g, mat.pick); G.tf = tf;
+  if (G.pick) G.pick.geometry.dispose(); const acc = { pos: [], nor: [], tf: [] }; faceGeo(M, Object.keys(M.f), null, acc); G.GP = []; G.GE = [];
+  for (const gid in M.G || {}) { const w = gWorld(M.G[gid]); faceGeo(w, Object.keys(w.f), 'g:' + gid, acc); for (const k in w.v) G.GP.push(w.v[k]); for (const [a, b] of modelEdges(w)) G.GE.push({ pa: w.v[a], pb: w.v[b], g: gid }); }
+  const pg = new THREE.BufferGeometry(); pg.setAttribute('position', new THREE.Float32BufferAttribute(acc.pos, 3)); pg.setAttribute('normal', new THREE.Float32BufferAttribute(acc.nor, 3)); G.pick = new THREE.Mesh(pg, mat.pick); G.tf = acc.tf;
   G.E = modelEdges(M).map(([a, b]) => ({ a, b, pa: M.v[a], pb: M.v[b], k: ekey(a, b) })); G.V = Object.keys(M.v).map(Number);
   drawSel(); hover(null);
 }
@@ -711,19 +790,21 @@ let hoverObj = null, selObj = null, hovKey = '';
 function hover(h) {
   const k = h ? (h.fid ? 'f' + h.fid : 'e' + h.e.k) : ''; if (k === hovKey) return; hovKey = k;
   if (hoverObj) { scene.remove(hoverObj); hoverObj.geometry.dispose(); hoverObj = null; }
-  if (h && h.fid && M.f[h.fid]) hoverObj = new THREE.Mesh(faceGeo(M, [h.fid]).g, mat.hover);
+  if (h && isG(h.fid) && M.G && M.G[h.fid.slice(2)]) { const w = gWorld(M.G[h.fid.slice(2)]); hoverObj = new THREE.Mesh(faceGeo(w, Object.keys(w.f)).g, mat.hover); }
+  else if (h && h.fid && M.f[h.fid]) hoverObj = new THREE.Mesh(faceGeo(M, [h.fid]).g, mat.hover);
   else if (h && h.e) hoverObj = new THREE.LineSegments(linesGeo(M, [[h.e.a, h.e.b]]), mat.hoverEdge);
   if (hoverObj) { hoverObj.renderOrder = 2; scene.add(hoverObj); } req();
 }
 function drawSel() {
   if (selObj) { scene.remove(selObj); selObj.traverse(o => o.geometry && o.geometry.dispose()); selObj = null; }
-  if (!ST.sel.f.size && !ST.sel.e.size) { req(); return; }
+  if (!ST.sel.f.size && !ST.sel.e.size && !ST.sel.g.size) { req(); return; }
   const g = new THREE.Group(); g.add(new THREE.Mesh(faceGeo(M, [...ST.sel.f]).g, mat.sel));
+  for (const gid of ST.sel.g) if (M.G && M.G[gid]) { const w = gWorld(M.G[gid]); g.add(new THREE.Mesh(faceGeo(w, Object.keys(w.f)).g, mat.sel), new THREE.LineSegments(linesGeo(w, modelEdges(w)), mat.selEdge)); }
   const es = [...ST.sel.e].map(k => k.split('|').map(Number)).filter(([a, b]) => M.v[a] && M.v[b]);
   for (const k of ST.sel.f) if (M.f[k]) for (const L of loopsOf(M.f[k])) for (let i = 0; i < L.length; i++) es.push([L[i], L[(i + 1) % L.length]]);
   g.add(new THREE.LineSegments(linesGeo(M, es), mat.selEdge)); g.renderOrder = 3; selObj = g; scene.add(g); req();
 }
-const clearSel = () => { ST.sel.f.clear(); ST.sel.e.clear(); drawSel(); info(); };
+const clearSel = () => { ST.sel.f.clear(); ST.sel.e.clear(); ST.sel.g.clear(); drawSel(); info(); selBar(); };
 /* tracé provisoire : polyligne, ligne d'inférence pointillée */
 let rubberObj = null, guideObj = null;
 function rubber(pts, closed, color) {
@@ -772,8 +853,9 @@ function pointUnder(sx, sy) {
   return vadd(r.o, vmul(r.d, Math.max(1, vdist(camPos(), ST.focus))));
 }
 function bounds(keys) {
+  const extra = []; if (!keys) for (const gid in M.G || {}) extra.push(...groupPts(M.G[gid])); else for (const gid of keys.g || []) if (M.G && M.G[gid]) extra.push(...groupPts(M.G[gid]));
   const ids = new Set(); if (keys) { for (const k of keys.f) if (M.f[k]) for (const L of loopsOf(M.f[k])) L.forEach(i => ids.add(i)); for (const e of keys.e) e.split('|').forEach(i => ids.add(+i)); } else Object.keys(M.v).forEach(i => ids.add(+i));
-  const P = [...ids].map(i => M.v[i]).filter(Boolean); if (!P.length) return null;
+  const P = [...ids].map(i => M.v[i]).filter(Boolean).concat(extra); if (!P.length) return null;
   const lo = [0, 1, 2].map(i => Math.min(...P.map(p => p[i]))), hi = [0, 1, 2].map(i => Math.max(...P.map(p => p[i]))), c = vmul(vadd(lo, hi), .5);
   return { c, r: Math.max(0.5, vdist(lo, hi) / 2) };
 }
@@ -968,11 +1050,12 @@ function snap(sx, sy, o = {}) {
   const proj = p => o.plane ? vsub(p, vmul(o.plane.n, vdot(vsub(p, o.plane.o), o.plane.n))) : p;
   let best = null, bd = 10;
   for (const id of G.V) { if (o.excl && o.excl.has(id)) continue; const p = M.v[id], s = toScreen(p); if (!s) continue; const d = Math.hypot(s[0] - sx, s[1] - sy); if (d < bd && vis(p)) { bd = d; best = { p, type: 'end', id }; } }
+  for (const p of G.GP || []) { const s = toScreen(p); if (!s) continue; const d = Math.hypot(s[0] - sx, s[1] - sy); if (d < bd && vis(p)) { bd = d; best = { p, type: 'end' }; } }
   if (best) return { ...best, p: proj(best.p), fid: hit && hit.fid };
-  bd = 9; for (const e of G.E) { const p = vmul(vadd(e.pa, e.pb), .5), s = toScreen(p); if (!s) continue; const d = Math.hypot(s[0] - sx, s[1] - sy); if (d < bd && vis(p)) { bd = d; best = { p, type: 'mid', e }; } }
+  bd = 9; for (const e of G.E.concat(G.GE || [])) { const p = vmul(vadd(e.pa, e.pb), .5), s = toScreen(p); if (!s) continue; const d = Math.hypot(s[0] - sx, s[1] - sy); if (d < bd && vis(p)) { bd = d; best = { p, type: 'mid', e }; } }
   if (best) return { ...best, p: proj(best.p), fid: hit && hit.fid };
   let eb = null; bd = 7;
-  for (const e of G.E) { const u = vsub(e.pb, e.pa), L = vlen(u); if (L < 1e-9) continue; const un = vmul(u, 1 / L); let s = Math.max(0, Math.min(L, lineRay(e.pa, un, r.o, r.d))); const p = vadd(e.pa, vmul(un, s)), sp = toScreen(p); if (!sp) continue; const d = Math.hypot(sp[0] - sx, sp[1] - sy); if (d < bd && vis(p) && onPl(p)) { bd = d; eb = { p, type: 'edge', e }; } }
+  for (const e of G.E.concat(G.GE || [])) { const u = vsub(e.pb, e.pa), L = vlen(u); if (L < 1e-9) continue; const un = vmul(u, 1 / L); let s = Math.max(0, Math.min(L, lineRay(e.pa, un, r.o, r.d))); const p = vadd(e.pa, vmul(un, s)), sp = toScreen(p); if (!sp) continue; const d = Math.hypot(sp[0] - sx, sp[1] - sy); if (d < bd && vis(p) && onPl(p)) { bd = d; eb = { p, type: 'edge', e }; } }
   let ab = null;
   if (o.from && !o.noAxis) { bd = 11;
     for (let i = 0; i < 3; i++) { const ax = AXES[i]; if (o.plane && Math.abs(vdot(ax, o.plane.n)) > 1e-6) continue; const s = lineRay(o.from, ax, r.o, r.d), p = vadd(o.from, vmul(ax, s)), sp = toScreen(p); if (!sp || Math.abs(s) < 1e-6) continue; const d = Math.hypot(sp[0] - sx, sp[1] - sy); if (d < bd) { bd = d; ab = { p, type: 'axis', axis: i }; } }
@@ -1035,11 +1118,11 @@ TOOLS.select = {
   label: 'Mesures',
   move(sx, sy) { hover(pickEdgeOrFace(sx, sy)); },
   down(sx, sy, ev) {
-    const h = pickEdgeOrFace(sx, sy), add = ev.shiftKey || ev.ctrlKey || ev.metaKey; if (!add) { ST.sel.f.clear(); ST.sel.e.clear(); }
-    if (h) { const set = h.fid ? ST.sel.f : ST.sel.e, k = h.fid || h.e.k; if (add && set.has(k)) set.delete(k); else set.add(k); }
-    drawSel(); info();
+    const h = pickEdgeOrFace(sx, sy), add = ev.shiftKey || ev.ctrlKey || ev.metaKey; if (!add) { ST.sel.f.clear(); ST.sel.e.clear(); ST.sel.g.clear(); }
+    if (h) { const gr = isG(h.fid), set = gr ? ST.sel.g : h.fid ? ST.sel.f : ST.sel.e, k = gr ? h.fid.slice(2) : h.fid || h.e.k; if (add && set.has(k)) set.delete(k); else set.add(k); }
+    drawSel(); info(); selBar();
   },
-  dbl(sx, sy) { const h = pickFace(sx, sy); if (!h) return; for (const k of connected(M, h.fid)) ST.sel.f.add(k); drawSel(); info(); }
+  dbl(sx, sy) { const h = pickFace(sx, sy); if (!h) return; if (isG(h.fid)) { enterGroup(h.fid.slice(2)); return; } for (const k of connected(M, h.fid)) ST.sel.f.add(k); drawSel(); info(); selBar(); }
 };
 /* sélection par fenêtre (de gauche à droite : entièrement dedans) ou par capture (de droite à gauche : ce qui touche le cadre), comme SketchUp */
 function selBox(d, x1, y1) { const el = $('#selBox'); if (!d) { el.hidden = true; return; } const l = Math.min(d.x0, x1), t = Math.min(d.y0, y1); el.hidden = false; el.className = x1 < d.x0 ? 'cross' : ''; el.style.cssText = `left:${l}px;top:${t}px;width:${Math.abs(x1 - d.x0)}px;height:${Math.abs(y1 - d.y0)}px`; }
@@ -1047,13 +1130,15 @@ function winSelect(x0, y0, x1, y1, add) {
   const cross = x1 < x0, L = Math.min(x0, x1), R = Math.max(x0, x1), T = Math.min(y0, y1), B = Math.max(y0, y1), inR = p => p && p[0] >= L && p[0] <= R && p[1] >= T && p[1] <= B;
   const segHit = (a, b) => { if (!a || !b) return false; if (inR(a) || inR(b)) return true; const S = [[L, T, R, T], [R, T, R, B], [R, B, L, B], [L, B, L, T]];
     return S.some(([c, d, e, f]) => { const den = (b[0] - a[0]) * (f - d) - (b[1] - a[1]) * (e - c); if (Math.abs(den) < 1e-9) return false; const u = ((c - a[0]) * (f - d) - (d - a[1]) * (e - c)) / den, v = ((c - a[0]) * (b[1] - a[1]) - (d - a[1]) * (b[0] - a[0])) / den; return u >= 0 && u <= 1 && v >= 0 && v <= 1; }); };
-  const P = {}, sp = id => (id in P ? P[id] : (P[id] = toScreen(M.v[id]))); if (!add) { ST.sel.f.clear(); ST.sel.e.clear(); }
+  const P = {}, sp = id => (id in P ? P[id] : (P[id] = toScreen(M.v[id]))); if (!add) { ST.sel.f.clear(); ST.sel.e.clear(); ST.sel.g.clear(); }
   for (const k in M.f) { const Ls = loopsOf(M.f[k]); let ok;
     if (!cross) ok = Ls.every(Lp => Lp.every(id => inR(sp(id))));
     else ok = Ls.some(Lp => Lp.some((id, i) => segHit(sp(id), sp(Lp[(i + 1) % Lp.length])))) || (() => { const c = [(L + R) / 2, (T + B) / 2], h = pickFace(c[0], c[1]); return h && h.fid === k; })();
     if (ok) ST.sel.f.add(k); }
   for (const k in M.l) { const [a, b] = M.l[k], A = sp(a), Bp = sp(b); if (cross ? segHit(A, Bp) : inR(A) && inR(Bp)) ST.sel.e.add(ekey(a, b)); }
-  drawSel(); info(); const n = ST.sel.f.size + ST.sel.e.size; setStatus(n ? `${cross ? 'Capture' : 'Fenêtre'} : ${ST.sel.f.size} face(s)${ST.sel.e.size ? ', ' + ST.sel.e.size + ' trait(s)' : ''}` : '');
+  for (const gid in M.G || {}) { const w = gWorld(M.G[gid]), Q = {}, q = id => (id in Q ? Q[id] : (Q[id] = toScreen(w.v[id]))), E = modelEdges(w);
+    if (cross ? E.some(([a, b]) => segHit(q(a), q(b))) : Object.keys(w.v).every(id => inR(q(id)))) ST.sel.g.add(gid); }
+  drawSel(); info(); selBar(); const n = ST.sel.f.size + ST.sel.e.size + ST.sel.g.size; setStatus(n ? `${cross ? 'Capture' : 'Fenêtre'} : ${ST.sel.f.size} face(s)${ST.sel.e.size ? ', ' + ST.sel.e.size + ' trait(s)' : ''}${ST.sel.g.size ? ', ' + ST.sel.g.size + ' groupe(s)' : ''}` : '');
 }
 function pickEdgeOrFace(sx, sy) {
   const hit = pickFace(sx, sy), r = setRay(sx, sy); let best = null, bd = 6;
@@ -1064,7 +1149,7 @@ TOOLS.erase = {
   hint: () => 'Clic sur une arête : elle disparaît (deux faces coplanaires de part et d\'autre se réunissent) · clic sur une face : la face disparaît, ses arêtes restent',
   label: 'Mesures',
   move(sx, sy) { hover(pickEdgeOrFace(sx, sy)); },
-  down(sx, sy) { const h = pickEdgeOrFace(sx, sy); if (!h) return; if (h.e) doOp(m => deleteEdge(m, h.e.a, h.e.b)); else doOp(m => { deleteFace(m, h.fid); cleanup(m); }); }
+  down(sx, sy) { const h = pickEdgeOrFace(sx, sy); if (!h) return; if (isG(h.fid)) { const gid = h.fid.slice(2); doOp(m => { delete m.G[gid]; }); return; } if (h.e) doOp(m => deleteEdge(m, h.e.a, h.e.b)); else doOp(m => { deleteFace(m, h.fid); cleanup(m); }); }
 };
 /* ---- ligne ---- */
 TOOLS.line = {
@@ -1183,7 +1268,7 @@ TOOLS.push = {
   label: 'Distance',
   busy() { return !!this.s; },
   reset() { if (this.s) { this.s = null; show(M); } guide(); },
-  target(sx, sy) { const e = pickPullEdge(sx, sy); if (e) return e; const h = pickFace(sx, sy); return h ? { h } : null; },
+  target(sx, sy) { const e = pickPullEdge(sx, sy); if (e) return e; const h = pickFace(sx, sy); if (h && isG(h.fid)) { setStatus('Groupe : double-cliquez dessus (outil Sélection) pour le modifier'); return null; } return h ? { h } : null; },
   move(sx, sy) {
     if (!this.s) { const t = this.target(sx, sy); hover(t ? (t.e ? { e: t.e } : { fid: t.h.fid }) : null); marker(null); return; }
     if (this.s.lines) { this.moveLines(sx, sy); return; }
@@ -1236,18 +1321,24 @@ TOOLS.push = {
     this.make((Math.sign(this.s.d) || 1) * v); return true; }
 };
 /* ---- déplacer (Ctrl : copier) ---- */
+/* déplacement ou copie : faces, arêtes et groupes (un groupe se déplace d'un bloc) */
+function moveAny(m, t, d, copy) {
+  let ok = true; if ((t.f && t.f.length) || (t.e && t.e.length)) ok = copy ? copySel(m, t, d) : moveSel(m, t, d); if (!ok) return false;
+  for (const g of t.g || []) { const G0 = m.G && m.G[g]; if (!G0) continue; if (copy) { const id = 'g' + (m.n++); m.G[id] = JSON.parse(JSON.stringify(G0)); m.G[id].t = vadd(G0.t, d); m.G[id].nom = G0.nom + ' (copie)'; } else G0.t = vadd(G0.t, d); }
+  return true;
+}
 TOOLS.move = {
   s: null, cur: null,
   hint() { return this.s ? 'Clic : point d\'arrivée · tapez la distance puis Entrée · Ctrl enfoncé : copie · Échap : annuler' : 'Clic sur un point de départ : déplace la sélection, à défaut la face ou l\'arête visée (pour un volume entier : double-clic avec la sélection) · Ctrl : copier'; },
   label: 'Distance',
   busy() { return !!this.s; },
   reset() { if (this.s) { this.s = null; show(M); } guide(); },
-  target(sx, sy) { if (ST.sel.f.size || ST.sel.e.size) return { f: [...ST.sel.f], e: [...ST.sel.e] }; const h = pickEdgeOrFace(sx, sy); return !h ? null : h.fid ? { f: [h.fid], e: [] } : { f: [], e: [h.e.k] }; },
+  target(sx, sy) { if (ST.sel.f.size || ST.sel.e.size || ST.sel.g.size) return { f: [...ST.sel.f], e: [...ST.sel.e], g: [...ST.sel.g] }; const h = pickEdgeOrFace(sx, sy); return !h ? null : isG(h.fid) ? { f: [], e: [], g: [h.fid.slice(2)] } : h.fid ? { f: [h.fid], e: [] } : { f: [], e: [h.e.k] }; },
   at(sx, sy) { return roundFrom(snap(sx, sy, { from: this.s.p0, excl: this.s.vs }), this.s.p0); },
   move(sx, sy, ev) {
     if (!this.s) { hover(ST.sel.f.size || ST.sel.e.size ? null : pickEdgeOrFace(sx, sy)); marker(snap(sx, sy)); return; }
     const s = this.at(sx, sy); if (!s) return; this.cur = s; const d = vsub(s.p, this.s.p0), copy = this.s.copy || !!(ev && (ev.ctrlKey || ev.metaKey));
-    const m = JSON.parse(this.s.base), ok = vlen(d) < TOL || (copy ? copySel(m, this.s.t, d) : moveSel(m, this.s.t, d)); show(ok ? m : M);
+    const m = JSON.parse(this.s.base), ok = vlen(d) < TOL || moveAny(m, this.s.t, d, copy); show(ok ? m : M);
     guide(this.s.p0, s.p, s.type === 'axis' ? AXC[s.axis] : null); marker(s, ok ? (copy ? 'Copie · ' : '') + fmtL(vlen(d)) : 'Impossible : une face ne resterait pas plane'); vcbShow('Distance', numL(vlen(d)));
   },
   down(sx, sy, ev) {
@@ -1256,7 +1347,7 @@ TOOLS.move = {
   },
   make(d, copy) {
     const S = this.s; this.s = null; guide(); marker(null); if (vlen(d) < TOL) { show(M); hint(this.hint()); return; }
-    const t = S.t, dir = vnorm(d), fn = (m, v) => copy ? copySel(m, t, vmul(dir, v)) : moveSel(m, t, vmul(dir, v));
+    const t = S.t, dir = vnorm(d), fn = (m, v) => moveAny(m, t, vmul(dir, v), copy);
     if (!fn(JSON.parse(S.base), vlen(d))) { show(M); setStatus('Déplacement impossible : une face voisine ne resterait pas plane', 'err'); hint(this.hint()); return; }
     commitFrom(S.base, txt => { const v = parseLen(txt); return isFinite(v) ? v : null; }, fn, vlen(d)); clearSel(); setStatus(''); hint(this.hint());
   },
@@ -1326,11 +1417,12 @@ document.addEventListener('keydown', ev => {
   if (ctrl && (k === 'z' || k === 'Z')) { ev.preventDefault(); ev.shiftKey ? redo() : undo(); return; }
   if (ctrl && (k === 'y' || k === 'Y')) { ev.preventDefault(); redo(); return; }
   if (ctrl && (k === 's' || k === 'S')) { ev.preventDefault(); saveFile(); return; }
-  if (ctrl && (k === 'a' || k === 'A')) { ev.preventDefault(); setTool('select'); Object.keys(M.f).forEach(f => ST.sel.f.add(f)); drawSel(); info(); return; }
+  if (ctrl && (k === 'g' || k === 'G')) { ev.preventDefault(); ev.shiftKey ? doUngroup() : doGroup(); return; }
+  if (ctrl && (k === 'a' || k === 'A')) { ev.preventDefault(); setTool('select'); Object.keys(M.f).forEach(f => ST.sel.f.add(f)); Object.keys(M.G || {}).forEach(g => ST.sel.g.add(g)); drawSel(); info(); selBar(); return; }
   if (ctrl) return;
   // chiffres, signe, séparateurs : saisie des cotes, comme dans SketchUp (on tape sans cliquer dans la case)
   if (/^[0-9.,;\-+]$/.test(k)) { ev.preventDefault(); if (document.activeElement !== vcb) vcb.value = ''; vcb.focus(); vcb.value += k; return; }
-  if (k === 'Escape') { const T = TOOLS[ST.tool]; if (T.busy && T.busy()) cancelTool(); else clearSel(); hint(T.hint()); return; }
+  if (k === 'Escape') { const T = TOOLS[ST.tool]; if (T.busy && T.busy()) cancelTool(); else if (ST.ctx && !ST.sel.f.size && !ST.sel.e.size) exitGroup(); else clearSel(); hint(T.hint()); return; }
   if (k === 'Delete' || k === 'Backspace') { ev.preventDefault(); delSel(); return; }
   if (k === 'Z' && ev.shiftKey) { frameView(bounds()); save(); return; }
   if (k === 'PageDown' || k === 'PageUp') { ev.preventDefault(); sceneStep(k === 'PageDown' ? 1 : -1); return; }
@@ -1338,23 +1430,170 @@ document.addEventListener('keydown', ev => {
   if (t && !ev.shiftKey) { ev.preventDefault(); setTool(t); }
 });
 function delSel() {
-  if (!ST.sel.f.size && !ST.sel.e.size) return; const fs = [...ST.sel.f], es = [...ST.sel.e].map(k => k.split('|').map(Number));
-  doOp(m => { for (const f of fs) deleteFace(m, f); for (const [a, b] of es) if (m.v[a] && m.v[b]) deleteEdge(m, a, b); cleanup(m); }); clearSel();
+  if (!ST.sel.f.size && !ST.sel.e.size && !ST.sel.g.size) return; const fs = [...ST.sel.f], es = [...ST.sel.e].map(k => k.split('|').map(Number)), gs = [...ST.sel.g];
+  doOp(m => { for (const g of gs) if (m.G) delete m.G[g]; for (const f of fs) deleteFace(m, f); for (const [a, b] of es) if (m.v[a] && m.v[b]) deleteEdge(m, a, b); cleanup(m); }); clearSel();
+}
+
+/* ================= Groupes ================= */
+function doGroup() {
+  if (ST.ctx) { setStatus('Fermez d\'abord le groupe ouvert'); return; } const fs = [...ST.sel.f], es = [...ST.sel.e], gs = [...ST.sel.g]; if (!fs.length && !es.length && gs.length < 2) { setStatus('Sélectionnez des faces, des traits ou plusieurs groupes à grouper'); return; }
+  let gid = null; doOp(m => { gid = makeGroup(m, fs, es, gs); return gid ? undefined : false; }); clearSel(); if (gid) { ST.sel.g.add(gid); drawSel(); info(); selBar(); setStatus('Groupe créé : double-clic pour le modifier', 'ok'); }
+}
+function doUngroup() { const gs = [...ST.sel.g]; if (!gs.length) return; doOp(m => { for (const g of gs) explodeGroup(m, g); }); clearSel(); setStatus('Dégroupé', 'ok'); }
+function enterGroup(gid) {
+  if (ST.ctx || !M.G || !M.G[gid]) return; cancelTool(); const g = M.G[gid];
+  ST.root = M; ST.ctx = gid; ST.ctxBefore = JSON.stringify(M); ST.rootStacks = [ST.undo.splice(0), ST.redo.splice(0)]; ST.last = null;
+  M = shiftModel(g.m, g.t); M.l = M.l || {}; clearSel(); changed(); setStatus('Groupe « ' + g.nom + ' » ouvert : Échap ou « Fermer le groupe » pour revenir');
+}
+function exitGroup(quiet) {
+  if (!ST.ctx) return; cancelTool(); const r = rootModel(), before = ST.ctxBefore; ST.undo.splice(0, ST.undo.length, ...ST.rootStacks[0]); ST.redo.splice(0, ST.redo.length, ...ST.rootStacks[1]);
+  M = r; ST.ctx = null; ST.root = null; ST.last = null; if (JSON.stringify(r) !== before) pushUndo(before); if (!quiet) { clearSel(); changed(); setStatus(''); }
+}
+function ctxBar() { const el = $('#ctxBar'); if (!el) return; if (!ST.ctx || !ST.root) { el.hidden = true; return; } el.hidden = false; el.innerHTML = `Groupe « ${escH(ST.root.G[ST.ctx].nom)} » ouvert <button class="btn sm" id="ctxClose">Fermer le groupe</button>`; $('#ctxClose').onclick = () => { exitGroup(); cv.focus(); }; }
+function selBar() {
+  const el = $('#selBar'); if (!el) return; const nf = ST.sel.f.size, ne = ST.sel.e.size, ng = ST.sel.g.size; if (!nf && !ne && !ng) { el.hidden = true; return; }
+  const one = ng === 1 && !nf && !ne ? [...ST.sel.g][0] : null; el.hidden = false;
+  el.innerHTML = (!ST.ctx && (nf || ne || ng > 1) ? '<button class="btn sm" data-a="grp" title="Ctrl+G">Grouper</button>' : '') + (ng ? '<button class="btn sm" data-a="ungrp" title="Ctrl+Maj+G">Dégrouper</button>' : '')
+    + (one && M.G[one] ? `<button class="btn sm" data-a="open">Ouvrir</button><button class="btn sm" data-a="ren" title="Renommer « ${escH(M.G[one].nom)} »">Renommer</button>` : '') + '<button class="btn sm danger" data-a="del">Supprimer</button>';
+  el.querySelectorAll('button').forEach(b => b.onclick = () => { const a = b.dataset.a; if (a === 'grp') doGroup(); else if (a === 'ungrp') doUngroup(); else if (a === 'open') enterGroup(one); else if (a === 'del') delSel(); else if (a === 'ren') { const n = prompt('Nom du groupe', M.G[one].nom); if (n && n.trim()) doOp(m => { m.G[one].nom = n.trim().slice(0, 60); }); } cv.focus(); });
+}
+
+/* ================= Import : DXF (tracé 2D ou faces 3D, par calques), OBJ, DAE (SketchUp), glTF ================= */
+const IMP = { data: null };
+function impFile(file) {
+  const ext = (file.name.split('.').pop() || '').toLowerCase();
+  if (ext === 'dwg') { impMsg('Format DWG', 'Le DWG (AutoCAD) est un format fermé que le navigateur ne lit pas. Enregistrez le plan en <b>DXF</b> : AutoCAD ou ArchiCAD, Enregistrer sous &gt; DXF, ou le convertisseur gratuit ODA File Converter. Puis importez le DXF.'); return; }
+  if (ext === 'skp') { impMsg('Format SketchUp', 'Le format .skp n\'est pas lisible hors de SketchUp. Dans SketchUp : Fichier &gt; Exporter &gt; Modèle 3D, au format <b>COLLADA (.dae)</b>, <b>OBJ</b> ou <b>glTF</b> pour un modèle ; pour un tracé à redessiner, exportez la vue en plan en <b>DXF</b> (SketchUp Pro, Exporter &gt; Graphique 2D).'); return; }
+  const rd = new FileReader();
+  rd.onload = async () => { try {
+    if (ext === 'dxf') IMP.data = { kind: 'dxf', name: file.name, ...parseDXF(rd.result) };
+    else if (ext === 'obj') IMP.data = { kind: 'mesh', name: file.name, unit: 'm', ...parseOBJ(rd.result) };
+    else if (ext === 'dae' || ext === 'gltf' || ext === 'glb') IMP.data = { kind: 'mesh', name: file.name, unit: 'auto', ...(await parse3D(ext, rd.result)) };
+    else throw new Error('format non reconnu (DXF, OBJ, DAE, glTF, GLB)');
+    impDialog();
+  } catch (e) { setStatus('Import impossible : ' + e.message, 'err'); } };
+  if (ext === 'glb') rd.readAsArrayBuffer(file); else rd.readAsText(file);
+}
+function impMsg(t, html) { const el = $('#imp'); el.innerHTML = `<h3>${t}</h3><p>${html}</p><div class="r"><span class="grow"></span><button class="btn" id="impX">Fermer</button></div>`; el.hidden = false; $('#impX').onclick = () => { el.hidden = true; cv.focus(); }; }
+/* DXF : lignes, polylignes (arcs compris), cercles, arcs, ellipses, splines, 3DFACE, SOLID, maillages polyface, blocs insérés */
+function parseDXF(text) {
+  const L = text.split(/\r?\n/), P = []; for (let i = 0; i + 1 < L.length; i += 2) P.push([parseInt(L[i], 10), L[i + 1].trim()]);
+  let units = 0; const blocks = {}, ents = []; let i = 0, sec = null, blk = null;
+  const readEnt = () => { const e = { type: P[i][1], c: [] }; i++; while (i < P.length && P[i][0] !== 0) { e.c.push(P[i]); i++; } return e; };
+  while (i < P.length) {
+    const [c, v] = P[i];
+    if (c === 0 && v === 'SECTION') { sec = P[i + 1] && P[i + 1][1]; i += 2; continue; }
+    if (c === 0 && v === 'ENDSEC') { sec = null; i++; continue; }
+    if (sec === 'HEADER') { if (c === 9 && v === '$INSUNITS') { units = parseInt(P[i + 1][1], 10) || 0; i += 2; continue; } i++; continue; }
+    if (c === 0 && (sec === 'ENTITIES' || sec === 'BLOCKS')) {
+      const e = readEnt();
+      if (e.type === 'BLOCK') { const g = k => (e.c.find(p => p[0] === k) || [])[1]; blk = { name: g(2), base: [+g(10) || 0, +g(20) || 0, +g(30) || 0], ents: [] }; continue; }
+      if (e.type === 'ENDBLK') { if (blk) blocks[blk.name] = blk; blk = null; continue; }
+      if (e.type === 'POLYLINE') { e.verts = []; while (i < P.length && P[i][0] === 0 && P[i][1] === 'VERTEX') e.verts.push(readEnt()); if (i < P.length && P[i][1] === 'SEQEND') readEnt(); }
+      (blk ? blk.ents : sec === 'ENTITIES' ? ents : []).push(e); continue;
+    }
+    i++;
+  }
+  const segs = [], faces = [], layers = new Map(), cnt = l => layers.set(l, (layers.get(l) || 0) + 1);
+  const g1 = (e, k, d) => { const p = e.c.find(x => x[0] === k); return p ? +p[1] : d; }, gs = (e, k) => (e.c.find(x => x[0] === k) || [])[1];
+  const arcPts = (cx, cy, z, r, a0, a1) => { let da = a1 - a0; while (da <= 1e-9) da += 2 * Math.PI; const n = Math.max(2, Math.ceil(da / (Math.PI / 18))), o = []; for (let k = 0; k <= n; k++) { const a = a0 + da * k / n; o.push([cx + r * Math.cos(a), cy + r * Math.sin(a), z]); } return o; };
+  /* arc de polyligne (renflement b entre a et c) */
+  const bulge = (a, c, b, z) => { const th = 4 * Math.atan(b), ch = Math.hypot(c.x - a.x, c.y - a.y); if (ch < 1e-12) return []; const r = ch / (2 * Math.sin(Math.abs(th) / 2)), mx = (a.x + c.x) / 2, my = (a.y + c.y) / 2, ux = -(c.y - a.y) / ch, uy = (c.x - a.x) / ch, d = r * Math.cos(Math.abs(th) / 2) * Math.sign(b) * (Math.abs(th) > Math.PI ? -1 : 1), cx = mx + ux * d, cy = my + uy * d;
+    const a0 = Math.atan2(a.y - cy, a.x - cx), a1 = Math.atan2(c.y - cy, c.x - cx); return (b > 0 ? arcPts(cx, cy, z, r, a0, a1) : arcPts(cx, cy, z, r, a1, a0).reverse()).slice(1, -1); };
+  const walk = (list, tf, lay0, depth) => {
+    for (const e of list) {
+      let lay = gs(e, 8) || '0'; if (lay === '0' && lay0) lay = lay0; const mir = g1(e, 230, 1) < 0, X = p => tf(mir ? [-p[0], p[1], p[2]] : p);
+      const line = (pts, closed) => { for (let k = 0; k + 1 < pts.length; k++) segs.push([X(pts[k]), X(pts[k + 1]), lay]); if (closed && pts.length > 2) segs.push([X(pts[pts.length - 1]), X(pts[0]), lay]); cnt(lay); };
+      switch (e.type) {
+        case 'LINE': line([[g1(e, 10, 0), g1(e, 20, 0), g1(e, 30, 0)], [g1(e, 11, 0), g1(e, 21, 0), g1(e, 31, 0)]]); break;
+        case 'LWPOLYLINE': { const z = g1(e, 38, 0), V = []; for (const [k, v] of e.c) { if (k === 10) V.push({ x: +v, y: 0, b: 0 }); else if (k === 20 && V.length) V[V.length - 1].y = +v; else if (k === 42 && V.length) V[V.length - 1].b = +v; }
+          const closed = (g1(e, 70, 0) & 1) === 1, pts = []; for (let k = 0; k < V.length; k++) { const a = V[k]; pts.push([a.x, a.y, z]); if (a.b && (k < V.length - 1 || closed)) pts.push(...bulge(a, V[(k + 1) % V.length], a.b, z)); }
+          line(pts, closed); break; }
+        case 'POLYLINE': { const fl = g1(e, 70, 0); if (fl & 64) { const vs = e.verts.filter(v => (g1(v, 70, 0) & 64)).map(v => [g1(v, 10, 0), g1(v, 20, 0), g1(v, 30, 0)]);
+            for (const v of e.verts) { const f2 = g1(v, 70, 0); if ((f2 & 128) && !(f2 & 64)) { const ix = [71, 72, 73, 74].map(k => Math.abs(g1(v, k, 0))).filter(x => x > 0 && vs[x - 1]); if (ix.length >= 3) { faces.push([ix.map(x => X(vs[x - 1])), lay]); cnt(lay); } } } }
+          else line(e.verts.map(v => [g1(v, 10, 0), g1(v, 20, 0), g1(v, 30, 0)]), (fl & 1) === 1); break; }
+        case 'CIRCLE': line(arcPts(g1(e, 10, 0), g1(e, 20, 0), g1(e, 30, 0), g1(e, 40, 0), 0, 2 * Math.PI).slice(0, -1), true); break;
+        case 'ARC': line(arcPts(g1(e, 10, 0), g1(e, 20, 0), g1(e, 30, 0), g1(e, 40, 0), g1(e, 50, 0) * Math.PI / 180, g1(e, 51, 0) * Math.PI / 180)); break;
+        case 'ELLIPSE': { const cx = g1(e, 10, 0), cy = g1(e, 20, 0), cz = g1(e, 30, 0), mx = g1(e, 11, 1), my = g1(e, 21, 0), ra = g1(e, 40, 1), p0 = g1(e, 41, 0), p1 = g1(e, 42, 2 * Math.PI), pts = []; let dp = p1 - p0; while (dp <= 1e-9) dp += 2 * Math.PI; const n = Math.ceil(dp / (Math.PI / 18));
+          for (let k = 0; k <= n; k++) { const t = p0 + dp * k / n, co = Math.cos(t), si = Math.sin(t); pts.push([cx + mx * co - my * ra * si, cy + my * co + mx * ra * si, cz]); } line(pts); break; }
+        case 'SPLINE': { const fit = e.c.some(x => x[0] === 11), kx = fit ? 11 : 10, pts = []; for (let k = 0; k < e.c.length; k++) if (e.c[k][0] === kx) { const y = e.c[k + 1] && e.c[k + 1][0] === kx + 10 ? +e.c[k + 1][1] : 0, z = e.c[k + 2] && e.c[k + 2][0] === kx + 20 ? +e.c[k + 2][1] : 0; pts.push([+e.c[k][1], y, z]); } line(pts, (g1(e, 70, 0) & 1) === 1); break; }
+        case '3DFACE': case 'SOLID': { let q = [0, 1, 2, 3].map(k => [g1(e, 10 + k, 0), g1(e, 20 + k, 0), g1(e, 30 + k, 0)]); if (e.type === 'SOLID') q = [q[0], q[1], q[3], q[2]]; if (vdist(q[2], q[3]) < 1e-9) q = q.slice(0, 3); faces.push([q.map(X), lay]); cnt(lay); break; }
+        case 'INSERT': { const B = blocks[gs(e, 2)]; if (!B || depth > 6) break; const ip = [g1(e, 10, 0), g1(e, 20, 0), g1(e, 30, 0)], sc = [g1(e, 41, 1), g1(e, 42, 1), g1(e, 43, 1)], ro = g1(e, 50, 0) * Math.PI / 180, co = Math.cos(ro), si = Math.sin(ro);
+          walk(B.ents, p => { const q = [(p[0] - B.base[0]) * sc[0], (p[1] - B.base[1]) * sc[1], (p[2] - B.base[2]) * sc[2]]; return X([ip[0] + co * q[0] - si * q[1], ip[1] + si * q[0] + co * q[1], ip[2] + q[2]]); }, lay, depth + 1); break; }
+      }
+    }
+  };
+  walk(ents, p => p, null, 0);
+  if (!segs.length && !faces.length) throw new Error('aucun tracé lisible dans ce DXF (enregistrez-le en DXF ASCII)');
+  const U = { 1: 'in', 2: 'ft', 4: 'mm', 5: 'cm', 6: 'm' }; return { segs, faces, layers: [...layers.entries()].sort((a, b) => a[0].localeCompare(b[0])), unit: U[units] || 'mm', unitKnown: !!U[units] };
+}
+function parseOBJ(text) {
+  const V = [], T = []; for (const ln of text.split(/\r?\n/)) { const p = ln.trim().split(/\s+/); if (p[0] === 'v') V.push([+p[1], +p[2], +p[3]]); else if (p[0] === 'f') { const ix = p.slice(1).map(x => { const k = parseInt(x, 10); return k < 0 ? V.length + k : k - 1; }); for (let k = 1; k + 1 < ix.length; k++) T.push([ix[0], ix[k], ix[k + 1]]); } }
+  if (!T.length) throw new Error('aucune face dans ce fichier OBJ'); return { P: V, T };
+}
+function loadScript(u) { return new Promise((ok, ko) => { const x = document.createElement('script'); x.src = u; x.onload = ok; x.onerror = () => ko(new Error('bibliothèque non chargée (connexion ?)')); document.head.appendChild(x); }); }
+const LOADERS = 'https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/';
+async function parse3D(ext, data) {
+  let root;
+  if (ext === 'dae') { if (!THREE.ColladaLoader) await loadScript(LOADERS + 'ColladaLoader.js'); root = new THREE.ColladaLoader().parse(data, '').scene; }
+  else { if (!THREE.GLTFLoader) await loadScript(LOADERS + 'GLTFLoader.js'); root = await new Promise((ok, ko) => new THREE.GLTFLoader().parse(data, '', g => ok(g.scene), () => ko(new Error('glTF illisible')))); }
+  root.updateMatrixWorld(true); const P = [], T = [], v = new THREE.Vector3();
+  root.traverse(o => { if (!o.isMesh || !o.geometry || !o.geometry.attributes.position) return; const pa = o.geometry.attributes.position, ix = o.geometry.index, b = P.length;
+    for (let k = 0; k < pa.count; k++) { v.fromBufferAttribute(pa, k).applyMatrix4(o.matrixWorld); P.push([v.x, -v.z, v.y]); } // Y vers le haut -> Z vers le haut
+    const n = ix ? ix.count : pa.count; for (let k = 0; k + 2 < n; k += 3) T.push(ix ? [b + ix.getX(k), b + ix.getX(k + 1), b + ix.getX(k + 2)] : [b + k, b + k + 1, b + k + 2]); });
+  if (!T.length) throw new Error('aucun maillage dans ce fichier'); return { P, T };
+}
+const UF = { m: 1, cm: .01, mm: .001, in: .0254, ft: .3048 };
+function impDialog() {
+  const D = IMP.data, el = $('#imp'), dxf = D.kind === 'dxf';
+  el.innerHTML = `<h3>Importer « ${escH(D.name)} »</h3>
+    ${dxf ? `<p class="hint0">${D.segs.length} segment(s), ${D.faces.length} face(s) 3D. Calques à importer :</p><div class="impl">${D.layers.map(([l, n], i) => `<label><input type="checkbox" data-l="${i}" checked> ${escH(l)} <small>${n}</small></label>`).join('')}</div>
+      <div class="r"><label><input type="radio" name="impm" value="2d" checked> Tracé 2D à plat (pour dessiner dessus)</label><label><input type="radio" name="impm" value="3d"> Garder hauteurs et faces 3D</label></div>`
+      : `<p class="hint0">${D.T.length} triangle(s). Les triangles d'un même plan sont réunis en faces.</p>${D.unit === 'auto' ? '' : '<div class="r"><label>Axe vertical du fichier <select id="impY"><option value="y" selected>Y (export OBJ de SketchUp, Blender…)</option><option value="z">Z</option></select></label></div>'}`}
+    <div class="r"><label>Unité du fichier <select id="impU">${D.unit === 'auto' ? '<option value="auto" selected>Indiquée dans le fichier</option>' : ''}${Object.keys(UF).map(u => `<option value="${u}"${u === D.unit ? ' selected' : ''}>${u === 'in' ? 'pouce' : u === 'ft' ? 'pied' : u}</option>`).join('')}</select></label>${dxf && !D.unitKnown ? '<span class="hint0">unité non indiquée dans le fichier : vérifiez</span>' : ''}</div>
+    <div class="r"><label><input type="checkbox" id="impO" checked> Ramener près de l'origine (coin bas gauche en 0,0)</label></div>
+    <div class="r"><span class="hint0" style="flex:1">Importé dans un groupe : déplacez-le avec M, double-cliquez pour le modifier.</span><button class="btn" id="impX">Annuler</button><button class="btn pri" id="impGo">Importer</button></div>`;
+  el.hidden = false; $('#impX').onclick = () => { el.hidden = true; cv.focus(); }; $('#impGo').onclick = () => { impBuild(); el.hidden = true; cv.focus(); };
+}
+function impBuild() {
+  const D = IMP.data, el = $('#imp'), u = $('#impU').value, k = u === 'auto' ? 1 : UF[u], name = D.name.replace(/\.[^.]+$/, '');
+  let sub;
+  if (D.kind === 'dxf') {
+    const on = new Set([...el.querySelectorAll('[data-l]')].filter(x => x.checked).map(x => D.layers[+x.dataset.l][0])), flat = (el.querySelector('[name=impm]:checked') || {}).value !== '3d';
+    sub = newModel(); const map = new Map(), vid = p => { const q = [p[0] * k, p[1] * k, flat ? 0 : p[2] * k], key = q.map(x => Math.round(x * 1e6)).join(','); if (!map.has(key)) { const id = sub.n++; sub.v[id] = q; map.set(key, id); } return map.get(key); };
+    const seen = new Set(), seg = (A, B) => { if (A !== B && !seen.has(ekey(A, B))) { seen.add(ekey(A, B)); sub.l[sub.n++] = [A, B]; } };
+    for (const [a, b, l] of D.segs) if (on.has(l)) seg(vid(a), vid(b));
+    for (const [pts, l] of D.faces) { if (!on.has(l)) continue; const ids = normLoop(pts.map(vid)); if (!flat && ids.length >= 3 && vlen(newell(sub, ids)) > 1e-9) addF(sub, { o: ids, h: [] }); else for (let j = 0; j < ids.length; j++) seg(ids[j], ids[(j + 1) % ids.length]); }
+    if (!flat) { const es = new Set(); for (const f of Object.values(sub.f)) for (let j = 0; j < f.o.length; j++) es.add(ekey(f.o[j], f.o[(j + 1) % f.o.length])); for (const lk in sub.l) if (es.has(ekey(...sub.l[lk]))) delete sub.l[lk]; }
+  } else {
+    if (D.T.length > 80000) { setStatus('Modèle trop lourd (' + D.T.length + ' triangles, 80 000 au plus) : simplifiez-le avant l\'export', 'err'); return; }
+    const yz = $('#impY') && $('#impY').value === 'y', P = D.P.map(p => (yz ? [p[0], -p[2], p[1]] : p).map(x => x * k));
+    sub = meshToModel(P, D.T);
+  }
+  const ids = Object.keys(sub.v); if (!ids.length) { setStatus('Rien à importer (calques décochés ?)', 'err'); return; }
+  const lo = [0, 1, 2].map(i => Math.min(...ids.map(id => sub.v[id][i]))); let off = [0, 0, 0];
+  if ($('#impO').checked) { off = [-lo[0], -lo[1], D.kind === 'mesh' ? -lo[2] : 0]; for (const id of ids) sub.v[id] = vadd(sub.v[id], off); }
+  if (ST.ctx) exitGroup();
+  let gid = null; doOp(m => { m.G = m.G || {}; gid = 'g' + (m.n++); m.G[gid] = { nom: name, t: [0, 0, 0], m: sub, soft: D.kind === 'mesh', src: { fichier: D.name, decalage: off, unite: u } }; });
+  const sz = JSON.stringify(sub).length; setStatus(`« ${name} » importé : ${Object.keys(sub.f).length} face(s), ${Object.keys(sub.l).length} trait(s)${sz > 2e6 ? ' · fichier lourd (' + Math.round(sz / 1e6) + ' Mo) : la synchronisation sera lente' : ''}`, sz > 2e6 ? 'err' : 'ok');
+  clearSel(); ST.sel.g.add(gid); drawSel(); selBar(); info(); frameView(bounds()); save();
 }
 
 /* ================= Informations ================= */
 function info() {
   const el = $('#info'), fs = [...ST.sel.f].filter(k => M.f[k]), es = [...ST.sel.e];
-  const nF = Object.keys(M.f).length, nL = Object.keys(M.l).length;
+  const nF = Object.keys(M.f).length, nL = Object.keys(M.l).length, nG = Object.keys(M.G || {}).length;
   let s = '';
   if (fs.length || es.length) {
     const A = fs.reduce((t, k) => t + faceArea(M, M.f[k]), 0), L = es.reduce((t, k) => { const [a, b] = k.split('|'); return t + (M.v[a] && M.v[b] ? vdist(M.v[a], M.v[b]) : 0); }, 0);
     s += `<div><b>Sélection</b> · ${fs.length ? fs.length + ' face' + (fs.length > 1 ? 's' : '') + ' <span class="mono">' + fmtA(A) + '</span>' : ''}${fs.length && es.length ? ' · ' : ''}${es.length ? es.length + ' arête' + (es.length > 1 ? 's' : '') + ' <span class="mono">' + fmtL(L) + '</span>' : ''}</div>`;
   }
-  if (nF || nL) {
-    let up = 0, vert = 0, tot = 0; for (const k in M.f) { const f = M.f[k], a = faceArea(M, f), n = faceN(M, f); tot += a; if (n[2] > 0.999) up += a; else if (Math.abs(n[2]) < 1e-3) vert += a; }
-    const vol = closedVolume(M);
-    s += `<div>${nF} face${nF > 1 ? 's' : ''}${nL ? ', ' + nL + ' trait' + (nL > 1 ? 's' : '') + ' libre' + (nL > 1 ? 's' : '') : ''} · surfaces <span class="mono">${fmtA(tot)}</span>, dont horizontales vers le haut <span class="mono">${fmtA(up)}</span>, verticales <span class="mono">${fmtA(vert)}</span>${vol != null ? ' · volume fermé <span class="mono">' + fmtV(vol) + '</span>' : ''}</div>`;
+  if (ST.sel.g.size) s += `<div><b>Sélection</b> · ${[...ST.sel.g].filter(g => M.G && M.G[g]).map(g => escH(M.G[g].nom)).join(', ')}</div>`;
+  if (ST.ctx && ST.root) s += `<div><b>Groupe ouvert</b> · ${escH(ST.root.G[ST.ctx].nom)}</div>`;
+  if (nF || nL || nG) {
+    const FM = nG ? flatModel(M) : M; let up = 0, vert = 0, tot = 0; for (const k in FM.f) { const f = FM.f[k], a = faceArea(FM, f), n = faceN(FM, f); tot += a; if (n[2] > 0.999) up += a; else if (Math.abs(n[2]) < 1e-3) vert += a; }
+    const vol = closedVolume(FM);
+    s += `<div>${nG ? nG + ' groupe' + (nG > 1 ? 's' : '') + ', ' : ''}${nF} face${nF > 1 ? 's' : ''}${nL ? ', ' + nL + ' trait' + (nL > 1 ? 's' : '') + ' libre' + (nL > 1 ? 's' : '') : ''} · surfaces <span class="mono">${fmtA(tot)}</span>, dont horizontales vers le haut <span class="mono">${fmtA(up)}</span>, verticales <span class="mono">${fmtA(vert)}</span>${vol != null ? ' · volume fermé <span class="mono">' + fmtV(vol) + '</span>' : ''}</div>`;
   } else s = '<div>Maquette vide. Tracez un rectangle (R) sur le sol, puis tirez-le avec Pousser/tirer (P).</div>';
   s += `<div class="unit">Longueurs en ${UN().nom}, surfaces en m², volumes en m³ · grille de 1 m · X est, Y nord, Z hauteur</div>`;
   el.innerHTML = s;
@@ -1375,10 +1614,10 @@ function closedVolume(m) {
 /* ================= Fichiers ================= */
 const stamp = () => new Date().toISOString().slice(0, 10);
 function dl(name, text, type) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
-function saveFile() { dl(`TerraModel ${stamp()}.json`, JSON.stringify({ app: 'TerraModel', version: APP_VERSION, units: UNIT, scenes: ST.scenes, model: M, cam: camJSON(), segs: ST.segs }), 'application/json'); setStatus('Maquette enregistrée', 'ok'); }
+function saveFile() { dl(`TerraModel ${stamp()}.json`, JSON.stringify({ app: 'TerraModel', version: APP_VERSION, units: UNIT, scenes: ST.scenes, model: rootModel(), cam: camJSON(), segs: ST.segs }), 'application/json'); setStatus('Maquette enregistrée', 'ok'); }
 function loadData(d) {
   if (!d || !d.model || !d.model.v || !d.model.f) throw new Error('fichier TerraModel attendu');
-  M = d.model; M.l = M.l || {}; ST.undo.length = 0; ST.redo.length = 0; ST.last = null; if (d.segs) Object.assign(ST.segs, d.segs); setUnit(d.units || 'm', true); ST.scenes = Array.isArray(d.scenes) ? d.scenes : []; ST.scene = null; renderScenes();
+  ST.ctx = null; ST.root = null; M = d.model; M.l = M.l || {}; ST.undo.length = 0; ST.redo.length = 0; ST.last = null; if (d.segs) Object.assign(ST.segs, d.segs); setUnit(d.units || 'm', true); ST.scenes = Array.isArray(d.scenes) ? d.scenes : []; ST.scene = null; renderScenes();
   clearSel(); changed();
   if (d.cam && d.cam.p) applyCam(d.cam); else setView('iso');
 }
@@ -1390,6 +1629,7 @@ function saveImage() {
   cv.toBlob(b => { keep.forEach(o => o.visible = true); req(); if (!b) { setStatus('Image impossible dans ce navigateur', 'err'); return; } const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `TerraModel ${nom} ${stamp()}.png`; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 800); setStatus('Image enregistrée : ' + nom, 'ok'); }, 'image/png');
 }
 function exportOBJ() {
+  const M = flatModel(rootModel());
   let s = `# TerraModel ${APP_VERSION}\n# Unité : mètre. Repère : X est, Y nord, Z vers le haut.\no TerraModel\n`, base = 1;
   for (const k in M.f) { const f = M.f[k], { tris, ids, n } = triFace(M, f); s += `g face_${k}\n`; for (const id of ids) { const p = M.v[id]; s += `v ${p[0].toFixed(4)} ${p[1].toFixed(4)} ${p[2].toFixed(4)}\n`; }
     for (const t of tris) { let [a, b, c] = t; const A = M.v[ids[a]], B = M.v[ids[b]], C = M.v[ids[c]]; if (vdot(vcross(vsub(B, A), vsub(C, A)), n) < 0) [b, c] = [c, b]; s += `f ${base + a} ${base + b} ${base + c}\n`; }
@@ -1414,6 +1654,8 @@ const HELP = `<h3>Unités</h3><table>
 <tr><td>Vue</td><td>Perspective, axonométrie, et géométraux sans perspective : plan (dessus), élévations sud, est, nord, ouest, dessous. Tourner autour de la maquette quitte le géométral (vue libre).</td></tr>
 <tr><td>Onglets</td><td>« + Vue » enregistre le point de vue (position, projection, zoom) dans un onglet au-dessus de la maquette, comme les scènes de SketchUp. Clic : y revenir ; ⟳ : remplacer par la vue actuelle ; × : supprimer ; double-clic : renommer ; Page suivante, Page précédente : onglet suivant, précédent. Les vues sont gardées avec la maquette.</td></tr>
 <tr><td>Caméras</td><td>Après avoir bougé la vue depuis un onglet, « ⟳ Mettre à jour » à côté de l'onglet l'enregistre d'un geste. « Vues et caméras… » ouvre la liste des vues avec vignettes : renommer, voir, mettre à jour, monter, descendre, supprimer. Caméras au format de TerraGeo (position, point visé, focale 24×36, hauteur d'œil), inclinaison 0° par défaut (visée horizontale, verticales droites) : sur le petit plan, toucher une caméra (son point ou son champ) la sélectionne, avec « Supprimer » sous le plan (ou la touche Suppr) ; glisser une caméra la déplace, la poignée blanche la tourne ; glisser depuis un endroit vide en pose une nouvelle, un simple toucher dans le vide désélectionne. « + Caméra » la pose à l'endroit de la vue actuelle.</td></tr>
+<tr><td>Groupes</td><td>Sélection puis « Grouper » (Ctrl+G) : la géométrie du groupe reste à part, elle ne se soude pas au reste. Un clic sélectionne tout le groupe, M le déplace (Ctrl : copie), double-clic l'ouvre pour le modifier (le reste passe en grisé), Échap le referme. « Dégrouper » (Ctrl+Maj+G) remet la géométrie dans la maquette.</td></tr>
+<tr><td>Importer</td><td>DXF : tracé 2D à plat par calques, pour dessiner dessus (les accroches suivent le tracé), ou faces 3D. Modèles OBJ, DAE (SketchUp : Exporter &gt; Modèle 3D), glTF. Chaque import arrive dans un groupe. DWG et SKP : passer par leurs exports DXF, DAE, OBJ.</td></tr>
 <tr><td>Image</td><td>Enregistre la vue actuelle en image PNG (dans les téléchargements du téléphone ou de l'ordinateur).</td></tr>
 <tr><td>Bouton du milieu</td><td>Orbite autour du point visé (Maj : panoramique). Double-clic du milieu : centrer sur ce point.</td></tr>
 <tr><td>Téléphone</td><td>Outil Sélection : un doigt fait tourner la vue, un toucher sélectionne ; deux doigts : zoom et déplacement. Autres outils : un doigt dessine.</td></tr>
@@ -1458,6 +1700,7 @@ const HELP = `<h3>Unités</h3><table>
   $('#bCenter').onclick = centerView; $('#bImg').onclick = () => { saveImage(); cv.focus(); };
   $('#bUndo').onclick = undo; $('#bRedo').onclick = redo;
   $('#bNew').onclick = () => { if (Object.keys(M.f).length + Object.keys(M.l).length && !confirm('Effacer la maquette en cours ? (Ctrl+Z permet de revenir en arrière)')) return; doOp(m => { m.v = {}; m.f = {}; m.l = {}; }); clearSel(); };
+  $('#bImp').onclick = () => $('#impIn').click(); $('#impIn').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (f) impFile(f); });
   $('#bSave').onclick = saveFile; $('#bObj').onclick = exportOBJ;
   $('#bOpen').onclick = () => $('#fileIn').click();
   $('#fileIn').addEventListener('change', async e => { const f = e.target.files[0]; e.target.value = ''; if (!f) return; try { const before = JSON.stringify(M); loadData(JSON.parse(await f.text())); ST.undo.push(before); changed(); setStatus('Maquette ouverte : ' + f.name, 'ok'); } catch (err) { setStatus('Fichier illisible : ' + err.message, 'err'); } });
