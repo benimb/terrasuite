@@ -1,7 +1,7 @@
 /* TerraSuite : fonctionnement hors réseau de l'application unique et des modules (TerraGeo, TerraEstim, TerraPlanning, TerraDocs, TerraSourcing, TerraModel).
    L'application est mise en cache à l'installation, les modules à leur première ouverture ; mise à jour en arrière-plan.
    TerraChantier et TerraContacts ont leur propre service (TerraChantier/sw.js). */
-const VERSION = 'ts-0.6.6';
+const VERSION = 'ts-0.6.7';
 const SHELL = ['./', 'index.html', 'suite/app.css', 'suite/app.js', 'suite/modules.js', 'manifest.webmanifest', 'suite/icons/tsv2-192.png', 'suite/icons/tsv2-512.png', 'suite/icons/tsv2-maskable-512.png', 'suite/icons/tsv2-apple-180.png', 'suite/logo.svg', 'suite/logo-petit.svg', 'suite/icons/tsv2-favicon-32.png',
   'TerraChantier/vendor/supabase.js', 'TerraChantier/common.js', 'TerraChantier/db.js', 'TerraChantier/plan.js', 'TerraChantier/carnet.js', 'TerraChantier/projets-api.js', 'TerraChantier/ts-link.js', 'TerraChantier/terrasuite-compte.js', 'TerraChantier/sync.js'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL.map(u => new Request(u, { cache: 'reload' })))).then(() => self.skipWaiting())); });

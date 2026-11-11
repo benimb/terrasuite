@@ -76,6 +76,7 @@ html.ts-embed .brand small{display:none}
 .vpanel .r{display:flex;align-items:center;gap:5px;flex-wrap:wrap} .vpanel .grow{flex:1}
 .btn.sm{padding:2px 7px;font-size:12px} .btn.danger{color:var(--err)}
 #vplan{width:100%;aspect-ratio:1;border:1px solid var(--line);border-radius:6px;touch-action:none;cursor:crosshair;flex:none}
+.vsel{min-height:30px;font-size:12px} .vsel .ic,.vsel svg{vertical-align:-2px}
 .hint0{color:var(--muted);font-size:11.5px}
 .vcard{border:1px solid var(--line);border-radius:7px;padding:6px 7px;display:flex;flex-direction:column;gap:4px;cursor:pointer}
 .vcard.cur{border-color:var(--accent);background:var(--accent-soft)} .vcard.sel{box-shadow:0 0 0 1px var(--accent)}
@@ -182,7 +183,7 @@ html.ts-embed .brand small{display:none}
         <div class="vhead"><b>Vues et caméras</b><button class="btn sm" id="vClose">Fermer ×</button></div>
         <div class="r"><button class="btn sm" id="vAddView" title="Enregistrer le point de vue de l'écran">+ Vue actuelle</button><button class="btn sm" id="vAddCam" title="Poser une caméra à l'endroit de la vue actuelle, visée horizontale">+ Caméra</button></div>
         <canvas id="vplan" aria-label="Plan des caméras"></canvas>
-        <div class="hint0">Plan : cliquez-glissez pour poser une caméra et l'orienter ; glissez une caméra pour la déplacer, la poignée blanche pour la tourner.</div>
+        <div class="vsel r" id="vsel"></div>
         <div id="vlist"></div>
       </aside>
       <div class="info" id="info"></div>
@@ -559,7 +560,7 @@ function modelEdges(M) {
 
 </script>
 <script>
-const APP_VERSION = '0.3.2';
+const APP_VERSION = '0.3.3';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const NF2 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 /* unités : la maquette est en mètres ; les longueurs s'affichent et se saisissent dans l'unité choisie (m, cm, mm) ; surfaces en m², volumes en m³ */
@@ -892,25 +893,50 @@ function drawPlan() {
   const sb = step * (PL.fit.R > 60 ? 2 : 1); ctx.fillRect(10 * u, W - 14 * u, sb * X.k, 2.5 * u); ctx.fillText(sb + ' m', 10 * u, W - 19 * u);
 }
 function camHandles(sc) { const X = planXf(), [x, y] = X.toPx(sc.x, sc.y), a = Math.atan2(sc.ty - sc.y, sc.tx - sc.x), L = X.W * .2; return { p: [x, y], h: [x + L * Math.cos(a), y - L * Math.sin(a)] }; }
+/* caméra sous le point du plan : son point, ou dans son champ (le cône dessiné) */
+function camAt(px, py, tol) {
+  const X = planXf(); let hit = null, bd = tol;
+  for (const sc of ST.scenes) if (isCam(sc)) { const H = camHandles(sc), d = Math.hypot(H.p[0] - px, H.p[1] - py); if (d < bd) { bd = d; hit = sc; } }
+  if (hit) return hit;
+  for (const sc of [...ST.scenes].reverse()) if (isCam(sc)) { const H = camHandles(sc), a = Math.atan2(sc.ty - sc.y, sc.tx - sc.x), b = Math.atan2(-(py - H.p[1]), px - H.p[0]), da = Math.abs(((b - a + 3 * Math.PI) % (2 * Math.PI)) - Math.PI), d = Math.hypot(px - H.p[0], py - H.p[1]);
+    if (da <= hfovOf(sc.f) / 2 && d <= X.W * .2) return sc; }
+  return null;
+}
+/* plan : toucher une caméra la sélectionne (glisser la déplace, la poignée la tourne) ; toucher le vide désélectionne ; glisser depuis le vide pose une nouvelle caméra */
 function planPointer(ev, type) {
-  const cv = $('#vplan'), b = cv.getBoundingClientRect(), k = cv.width / b.width, px = (ev.clientX - b.left) * k, py = (ev.clientY - b.top) * k, X = planXf(), [mx, my] = X.toM(px, py), r = (x => Math.round(x * 100) / 100), tol = 12 * k;
+  const cv = $('#vplan'), b = cv.getBoundingClientRect(), k = cv.width / b.width, px = (ev.clientX - b.left) * k, py = (ev.clientY - b.top) * k, X = planXf(), [mx, my] = X.toM(px, py), r = (x => Math.round(x * 100) / 100), tol = (ev.pointerType === 'touch' ? 22 : 14) * k;
   if (type === 'down') {
     cv.setPointerCapture(ev.pointerId); const sel = ST.scenes.find(s => s.id === PL.sel && isCam(s));
     if (sel) { const H = camHandles(sel); if (Math.hypot(H.h[0] - px, H.h[1] - py) < tol) { PL.drag = { id: sel.id, mode: 'aim' }; return; } }
-    for (const sc of [...ST.scenes].reverse()) if (isCam(sc)) { const H = camHandles(sc); if (Math.hypot(H.p[0] - px, H.p[1] - py) < tol) { PL.sel = sc.id; PL.drag = { id: sc.id, mode: 'move', dx: sc.tx - sc.x, dy: sc.ty - sc.y }; renderPanel(); return; } }
-    const sc = cameraAdd({ type: 'camera', nom: uniqName('Caméra'), x: r(mx), y: r(my), tx: r(mx), ty: r(my + 10), f: 24, h: 1.6 }); PL.sel = sc.id; PL.drag = { id: sc.id, mode: 'aim', fresh: true }; drawPlan(); return;
+    const hit = camAt(px, py, tol);
+    if (hit) { PL.sel = hit.id; PL.drag = { id: hit.id, mode: 'move', ox: mx - hit.x, oy: my - hit.y, dx: hit.tx - hit.x, dy: hit.ty - hit.y, px, py }; renderPanel(); return; }
+    PL.drag = { mode: 'new', x: r(mx), y: r(my), px, py }; return;
   }
-  const d = PL.drag; if (!d) return; const sc = ST.scenes.find(s => s.id === d.id); if (!sc) { PL.drag = null; return; }
-  if (type === 'move') { if (d.mode === 'move') { sc.x = r(mx); sc.y = r(my); sc.tx = r(mx + d.dx); sc.ty = r(my + d.dy); } else if (Math.hypot(mx - sc.x, my - sc.y) > 0.05) { const a = Math.atan2(my - sc.y, mx - sc.x), D = Math.max(10, Math.hypot(sc.tx - sc.x, sc.ty - sc.y)); sc.tx = r(sc.x + Math.cos(a) * D); sc.ty = r(sc.y + Math.sin(a) * D); } d.moved = true; drawPlan(); return; }
-  if (type === 'up') { PL.drag = null; renderScenes(); sceneGo(sc.id, true, true); save(); }
+  const d = PL.drag; if (!d) return;
+  if (d.mode === 'new') {
+    const far = Math.hypot(px - d.px, py - d.py) > 10 * k;
+    if (type === 'move' && far && !d.id) { const sc = cameraAdd({ type: 'camera', nom: uniqName('Caméra'), x: d.x, y: d.y, tx: d.x, ty: d.y + 10, f: 24, h: 1.6, t: 0 }); PL.sel = d.id = sc.id; }
+    if (!d.id) { if (type === 'up') { PL.drag = null; PL.sel = null; renderPanel(); } return; } // toucher le vide : désélection
+    d.mode = 'aim';
+  }
+  const sc = ST.scenes.find(s => s.id === d.id); if (!sc) { PL.drag = null; return; }
+  if (type === 'move') {
+    if (d.mode === 'move') { if (!d.moved && Math.hypot(px - d.px, py - d.py) < 6 * k) return; sc.x = r(mx - d.ox); sc.y = r(my - d.oy); sc.tx = r(sc.x + d.dx); sc.ty = r(sc.y + d.dy); }
+    else if (Math.hypot(mx - sc.x, my - sc.y) > 0.05) { const a = Math.atan2(my - sc.y, mx - sc.x), D = Math.max(10, Math.hypot(sc.tx - sc.x, sc.ty - sc.y)); sc.tx = r(sc.x + Math.cos(a) * D); sc.ty = r(sc.y + Math.sin(a) * D); }
+    d.moved = true; drawPlan(); return;
+  }
+  if (type === 'up') { PL.drag = null; renderScenes(); sceneGo(sc.id, true, d.moved || d.mode === 'aim'); save(); }
 }
+function camDelSel() { const sc = ST.scenes.find(s => s.id === PL.sel && isCam(s)); if (sc) { sceneAct(sc.id, 'del'); if (!ST.scenes.includes(sc)) PL.sel = null; renderPanel(); } }
 function renderPanel() {
   const box = $('#vlist'); if (!box || $('#vpanel').hidden) return;
   box.innerHTML = ST.scenes.map((sc, i) => `<div class="vcard${sc.id === ST.scene ? ' cur' : ''}${sc.id === PL.sel ? ' sel' : ''}" data-id="${sc.id}">
     <div class="r"><img class="vth" alt="" src="${sc.img || ''}"${sc.img ? '' : ' data-empty'}><div class="vtx"><span class="k">${isCam(sc) ? SVG_CAM + 'Caméra' : 'Vue'}</span><input type="text" data-k="nom" value="${escH(sc.nom)}" aria-label="Nom"></div></div>
     ${isCam(sc) ? `<div class="r"><label>Focale <select data-k="f">${FOCALES.map(f => `<option value="${f}"${+sc.f === f ? ' selected' : ''}>${f} mm</option>`).join('')}</select></label><label>Hauteur d'œil <input type="number" step="0.1" min="0" data-k="h" value="${sc.h}"> m</label><label title="0° : visée horizontale, verticales droites ; positif vers le haut">Inclinaison <input type="number" step="1" min="-80" max="80" data-k="t" value="${+sc.t || 0}"> °</label></div>
     <div class="r mono">X ${NF2.format(sc.x)} · Y ${NF2.format(sc.y)} m, visée ${Math.round((90 - Math.atan2(sc.ty - sc.y, sc.tx - sc.x) * 180 / Math.PI + 360) % 360)}° (nord 0°, est 90°)</div>` : `<div class="r mono">${sc.cam && sc.cam.o ? 'Vue parallèle' : 'Perspective'}${sc.cam && sc.cam.vue ? ' · ' + escH(($('#vSel option[value="' + sc.cam.vue + '"]') || {}).textContent || '') : ''}</div>`}
-    <div class="r"><button class="btn sm" data-a="go">Voir</button><button class="btn sm pri" data-a="upd" title="Enregistrer le point de vue actuel dans cette vue">Mettre à jour</button>${isCam(sc) ? '' : '<button class="btn sm" data-a="tocam" title="Transformer en caméra (focale, hauteur d\'œil, inclinaison)">En caméra</button>'}<span class="grow"></span><button class="btn sm" data-a="up" title="Monter" ${i ? '' : 'disabled'}>↑</button><button class="btn sm" data-a="down" title="Descendre" ${i < ST.scenes.length - 1 ? '' : 'disabled'}>↓</button><button class="btn sm danger" data-a="del" title="Supprimer">×</button></div></div>`).join('') || '<div class="hint0">Aucune vue. « + Vue actuelle » garde le point de vue de l\'écran ; sur le plan, cliquez-glissez pour poser une caméra.</div>';
+    <div class="r"><button class="btn sm" data-a="go">Voir</button><button class="btn sm pri" data-a="upd" title="Enregistrer le point de vue actuel dans cette vue">Mettre à jour</button>${isCam(sc) ? '' : '<button class="btn sm" data-a="tocam" title="Transformer en caméra (focale, hauteur d\'œil, inclinaison)">En caméra</button>'}<span class="grow"></span><button class="btn sm" data-a="up" title="Monter" ${i ? '' : 'disabled'}>↑</button><button class="btn sm" data-a="down" title="Descendre" ${i < ST.scenes.length - 1 ? '' : 'disabled'}>↓</button><button class="btn sm danger" data-a="del" title="Supprimer">×</button></div></div>`).join('') || '<div class="hint0">Aucune vue. « + Vue actuelle » garde le point de vue de l\'écran ; sur le plan, glissez depuis un endroit vide pour poser une caméra.</div>';
+  const sel = ST.scenes.find(x => x.id === PL.sel && isCam(x)), bar = $('#vsel');
+  if (bar) bar.innerHTML = sel ? `<span>${SVG_CAM}<b>${escH(sel.nom)}</b> sélectionnée</span><span class="grow"></span><button class="btn sm" data-a="go">Voir</button><button class="btn sm danger" data-a="del">Supprimer</button>` : '<span class="hint0">Touchez une caméra pour la sélectionner ; glissez depuis un endroit vide pour en poser une.</span>';
   drawPlan();
 }
 function openPanel(on) { const p = $('#vpanel'); p.hidden = on === undefined ? !p.hidden : !on; if (!p.hidden) { PL.fit = null; PL.sel = PL.sel || ST.scene; } renderScenes(); }
@@ -1368,7 +1394,7 @@ const HELP = `<h3>Unités</h3><table>
 <h3>Vue</h3><table>
 <tr><td>Vue</td><td>Perspective, axonométrie, et géométraux sans perspective : plan (dessus), élévations sud, est, nord, ouest, dessous. Tourner autour de la maquette quitte le géométral (vue libre).</td></tr>
 <tr><td>Onglets</td><td>« + Vue » enregistre le point de vue (position, projection, zoom) dans un onglet au-dessus de la maquette, comme les scènes de SketchUp. Clic : y revenir ; ⟳ : remplacer par la vue actuelle ; × : supprimer ; double-clic : renommer ; Page suivante, Page précédente : onglet suivant, précédent. Les vues sont gardées avec la maquette.</td></tr>
-<tr><td>Caméras</td><td>Après avoir bougé la vue depuis un onglet, « ⟳ Mettre à jour » à côté de l'onglet l'enregistre d'un geste. « Vues et caméras… » ouvre la liste des vues avec vignettes : renommer, voir, mettre à jour, monter, descendre, supprimer. Caméras au format de TerraGeo (position, point visé, focale 24×36, hauteur d'œil), inclinaison 0° par défaut (visée horizontale, verticales droites) : sur le petit plan, cliquez-glissez pour poser une caméra et l'orienter ; glissez une caméra pour la déplacer, la poignée blanche pour la tourner. « + Caméra » la pose à l'endroit de la vue actuelle.</td></tr>
+<tr><td>Caméras</td><td>Après avoir bougé la vue depuis un onglet, « ⟳ Mettre à jour » à côté de l'onglet l'enregistre d'un geste. « Vues et caméras… » ouvre la liste des vues avec vignettes : renommer, voir, mettre à jour, monter, descendre, supprimer. Caméras au format de TerraGeo (position, point visé, focale 24×36, hauteur d'œil), inclinaison 0° par défaut (visée horizontale, verticales droites) : sur le petit plan, toucher une caméra (son point ou son champ) la sélectionne, avec « Supprimer » sous le plan (ou la touche Suppr) ; glisser une caméra la déplace, la poignée blanche la tourne ; glisser depuis un endroit vide en pose une nouvelle, un simple toucher dans le vide désélectionne. « + Caméra » la pose à l'endroit de la vue actuelle.</td></tr>
 <tr><td>Image</td><td>Enregistre la vue actuelle en image PNG (dans les téléchargements du téléphone ou de l'ordinateur).</td></tr>
 <tr><td>Bouton du milieu</td><td>Orbite autour du point visé (Maj : panoramique). Double-clic du milieu : centrer sur ce point.</td></tr>
 <tr><td>Téléphone</td><td>Outil Sélection : un doigt fait tourner la vue, un toucher sélectionne ; deux doigts : zoom et déplacement. Autres outils : un doigt dessine.</td></tr>
@@ -1404,6 +1430,8 @@ const HELP = `<h3>Unités</h3><table>
     vl.addEventListener('change', e => { const card = e.target.closest('.vcard'), k = e.target.dataset.k; if (!card || !k) return; const sc = ST.scenes.find(s => s.id === card.dataset.id); if (!sc) return;
       if (k === 'nom') sc.nom = e.target.value.trim().slice(0, 60) || sc.nom; else if (k === 'f') sc.f = +e.target.value; else if (k === 'h') sc.h = Math.max(0, parseFloat(String(e.target.value).replace(',', '.')) || 1.6); else if (k === 't') sc.t = Math.max(-80, Math.min(80, parseFloat(String(e.target.value).replace(',', '.')) || 0));
       save(); renderScenes(); if (k !== 'nom') sceneGo(sc.id, true, true); });
+    $('#vsel').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.a === 'del') camDelSel(); else if (PL.sel) sceneGo(PL.sel); });
+    pc.tabIndex = 0; pc.addEventListener('keydown', e => { if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); e.stopPropagation(); camDelSel(); } });
     pc.addEventListener('pointerdown', e => planPointer(e, 'down')); pc.addEventListener('pointermove', e => planPointer(e, 'move')); pc.addEventListener('pointerup', e => planPointer(e, 'up')); pc.addEventListener('pointercancel', e => planPointer(e, 'up'));
     new ResizeObserver(() => drawPlan()).observe(pc); }
   { const el = $('#scenes'); renderScenes();

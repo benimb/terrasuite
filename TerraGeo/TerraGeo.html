@@ -185,7 +185,7 @@ body.wide3d .work{grid-template-columns:1fr} body.wide3d .side{display:none}
       <div id="v3d" hidden>
         <div class="bar3"><button class="btn sm" id="b3close">← Carte</button><label class="btn sm" style="display:flex;gap:5px;align-items:center">Rayon <select id="r3d"><option value="100">100 m</option><option value="200" selected>200 m</option><option value="400">400 m</option></select></label><button class="btn sm on" id="b3terrain">Relief</button><button class="btn sm" id="b3roof" title="Formes de toiture tirées du modèle numérique de surface LiDAR HD de l'IGN">Toitures LiDAR</button><button class="btn sm" id="b3simple" title="Toitures LiDAR simplifiées en pans plans (deux pans, croupes, terrasses…), teinte unie par pan ; sinon relevé brut">Simplifiées</button><button class="btn sm" id="b3ortho" title="Photo aérienne de l'IGN plaquée sur le sol et les toitures">Photo aérienne</button><button class="btn sm" id="b3plu" title="Plaque au sol les cartes du PLU cochées dans « Calques » (zonage, prescriptions, servitudes…)">PLU au sol</button><button class="btn sm" id="b3fac" title="Photos de rue Panoramax (libres, CC-BY-SA) projetées sur les façades proches de la parcelle">Façades</button><button class="btn sm" id="b3g" title="Vue 3D photoréaliste de Google : affichage seul, rien n'est extrait ni exporté">Google 3D</button><button class="btn sm" id="b3sv" title="Photos Google Street View prises depuis la rue, au point de vue de la caméra sélectionnée (ou de la vue actuelle), avec sa focale">Vue de rue</button><button class="btn sm" id="b3flat" hidden title="Masque bâtiments et arbres Google sur les parcelles sélectionnées (pour y imaginer un projet)">Aplanir la parcelle</button><button class="btn sm" id="b3gk" hidden title="Clé Google Maps Platform">Clé…</button><button class="btn sm" id="b3tif" title="Utiliser des dalles MNS LiDAR HD (GeoTIFF) téléchargées sur le site de l'IGN">Charger un MNS…</button><input type="file" id="tifIn" accept=".tif,.tiff" multiple hidden><button class="btn sm" id="b3reload">Recharger</button><span class="grow"></span><button class="btn sm" id="b3full" title="Plein écran (Échap pour sortir)">Plein écran</button><button class="btn sm" id="b3cams">Caméras</button><button class="btn sm" id="b3exp" aria-haspopup="true">Exporter ▾</button></div>
         <div class="lpanel" id="exp3" hidden style="left:auto;right:10px;width:300px"><button class="btn" id="b3dxf">DXF 3D (AutoCAD, ArchiCAD, Revit, SketchUp Pro)</button><button class="btn" id="b3glb">glTF .glb (Blender, Twinmotion, SketchUp 2024+)</button><button class="btn" id="b3obj">OBJ (repère local)</button><button class="btn" id="b3png">Image de la vue</button><span class="hint">DXF : coordonnées Lambert-93, altitudes NGF, calques BATIMENTS, TERRAIN, PARCELLES. glTF et OBJ : repère local en mètres, origine notée dans le fichier ou le nom.</span></div>
-        <div class="campanel" id="cams3" hidden><div class="camhead"><b>Caméras</b><button class="btn sm" id="camClose" aria-label="Fermer le panneau des caméras">Fermer ×</button></div><div class="hint">Clic sur un endroit libre : nouvelle caméra (maintenez et glissez pour l'orienter). Sur une caméra : glissez le point pour la déplacer, la poignée blanche au bout de l'axe pour la réorienter. Un clic sur une fiche ci-dessous la sélectionne.</div><canvas id="plan3" width="1000" height="1000"></canvas><div id="camList"></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn sm" id="camCur">+ Vue actuelle</button><button class="btn sm pri" id="camAll">Imprimer les planches</button></div></div>
+        <div class="campanel" id="cams3" hidden><div class="camhead"><b>Caméras</b><button class="btn sm" id="camClose" aria-label="Fermer le panneau des caméras">Fermer ×</button></div><div class="hint">Toucher une caméra (son point ou son champ) la sélectionne : glissez-la pour la déplacer, la poignée blanche pour la tourner, Suppr ou « Supprimer » pour l'effacer. Glisser depuis un endroit libre pose une nouvelle caméra ; un simple toucher dans le vide désélectionne.</div><canvas id="plan3" width="1000" height="1000"></canvas><div id="camList"></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn sm" id="camCur">+ Vue actuelle</button><button class="btn sm pri" id="camAll">Imprimer les planches</button></div></div>
         <div class="lpanel" id="gkey" hidden style="left:auto;right:10px;width:340px"><h4>Clé Google Maps</h4><input type="text" id="gkeyIn" placeholder="AIza…" autocomplete="off" spellcheck="false"><div style="display:flex;gap:6px"><button class="btn sm pri" id="gkeyOk">Enregistrer</button><button class="btn sm" id="gkeyDel">Effacer</button></div><span class="hint">Clé Google Maps Platform (la clé de démonstration gratuite suffit). Elle reste dans ce navigateur, elle n'est jamais écrite dans le fichier. Après un changement de clé, rechargez la page.</span></div>
         <canvas id="c3d"></canvas><div id="g3d" hidden></div><div id="gsv" hidden></div><div class="info3 ginfo" id="ginfo" hidden></div>
         <div class="campanel" id="fac3" hidden style="width:300px;bottom:auto;max-height:calc(100% - 54px)"></div><div class="info3" id="info3"></div>
@@ -205,7 +205,7 @@ body.wide3d .work{grid-template-columns:1fr} body.wide3d .side{display:none}
 <style>.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn{display:none!important}</style>
 <script src="../TerraChantier/terrasuite-compte.js" onerror="this.remove()"></script>
 <script>
-const APP_VERSION = '0.19';
+const APP_VERSION = '0.19.1';
 /* ================= Outils ================= */
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -1705,24 +1705,29 @@ async function gSheets(list) {
 function bindCams() {
   const cv = $('#plan3');
   const pos = e => { const b = cv.getBoundingClientRect(); return [(e.clientX - b.left) * cv.width / b.width, (e.clientY - b.top) * cv.height / b.height]; };
+  /* toucher une caméra (son point ou son champ) la sélectionne ; toucher le vide désélectionne ; glisser depuis le vide pose une caméra */
   cv.onpointerdown = e => {
     if (!v3.data) return; cv.setPointerCapture(e.pointerId); const [px, py] = pos(e), X = planXf();
-    const tol = 18 * cv.width / cv.getBoundingClientRect().width; // 18 px à l'écran
+    const tol = (e.pointerType === 'touch' ? 24 : 18) * cv.width / cv.getBoundingClientRect().width;
     const L0 = cams();
     if (camState.sel >= 0 && L0[camState.sel]) { const hd = camHandles(L0[camState.sel]); if (Math.hypot(hd.h[0] - px, hd.h[1] - py) < tol) { camState.drag = { i: camState.sel, mode: 'aim' }; return; } }
     let hit = -1, best = tol; L0.forEach((c, i) => { const hd = camHandles(c), d = Math.hypot(hd.p[0] - px, hd.p[1] - py); if (d < best) { best = d; hit = i; } });
-    if (hit >= 0) { const c = L0[hit]; camState.sel = hit; camState.drag = { i: hit, mode: 'move', dx: c.tx - c.x, dy: c.ty - c.y }; drawPlan(cv, v3.data, L0, hit); return; }
-    const [x, y] = X.toL93(px, py);
-    L0.push({ nom: 'Vue ' + (L0.length + 1), x, y, tx: x + 10, ty: y + 10, f: 24, h: 1.6 }); camState.sel = L0.length - 1; camState.drag = { i: camState.sel, mode: 'aim' };
-    drawPlan(cv, v3.data, L0, camState.sel);
+    if (hit < 0) for (let i = L0.length - 1; i >= 0; i--) { const c = L0[i], hd = camHandles(c), a = Math.atan2(c.ty - c.y, c.tx - c.x), b = Math.atan2(-(py - hd.p[1]), px - hd.p[0]), da = Math.abs(((b - a + 3 * Math.PI) % (2 * Math.PI)) - Math.PI); if (da <= hfov(c.f) / 2 && Math.hypot(px - hd.p[0], py - hd.p[1]) <= X.W * .22) { hit = i; break; } }
+    if (hit >= 0) { const c = L0[hit], [x, y] = X.toL93(px, py); camState.sel = hit; camState.drag = { i: hit, mode: 'move', ox: x - c.x, oy: y - c.y, dx: c.tx - c.x, dy: c.ty - c.y, px, py }; drawPlan(cv, v3.data, L0, hit); renderCams(); return; }
+    const [x, y] = X.toL93(px, py); camState.drag = { mode: 'new', x, y, px, py, k: cv.width / cv.getBoundingClientRect().width };
   };
   cv.onpointermove = e => {
-    if (!camState.drag) return; const [px, py] = pos(e), [x, y] = planXf().toL93(px, py), d = camState.drag, c = cams()[d.i];
+    const d = camState.drag; if (!d) return; const [px, py] = pos(e), [x, y] = planXf().toL93(px, py);
+    if (d.mode === 'new') { if (Math.hypot(px - d.px, py - d.py) < 10 * d.k) return; cams().push({ nom: 'Vue ' + (cams().length + 1), x: d.x, y: d.y, tx: d.x + 10, ty: d.y + 10, f: 24, h: 1.6 }); camState.sel = d.i = cams().length - 1; d.mode = 'aim'; }
+    const c = cams()[d.i];
     if (d.mode === 'aim') { if (Math.hypot(x - c.x, y - c.y) > 1) { c.tx = x; c.ty = y; } }
-    else { c.x = x; c.y = y; c.tx = x + d.dx; c.ty = y + d.dy; }
-    drawPlan(cv, v3.data, cams(), camState.sel);
+    else { if (!d.moved && Math.hypot(px - d.px, py - d.py) < 6) return; c.x = x - d.ox; c.y = y - d.oy; c.tx = c.x + d.dx; c.ty = c.y + d.dy; }
+    d.moved = true; drawPlan(cv, v3.data, cams(), camState.sel);
   };
-  cv.onpointerup = () => { if (!camState.drag) return; const i = camState.drag.i; camState.drag = null; save(); renderCams(); viewCam(i); };
+  cv.onpointerup = () => { const d = camState.drag; if (!d) return; camState.drag = null;
+    if (d.mode === 'new') { camState.sel = -1; renderCams(); return; } // simple toucher dans le vide : désélection
+    save(); renderCams(); viewCam(d.i); const el = document.querySelector(`#camList .cam[data-ci="${d.i}"]`); if (el) el.scrollIntoView({ block: 'nearest' }); };
+  cv.tabIndex = 0; cv.onkeydown = e => { if ((e.key === 'Delete' || e.key === 'Backspace') && camState.sel >= 0 && cams()[camState.sel]) { e.preventDefault(); cams().splice(camState.sel, 1); camState.sel = -1; save(); renderCams(); } };
   $('#camCur').onclick = () => { if (G3.on) gToThree(); if (!v3.data) return; const D = v3.data, p = v3.camera.position, t = v3.controls.target; cams().push({ nom: 'Vue ' + (cams().length + 1), x: p.x + D.o[0], y: p.y + D.o[1], tx: t.x + D.o[0], ty: t.y + D.o[1], f: 24, h: Math.max(.5, +(p.z - camGround({ x: p.x + D.o[0], y: p.y + D.o[1] })).toFixed(1)) }); camState.sel = cams().length - 1; save(); renderCams(); };
   $('#camAll').onclick = () => G3.on ? gSheets() : printSheets();
 }
