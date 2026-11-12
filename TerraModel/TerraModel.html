@@ -73,6 +73,11 @@ html.ts-embed .brand small{display:none}
 @media (max-width:760px){ .scenes{right:8px;top:46px} }
 .vpanel{position:absolute;top:44px;right:8px;bottom:8px;width:min(340px,calc(100% - 16px));overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:8px 10px;z-index:3;display:flex;flex-direction:column;gap:6px}
 .vpanel .vhead{display:flex;align-items:center;justify-content:space-between}
+#annot{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+#annot .lbl{position:absolute;transform:translate(-50%,-50%);background:rgba(255,255,255,.88);border:1px solid #9aa3ad;border-radius:3px;padding:0 4px;font:12px/1.5 system-ui,sans-serif;color:#1d2733;white-space:nowrap}
+#annot .lbl.dim{border-color:#2563eb;color:#1e40af} #annot.act .lbl{pointer-events:auto;cursor:pointer} #annot .lbl[hidden]{display:none}
+.nivt{width:100%;border-collapse:collapse;font-size:13px} .nivt th,.nivt td{padding:2px 3px;border-bottom:1px solid var(--line);text-align:left} .nivt .num{text-align:right;white-space:nowrap} .nivt td:last-child{white-space:nowrap} .nivt input{width:100%;min-width:0;font:inherit;padding:2px 4px;border:1px solid var(--line);border-radius:4px}
+#bCut.on{background:#fde2e2;border-color:#D02020}
 .vpanel .r{display:flex;align-items:center;gap:5px;flex-wrap:wrap} .vpanel .grow{flex:1}
 .btn.sm{padding:2px 7px;font-size:12px} .btn.danger{color:var(--err)}
 #vplan{width:100%;aspect-ratio:1;border:1px solid var(--line);border-radius:6px;touch-action:none;cursor:crosshair;flex:none}
@@ -164,10 +169,18 @@ html.ts-embed .brand small{display:none}
       <button class="tb" data-tool="line" title="Ligne (L)"><svg viewBox="0 0 24 24"><path d="M5 19L19 5"/><circle cx="5" cy="19" r="1.6"/><circle cx="19" cy="5" r="1.6"/></svg><kbd>L</kbd></button>
       <button class="tb" data-tool="rect" title="Rectangle (R)"><svg viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12"/></svg><kbd>R</kbd></button>
       <button class="tb" data-tool="circle" title="Cercle (C)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 12h8"/></svg><kbd>C</kbd></button>
+      <button class="tb" data-tool="arc" title="Arc (A) : début, fin, flèche"><svg viewBox="0 0 24 24"><path d="M4 18a8 8 0 0 1 16 0"/><circle cx="4" cy="18" r="1.6"/><circle cx="20" cy="18" r="1.6"/></svg><kbd>A</kbd></button>
       <button class="tb" data-tool="poly" title="Polygone (G)"><svg viewBox="0 0 24 24"><path d="M12 3.5l7.4 4.25v8.5L12 20.5l-7.4-4.25v-8.5z"/></svg><kbd>G</kbd></button>
       <div class="sep"></div>
       <button class="tb" data-tool="push" title="Pousser/tirer (P)"><svg viewBox="0 0 24 24"><path d="M4 15l8-4 8 4-8 4z"/><path d="M12 11V3"/><path d="M9 6l3-3 3 3"/></svg><kbd>P</kbd></button>
-      <button class="tb" data-tool="move" title="Déplacer (M) ; Ctrl : copier"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3"/><circle cx="12" cy="12" r="2.2"/></svg><kbd>M</kbd></button>
+      <button class="tb" data-tool="offset" title="Décalage (F) : clic sur une face"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16"/><rect x="7.5" y="8.5" width="9" height="7" stroke-dasharray="2 1.6"/></svg><kbd>F</kbd></button>
+      <button class="tb" data-tool="rotate" title="Rotation (Q) : centre, départ, angle"><svg viewBox="0 0 24 24"><path d="M19 12a7 7 0 1 1-2.1-5"/><path d="M17.5 2.5l-.6 4.6-4.5-1"/><circle cx="12" cy="12" r="1.6"/></svg><kbd>Q</kbd></button>
+      <button class="tb" data-tool="move" title="Déplacer (M) ; Ctrl : copier, puis x5 ou /5 pour un réseau"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3"/><circle cx="12" cy="12" r="2.2"/></svg><kbd>M</kbd></button>
+      <div class="sep"></div>
+      <button class="tb" data-tool="tape" title="Mètre et lignes de construction (T)"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="13" height="10" rx="2"/><circle cx="9.5" cy="13" r="2.5"/><path d="M16 15h5v3h-5M18 15v1.5M20 15v1.5"/></svg><kbd>T</kbd></button>
+      <button class="tb" data-tool="dim" title="Cotation (D)"><svg viewBox="0 0 24 24"><path d="M4 6v12M20 6v12M4 12h16M7 9.5L4 12l3 2.5M17 9.5l3 2.5-3 2.5"/></svg><kbd>D</kbd></button>
+      <button class="tb" data-tool="text" title="Texte, étiquette d'aire (X)"><svg viewBox="0 0 24 24"><path d="M5 6h14M12 6v13M9 19h6"/></svg><kbd>X</kbd></button>
+      <button class="tb" data-tool="section" title="Plan de coupe : clic sur une face"><svg viewBox="0 0 24 24"><path d="M4 8l8-4 8 4v8l-8 4-8-4z"/><path d="M2 13l10-5 10 5" stroke="#D02020"/></svg></button>
       <div class="sep"></div>
       <button class="tb" data-tool="orbit" title="Orbite (O) ; aussi bouton du milieu de la souris"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="4.5"/><path d="M12 3v18"/><path d="M18 5.5l2.2 2.4-3 .9"/></svg><kbd>O</kbd></button>
       <button class="tb" data-tool="pan" title="Panoramique (H) ; aussi Maj + bouton du milieu, ou clic droit"><svg viewBox="0 0 24 24"><path d="M8 13V6.5a1.5 1.5 0 0 1 3 0V12M11 11V4.5a1.5 1.5 0 0 1 3 0V11M14 11V5.5a1.5 1.5 0 0 1 3 0V13M17 10.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1.5a6 6 0 0 1-4.6-2.2L4.5 14.6a1.5 1.5 0 0 1 2.3-1.9L8 14"/></svg><kbd>H</kbd></button>
@@ -185,6 +198,9 @@ html.ts-embed .brand small{display:none}
         </select>
         <button class="btn" id="bProj" title="Perspective ou vue parallèle (projection orthogonale)"><span class="lg">Perspective</span><span class="sh">Persp.</span></button>
         <button class="btn" id="bImg" title="Enregistrer la vue actuelle en image (PNG)"><svg class="ic" viewBox="0 0 16 16"><path d="M2 4.5h2.5l1.2-1.8h4.6l1.2 1.8H14v8.3H2z"/><circle cx="8" cy="8.5" r="2.4"/></svg><span class="lg">Image</span></button>
+        <button class="btn" id="bCut" title="Activer ou désactiver le plan de coupe"><span class="lg">Coupe</span><span class="sh">Cp</span></button>
+        <button class="btn" id="bDisp" title="Balises, objets masqués, guides"><span class="lg">Affichage</span><span class="sh">Aff.</span></button>
+        <button class="btn" id="bNiv" title="Niveaux et surfaces de plancher"><span class="lg">Niveaux</span><span class="sh">Niv.</span></button>
         <button class="btn" id="bCenter" title="Centrer la vue sur la sélection, ou sur toute la maquette"><svg class="ic" viewBox="0 0 16 16"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"/><circle cx="8" cy="8" r="1.6"/></svg><span class="lg">Centrer</span></button>
       </div>
       <aside class="vpanel" id="vpanel" hidden aria-label="Vues et caméras">
@@ -194,6 +210,7 @@ html.ts-embed .brand small{display:none}
         <div class="vsel r" id="vsel"></div>
         <div id="vlist"></div>
       </aside>
+      <aside class="vpanel" id="dispP" hidden aria-label="Affichage"></aside><aside class="vpanel" id="nivP" hidden aria-label="Niveaux"></aside><div id="annot"></div>
       <div class="ctxbar" id="ctxBar" hidden></div><div class="selbar" id="selBar" hidden></div><div class="imp" id="imp" hidden></div>
       <div class="info" id="info"></div>
       <div class="help" id="help" hidden></div>
@@ -621,10 +638,45 @@ function meshToModel(P, T) {
   let vol = 0; for (const k in m.f) { const f = m.f[k]; vol += faceArea(m, f) * vdot(faceN(m, f), m.v[f.o[0]]); } if (vol < -1e-9) for (const k in m.f) m.f[k] = revF(m.f[k]);
   return m;
 }
+/* ---- coupe : segments d'intersection des faces avec le plan n·x = c, orientés (n × normale de la face) ; pour un plan horizontal,
+   la somme des aires signées des segments donne l'aire de la section des volumes fermés (sans les chaîner) ---- */
+function sliceModel(m, n, c) {
+  const segs = [];
+  for (const k in m.f) { const f = m.f[k], fn = faceN(m, f), d = vcross(n, fn); if (vlen(d) < 1e-9) continue; const pts = [];
+    for (const L of loopsOf(f)) for (let i = 0; i < L.length; i++) { const a = m.v[L[i]], b = m.v[L[(i + 1) % L.length]], sa = vdot(n, a) - c, sb = vdot(n, b) - c; if ((sa < 0) === (sb < 0)) continue; pts.push(vadd(a, vmul(vsub(b, a), sa / (sa - sb)))); }
+    pts.sort((p, q) => vdot(p, d) - vdot(q, d)); for (let i = 0; i + 1 < pts.length; i += 2) segs.push([pts[i], pts[i + 1]]); }
+  return segs;
+}
+/* aire de la section horizontale à l'altitude z (volumes fermés) */
+function sectionArea(m, z) { let a = 0; for (const [p, q] of sliceModel(m, [0, 0, 1], z)) a += p[0] * q[1] - q[0] * p[1]; return a / 2; }
+/* contour décalé d'une face (d > 0 vers l'intérieur), sommets à l'onglet */
+function offsetLoop(M, f, d) {
+  const n = faceN(M, f), P = f.o.map(id => M.v[id]), N = P.length, out = [];
+  const inw = i => vnorm(vcross(n, vsub(P[(i + 1) % N], P[i])));
+  for (let i = 0; i < N; i++) { const j = (i - 1 + N) % N, a0 = vadd(P[j], vmul(inw(j), d)), u0 = vsub(P[i], P[j]), a1 = vadd(P[i], vmul(inw(i), d)), u1 = vsub(P[(i + 1) % N], P[i]);
+    const w = vsub(a1, a0), cr = vcross(u0, u1), den = vdot(cr, cr); if (den < 1e-14) { out.push(a1); continue; } const s = vdot(vcross(w, u1), cr) / den; out.push(vadd(a0, vmul(u0, s))); }
+  return out;
+}
+/* rotation d'un point p autour de l'axe (c, u) d'un angle a */
+function rotP(p, c, u, a) { const v = vsub(p, c), co = Math.cos(a), si = Math.sin(a); return vadd(c, vadd(vadd(vmul(v, co), vmul(vcross(u, v), si)), vmul(u, vdot(u, v) * (1 - co)))); }
+/* rotation de la sélection (faces, arêtes, groupes) ; refusée si une face voisine ne resterait pas plane */
+function rotateSel(M, t, c, u, a) {
+  const vs = selVerts(M, t); for (const id of vs) M.v[id] = rotP(M.v[id], c, u, a);
+  for (const k in M.f) { const f = M.f[k], all = loopsOf(f).flat(); if (!all.some(id => vs.has(id)) || all.every(id => vs.has(id))) continue; const nn = vnorm(newell(M, f.o)), p0 = M.v[f.o[0]]; if (all.some(id => Math.abs(vdot(nn, vsub(M.v[id], p0))) > 1e-5)) return false; }
+  for (const g of t.g || []) { const G0 = M.G && M.G[g]; if (!G0) continue; const nt = rotP(G0.t, c, u, a); for (const k in G0.m.v) G0.m.v[k] = rotP(G0.m.v[k], [0, 0, 0], u, a); G0.t = nt; }
+  if (vs.size) cleanup(M); return true;
+}
+/* arc de A à B, de flèche h (signe : côté de v), dans le plan de normale n ; nseg segments */
+function arcPts(A, B, h, n, nseg) {
+  const ch = vsub(B, A), c = vlen(ch); if (c < 1e-9 || Math.abs(h) < 1e-9) return [A, B]; const mid = vmul(vadd(A, B), .5), side = vnorm(vcross(n, ch)), R = (c * c / 4 + h * h) / (2 * Math.abs(h)), sg = Math.sign(h);
+  const C = vadd(mid, vmul(side, sg * (Math.abs(h) - R))), a0v = vsub(A, C), ang = 2 * Math.asin(Math.min(1, c / (2 * R))), tot = Math.abs(h) > R ? 2 * Math.PI - ang : ang, dir = -sg, out = [];
+  for (let i = 0; i <= nseg; i++) out.push(rotP(vadd(C, a0v), C, n, dir * tot * i / nseg));
+  out[nseg] = B.slice(); return out;
+}
 
 </script>
 <script>
-const APP_VERSION = '0.5';
+const APP_VERSION = '0.6';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const NF2 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 /* unités : la maquette est en mètres ; les longueurs s'affichent et se saisissent dans l'unité choisie (m, cm, mm) ; surfaces en m², volumes en m³ */
@@ -636,7 +688,7 @@ function setStatus(t, cls) { const el = $('#status'); el.textContent = t || ''; 
 
 /* ================= État, annulation, enregistrement ================= */
 let M = newModel();
-const ST = { ctx: null, root: null, scenes: [], scene: null, units: 'm', tool: 'select', sel: { f: new Set(), e: new Set(), g: new Set() }, undo: [], redo: [], segs: { circle: 24, poly: 6 }, last: null, lastPP: null, focus: [0, 0, 0] };
+const ST = { ctx: null, root: null, scenes: [], scene: null, units: 'm', tool: 'select', sel: { f: new Set(), e: new Set(), g: new Set() }, undo: [], redo: [], segs: { circle: 24, poly: 6, arc: 12 }, last: null, lastPP: null, focus: [0, 0, 0] };
 /* ---- une maquette par projet TerraSuite (#projet=…), plus une « maquette sans projet » ; gardées dans ce navigateur et synchronisées entre appareils ---- */
 const KEY = 'terramodel-maquettes', OLDKEY = 'terramodel', LIBRE = 'libre';
 const HAS_TSP = typeof TSP !== 'undefined', HAS_LINK = typeof TSLink !== 'undefined';
@@ -654,7 +706,7 @@ let saveT = null;
 function save() {
   clearTimeout(saveT); saveT = setTimeout(() => {
     const old = PR.recs[PR.rid];
-    PR.recs[PR.rid] = { id: PR.rid, projetId: PR.rid === LIBRE ? null : PR.rid, nom: PR.projet ? projLabel(PR.projet) : (old && old.nom) || 'Maquette sans projet', version: APP_VERSION, model: rootModel(), segs: ST.segs, units: UNIT, scenes: ST.scenes, surf: surfaces(flatModel(rootModel())), cam: camJSON() };
+    PR.recs[PR.rid] = { id: PR.rid, projetId: PR.rid === LIBRE ? null : PR.rid, nom: PR.projet ? projLabel(PR.projet) : (old && old.nom) || 'Maquette sans projet', version: APP_VERSION, model: rootModel(), segs: ST.segs, units: UNIT, scenes: ST.scenes, surf: { ...surfaces(flatModel(rootModel())), niveaux: ST.ctx ? undefined : nivAreas().map(n => ({ nom: n.nom, z: n.z, surface: Math.round(n.sdp * 100) / 100 })) }, cam: camJSON() };
     storeRecs(); if (HAS_LINK) { clearTimeout(PR.pushT); PR.pushT = setTimeout(() => TSLink.push('terramodel', 'maquettes', syncView(), { projet: r => r.projetId }), 1500); }
   }, 300);
 }
@@ -688,7 +740,7 @@ async function projUI() {
   sel.innerHTML = TSP.options(PR.rid === LIBRE ? '' : PR.rid, list, { none: 'Maquette sans projet', create: false });
   if (PR.rid !== LIBRE && !list.some(p => p.id === PR.rid)) sel.insertAdjacentHTML('beforeend', `<option value="${PR.rid}" selected>Projet ${PR.rid}</option>`);
 }
-function doOp(fn) { const before = JSON.stringify(M), m = JSON.parse(before); const r = fn(m); if (r === false) return r; pushUndo(before); M = m; changed(); return r; }
+function doOp(fn) { const before = JSON.stringify(M), m = JSON.parse(before); const r = fn(m); if (r === false) return r; pushUndo(before); M = m; ST.last = null; changed(); return r; }
 function pushUndo(before) { ST.undo.push(before); if (ST.undo.length > 200) ST.undo.shift(); ST.redo.length = 0; }
 function undo() { cancelTool(); if (!ST.undo.length) return; ST.redo.push(JSON.stringify(M)); M = JSON.parse(ST.undo.pop()); ST.last = null; clearSel(); changed(); }
 function redo() { cancelTool(); if (!ST.redo.length) return; ST.undo.push(JSON.stringify(M)); M = JSON.parse(ST.redo.pop()); ST.last = null; clearSel(); changed(); }
@@ -738,7 +790,7 @@ function buildGrid() {
   g.add(ax([0, 0, 0], [0, 0, 500], 0x1F4FC4)); g.add(ax([0, 0, 0], [0, 0, -500], 0x1F4FC4, true));
   g.position.z = -0.002; g.renderOrder = -1; gridObj = g; scene.add(g);
 }
-let rq = false; function req() { if (rq) return; rq = true; requestAnimationFrame(() => { rq = false; renderer.render(scene, camera); }); }
+let rq = false; function req() { if (rq) return; rq = true; requestAnimationFrame(() => { rq = false; renderer.render(scene, camera); updateAnnot(); }); }
 function resize() { const w = view.clientWidth, h = view.clientHeight; if (!w || !h) return; renderer.setSize(w, h, false); camP.aspect = w / h; camP.updateProjectionMatrix(); camO.left = -w / h; camO.right = w / h; camO.top = 1; camO.bottom = -1; camO.updateProjectionMatrix(); req(); }
 new ResizeObserver(resize).observe(view);
 
@@ -771,19 +823,19 @@ function show(m) {
   if (G.group) { scene.remove(G.group); G.group.traverse(o => o.geometry && o.geometry.dispose()); }
   const { g } = faceGeo(m, Object.keys(m.f)), grp = new THREE.Group();
   grp.add(new THREE.Mesh(g, mat.front), new THREE.Mesh(g, mat.back), new THREE.LineSegments(linesGeo(m, visibleEdges(m)), mat.edge));
-  for (const gid in m.G || {}) { const w = gWorld(m.G[gid]), fg = faceGeo(w, Object.keys(w.f)).g; grp.add(new THREE.Mesh(fg, mat.front), new THREE.Mesh(fg, mat.back), new THREE.LineSegments(linesGeo(w, visibleEdges(w, m.G[gid].soft)), mat.edge)); }
+  for (const gid in m.G || {}) { if (!gVis(m, gid)) continue; const w = gWorld(m.G[gid]), fg = faceGeo(w, Object.keys(w.f)).g; grp.add(new THREE.Mesh(fg, mat.front), new THREE.Mesh(fg, mat.back), new THREE.LineSegments(linesGeo(w, visibleEdges(w, m.G[gid].soft)), mat.edge)); }
   if (ST.ctx && ST.root) { // groupe ouvert : le reste de la maquette en grisé
     const r = ST.root, rg = faceGeo(r, Object.keys(r.f)).g; grp.add(new THREE.Mesh(rg, mat.ghost), new THREE.LineSegments(linesGeo(r, visibleEdges(r)), mat.ghostEdge));
-    for (const gid in r.G || {}) { if (gid === ST.ctx) continue; const w = gWorld(r.G[gid]); grp.add(new THREE.Mesh(faceGeo(w, Object.keys(w.f)).g, mat.ghost), new THREE.LineSegments(linesGeo(w, visibleEdges(w, r.G[gid].soft)), mat.ghostEdge)); } }
+    for (const gid in r.G || {}) { if (gid === ST.ctx || !gVis(r, gid)) continue; const w = gWorld(r.G[gid]); grp.add(new THREE.Mesh(faceGeo(w, Object.keys(w.f)).g, mat.ghost), new THREE.LineSegments(linesGeo(w, visibleEdges(w, r.G[gid].soft)), mat.ghostEdge)); } }
   G.group = grp; scene.add(grp); req();
 }
 function rebuild() {
   show(M);
   if (G.pick) G.pick.geometry.dispose(); const acc = { pos: [], nor: [], tf: [] }; faceGeo(M, Object.keys(M.f), null, acc); G.GP = []; G.GE = [];
-  for (const gid in M.G || {}) { const w = gWorld(M.G[gid]); faceGeo(w, Object.keys(w.f), 'g:' + gid, acc); for (const k in w.v) G.GP.push(w.v[k]); for (const [a, b] of modelEdges(w)) G.GE.push({ pa: w.v[a], pb: w.v[b], g: gid }); }
+  for (const gid in M.G || {}) { if (!gVis(M, gid)) continue; const w = gWorld(M.G[gid]); faceGeo(w, Object.keys(w.f), 'g:' + gid, acc); for (const k in w.v) G.GP.push(w.v[k]); for (const [a, b] of modelEdges(w)) G.GE.push({ pa: w.v[a], pb: w.v[b], g: gid }); }
   const pg = new THREE.BufferGeometry(); pg.setAttribute('position', new THREE.Float32BufferAttribute(acc.pos, 3)); pg.setAttribute('normal', new THREE.Float32BufferAttribute(acc.nor, 3)); G.pick = new THREE.Mesh(pg, mat.pick); G.tf = acc.tf;
   G.E = modelEdges(M).map(([a, b]) => ({ a, b, pa: M.v[a], pb: M.v[b], k: ekey(a, b) })); G.V = Object.keys(M.v).map(Number);
-  drawSel(); hover(null);
+  drawSel(); hover(null); applyCut(); buildAnno(); dispPanel(); nivPanel();
 }
 /* surbrillance : face ou arête survolée, sélection */
 let hoverObj = null, selObj = null, hovKey = '';
@@ -1036,32 +1088,39 @@ function camJSON() { return { p: camPos(), q: camera.quaternion.toArray(), f: ST
 /* ================= Rayons, projection, inférences ================= */
 const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
 function setRay(sx, sy) { ndc.set(sx / view.clientWidth * 2 - 1, -sy / view.clientHeight * 2 + 1); ray.setFromCamera(ndc, camera); return { o: ray.ray.origin.toArray(), d: ray.ray.direction.toArray() }; }
-function pickFace(sx, sy) { if (!G.pick) return null; setRay(sx, sy); const h = ray.intersectObject(G.pick, false)[0]; return h ? { fid: G.tf[h.faceIndex], p: h.point.toArray(), dist: h.distance } : null; }
+function pickFace(sx, sy) { if (!G.pick) return null; setRay(sx, sy); const h = ray.intersectObject(G.pick, false).find(x => !clipped(x.point.toArray())); return h ? { fid: G.tf[h.faceIndex], p: h.point.toArray(), dist: h.distance, n: h.face && h.face.normal.toArray() } : null; }
 function toScreen(p) { const v = new THREE.Vector3(...p).project(camera); if (v.z > 1 || v.z < -1) return null; return [(v.x + 1) / 2 * view.clientWidth, (1 - v.y) / 2 * view.clientHeight]; }
 function rayPlane(o, d, p0, n) { const den = vdot(d, n); if (Math.abs(den) < 1e-9) return null; const t = vdot(vsub(p0, o), n) / den; return t > 0 ? vadd(o, vmul(d, t)) : null; }
 /* paramètre s du point P0 + s·u le plus proche de la droite o + t·d */
 function lineRay(P0, u, o, d) { const w = vsub(P0, o), a = vdot(u, u), b = vdot(u, d), c = vdot(d, d), dd = vdot(u, w), e = vdot(d, w), den = a * c - b * b; return Math.abs(den) < 1e-12 ? 0 : (b * e - c * dd) / den; }
-const AXES = [[1, 0, 0], [0, 1, 0], [0, 0, 1]], AXC = ['#D02020', '#1E9A2E', '#2040D0'], AXN = ['Axe rouge', 'Axe vert', 'Axe bleu'];
+const AXES = [[1, 0, 0], [0, 1, 0], [0, 0, 1]], AXC = ['#D02020', '#1E9A2E', '#2040D0', '#C026D3', '#C026D3'], AXN = ['Axe rouge', 'Axe vert', 'Axe bleu', 'Parallèle à l\'arête', 'Perpendiculaire à l\'arête'];
 const SNAPLAB = { end: 'Extrémité', mid: 'Milieu', edge: 'Sur l\'arête', face: 'Sur la face', ground: '', plane: '' };
 /* o.from : point de départ (inférences d'axe) ; o.plane : {o, n} plan de tracé imposé ; o.excl : sommets ignorés */
-function snap(sx, sy, o = {}) {
+function snap(sx, sy, o = {}) { const s = snap0(sx, sy, o); ST.lastSnap = s; return s; }
+function snap0(sx, sy, o = {}) {
   const r = setRay(sx, sy), hit = pickFace(sx, sy);
-  const vis = p => !hit || vdot(vsub(p, r.o), r.d) <= hit.dist * 1.003 + 0.01, onPl = p => !o.plane || Math.abs(vdot(vsub(p, o.plane.o), o.plane.n)) < 1e-4;
+  const vis = p => !clipped(p) && (!hit || vdot(vsub(p, r.o), r.d) <= hit.dist * 1.003 + 0.01), onPl = p => !o.plane || Math.abs(vdot(vsub(p, o.plane.o), o.plane.n)) < 1e-4;
   const proj = p => o.plane ? vsub(p, vmul(o.plane.n, vdot(vsub(p, o.plane.o), o.plane.n))) : p;
   let best = null, bd = 10;
-  for (const id of G.V) { if (o.excl && o.excl.has(id)) continue; const p = M.v[id], s = toScreen(p); if (!s) continue; const d = Math.hypot(s[0] - sx, s[1] - sy); if (d < bd && vis(p)) { bd = d; best = { p, type: 'end', id }; } }
+  for (const id of G.V) { if (o.excl && o.excl.has(id)) continue; const p = M.v[id]; if (!p) continue; const s = toScreen(p); if (!s) continue; const d = Math.hypot(s[0] - sx, s[1] - sy); if (d < bd && vis(p)) { bd = d; best = { p, type: 'end', id }; } }
   for (const p of G.GP || []) { const s = toScreen(p); if (!s) continue; const d = Math.hypot(s[0] - sx, s[1] - sy); if (d < bd && vis(p)) { bd = d; best = { p, type: 'end' }; } }
+  for (const x of G.GX || []) { const s = toScreen(x.p); if (!s) continue; const d = Math.hypot(s[0] - sx, s[1] - sy); if (d < bd && !clipped(x.p)) { bd = d; best = { p: x.p, type: 'end', lab: x.lab }; } }
+  // direction verrouillée (Maj, flèches) : le point reste sur la droite, un sommet visé y est projeté
+  if (o.from && ST.lock && !o.noAxis) { const u = ST.lock.dir, t = best ? vdot(vsub(best.p, o.from), u) : lineRay(o.from, u, r.o, r.d); return { p: vadd(o.from, vmul(u, t)), type: 'axis', axis: ST.lock.axis, dir: u, locked: true, fid: hit && hit.fid }; }
   if (best) return { ...best, p: proj(best.p), fid: hit && hit.fid };
+  const EE = G.E.concat(G.GE || [], G.GL || []);
   bd = 9; for (const e of G.E.concat(G.GE || [])) { const p = vmul(vadd(e.pa, e.pb), .5), s = toScreen(p); if (!s) continue; const d = Math.hypot(s[0] - sx, s[1] - sy); if (d < bd && vis(p)) { bd = d; best = { p, type: 'mid', e }; } }
-  if (best) return { ...best, p: proj(best.p), fid: hit && hit.fid };
+  if (best) { ST.hotEdge = vnorm(vsub(best.e.pb, best.e.pa)); return { ...best, p: proj(best.p), fid: hit && hit.fid }; }
   let eb = null; bd = 7;
-  for (const e of G.E.concat(G.GE || [])) { const u = vsub(e.pb, e.pa), L = vlen(u); if (L < 1e-9) continue; const un = vmul(u, 1 / L); let s = Math.max(0, Math.min(L, lineRay(e.pa, un, r.o, r.d))); const p = vadd(e.pa, vmul(un, s)), sp = toScreen(p); if (!sp) continue; const d = Math.hypot(sp[0] - sx, sp[1] - sy); if (d < bd && vis(p) && onPl(p)) { bd = d; eb = { p, type: 'edge', e }; } }
+  for (const e of EE) { const u = vsub(e.pb, e.pa), L = vlen(u); if (L < 1e-9) continue; const un = vmul(u, 1 / L); let s = Math.max(0, Math.min(L, lineRay(e.pa, un, r.o, r.d))); const p = vadd(e.pa, vmul(un, s)), sp = toScreen(p); if (!sp) continue; const d = Math.hypot(sp[0] - sx, sp[1] - sy); if (d < bd && vis(p) && onPl(p)) { bd = d; eb = { p, type: 'edge', e, lab: e.gd ? 'Sur le guide' : '' }; } }
+  if (eb && !eb.e.gd) ST.hotEdge = vnorm(vsub(eb.e.pb, eb.e.pa));
   let ab = null;
-  if (o.from && !o.noAxis) { bd = 11;
-    for (let i = 0; i < 3; i++) { const ax = AXES[i]; if (o.plane && Math.abs(vdot(ax, o.plane.n)) > 1e-6) continue; const s = lineRay(o.from, ax, r.o, r.d), p = vadd(o.from, vmul(ax, s)), sp = toScreen(p); if (!sp || Math.abs(s) < 1e-6) continue; const d = Math.hypot(sp[0] - sx, sp[1] - sy); if (d < bd) { bd = d; ab = { p, type: 'axis', axis: i }; } }
-    if (ab && eb) { // axe et arête : point de l'arête sur l'axe
-      const u = vsub(eb.e.pb, eb.e.pa), L = vlen(u), un = vmul(u, 1 / L), ax = AXES[ab.axis], w = vsub(eb.e.pa, o.from), b = vdot(un, ax), den = 1 - b * b;
-      if (den > 1e-9) { const s = (b * vdot(ax, w) - vdot(un, w)) / den, t = vdot(ax, vadd(w, vmul(un, s))), q = vadd(eb.e.pa, vmul(un, s)); if (s >= -1e-6 && s <= L + 1e-6 && vdist(q, vadd(o.from, vmul(ax, t))) < 1e-4) return { p: q, type: 'axis', axis: ab.axis, onEdge: true, fid: hit && hit.fid }; }
+  if (o.from && !o.noAxis) { bd = 11; const dirs = AXES.map((d, i) => [d, i]);
+    if (ST.hotEdge && !AXES.some(a => Math.abs(vdot(a, ST.hotEdge)) > .999)) { const pn = o.plane ? o.plane.n : [0, 0, 1], pp = vcross(ST.hotEdge, pn); dirs.push([ST.hotEdge, 3]); if (vlen(pp) > 1e-6) dirs.push([vnorm(pp), 4]); }
+    for (const [ax, i] of dirs) { if (o.plane && Math.abs(vdot(ax, o.plane.n)) > 1e-6) continue; const s = lineRay(o.from, ax, r.o, r.d), p = vadd(o.from, vmul(ax, s)), sp = toScreen(p); if (!sp || Math.abs(s) < 1e-6) continue; const d = Math.hypot(sp[0] - sx, sp[1] - sy); if (d < bd) { bd = d; ab = { p, type: 'axis', axis: i, dir: ax }; } }
+    if (ab && eb) { // direction et arête : point de l'arête sur la direction
+      const u = vsub(eb.e.pb, eb.e.pa), L = vlen(u), un = vmul(u, 1 / L), ax = ab.dir, w = vsub(eb.e.pa, o.from), b = vdot(un, ax), den = 1 - b * b;
+      if (den > 1e-9) { const s = (b * vdot(ax, w) - vdot(un, w)) / den, t = vdot(ax, vadd(w, vmul(un, s))), q = vadd(eb.e.pa, vmul(un, s)); if (s >= -1e-6 && s <= L + 1e-6 && vdist(q, vadd(o.from, vmul(ax, t))) < 1e-4) return { p: q, type: 'axis', axis: ab.axis, dir: ab.dir, onEdge: true, fid: hit && hit.fid }; }
     }
   }
   if (ab) return { ...ab, p: proj(ab.p), fid: hit && hit.fid };
@@ -1074,8 +1133,8 @@ function marker(s, extra) {
   const mk = $('#snapMk'), lb = $('#snapLb');
   if (!s || s.type === 'ground' || s.type === 'plane') { mk.hidden = true; lb.hidden = !extra; if (extra && s) { const sp = toScreen(s.p); if (sp) { lb.style.left = sp[0] + 14 + 'px'; lb.style.top = sp[1] + 10 + 'px'; lb.textContent = extra; } else lb.hidden = true; } return; }
   const sp = toScreen(s.p); if (!sp) { mk.hidden = lb.hidden = true; return; }
-  mk.hidden = false; mk.className = s.type === 'axis' ? 'axis' + s.axis : s.type; mk.style.left = sp[0] + 'px'; mk.style.top = sp[1] + 'px';
-  const t = [s.type === 'axis' ? AXN[s.axis] + (s.onEdge ? ', sur l\'arête' : '') : SNAPLAB[s.type], extra].filter(Boolean).join(' · ');
+  mk.hidden = false; mk.className = s.type === 'axis' ? 'axis' + Math.min(s.axis, 3) : s.type; mk.style.left = sp[0] + 'px'; mk.style.top = sp[1] + 'px';
+  const t = [s.type === 'axis' ? AXN[s.axis] + (s.onEdge ? ', sur l\'arête' : '') + (s.locked ? ' (bloqué)' : '') : (s.lab || SNAPLAB[s.type]), extra].filter(Boolean).join(' · ');
   lb.hidden = !t; lb.textContent = t; lb.style.left = sp[0] + 14 + 'px'; lb.style.top = sp[1] + 10 + 'px';
 }
 /* plan de tracé : face visée, sinon le sol, sinon un plan horizontal passant par le point */
@@ -1099,8 +1158,11 @@ function vcbApply() {
   const t = vcb.value.trim(); if (!t) return; const T = TOOLS[ST.tool];
   let done = false;
   if (T && T.vcb && T.busy && T.busy()) done = T.vcb(t);
-  else if (ST.last) { const v = ST.last.parse(t); if (v != null) { M = JSON.parse(ST.last.before); ST.last.apply(M, v); changed(); done = true; } }
-  vcb.value = ''; cv.focus();
+  else if (ST.last && ST.last.arr && /^\s*(?:[x*]\s*\d+|\d+\s*[x*]|\/\s*\d+)\s*$/i.test(t)) { const A = ST.last.arr, n = Math.min(200, parseInt(t.replace(/\D/g, ''), 10)), div = t.includes('/');
+    if (n >= 1) { M = JSON.parse(ST.last.before); for (let i = 1; i <= n; i++) moveAny(M, A.t, vmul(A.dir, div ? A.len * i / n : A.len * i), true); changed(); done = true; } }
+  else if (ST.last) { const v = ST.last.parse(t); if (v != null) { M = JSON.parse(ST.last.before); ST.last.apply(M, v); if (ST.last.arr) ST.last.arr.len = v; changed(); done = true; } }
+  vcb.value = ''; cv.focus(); const arrMsg = done && ST.last && ST.last.arr && /^\s*(?:[x*]\s*\d+|\d+\s*[x*]|\/\s*\d+)\s*$/i.test(t);
+  if (arrMsg) { setStatus(t.includes('/') ? 'Copies réparties' : 'Copies au même pas', 'ok'); return; }
   if (!done) setStatus('Saisie non comprise : « ' + t + ' »', 'err'); else { setStatus(''); vcb.classList.add('flash'); setTimeout(() => vcb.classList.remove('flash'), 300); }
 }
 /* opération corrigeable : une nouvelle saisie juste après la refait avec la nouvelle valeur */
@@ -1136,7 +1198,7 @@ function winSelect(x0, y0, x1, y1, add) {
     else ok = Ls.some(Lp => Lp.some((id, i) => segHit(sp(id), sp(Lp[(i + 1) % Lp.length])))) || (() => { const c = [(L + R) / 2, (T + B) / 2], h = pickFace(c[0], c[1]); return h && h.fid === k; })();
     if (ok) ST.sel.f.add(k); }
   for (const k in M.l) { const [a, b] = M.l[k], A = sp(a), Bp = sp(b); if (cross ? segHit(A, Bp) : inR(A) && inR(Bp)) ST.sel.e.add(ekey(a, b)); }
-  for (const gid in M.G || {}) { const w = gWorld(M.G[gid]), Q = {}, q = id => (id in Q ? Q[id] : (Q[id] = toScreen(w.v[id]))), E = modelEdges(w);
+  for (const gid in M.G || {}) { if (!gVis(M, gid)) continue; const w = gWorld(M.G[gid]), Q = {}, q = id => (id in Q ? Q[id] : (Q[id] = toScreen(w.v[id]))), E = modelEdges(w);
     if (cross ? E.some(([a, b]) => segHit(q(a), q(b))) : Object.keys(w.v).every(id => inR(q(id)))) ST.sel.g.add(gid); }
   drawSel(); info(); selBar(); const n = ST.sel.f.size + ST.sel.e.size + ST.sel.g.size; setStatus(n ? `${cross ? 'Capture' : 'Fenêtre'} : ${ST.sel.f.size} face(s)${ST.sel.e.size ? ', ' + ST.sel.e.size + ' trait(s)' : ''}${ST.sel.g.size ? ', ' + ST.sel.g.size + ' groupe(s)' : ''}` : '');
 }
@@ -1145,11 +1207,15 @@ function pickEdgeOrFace(sx, sy) {
   for (const e of G.E) { const u = vsub(e.pb, e.pa), L = vlen(u); if (L < 1e-9) continue; const un = vmul(u, 1 / L), s = Math.max(0, Math.min(L, lineRay(e.pa, un, r.o, r.d))), p = vadd(e.pa, vmul(un, s)), sp = toScreen(p); if (!sp) continue; const d = Math.hypot(sp[0] - sx, sp[1] - sy); if (d < bd && (!hit || vdot(vsub(p, r.o), r.d) <= hit.dist * 1.003 + 0.01)) { bd = d; best = { e }; } }
   return best || (hit ? { fid: hit.fid } : null);
 }
+/* guide sous le curseur (ligne ou point), pour la gomme */
+function guideAt(sx, sy) { let best = null, bd = 7; const r = setRay(sx, sy);
+  for (const k in M.gd || {}) { const g = M.gd[k]; let p = g.p; if (g.d) p = vadd(g.p, vmul(g.d, lineRay(g.p, g.d, r.o, r.d))); const s = toScreen(p); if (!s) continue; const d = Math.hypot(s[0] - sx, s[1] - sy); if (d < bd) { bd = d; best = k; } }
+  return best; }
 TOOLS.erase = {
   hint: () => 'Clic sur une arête : elle disparaît (deux faces coplanaires de part et d\'autre se réunissent) · clic sur une face : la face disparaît, ses arêtes restent',
   label: 'Mesures',
   move(sx, sy) { hover(pickEdgeOrFace(sx, sy)); },
-  down(sx, sy) { const h = pickEdgeOrFace(sx, sy); if (!h) return; if (isG(h.fid)) { const gid = h.fid.slice(2); doOp(m => { delete m.G[gid]; }); return; } if (h.e) doOp(m => deleteEdge(m, h.e.a, h.e.b)); else doOp(m => { deleteFace(m, h.fid); cleanup(m); }); }
+  down(sx, sy) { const gd = guideAt(sx, sy); if (gd) { doOp(m => { delete m.gd[gd]; }); return; } const h = pickEdgeOrFace(sx, sy); if (!h) return; if (isG(h.fid)) { const gid = h.fid.slice(2); doOp(m => { delete m.G[gid]; }); return; } if (h.e) doOp(m => deleteEdge(m, h.e.a, h.e.b)); else doOp(m => { deleteFace(m, h.fid); cleanup(m); }); }
 };
 /* ---- ligne ---- */
 TOOLS.line = {
@@ -1349,7 +1415,7 @@ TOOLS.move = {
     const S = this.s; this.s = null; guide(); marker(null); if (vlen(d) < TOL) { show(M); hint(this.hint()); return; }
     const t = S.t, dir = vnorm(d), fn = (m, v) => moveAny(m, t, vmul(dir, v), copy);
     if (!fn(JSON.parse(S.base), vlen(d))) { show(M); setStatus('Déplacement impossible : une face voisine ne resterait pas plane', 'err'); hint(this.hint()); return; }
-    commitFrom(S.base, txt => { const v = parseLen(txt); return isFinite(v) ? v : null; }, fn, vlen(d)); clearSel(); setStatus(''); hint(this.hint());
+    commitFrom(S.base, txt => { const v = parseLen(txt); return isFinite(v) ? v : null; }, fn, vlen(d)); if (copy) { ST.last.arr = { t, dir, len: vlen(d) }; setStatus('Copie : tapez x5 pour 5 copies au même pas, /5 pour 5 copies réparties', 'ok'); } else setStatus(''); clearSel(); hint(this.hint());
   },
   vcb(txt) { const v = parseLen(txt); if (!isFinite(v) || !this.s || !this.cur) return false; const d = vsub(this.cur.p, this.s.p0); if (vlen(d) < 1e-9) return false; this.make(vmul(vnorm(d), v), this.s.copy); return true; }
 };
@@ -1359,7 +1425,7 @@ function cancelTool() { const T = TOOLS[ST.tool]; if (T && T.reset) T.reset(); m
 function setTool(t) {
   if (!TOOLS[t]) return; cancelTool(); ST.tool = t; $$('.tb[data-tool]').forEach(b => b.classList.toggle('on', b.dataset.tool === t));
   const T = TOOLS[t]; hint(T.hint()); vcbShow(T.label || 'Mesures', '');
-  const sg = t === 'circle' || t === 'poly'; $('#segsL').hidden = !sg; if (sg) { $('#segsT').textContent = t === 'circle' ? 'Segments' : 'Côtés'; $('#segs').value = ST.segs[t]; }
+  const sg = t === 'circle' || t === 'poly' || t === 'arc'; $('#segsL').hidden = !sg; if (sg) { $('#segsT').textContent = t === 'poly' ? 'Côtés' : 'Segments'; $('#segs').value = ST.segs[t]; } ST.lock = null; if (ST.last && ST.last.arr) ST.last.arr = null; updateAnnot();
   cv.style.cursor = t === 'orbit' || t === 'pan' ? 'grab' : t === 'select' ? 'default' : 'crosshair'; hover(null);
 }
 
@@ -1409,6 +1475,7 @@ function pinchState() { const [a, b] = [...ptr.values()]; return { d: Math.hypot
 function pinchMove() { const p = pinchState(); if (drag.d > 0 && p.d > 0) zoomAt(p.c[0], p.c[1], 1 - drag.d / p.d); pan(p.c[0] - drag.c[0], p.c[1] - drag.c[1]); drag.d = p.d; drag.c = p.c; }
 
 /* ================= Clavier ================= */
+document.addEventListener('keyup', ev => { if (ev.key === 'Shift' && ST.lock) { ST.lock = null; const T = TOOLS[ST.tool]; T && T.move && T.move(mouse[0], mouse[1]); } });
 document.addEventListener('keydown', ev => {
   const tg = ev.target, inField = tg && (tg.tagName === 'INPUT' || tg.tagName === 'TEXTAREA' || tg.tagName === 'SELECT');
   if (tg === vcb) { if (ev.key === 'Enter') { ev.preventDefault(); vcbApply(); } else if (ev.key === 'Escape') { vcb.value = ''; cv.focus(); } return; }
@@ -1421,17 +1488,242 @@ document.addEventListener('keydown', ev => {
   if (ctrl && (k === 'a' || k === 'A')) { ev.preventDefault(); setTool('select'); Object.keys(M.f).forEach(f => ST.sel.f.add(f)); Object.keys(M.G || {}).forEach(g => ST.sel.g.add(g)); drawSel(); info(); selBar(); return; }
   if (ctrl) return;
   // chiffres, signe, séparateurs : saisie des cotes, comme dans SketchUp (on tape sans cliquer dans la case)
+  if (ST.last && ST.last.arr && /^[x*/]$/i.test(k) && !(TOOLS[ST.tool].busy && TOOLS[ST.tool].busy())) { ev.preventDefault(); vcb.value = k; vcb.focus(); return; }
   if (/^[0-9.,;\-+]$/.test(k)) { ev.preventDefault(); if (document.activeElement !== vcb) vcb.value = ''; vcb.focus(); vcb.value += k; return; }
   if (k === 'Escape') { const T = TOOLS[ST.tool]; if (T.busy && T.busy()) cancelTool(); else if (ST.ctx && !ST.sel.f.size && !ST.sel.e.size) exitGroup(); else clearSel(); hint(T.hint()); return; }
   if (k === 'Delete' || k === 'Backspace') { ev.preventDefault(); delSel(); return; }
   if (k === 'Z' && ev.shiftKey) { frameView(bounds()); save(); return; }
   if (k === 'PageDown' || k === 'PageUp') { ev.preventDefault(); sceneStep(k === 'PageDown' ? 1 : -1); return; }
-  const map = { ' ': 'select', m: 'move', l: 'line', r: 'rect', c: 'circle', g: 'poly', p: 'push', o: 'orbit', h: 'pan', e: 'erase' }, t = map[k.toLowerCase()];
+  if (k === 'Shift') { if (!ST.lock && lockFrom(ST.lastSnap)) { const T = TOOLS[ST.tool]; T.move && T.move(mouse[0], mouse[1]); } return; }
+  if (k === 'ArrowRight' || k === 'ArrowLeft' || k === 'ArrowUp') { const i = k === 'ArrowRight' ? 0 : k === 'ArrowLeft' ? 1 : 2; ev.preventDefault(); ST.lock = ST.lock && ST.lock.axis === i && !ST.lock.shift ? null : { dir: AXES[i], axis: i }; const T = TOOLS[ST.tool]; T.move && T.move(mouse[0], mouse[1]); return; }
+  if (k === 'ArrowDown') { ev.preventDefault(); ST.lock = null; return; }
+  const map = { ' ': 'select', m: 'move', l: 'line', r: 'rect', c: 'circle', g: 'poly', p: 'push', o: 'orbit', h: 'pan', e: 'erase', t: 'tape', f: 'offset', q: 'rotate', a: 'arc', d: 'dim', x: 'text' }, t = map[k.toLowerCase()];
   if (t && !ev.shiftKey) { ev.preventDefault(); setTool(t); }
 });
 function delSel() {
   if (!ST.sel.f.size && !ST.sel.e.size && !ST.sel.g.size) return; const fs = [...ST.sel.f], es = [...ST.sel.e].map(k => k.split('|').map(Number)), gs = [...ST.sel.g];
   doOp(m => { for (const g of gs) if (m.G) delete m.G[g]; for (const f of fs) deleteFace(m, f); for (const [a, b] of es) if (m.v[a] && m.v[b]) deleteEdge(m, a, b); cleanup(m); }); clearSel();
+}
+
+/* ================= Guides, cotations, textes, coupe, niveaux, balises =================
+   M.gd[id] = { p, d } ligne de construction (infinie, direction d) ou { p } point de construction ;
+   M.an[id] = { k: 'dim', a, b, o } cotation (o : décalage de la ligne de cote) ou { k: 'txt', a, q, t, fid } texte (fid : face dont l'aire est affichée) ;
+   M.cut = { p, n, on } plan de coupe (ce qui est devant, du côté de n, est caché) ; M.niv = [{ nom, z }] niveaux ;
+   M.tags[nom] = { vis } balises ; un groupe porte g.tag, et g.hid quand il est masqué. */
+const gVis = (m, gid) => { const g = m.G && m.G[gid]; if (!g || g.hid) return false; const T = g.tag && m.tags && m.tags[g.tag]; return !T || T.vis !== false; };
+const anno = { obj: null };
+function cutPlane() { const c = M.cut; return c && c.on ? c : null; }
+function applyCut() { const c = cutPlane(); renderer.clippingPlanes = c ? [new THREE.Plane(new THREE.Vector3(...vmul(c.n, -1)), vdot(c.n, c.p))] : []; const b = $('#bCut'); if (b) { b.hidden = !M.cut; b.classList.toggle('on', !!c); } }
+const clipped = p => { const c = cutPlane(); return !!c && vdot(c.n, vsub(p, c.p)) > 1e-4; };
+/* intersection de deux droites (p, d) et (q, e) si elles se coupent */
+function lineX(p, d, q, e) { const w = vsub(p, q), a = vdot(d, d), b = vdot(d, e), c = vdot(e, e), dd = vdot(d, w), ee = vdot(e, w), den = a * c - b * b; if (Math.abs(den) < 1e-12) return null; const s = (b * ee - c * dd) / den, t = (a * ee - b * dd) / den, P = vadd(p, vmul(d, s)), Q = vadd(q, vmul(e, t)); return vdist(P, Q) < 1e-5 ? { P, s, t } : null; }
+/* guides, cotations, textes, traits de coupe : dessinés à part, recalculés à chaque changement */
+function buildAnno() {
+  if (anno.obj) { scene.remove(anno.obj); anno.obj.traverse(o => o.geometry && o.geometry.dispose()); }
+  const grp = new THREE.Group(), gl = [], gp = [], dl = [], cl = [], R = 400; G.GX = []; G.GL = [];
+  for (const k in M.gd || {}) { const g = M.gd[k]; if (g.d) { const a = vadd(g.p, vmul(g.d, -R)), b = vadd(g.p, vmul(g.d, R)); gl.push(...a, ...b); G.GL.push({ pa: a, pb: b, gd: k, d: g.d, p: g.p }); } else { gp.push(g.p); G.GX.push({ p: g.p, lab: 'Point de construction' }); } }
+  // intersections : guide et guide, guide et arête
+  const L = G.GL; for (let i = 0; i < L.length; i++) { for (let j = i + 1; j < L.length; j++) { const x = lineX(L[i].p, L[i].d, L[j].p, L[j].d); if (x) G.GX.push({ p: x.P, lab: 'Intersection des guides' }); }
+    for (const e of G.E.concat(G.GE || []).slice(0, 3000)) { const u = vsub(e.pb, e.pa), x = lineX(L[i].p, L[i].d, e.pa, u); if (x && x.t > -1e-6 && x.t < 1 + 1e-6) G.GX.push({ p: x.P, lab: 'Intersection guide et arête' }); } }
+  if (gl.length) { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(gl, 3)); const l = new THREE.LineSegments(g, new THREE.LineDashedMaterial({ color: 0x5b6b7a, dashSize: .25, gapSize: .15 })); l.computeLineDistances(); grp.add(l); }
+  for (const p of gp) { const s = .12; dl.push(p[0] - s, p[1], p[2], p[0] + s, p[1], p[2], p[0], p[1] - s, p[2], p[0], p[1] + s, p[2], p[0], p[1], p[2] - s, p[0], p[1], p[2] + s); }
+  for (const k in M.an || {}) { const a = M.an[k];
+    if (a.k === 'dim') { const A2 = vadd(a.a, a.o), B2 = vadd(a.b, a.o), on = vlen(a.o) > 1e-9 ? vmul(vnorm(a.o), .15) : [0, 0, 0], u = vnorm(vsub(a.b, a.a)), t = vmul(vnorm(vadd(u, vnorm(a.o.some(Boolean) ? a.o : [0, 0, 1]))), .12);
+      dl.push(...a.a, ...vadd(A2, on), ...a.b, ...vadd(B2, on), ...A2, ...B2, ...vsub(A2, t), ...vadd(A2, t), ...vsub(B2, t), ...vadd(B2, t)); }
+    else if (a.k === 'txt' && vdist(a.a, a.q) > 1e-6) dl.push(...a.a, ...a.q); }
+  if (dl.length) { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(dl, 3)); grp.add(new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: 0x1f3a5f }))); }
+  // traits de coupe
+  const c = cutPlane(); if (c) { const fm = flatModel(visModel(M)); for (const [p, q] of sliceModel(fm, c.n, vdot(c.n, c.p))) { const e = vmul(c.n, -2e-3); cl.push(...vadd(p, e), ...vadd(q, e)); }
+    if (cl.length) { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(cl, 3)); const ln = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: 0xb3261e })); ln.renderOrder = 6; grp.add(ln); } }
+  anno.obj = grp; scene.add(grp); updateAnnot();
+}
+/* maquette sans les groupes masqués (balises, masquer) */
+function visModel(m) { if (!m.G) return m; const r = { ...m, G: {} }; for (const g in m.G) if (gVis(m, g)) r.G[g] = m.G[g]; return r; }
+/* étiquettes HTML des cotations et textes, replacées à chaque image */
+function annText(a) { if (a.k === 'dim') return fmtL(vdist(a.a, a.b)); if (a.t) return a.t; const f = a.fid && M.f[a.fid]; return f ? fmtA(faceArea(M, f)) : (a.last || '?'); }
+function updateAnnot() {
+  const box = $('#annot'); if (!box) return; const ids = Object.keys(M.an || {}); box.classList.toggle('act', ST.tool === 'erase' || ST.tool === 'text');
+  if (box.childElementCount !== ids.length || box.dataset.k !== ids.join('')) { box.innerHTML = ids.map(k => `<span class="lbl" data-an="${k}"></span>`).join(''); box.dataset.k = ids.join(''); }
+  for (const el of box.children) { const a = M.an[el.dataset.an]; if (!a) continue; const p = a.k === 'dim' ? vadd(vmul(vadd(a.a, a.b), .5), a.o) : a.q, s = toScreen(p);
+    if (!s || clipped(p)) { el.hidden = true; continue; } el.hidden = false; const t = annText(a); if (el.textContent !== t) el.textContent = t; el.style.left = s[0] + 'px'; el.style.top = s[1] + 'px'; el.className = 'lbl ' + a.k; }
+}
+/* ---- Mètre : mesurer ; depuis une arête : ligne de construction parallèle ; depuis un point : point de construction ---- */
+TOOLS.tape = {
+  s: null, cur: null, label: 'Distance',
+  hint() { return this.s ? (this.s.u ? 'Déplacez : guide parallèle à l\'arête · tapez le décalage puis Entrée · Échap : annuler' : 'Clic : mesure et point de construction · tapez une longueur puis Entrée · Ctrl : mesurer sans guide') : 'Clic sur une arête : guide parallèle · clic sur un point : mesure · double-clic sur une arête : guide dans son prolongement · Gomme sur un guide : l\'effacer'; },
+  busy() { return !!this.s; }, reset() { this.s = null; rubber(); guide(); },
+  off(q, S = this.s) { const w = vsub(q, S.a); return vsub(w, vmul(S.u, vdot(w, S.u))); },
+  move(sx, sy) {
+    if (!this.s) { marker(snap(sx, sy)); return; }
+    const S = this.s, s = this.at(sx, sy); if (!s) return; this.cur = s;
+    if (S.u) { const o = this.off(s.p), L = mm(vlen(o)); guide(vadd(S.a, vmul(S.u, -50)), vadd(S.a, vmul(S.u, 50))); rubber([S.p0, vadd(S.p0, o)]); marker(s, 'Décalage ' + fmtL(L)); vcbShow('Décalage', numL(L)); }
+    else { const L = vdist(S.p0, s.p); rubber([S.p0, s.p], false, s.type === 'axis' ? AXC[s.axis] : null); marker(s, fmtL(L)); vcbShow('Longueur', numL(L)); }
+  },
+  /* point visé ; pour un guide parallèle, hors sommet ou arête, dans le plan de l'arête tourné vers l'écran (ou la face qui la porte) */
+  at(sx, sy) { const S = this.s; if (!S || !S.u) return snap(sx, sy, S ? { from: S.p0 } : {}); const s = snap(sx, sy, { noAxis: true }); if (!s || s.type === 'end' || s.type === 'mid' || s.type === 'edge') return s;
+    if (s.type === 'face' && s.fid && M.f[s.fid]) { const n = faceN(M, M.f[s.fid]); if (Math.abs(vdot(n, S.u)) < 1e-6 && Math.abs(vdot(vsub(S.a, s.p), n)) < 1e-6) return s; }
+    const r = setRay(sx, sy), vd = r.d; let n = vsub(vd, vmul(S.u, vdot(vd, S.u))); if (vlen(n) < 1e-6) return s; n = vnorm(n); const ax = AXES.find(a => Math.abs(vdot(a, n)) > 0.999 && Math.abs(vdot(a, S.u)) < 1e-9); if (ax) n = ax; const q = rayPlane(r.o, r.d, S.a, n); return q ? { p: q, type: 'plane' } : s; },
+  down(sx, sy, ev) {
+    const s = this.s ? this.at(sx, sy) : snap(sx, sy); if (!s) return;
+    if (!this.s) { if ((s.type === 'edge' || s.type === 'mid') && s.e) { const u = vnorm(vsub(s.e.pb, s.e.pa)); this.s = { p0: s.p, a: s.e.pa, u }; } else this.s = { p0: s.p, ctrl: ev.ctrlKey || ev.metaKey }; hint(this.hint()); return; }
+    this.make(s.p, ev.ctrlKey || ev.metaKey);
+  },
+  make(q, noGuide) {
+    const S = this.s; this.s = null; rubber(); guide(); marker(null);
+    if (S.u) { const o = this.off(q, S); const p = vadd(S.a, o); doOp(m => { m.gd = m.gd || {}; m.gd['d' + (m.n++)] = { p, d: S.u }; }); setStatus('Guide à ' + fmtL(vlen(o)) + ' de l\'arête', 'ok'); }
+    else { const L = vdist(S.p0, q); if (!noGuide && !S.ctrl && L > TOL) doOp(m => { m.gd = m.gd || {}; m.gd['d' + (m.n++)] = { p: q.slice() }; }); setStatus('Longueur mesurée : ' + fmtL(L), 'ok'); }
+    hint(this.hint());
+  },
+  dbl(sx, sy) { const h = pickEdgeOrFace(sx, sy); if (!h || !h.e) return; this.reset(); const u = vnorm(vsub(h.e.pb, h.e.pa)); doOp(m => { m.gd = m.gd || {}; m.gd['d' + (m.n++)] = { p: h.e.pa.slice(), d: u }; }); },
+  vcb(t) { const v = parseLen(t); if (!isFinite(v) || !this.s || !this.cur) return false; const S = this.s;
+    if (S.u) { const o = this.off(this.cur.p), dir = vlen(o) > 1e-9 ? vnorm(o) : null; if (!dir) return false; this.make(vadd(S.a, vmul(dir, v))); }
+    else { const d = vsub(this.cur.p, S.p0); if (vlen(d) < 1e-9) return false; this.make(vadd(S.p0, vmul(vnorm(d), v))); } return true; }
+};
+/* ---- Décalage d'une face : vers l'intérieur, le contour s'imprime dans la face ; vers l'extérieur, une couronne s'ajoute ---- */
+TOOLS.offset = {
+  s: null, label: 'Distance',
+  hint() { return this.s ? 'Déplacez puis cliquez · tapez la distance puis Entrée (positive : vers l\'intérieur)' : 'Clic sur une face : son contour se décale (épaisseur de mur, acrotère, cadre de baie)'; },
+  busy() { return !!this.s; }, reset() { this.s = null; rubber(); },
+  move(sx, sy) {
+    if (!this.s) { const h = pickFace(sx, sy); hover(h && !isG(h.fid) ? { fid: h.fid } : null); return; }
+    const S = this.s, f = M.f[S.fid], r = setRay(sx, sy), q = rayPlane(r.o, r.d, M.v[f.o[0]], S.n) || rayPlane(r.o, r.d, M.v[f.o[0]], vmul(S.n, -1)); if (!q) return;
+    const fr = frame(M, f), q2 = to2(fr, q), L2 = f.o.map(id => to2(fr, M.v[id])); let dmin = Infinity; for (let i = 0; i < L2.length; i++) dmin = Math.min(dmin, dseg2(q2, L2[i], L2[(i + 1) % L2.length]));
+    let d = mm(dmin) * (pip(q2, L2) ? 1 : -1); S.d = d; rubber(offsetLoop(M, f, d), true); marker({ p: q, type: 'plane' }, (d >= 0 ? 'Vers l\'intérieur ' : 'Vers l\'extérieur ') + fmtL(Math.abs(d))); vcbShow('Distance', numL(d));
+  },
+  down(sx, sy) { if (!this.s) { const h = pickFace(sx, sy); if (!h || isG(h.fid)) return; this.s = { fid: h.fid, n: faceN(M, M.f[h.fid]), d: 0 }; hover(null); hint(this.hint()); return; } this.make(this.s.d); },
+  make(d) {
+    const S = this.s; this.s = null; rubber(); marker(null); if (Math.abs(d) < TOL) { hint(this.hint()); return; } const fid = S.fid;
+    commitFrom(JSON.stringify(M), t => { const v = parseLen(t); return isFinite(v) ? v : null; }, (m, v) => { const f = m.f[fid]; if (!f) return; const P = offsetLoop(m, f, v), n = faceN(m, f);
+      if (v > 0) addShape(m, P, n, fid); else { const ids = P.map(p => addV(m, p)); addF(m, { o: ids, h: [f.o.slice().reverse()] }); cleanup(m); } }, d);
+    hint(this.hint());
+  },
+  vcb(t) { const v = parseLen(t); if (!isFinite(v) || !this.s) return false; this.make(v); return true; }
+};
+/* ---- Rotation : centre, direction de départ, angle (rapporteur dans le plan de la face visée) ---- */
+TOOLS.rotate = {
+  s: null, label: 'Angle',
+  hint() { return !this.s ? 'Clic : centre de rotation (rapporteur horizontal ; sur une face, dans son plan ; flèches : rouge, vert, bleu) · tourne la sélection, à défaut ce qui est sous le clic' : !this.s.r0 ? 'Clic : direction de départ' : 'Clic : angle (crans de 15°) · tapez l\'angle en degrés puis Entrée'; },
+  busy() { return !!this.s; }, reset() { if (this.s) { this.s = null; show(M); } rubber(); guide(); },
+  ang(q) { const S = this.s, v = vsub(q, S.c), w = vsub(v, vmul(S.u, vdot(v, S.u))); if (vlen(w) < 1e-9) return 0; const a = Math.atan2(vdot(vcross(S.r0, w), S.u), vdot(S.r0, w)); let deg = a * 180 / Math.PI; const k = Math.round(deg / 15) * 15; if (Math.abs(deg - k) < 2) deg = k; return Math.round(deg * 10) / 10; },
+  circle(rad) { const S = this.s, b = basis(S.u), P = []; for (let i = 0; i < 48; i++) { const t = i / 48 * 2 * Math.PI; P.push(vadd(S.c, vadd(vmul(b.u, rad * Math.cos(t)), vmul(b.v, rad * Math.sin(t))))); } return P; },
+  move(sx, sy) {
+    if (!this.s) { marker(snap(sx, sy)); return; } const S = this.s, r = setRay(sx, sy), q = rayPlane(r.o, r.d, S.c, S.u) || rayPlane(r.o, r.d, S.c, vmul(S.u, -1)); const s = snap(sx, sy, { plane: { o: S.c, n: S.u }, noAxis: true }); const p = s ? s.p : q; if (!p) return;
+    const rad = Math.max(worldPx(S.c) * 50, S.r0 ? S.rad : vdist(S.c, p)); rubber(this.circle(rad), true);
+    if (!S.r0) { guide(S.c, p); marker(s, 'Direction de départ'); return; }
+    const a = this.ang(p); S.a = a; guide(S.c, vadd(S.c, vmul(vnorm(vsub(p, S.c)), S.rad)));
+    const m = JSON.parse(S.base); const ok = rotateSel(m, S.t, S.c, S.u, a * Math.PI / 180); show(ok ? m : M); marker({ p, type: 'plane' }, ok ? a.toLocaleString('fr-FR') + '°' : 'Impossible : une face ne resterait pas plane'); vcbShow('Angle (°)', String(a).replace('.', ','));
+  },
+  down(sx, sy) {
+    const s0 = snap(sx, sy, this.s ? { plane: { o: this.s.c, n: this.s.u }, noAxis: true } : {}); if (!s0) return;
+    if (!this.s) { const t = ST.sel.f.size || ST.sel.e.size || ST.sel.g.size ? { f: [...ST.sel.f], e: [...ST.sel.e], g: [...ST.sel.g] } : (h => !h ? null : isG(h.fid) ? { f: [], e: [], g: [h.fid.slice(2)] } : h.fid ? { f: [...connected(M, h.fid)], e: [] } : null)(pickEdgeOrFace(sx, sy));
+      if (!t) { setStatus('Sélectionnez d\'abord ce qu\'il faut tourner (ou cliquez sur l\'objet)'); return; } const u = ST.lock ? ST.lock.dir : s0.type === 'face' ? planeAt(s0).n : [0, 0, 1]; ST.lock = null; this.s = { t, c: s0.p, u, base: JSON.stringify(M) }; hint(this.hint()); return; }
+    const S = this.s; if (!S.r0) { const v = vsub(s0.p, S.c), w = vsub(v, vmul(S.u, vdot(v, S.u))); if (vlen(w) < 1e-6) return; S.r0 = vnorm(w); S.rad = Math.max(vlen(w), worldPx(S.c) * 50); hint(this.hint()); return; }
+    this.make(S.a || 0);
+  },
+  make(a) { const S = this.s; this.s = null; rubber(); guide(); marker(null); if (!a) { show(M); hint(this.hint()); return; } const t = S.t, c = S.c, u = S.u;
+    if (!rotateSel(JSON.parse(S.base), t, c, u, a * Math.PI / 180)) { show(M); setStatus('Rotation impossible : une face voisine ne resterait pas plane', 'err'); return; }
+    commitFrom(S.base, txt => { const v = parseFloat(String(txt).replace(',', '.')); return isFinite(v) ? v : null; }, (m, v) => rotateSel(m, t, c, u, v * Math.PI / 180), a); hint(this.hint()); },
+  vcb(t) { const v = parseFloat(String(t).replace(',', '.')); if (!isFinite(v) || !this.s || !this.s.r0) return false; this.make(v); return true; }
+};
+/* ---- Arc : début, fin, flèche ; segments réglables en bas ---- */
+TOOLS.arc = {
+  s: null, label: 'Flèche',
+  hint() { return !this.s ? 'Clic : début de l\'arc' : !this.s.B ? 'Clic : fin de l\'arc · tapez la longueur de la corde' : 'Clic : flèche (demi-cercle proposé) · tapez la flèche puis Entrée'; },
+  busy() { return !!this.s; }, reset() { this.s = null; rubber(); guide(); },
+  h(q) { const S = this.s, side = vnorm(vcross(S.n, vsub(S.B, S.A))), w = vsub(q, vmul(vadd(S.A, S.B), .5)); let h = mm(vdot(w, side)); const c = vdist(S.A, S.B); if (Math.abs(Math.abs(h) - c / 2) < c * .03) h = Math.sign(h) * c / 2; return h; },
+  move(sx, sy) {
+    const S = this.s; if (!S) { marker(snap(sx, sy)); return; }
+    if (!S.B) { const s = roundFrom(snap(sx, sy, { from: S.A, plane: S.pl }), S.A); if (!s) return; this.cur = s; rubber([S.A, s.p], false, s.type === 'axis' ? AXC[s.axis] : null); marker(s, fmtL(vdist(S.A, s.p))); vcbShow('Corde', numL(vdist(S.A, s.p))); return; }
+    const r = setRay(sx, sy), q = rayPlane(r.o, r.d, S.A, S.n) || rayPlane(r.o, r.d, S.A, vmul(S.n, -1)); if (!q) return; const h = this.h(q); S.h = h;
+    rubber(arcPts(S.A, S.B, h, S.n, ST.segs.arc), false); marker({ p: q, type: 'plane' }, (Math.abs(Math.abs(h) - vdist(S.A, S.B) / 2) < 1e-9 ? 'Demi-cercle · ' : '') + 'Flèche ' + fmtL(Math.abs(h))); vcbShow('Flèche', numL(Math.abs(h)));
+  },
+  down(sx, sy) {
+    if (!this.s) { const s = snap(sx, sy); if (!s) return; const pl = planeAt(s); this.s = { A: s.p, pl: { o: s.p, n: pl.n }, n: pl.n, fid: pl.fid }; hint(this.hint()); return; }
+    const S = this.s; if (!S.B) { const s = roundFrom(snap(sx, sy, { from: S.A, plane: S.pl }), S.A); if (!s || vdist(s.p, S.A) < TOL) return; S.B = s.p; hint(this.hint()); return; }
+    this.make(S.h || 0);
+  },
+  make(h) {
+    const S = this.s; this.s = null; rubber(); marker(null); if (!S.B || Math.abs(h) < TOL) { hint(this.hint()); return; } const P = arcPts(S.A, S.B, h, S.n, ST.segs.arc);
+    doOp(m => { const ids = P.map(p => addV(m, p)), segs = []; for (let i = 0; i + 1 < ids.length; i++) { if (ids[i] === ids[i + 1]) continue; m.l[m.n++] = [ids[i], ids[i + 1]]; segs.push([ids[i], ids[i + 1]]); } fixT(m); intersectLines(m, segs); splitFacesByLines(m); cleanup(m); });
+    hint(this.hint());
+  },
+  vcb(t) { const v = parseLen(t); if (!isFinite(v) || !this.s) return false; const S = this.s;
+    if (!S.B) { if (!this.cur) return false; const d = vsub(this.cur.p, S.A); if (vlen(d) < 1e-9) return false; S.B = vadd(S.A, vmul(vnorm(d), v)); hint(this.hint()); return true; }
+    this.make((Math.sign(S.h) || 1) * Math.abs(v)); return true; }
+};
+/* ---- Cotation : deux points puis la position de la ligne de cote (dans le plan face à la vue) ---- */
+TOOLS.dim = {
+  s: null, label: 'Mesures',
+  hint() { return !this.s ? 'Clic : premier point à coter' : !this.s.B ? 'Clic : second point' : 'Clic : position de la ligne de cote'; },
+  busy() { return !!this.s; }, reset() { this.s = null; rubber(); guide(); },
+  off(sx, sy) { const S = this.s, u = vnorm(vsub(S.B, S.A)), f = fwd(), np = vsub(f, vmul(u, vdot(f, u))); if (vlen(np) < 1e-6) return [0, 0, 0]; const r = setRay(sx, sy), q = rayPlane(r.o, r.d, S.A, vnorm(np)) || rayPlane(r.o, r.d, S.A, vmul(vnorm(np), -1)); if (!q) return [0, 0, 0]; const w = vsub(q, S.A); return vsub(w, vmul(u, vdot(w, u))); },
+  move(sx, sy) { const S = this.s; if (!S) { marker(snap(sx, sy)); return; }
+    if (!S.B) { const s = snap(sx, sy, { from: S.A }); if (!s) return; rubber([S.A, s.p]); marker(s, fmtL(vdist(S.A, s.p))); return; }
+    const o = this.off(sx, sy); S.o = o; rubber([S.A, vadd(S.A, o), vadd(S.B, o), S.B]); marker({ p: vadd(S.B, o), type: 'plane' }, fmtL(vdist(S.A, S.B))); },
+  down(sx, sy) { const S = this.s; if (!S) { const s = snap(sx, sy); if (s) { this.s = { A: s.p }; hint(this.hint()); } return; }
+    if (!S.B) { const s = snap(sx, sy, { from: S.A }); if (!s || vdist(s.p, S.A) < TOL) return; S.B = s.p; hint(this.hint()); return; }
+    const a = { k: 'dim', a: S.A, b: S.B, o: S.o || [0, 0, 0] }; this.reset(); doOp(m => { m.an = m.an || {}; m.an['a' + (m.n++)] = a; }); hint(this.hint()); }
+};
+/* ---- Texte : sur une face, son aire (mise à jour avec la maquette) ; ailleurs, texte libre ; clic sur un texte : le modifier ---- */
+TOOLS.text = {
+  s: null, label: 'Mesures',
+  hint() { return this.s ? 'Clic : position de l\'étiquette' : 'Clic sur une face : étiquette de son aire · ailleurs : texte libre · clic sur une étiquette : modifier son texte'; },
+  busy() { return !!this.s; }, reset() { this.s = null; rubber(); },
+  move(sx, sy) { if (!this.s) { const h = pickFace(sx, sy); hover(h && !isG(h.fid) ? { fid: h.fid } : null); return; } const r = setRay(sx, sy), f = fwd(), q = rayPlane(r.o, r.d, this.s.a, vmul(f, -1)) || rayPlane(r.o, r.d, this.s.a, f); if (q) { this.s.q = q; rubber([this.s.a, q]); } },
+  down(sx, sy) {
+    if (!this.s) { const h = pickFace(sx, sy); if (h && !isG(h.fid)) { this.s = { a: h.p, fid: h.fid, q: h.p }; hover(null); hint(this.hint()); return; }
+      const s = snap(sx, sy); if (!s) return; const t = prompt('Texte'); if (!t || !t.trim()) return; doOp(m => { m.an = m.an || {}; m.an['a' + (m.n++)] = { k: 'txt', a: s.p, q: s.p, t: t.trim() }; }); return; }
+    const S = this.s; this.reset(); const a = { k: 'txt', a: S.a, q: S.q || S.a, fid: S.fid, last: fmtA(faceArea(M, M.f[S.fid])) }; doOp(m => { m.an = m.an || {}; m.an['a' + (m.n++)] = a; }); hint(this.hint());
+  }
+};
+/* ---- Plan de coupe : clic sur une face, la coupe se pose dans son plan ; une distance tapée l'enfonce dans le volume ---- */
+TOOLS.section = {
+  label: 'Distance',
+  hint: () => 'Clic sur une face : coupe dans son plan, ce qui est devant est caché · tapez une distance pour l\'enfoncer dans le volume · bouton « Coupe » en haut : l\'activer ou la désactiver',
+  move(sx, sy) { const h = pickFace(sx, sy); hover(h ? { fid: h.fid } : null); },
+  down(sx, sy) { const h = pickFace(sx, sy); if (!h || !h.n) return; const p = h.p, n = h.n; commitFrom(JSON.stringify(M), t => { const v = parseLen(t); return isFinite(v) ? v : null; }, (m, v) => { m.cut = { p: vsub(p, vmul(n, v)), n, on: true }; }, 0.01); setStatus('Coupe posée : tapez une distance pour l\'enfoncer', 'ok'); }
+};
+/* ---- verrouillage d'inférence : Maj sur un axe ou un parallèle ; flèches : droite rouge, gauche vert, haut bleu ---- */
+function lockFrom(s) { if (s && s.type === 'axis' && s.dir) { ST.lock = { dir: s.dir, axis: s.axis }; return true; } return false; }
+
+/* ================= Panneaux : Affichage (balises, objets masqués, guides, coupe) et Niveaux ================= */
+function panel(id, html) { const el = $('#' + id); el.innerHTML = html; el.hidden = false; return el; }
+function dispPanel() {
+  const el = $('#dispP'); if (el.hidden) return; const tags = Object.keys(M.tags || {}), G0 = M.G || {}, hid = Object.keys(G0).filter(g => G0[g].hid), cnt = t => Object.values(G0).filter(g => g.tag === t).length, nGd = Object.keys(M.gd || {}).length;
+  panel('dispP', `<div class="vhead"><b>Affichage</b><button class="btn sm" data-a="x">Fermer ×</button></div>
+    <div><b>Balises</b> <span class="hint0">(posées sur les groupes, depuis la barre de sélection)</span></div>
+    ${tags.map(t => `<label class="r"><input type="checkbox" data-tag="${escH(t)}"${M.tags[t].vis !== false ? ' checked' : ''}> ${escH(t)} <small class="hint0">${cnt(t)} groupe(s)</small><span class="grow"></span><button class="btn sm" data-del="${escH(t)}" title="Supprimer la balise (les groupes la perdent)">×</button></label>`).join('') || '<div class="hint0">Aucune balise.</div>'}
+    <div class="r"><button class="btn sm" data-a="newtag">+ Balise</button></div>
+    <div><b>Objets masqués</b> : ${hid.length} ${hid.length ? '<button class="btn sm" data-a="showall">Tout afficher</button>' : ''}</div>
+    <div><b>Guides</b> : ${nGd} ${nGd ? '<button class="btn sm" data-a="clrgd">Effacer les guides</button>' : ''}</div>
+    <div><b>Coupe</b> : ${M.cut ? `<button class="btn sm${M.cut.on ? ' on' : ''}" data-a="cut">${M.cut.on ? 'Active' : 'Inactive'}</button> <button class="btn sm" data-a="cutx">Retirer</button>` : '<span class="hint0">aucune (outil Coupe, ou « Plan » d\'un niveau)</span>'}</div>`);
+  el.onclick = e => { const b = e.target.closest('button'); if (!b) return; const a = b.dataset.a;
+    if (a === 'x') el.hidden = true; else if (a === 'newtag') { const n = prompt('Nom de la balise (ex. Existant, Projet, Tracé)'); if (n && n.trim()) doOp(m => { m.tags = m.tags || {}; m.tags[n.trim()] = { vis: true }; }); }
+    else if (a === 'showall') doOp(m => { for (const g in m.G) delete m.G[g].hid; }); else if (a === 'clrgd') doOp(m => { m.gd = {}; });
+    else if (a === 'cut') doOp(m => { m.cut.on = !m.cut.on; }); else if (a === 'cutx') doOp(m => { delete m.cut; });
+    else if (b.dataset.del) { const t = b.dataset.del; doOp(m => { delete m.tags[t]; for (const g in m.G) if (m.G[g].tag === t) delete m.G[g].tag; }); }
+    dispPanel(); cv.focus(); };
+  el.onchange = e => { const t = e.target.dataset.tag; if (t == null) return; doOp(m => { m.tags[t].vis = e.target.checked; }); clearSel(); dispPanel(); };
+}
+function nivAreas() { const fm = flatModel(visModel(M)); return (M.niv || []).map(n => ({ nom: n.nom, z: n.z, sdp: Math.max(0, sectionArea(fm, n.z + 0.05)) })); }
+function nivPanel() {
+  const el = $('#nivP'); if (el.hidden) return; const A = nivAreas(), tot = A.reduce((s, n) => s + n.sdp, 0);
+  panel('nivP', `<div class="vhead"><b>Niveaux</b><button class="btn sm" data-a="x">Fermer ×</button></div>
+    <div class="hint0">Surface de plancher brute de chaque niveau : section horizontale des volumes fermés, juste au-dessus du plancher (sans déduction des murs, trémies déduites).</div>
+    <table class="nivt"><thead><tr><th>Niveau</th><th>Altitude (${UNIT})</th><th class="num">Surface</th><th></th></tr></thead><tbody>
+    ${A.map((n, i) => `<tr><td><input type="text" data-nom="${i}" value="${escH(n.nom)}"></td><td><input type="text" inputmode="decimal" data-z="${i}" value="${numL(n.z)}"></td><td class="num mono">${fmtA(n.sdp)}</td><td><button class="btn sm" data-plan="${i}" title="Plan de ce niveau : coupe à 1,20 m au-dessus, vue de dessus">Plan</button><button class="btn sm" data-rm="${i}" aria-label="Supprimer">×</button></td></tr>`).join('') || '<tr><td colspan="4" class="hint0">Aucun niveau.</td></tr>'}
+    </tbody><tfoot><tr><td colspan="2"><b>Total</b></td><td class="num mono"><b>${fmtA(tot)}</b></td><td></td></tr></tfoot></table>
+    <div class="r"><button class="btn sm" data-a="add">+ Niveau</button><button class="btn sm" data-a="auto" title="Un niveau à chaque hauteur d'étage, du sol au sommet de la maquette">Répartir…</button>${M.cut ? '<button class="btn sm" data-a="nocut">Sans coupe</button>' : ''}</div>`);
+  const rename = ['RDC', 'R+1', 'R+2', 'R+3', 'R+4', 'R+5', 'R+6', 'R+7', 'R+8', 'R+9'];
+  el.onclick = e => { const b = e.target.closest('button'); if (!b) return; const a = b.dataset.a;
+    if (a === 'x') el.hidden = true;
+    else if (a === 'add') doOp(m => { m.niv = m.niv || []; const z = m.niv.length ? Math.max(...m.niv.map(n => n.z)) + 3 : 0; m.niv.push({ nom: rename[m.niv.length] || 'Niveau ' + (m.niv.length + 1), z }); });
+    else if (a === 'auto') { const h = parseLen(prompt('Hauteur d\'étage (' + UNIT + ')', numL(3)) || ''); const b0 = bounds(); if (h > 0 && b0) { const P = Object.values(flatModel(visModel(M)).v), z1 = Math.max(...P.map(p => p[2])); doOp(m => { m.niv = []; for (let z = 0, i = 0; z < z1 - 0.5 && i < 60; z += h, i++) m.niv.push({ nom: rename[i] || 'R+' + i, z: Math.round(z * 1000) / 1000 }); }); } }
+    else if (a === 'nocut') doOp(m => { delete m.cut; });
+    else if (b.dataset.rm) doOp(m => { m.niv.splice(+b.dataset.rm, 1); });
+    else if (b.dataset.plan) { const z = M.niv[+b.dataset.plan].z; doOp(m => { m.cut = { p: [0, 0, z + 1.2], n: [0, 0, 1], on: true }; }); setView('top'); }
+    nivPanel(); cv.focus(); };
+  el.onchange = e => { const i = e.target.dataset.nom ?? e.target.dataset.z; if (i == null) return; if (e.target.dataset.nom != null) doOp(m => { m.niv[+i].nom = e.target.value.trim() || m.niv[+i].nom; }); else { const v = parseLen(e.target.value); if (isFinite(v)) doOp(m => { m.niv[+i].z = v; m.niv.sort((a, b) => a.z - b.z); }); } nivPanel(); };
 }
 
 /* ================= Groupes ================= */
@@ -1454,8 +1746,10 @@ function selBar() {
   const el = $('#selBar'); if (!el) return; const nf = ST.sel.f.size, ne = ST.sel.e.size, ng = ST.sel.g.size; if (!nf && !ne && !ng) { el.hidden = true; return; }
   const one = ng === 1 && !nf && !ne ? [...ST.sel.g][0] : null; el.hidden = false;
   el.innerHTML = (!ST.ctx && (nf || ne || ng > 1) ? '<button class="btn sm" data-a="grp" title="Ctrl+G">Grouper</button>' : '') + (ng ? '<button class="btn sm" data-a="ungrp" title="Ctrl+Maj+G">Dégrouper</button>' : '')
+    + (ng ? `<select class="btn sm" data-a="tag" title="Balise des groupes sélectionnés"><option value="">Balise…</option><option value="-">(aucune)</option>${Object.keys(M.tags || {}).map(t => `<option>${escH(t)}</option>`).join('')}<option value="+">Nouvelle…</option></select><button class="btn sm" data-a="hide">Masquer</button>` : '')
     + (one && M.G[one] ? `<button class="btn sm" data-a="open">Ouvrir</button><button class="btn sm" data-a="ren" title="Renommer « ${escH(M.G[one].nom)} »">Renommer</button>` : '') + '<button class="btn sm danger" data-a="del">Supprimer</button>';
-  el.querySelectorAll('button').forEach(b => b.onclick = () => { const a = b.dataset.a; if (a === 'grp') doGroup(); else if (a === 'ungrp') doUngroup(); else if (a === 'open') enterGroup(one); else if (a === 'del') delSel(); else if (a === 'ren') { const n = prompt('Nom du groupe', M.G[one].nom); if (n && n.trim()) doOp(m => { m.G[one].nom = n.trim().slice(0, 60); }); } cv.focus(); });
+  const tg = el.querySelector('[data-a=tag]'); if (tg) tg.onchange = () => { let v = tg.value; if (v === '+') { v = (prompt('Nom de la balise (ex. Existant, Projet, Tracé)') || '').trim(); if (!v) { tg.value = ''; return; } } const gs = [...ST.sel.g]; doOp(m => { m.tags = m.tags || {}; if (v !== '-' && !m.tags[v]) m.tags[v] = { vis: true }; for (const g of gs) if (m.G[g]) { if (v === '-') delete m.G[g].tag; else m.G[g].tag = v; } }); selBar(); cv.focus(); };
+  el.querySelectorAll('button').forEach(b => b.onclick = () => { const a = b.dataset.a; if (a === 'hide') { const gs = [...ST.sel.g]; doOp(m => { for (const g of gs) if (m.G[g]) m.G[g].hid = true; }); clearSel(); setStatus('Masqué : « Affichage » pour le réafficher'); } else if (a === 'grp') doGroup(); else if (a === 'ungrp') doUngroup(); else if (a === 'open') enterGroup(one); else if (a === 'del') delSel(); else if (a === 'ren') { const n = prompt('Nom du groupe', M.G[one].nom); if (n && n.trim()) doOp(m => { m.G[one].nom = n.trim().slice(0, 60); }); } cv.focus(); });
 }
 
 /* ================= Import : DXF (tracé 2D ou faces 3D, par calques), OBJ, DAE (SketchUp), glTF ================= */
@@ -1643,7 +1937,15 @@ const HELP = `<h3>Unités</h3><table>
 <tr><td>C · G</td><td>Cercle, polygone : centre puis rayon. Nombre de segments ou de côtés en bas à droite.</td></tr>
 <tr><td>L</td><td>Ligne : clics successifs, longueur tapée au clavier. Un trait d'un bord à l'autre d'une face la divise en deux ; deux traits qui se croisent se coupent l'un l'autre au croisement ; revenir au départ ferme une face.</td></tr>
 <tr><td>Inférences</td><td>Extrémité (vert), milieu (bleu clair), sur l'arête (rouge), sur la face (bleu), axes rouge, vert, bleu.</td></tr></table>
+<h3>Mesurer, construire</h3><table>
+<tr><td>T</td><td>Mètre : depuis une arête, ligne de construction parallèle (décalage tapé au clavier) ; depuis un point, mesure et point de construction (Ctrl : sans guide) ; double-clic sur une arête : guide dans son prolongement. Les intersections de guides s'accrochent. Gomme sur un guide pour l'effacer.</td></tr>
+<tr><td>Maj · flèches</td><td>Maj maintenue sur une direction proposée (axe, parallèle ou perpendiculaire à l'arête survolée) : elle est bloquée. Flèche droite : axe rouge, gauche : vert, haut : bleu, bas : débloquer.</td></tr>
+<tr><td>D · X</td><td>Cotation : deux points puis la ligne de cote. Texte : clic sur une face, étiquette de son aire (tenue à jour) ; ailleurs, texte libre ; clic sur une étiquette avec l'outil Texte : la modifier, avec la gomme : l'effacer.</td></tr></table>
 <h3>Volumes et surfaces</h3><table>
+<tr><td>F</td><td>Décalage : clic sur une face, son contour se décale vers l'intérieur (il s'imprime dans la face) ou vers l'extérieur (une couronne s'ajoute).</td></tr>
+<tr><td>Q</td><td>Rotation : centre, direction de départ, angle (crans de 15°, ou angle tapé). Tourne la sélection, à défaut l'objet cliqué.</td></tr>
+<tr><td>A</td><td>Arc : début, fin, flèche (demi-cercle proposé). Segments réglables en bas.</td></tr>
+<tr><td>Réseau</td><td>Juste après une copie (M avec Ctrl), tapez x5 : 5 copies au même pas ; /5 : 5 copies réparties sur la distance.</td></tr>
 <tr><td>P sur une face</td><td>Pousser/tirer : clic sur une face, déplacez, recliquez (ou tapez la distance). Viser un sommet aligne sur son niveau.</td></tr>
 <tr><td>P sur un trait</td><td>Un trait, une polyligne ou le bord d'une face seule, tiré, donne une surface (un mur à partir d'un tracé au sol). Trait droit : dans toutes les directions perpendiculaires, axes proposés ; polyligne plane : perpendiculairement à son plan.</td></tr>
 <tr><td>Dans un volume</td><td>Une forme tracée sur une face s'y imprime : tirée vers l'extérieur elle fait une excroissance, poussée vers l'intérieur un creux. Poussée jusqu'à la face opposée ou au-delà, elle troue le volume (baie dans un mur, trémie dans une dalle).</td></tr>
@@ -1654,6 +1956,9 @@ const HELP = `<h3>Unités</h3><table>
 <tr><td>Vue</td><td>Perspective, axonométrie, et géométraux sans perspective : plan (dessus), élévations sud, est, nord, ouest, dessous. Tourner autour de la maquette quitte le géométral (vue libre).</td></tr>
 <tr><td>Onglets</td><td>« + Vue » enregistre le point de vue (position, projection, zoom) dans un onglet au-dessus de la maquette, comme les scènes de SketchUp. Clic : y revenir ; ⟳ : remplacer par la vue actuelle ; × : supprimer ; double-clic : renommer ; Page suivante, Page précédente : onglet suivant, précédent. Les vues sont gardées avec la maquette.</td></tr>
 <tr><td>Caméras</td><td>Après avoir bougé la vue depuis un onglet, « ⟳ Mettre à jour » à côté de l'onglet l'enregistre d'un geste. « Vues et caméras… » ouvre la liste des vues avec vignettes : renommer, voir, mettre à jour, monter, descendre, supprimer. Caméras au format de TerraGeo (position, point visé, focale 24×36, hauteur d'œil), inclinaison 0° par défaut (visée horizontale, verticales droites) : sur le petit plan, toucher une caméra (son point ou son champ) la sélectionne, avec « Supprimer » sous le plan (ou la touche Suppr) ; glisser une caméra la déplace, la poignée blanche la tourne ; glisser depuis un endroit vide en pose une nouvelle, un simple toucher dans le vide désélectionne. « + Caméra » la pose à l'endroit de la vue actuelle.</td></tr>
+<tr><td>Coupe</td><td>Outil Coupe : clic sur une face, ce qui est devant est caché et le trait de coupe s'affiche en rouge ; tapez une distance pour l'enfoncer. Bouton « Coupe » : l'activer ou la désactiver.</td></tr>
+<tr><td>Niveaux</td><td>Niveaux du projet (RDC, R+1…, ou « Répartir » par hauteur d'étage) et surface de plancher brute de chacun, reprise par l'estimation. « Plan » : coupe à 1,20 m au-dessus du niveau, vue de dessus.</td></tr>
+<tr><td>Affichage</td><td>Balises posées sur les groupes (Existant, Projet, Tracé…) à afficher ou masquer ; objets masqués ; guides ; coupe.</td></tr>
 <tr><td>Groupes</td><td>Sélection puis « Grouper » (Ctrl+G) : la géométrie du groupe reste à part, elle ne se soude pas au reste. Un clic sélectionne tout le groupe, M le déplace (Ctrl : copie), double-clic l'ouvre pour le modifier (le reste passe en grisé), Échap le referme. « Dégrouper » (Ctrl+Maj+G) remet la géométrie dans la maquette.</td></tr>
 <tr><td>Importer</td><td>DXF : tracé 2D à plat par calques, pour dessiner dessus (les accroches suivent le tracé), ou faces 3D. Modèles OBJ, DAE (SketchUp : Exporter &gt; Modèle 3D), glTF. Chaque import arrive dans un groupe. DWG et SKP : passer par leurs exports DXF, DAE, OBJ.</td></tr>
 <tr><td>Image</td><td>Enregistre la vue actuelle en image PNG (dans les téléchargements du téléphone ou de l'ordinateur).</td></tr>
@@ -1700,11 +2005,16 @@ const HELP = `<h3>Unités</h3><table>
   $('#bCenter').onclick = centerView; $('#bImg').onclick = () => { saveImage(); cv.focus(); };
   $('#bUndo').onclick = undo; $('#bRedo').onclick = redo;
   $('#bNew').onclick = () => { if (Object.keys(M.f).length + Object.keys(M.l).length && !confirm('Effacer la maquette en cours ? (Ctrl+Z permet de revenir en arrière)')) return; doOp(m => { m.v = {}; m.f = {}; m.l = {}; }); clearSel(); };
+  $('#bDisp').onclick = () => { const p = $('#dispP'); p.hidden = !p.hidden; $('#nivP').hidden = true; dispPanel(); };
+  $('#bNiv').onclick = () => { const p = $('#nivP'); p.hidden = !p.hidden; $('#dispP').hidden = true; nivPanel(); };
+  $('#bCut').onclick = () => { if (M.cut) doOp(m => { m.cut.on = !m.cut.on; }); };
+  $('#annot').addEventListener('click', e => { const l = e.target.closest('[data-an]'); if (!l) return; const id = l.dataset.an; if (ST.tool === 'erase') doOp(m => { delete m.an[id]; }); else if (ST.tool === 'text') { const a = M.an[id]; const t = prompt('Texte (vide : aire de la face)', a.t || ''); if (t !== null) doOp(m => { m.an[id].t = t.trim(); }); } });
+  renderer.localClippingEnabled = true;
   $('#bImp').onclick = () => $('#impIn').click(); $('#impIn').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (f) impFile(f); });
   $('#bSave').onclick = saveFile; $('#bObj').onclick = exportOBJ;
   $('#bOpen').onclick = () => $('#fileIn').click();
   $('#fileIn').addEventListener('change', async e => { const f = e.target.files[0]; e.target.value = ''; if (!f) return; try { const before = JSON.stringify(M); loadData(JSON.parse(await f.text())); ST.undo.push(before); changed(); setStatus('Maquette ouverte : ' + f.name, 'ok'); } catch (err) { setStatus('Fichier illisible : ' + err.message, 'err'); } });
-  $('#segs').addEventListener('change', e => { const t = ST.tool; if (t !== 'circle' && t !== 'poly') return; ST.segs[t] = Math.max(3, Math.min(128, Math.round(+e.target.value) || ST.segs[t])); e.target.value = ST.segs[t]; save(); cv.focus(); });
+  $('#segs').addEventListener('change', e => { const t = ST.tool; if (t !== 'circle' && t !== 'poly' && t !== 'arc') return; ST.segs[t] = Math.max(3, Math.min(128, Math.round(+e.target.value) || ST.segs[t])); e.target.value = ST.segs[t]; save(); cv.focus(); });
   $('#help').innerHTML = HELP; $('#bHelp').onclick = () => { const h = $('#help'); h.hidden = !h.hidden; $('#bHelp').setAttribute('aria-expanded', String(!h.hidden)); $('#bHelp').classList.toggle('on', !h.hidden); };
   /* dans TerraSuite : la suite masque ses menus pendant l'édition (téléphone, tablette) ; ☰ les fait revenir */
   if (HAS_LINK && TSLink.embedded) {
@@ -1714,7 +2024,7 @@ const HELP = `<h3>Unités</h3><table>
     $('#bMenus').onclick = () => { try { parent.postMessage({ ts: 'menus' }, '*'); } catch (e) {} };
   }
   setTool('rect'); cv.focus();
-  window.TM = { G, PR, openRid, setProjection, isO, get camera() { return camera; }, get M() { return M; }, set M(v) { M = v; changed(); }, ST, TOOLS, setTool, snap, pickFace, toScreen, req, show, rebuild, frameView, bounds, setView, setUnit, sceneAdd, sceneGo, cameraAdd, openPanel, applyCam, closedVolume, get UNIT() { return UNIT; } };
+  window.TM = { gVis, nivAreas, visModel, sectionArea, get lock() { return ST.lock; }, G, PR, openRid, setProjection, isO, get camera() { return camera; }, get M() { return M; }, set M(v) { M = v; changed(); }, ST, TOOLS, setTool, snap, pickFace, toScreen, req, show, rebuild, frameView, bounds, setView, setUnit, sceneAdd, sceneGo, cameraAdd, openPanel, applyCam, closedVolume, get UNIT() { return UNIT; } };
 })();
 
 </script>

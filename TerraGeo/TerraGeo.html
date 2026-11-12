@@ -205,7 +205,7 @@ body.wide3d .work{grid-template-columns:1fr} body.wide3d .side{display:none}
 <style>.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn{display:none!important}</style>
 <script src="../TerraChantier/terrasuite-compte.js" onerror="this.remove()"></script>
 <script>
-const APP_VERSION = '0.21.1';
+const APP_VERSION = '0.21.2';
 /* ================= Outils ================= */
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -1318,7 +1318,7 @@ const batKey = ft => String(ft.id || (ft.properties || {}).cleabs || centroid(ft
 const tmRecs = () => { try { return JSON.parse(localStorage.getItem('terramodel-maquettes') || '{}') || {}; } catch (e) { return {}; } };
 /* maquette TerraModel à plat : faces des groupes (TerraModel 0.5) placées à leur position ; tracés 2D importés laissés de côté */
 function tmFlat(Mo) { const r = { v: { ...Mo.v }, f: { ...Mo.f }, l: { ...(Mo.l || {}) } }; let n = 1e9;
-  for (const gid in Mo.G || {}) { const g = Mo.G[gid], map = {}; if (!Object.keys(g.m.f || {}).length) continue; for (const k in g.m.v) { const id = n++; r.v[id] = [g.m.v[k][0] + g.t[0], g.m.v[k][1] + g.t[1], g.m.v[k][2] + g.t[2]]; map[k] = id; }
+  for (const gid in Mo.G || {}) { const g = Mo.G[gid], map = {}; if (!Object.keys(g.m.f || {}).length || g.hid || (g.tag && Mo.tags && Mo.tags[g.tag] && Mo.tags[g.tag].vis === false)) continue; // objets masqués et balises éteintes dans TerraModel for (const k in g.m.v) { const id = n++; r.v[id] = [g.m.v[k][0] + g.t[0], g.m.v[k][1] + g.t[1], g.m.v[k][2] + g.t[2]]; map[k] = id; }
     for (const k in g.m.f) { const f = g.m.f[k]; r.f[n++] = { o: f.o.map(i => map[i]), h: (f.h || []).map(L => L.map(i => map[i])) }; } }
   return r; }
 const tmOk = r => r && r.model && Object.keys(tmFlat(r.model).f).length;
