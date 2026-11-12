@@ -206,7 +206,7 @@ body.wide3d .work{grid-template-columns:1fr} body.wide3d .side{display:none}
 <style>.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn{display:none!important}</style>
 <script src="../TerraChantier/terrasuite-compte.js" onerror="this.remove()"></script>
 <script>
-const APP_VERSION = '0.22.2';
+const APP_VERSION = '0.22.3';
 /* ================= Outils ================= */
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -1636,9 +1636,13 @@ function gModel() {
   const mesh = new THREE.Mesh(o.geometry, new THREE.MeshStandardMaterial({ color: 0xffffff, vertexColors: true, roughness: 1, metalness: 0, side: THREE.DoubleSide }));
   const ll = llOf(q.x, q.y), dz = q.z != null && isFinite(q.z) ? q.z - groundAt(D, q.x, q.y) : 0;
   new THREE.GLTFExporter().parse(mesh, res => {
-    if (!G3.on || !G3.el) return; G3.mqUrl = URL.createObjectURL(new Blob([res], { type: 'model/gltf-binary' }));
-    try { const m = new G3.lib.Model3DElement({ src: G3.mqUrl, position: { lat: ll.lat, lng: ll.lng, altitude: dz + 0.02 }, altitudeMode: 'RELATIVE_TO_GROUND', orientation: { heading: -(q.rot || 0), tilt: 0, roll: 0 }, scale: 1 });
-      G3.el.append(m); G3.extras.push(m); G3.mqOk = true; gMsg(); } catch (e) { console.warn('maquette Google', e); }
+    if (!G3.on || !G3.el) return;
+    // adresse data: (le moteur Google ne lit pas les adresses blob: de la page)
+    const u8 = new Uint8Array(res); let bin = ''; for (let i = 0; i < u8.length; i += 0x8000) bin += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000));
+    const src = 'data:model/gltf-binary;base64,' + btoa(bin);
+    try { const m = new G3.lib.Model3DElement({ src, position: { lat: ll.lat, lng: ll.lng, altitude: dz + 0.02 }, altitudeMode: 'RELATIVE_TO_GROUND', orientation: { heading: -(q.rot || 0), tilt: 0, roll: 0 }, scale: 1 });
+      m.addEventListener && m.addEventListener('gmp-error', ev => { G3.mqOk = false; gInfo('Maquette du projet refusée par la vue Google : ' + esc(String((ev && (ev.message || ev.detail)) || 'erreur de chargement')), true); });
+      G3.el.append(m); G3.extras.push(m); G3.mqOk = true; gMsg(); } catch (e) { console.warn('maquette Google', e); gInfo('Maquette du projet impossible à afficher dans la vue Google : ' + esc(e.message || String(e)), true); }
   }, e => console.warn('glTF maquette', e), { binary: true });
 }
 function gMsg() { gInfo(`Vue Google 3D : affichage seul. Exports, image de la vue et planches restent ceux de la maquette IGN. Parcelle${G3.nRings > 1 ? 's' : ''} sélectionnée${G3.nRings > 1 ? 's' : ''} en rouge${G3.flat ? ', aplanie' + (G3.nRings > 1 ? 's' : '') : ''}.${G3.mqOk ? ' Maquette du projet posée au point d\'insertion' + (G3.flat ? '' : ' (« Aplanir la parcelle » retire le bâti Google qui la cache)') + '.' : site().mq && site().mq.on ? '' : ' Pour voir le projet : « Projet dans le site », puis cliquez le point d\'insertion.'} Images © Google.`); }
