@@ -206,7 +206,7 @@ body.wide3d .work{grid-template-columns:1fr} body.wide3d .side{display:none}
 <style>.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn{display:none!important}</style>
 <script src="../TerraChantier/terrasuite-compte.js" onerror="this.remove()"></script>
 <script>
-const APP_VERSION = '0.22.1';
+const APP_VERSION = '0.22.2';
 /* ================= Outils ================= */
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -1625,9 +1625,23 @@ function gOverlay() {
     try { const l = new Polyline3DElement({ altitudeMode: 'CLAMP_TO_GROUND', strokeColor: '#c2410c', strokeWidth: 4, drawsOccludedSegments: true }); l.path = r; G3.el.append(l); G3.extras.push(l); } catch (e) { console.warn('contour Google', e); }
     if (G3.flat && FlattenerElement) { try { const f = new FlattenerElement(); f.path = r; G3.el.append(f); G3.extras.push(f); } catch (e) { console.warn('aplanir', e); } }
   }
-  G3.forData = v3.data; G3.nRings = rings.length;
+  G3.forData = v3.data; G3.nRings = rings.length; gModel();
 }
-function gMsg() { gInfo(`Vue Google 3D : affichage seul. Exports, image de la vue et planches restent ceux de la maquette IGN. Parcelle${G3.nRings > 1 ? 's' : ''} sélectionnée${G3.nRings > 1 ? 's' : ''} en rouge${G3.flat ? ', aplanie' + (G3.nRings > 1 ? 's' : '') : ''}. Images © Google.`); }
+/* maquette du projet (TerraModel) dans la vue Google 3D : glTF binaire en coordonnées locales est, nord, haut (mètres),
+   posé au point d'insertion, à la hauteur du sol Google (plus l'écart du niveau 0 saisi), tourné comme dans la maquette IGN */
+function gModel() {
+  const D = v3.data, q = site().mq, o = D && D.mqObjs && D.mqObjs[0]; G3.mqOk = false;
+  if (G3.mqUrl) { URL.revokeObjectURL(G3.mqUrl); G3.mqUrl = null; }
+  if (!o || !q || !G3.lib || !G3.lib.Model3DElement || !THREE.GLTFExporter) return;
+  const mesh = new THREE.Mesh(o.geometry, new THREE.MeshStandardMaterial({ color: 0xffffff, vertexColors: true, roughness: 1, metalness: 0, side: THREE.DoubleSide }));
+  const ll = llOf(q.x, q.y), dz = q.z != null && isFinite(q.z) ? q.z - groundAt(D, q.x, q.y) : 0;
+  new THREE.GLTFExporter().parse(mesh, res => {
+    if (!G3.on || !G3.el) return; G3.mqUrl = URL.createObjectURL(new Blob([res], { type: 'model/gltf-binary' }));
+    try { const m = new G3.lib.Model3DElement({ src: G3.mqUrl, position: { lat: ll.lat, lng: ll.lng, altitude: dz + 0.02 }, altitudeMode: 'RELATIVE_TO_GROUND', orientation: { heading: -(q.rot || 0), tilt: 0, roll: 0 }, scale: 1 });
+      G3.el.append(m); G3.extras.push(m); G3.mqOk = true; gMsg(); } catch (e) { console.warn('maquette Google', e); }
+  }, e => console.warn('glTF maquette', e), { binary: true });
+}
+function gMsg() { gInfo(`Vue Google 3D : affichage seul. Exports, image de la vue et planches restent ceux de la maquette IGN. Parcelle${G3.nRings > 1 ? 's' : ''} sélectionnée${G3.nRings > 1 ? 's' : ''} en rouge${G3.flat ? ', aplanie' + (G3.nRings > 1 ? 's' : '') : ''}.${G3.mqOk ? ' Maquette du projet posée au point d\'insertion' + (G3.flat ? '' : ' (« Aplanir la parcelle » retire le bâti Google qui la cache)') + '.' : site().mq && site().mq.on ? '' : ' Pour voir le projet : « Projet dans le site », puis cliquez le point d\'insertion.'} Images © Google.`); }
 async function gOpen() {
   if (!v3.data) { setStatus('Attendez la fin du chargement de la maquette 3D', 'err'); return; }
   if (!G3.key) { $('#gkey').hidden = false; $('#gkeyIn').focus(); return; }
