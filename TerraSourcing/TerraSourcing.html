@@ -182,9 +182,10 @@ table.t{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px}
 </div>
 <!-- avis des plateformes (AWS…), fichier déposé par la collecte quotidienne ; absent : seul le BOAMP est interrogé -->
 <script src="TerraSourcing-plateformes.js"></script>
+<script src="../TerraChantier/ts-undo.js" onerror="this.remove()"></script>
 <script>
 /* ================= TerraSourcing : noyau ================= */
-const APP_VERSION = '0.3';
+const APP_VERSION = '0.4';
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -209,7 +210,10 @@ const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ
 /* ---------- stockage navigateur ---------- */
 const LS = {
   get(k, d) { try { const v = localStorage.getItem('ts-' + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
-  set(k, v) { try { localStorage.setItem('ts-' + k, JSON.stringify(v)); return true; } catch (e) { setStatus('Enregistrement impossible dans ce navigateur : ' + e.message, 'err'); return false; } }
+  /* veilles, dossiers suivis et refus : annulables (ts-undo.js) ; l'état d'avant est celui resté dans le navigateur */
+  set(k, v) { try { const a = JSON.stringify(v), U = { suivi: 'suivi', profiles: 'veille', refus: 'refus' }[k];
+    if (U && typeof TSUndo !== 'undefined') TSUndo.record([{ s: 'ls', id: k, before: localStorage.getItem('ts-' + k), after: a }], U);
+    localStorage.setItem('ts-' + k, a); return true; } catch (e) { setStatus('Enregistrement impossible dans ce navigateur : ' + e.message, 'err'); return false; } }
 };
 
 /* ---------- API BOAMP (DILA, Opendatasoft) ---------- */
@@ -883,6 +887,7 @@ function init() {
   document.addEventListener('click', e => { if (!e.target.closest('#saveMenu')) $('#saveMenu').hidden = true; });
   $$('#saveMenu [data-act]').forEach(b => b.onclick = () => { $('#saveMenu').hidden = true; saveAct(b.dataset.act); });
   $('#jsonIn').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (f) restore(f); });
+  if (typeof TSUndo !== 'undefined') { TSUndo.init(items => { for (const { id, value } of items) { st[id] = value ?? (id === 'profiles' ? [] : {}); LS.set(id, st[id]); } render(); }); TSUndo.buttons($('.top'), { cls: 'btn', before: $('#status') }); }
   render(); search(); loadDescOpts(); refreshCounts(); platBoampCheck();
 }
 window.TS = { st, parseRec, whereOf, search, platRec };

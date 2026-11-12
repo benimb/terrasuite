@@ -188,7 +188,7 @@ dialog .act{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
 <div id="app">
   <header class="top">
     <a class="btn sm" id="back" href="../terrasuite.html" title="Page d'accueil TerraSuite">← TerraSuite</a>
-    <div class="brand">TerraDocs <span class="ver">v0.12</span><small>Produits et documentation par lot</small></div>
+    <div class="brand">TerraDocs <span class="ver">v0.13</span><small>Produits et documentation par lot</small></div>
     <nav class="tabs" role="tablist">
       <button role="tab" data-tab="accueil" aria-selected="false">Accueil</button>
       <button role="tab" data-tab="produits" aria-selected="true">Produits</button>
@@ -295,6 +295,7 @@ dialog .act{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
 
 <script src="../TerraChantier/projets-api.js" onerror="this.remove()"></script>
 <script src="../TerraChantier/ts-link.js" onerror="this.remove()"></script>
+<script src="../TerraChantier/ts-undo.js" onerror="this.remove()"></script>
 <style>.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn{display:none!important}</style>
 <script src="../TerraChantier/terrasuite-compte.js" onerror="this.remove()"></script>
 <script src="TerraDocs-donnees.js" onerror="this.remove()"></script>
@@ -417,7 +418,11 @@ const lotByCode = c => D.lots.find(l=>l.code===c);
 const sortedLots = () => [...D.lots].sort((a,b)=>a.code.localeCompare(b.code,'fr',{numeric:true}));
 
 let saveT = null, fileHandle = null;
+/* annulation (ts-undo.js) : état de la bibliothèque au dernier enregistrement ; données reçues ou rechargées : nouveau point de départ */
+let undoLast = null;
+const undoBase = () => { undoLast = JSON.stringify(D); };
 function save(){
+  { const a = JSON.stringify(D); if(undoLast!=null && typeof TSUndo!=='undefined') TSUndo.record([{s:'docs',id:'D',before:undoLast,after:a}],'bibliothèque'); undoLast = a; }
   try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch(e){ setStatus('Enregistrement local impossible : '+e.message,'err'); }
   docsPush();
   clearTimeout(saveT); saveT = setTimeout(writeFile, 800);
@@ -451,7 +456,7 @@ async function openFile(){
       if(!data || !Array.isArray(data.produits)) throw new Error('fichier non reconnu');
       D = data; fixup(); fileHandle = h; await kvSet('handle',h);
       try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch{}
-      applySeed();
+      applySeed(); undoBase();
       sel = null; renderAll(); setStatus('Ouvert : '+h.name+' ('+D.produits.length+' produits)','ok');
     }catch(e){ if(e.name!=='AbortError') alertDlg('Ouverture impossible', e.message); }
   } else pickFile('.json', txt=>{ const data=JSON.parse(txt); if(!Array.isArray(data.produits)) throw new Error('fichier non reconnu'); D=data; fixup(); save(); sel=null; renderAll(); });
@@ -471,7 +476,7 @@ async function reloadFrom(h){
   try{
     const data = JSON.parse(await (await h.getFile()).text());
     if(Array.isArray(data.produits)){ D = data; fixup(); try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch{} }
-    fileHandle = h; const msg = applySeed(); renderAll(); setStatus(msg || 'Lié à '+h.name,'ok');
+    fileHandle = h; const msg = applySeed(); undoBase(); renderAll(); setStatus(msg || 'Lié à '+h.name,'ok');
   }catch(e){ setStatus('Fichier lié illisible : '+e.message,'err'); }
 }
 
@@ -1168,7 +1173,7 @@ window.addEventListener('storage', e=>{ if(e.key==='te-articles' && sel) renderD
 
 /* retour à l'accueil : referme l'onglet s'il a été ouvert depuis TerraSuite */
 $('#back').addEventListener('click', e=>{ if(window.opener){ e.preventDefault(); window.close(); } });
-window.addEventListener('storage', e=>{ if(e.key===KEY && e.newValue){ try{ D = JSON.parse(e.newValue); fixup(); renderAll(); }catch{} } });
+window.addEventListener('storage', e=>{ if(e.key===KEY && e.newValue){ try{ D = JSON.parse(e.newValue); fixup(); undoBase(); renderAll(); }catch{} } });
 
 /* synchronisation de la bibliothèque entre les appareils de l'agence (TerraSuite, ts-link.js) : produits, lots, sociétés */
 let docsPushT = null;
@@ -1177,9 +1182,10 @@ async function docsPull(){ if(typeof TSLink==='undefined') return 0; let n = 0;
   const a = await TSLink.pull('docs','produits',D.produits); if(a.changed){ D.produits=[...a.recs.values()]; n+=a.changed; }
   const b = await TSLink.pull('docs','lots',D.lots); if(b.changed){ D.lots=[...b.recs.values()]; n+=b.changed; }
   const c = await TSLink.pull('docs','societes',D.societes||{}); if(c.changed){ D.societes=Object.fromEntries(c.recs); n+=c.changed; }
-  if(n){ fixup(); try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch{} renderAll(); }
+  if(n){ fixup(); try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch{} undoBase(); renderAll(); }
   return n; }
-load(); { const msg = applySeed(); renderAll(); if(msg) setStatus(msg,'ok'); } docsPull().then(()=>docsPush()); if(typeof TSLink!=='undefined') TSLink.onRemote(()=>docsPull()); resumeFile(); if(!/[#&](p|projet)=/.test(location.hash)) goTabDocs('accueil'); openFromHash(); loadProj();
+load(); { const msg = applySeed(); undoBase(); renderAll(); if(msg) setStatus(msg,'ok'); }
+if(typeof TSUndo!=='undefined'){ TSUndo.init(v=>{ const x = v[0]; if(!x || !x.value) return; D = x.value; fixup(); save(); renderAll(); }); TSUndo.buttons($('.top'),{cls:'btn sm',before:$('#status')}); } docsPull().then(()=>docsPush()); if(typeof TSLink!=='undefined') TSLink.onRemote(()=>docsPull()); resumeFile(); if(!/[#&](p|projet)=/.test(location.hash)) goTabDocs('accueil'); openFromHash(); loadProj();
 </script>
 </body>
 </html>
