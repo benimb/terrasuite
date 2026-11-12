@@ -160,7 +160,7 @@ input.bad{border-color:var(--err);box-shadow:0 0 0 1px var(--err)}
 </style>
 <div id="app">
   <header class="top">
-    <div class="brand">TerraEstim <span class="ver" title="Version bêta">v0.23 bêta</span><small>Base de prix et estimations</small></div>
+    <div class="brand">TerraEstim <span class="ver" title="Version bêta">v0.23.1 bêta</span><small>Base de prix et estimations</small></div>
     <nav class="tabs" role="tablist" aria-label="Vues">
       <button role="tab" data-tab="home" aria-selected="false">Accueil</button>
       <button role="tab" data-tab="lib" aria-selected="true">Bibliothèque<span class="n" id="nLib"></span></button>
@@ -378,7 +378,7 @@ function migrateLots(D) {
 }
 /* index par défaut de chaque lot (modifiable dans Indices et réglages) */
 const LOT_INDEX = Object.fromEntries(NOMENCLATURE.map(([c, , i]) => [c, i]));
-const APP_VERSION = '0.23';
+const APP_VERSION = '0.23.1';
 const LOTS_DEFAULT = NOMENCLATURE.map(([code, nom]) => ({ code, nom, indice: '' }));
 const SETTINGS_DEFAULT = { lots: LOTS_DEFAULT, stat: 'median', partFixe: 0, retenuesOnly: false, defIndex: 'BT01', tva: 20, aleas: 5, locNorm: true };
 
@@ -1802,15 +1802,16 @@ function estModCard(e) {
   const p = projOf(e); if (!p) return '';
   const m = modOf(e), s = m && m.surf, N = modNiv(m), sdp = modSdp(m), q = x => NFq.format(Math.round(x * 100) / 100);
   if (!s || !s.total) return `<section class="card" style="gap:6px" id="estMod"><h3>Maquette 3D</h3><p class="hint">Aucune maquette 3D pour ce projet. Dessinez-la dans TerraSuite (ESQ, Maquette 3D) et placez ses niveaux (outil Niveaux) : leurs surfaces s'afficheront ici.</p></section>`;
+  const hasB = N.some(n => n.brute !== undefined && Math.abs(+n.brute - +n.surface) > 0.005), totB = N.reduce((a, n) => a + +(n.brute ?? n.surface), 0);
   const same = sdp !== null && e.surface !== null && e.surface !== undefined && Math.abs(+e.surface - sdp) < 0.01;
   return `<section class="card" style="gap:8px" id="estMod"><h3>Maquette 3D</h3>
-    ${N.length ? `<table class="t"><thead><tr><th style="text-align:left">Niveau</th><th style="text-align:right">Altitude</th><th style="text-align:right">Surface</th></tr></thead><tbody>
-      ${N.slice().sort((a, b) => (+a.z || 0) - (+b.z || 0)).map(n => `<tr><td>${esc(n.nom || '')}</td><td style="text-align:right">${String(Math.round((+n.z || 0) * 100) / 100).replace('.', ',')} m</td><td style="text-align:right">${q(+n.surface)} m²</td></tr>`).join('')}
-      <tr><td><b>Total des niveaux</b></td><td></td><td style="text-align:right"><b>${q(sdp)} m²</b></td></tr></tbody></table>`
+    ${N.length ? `<table class="t"><thead><tr><th style="text-align:left">Niveau</th><th style="text-align:right">Altitude</th>${hasB ? '<th style="text-align:right">Brute</th>' : ''}<th style="text-align:right">${hasB ? 'Plancher' : 'Surface'}</th></tr></thead><tbody>
+      ${N.slice().sort((a, b) => (+a.z || 0) - (+b.z || 0)).map(n => `<tr><td>${esc(n.nom || '')}</td><td style="text-align:right">${String(Math.round((+n.z || 0) * 100) / 100).replace('.', ',')} m</td>${hasB ? `<td style="text-align:right">${q(+(n.brute ?? n.surface))} m²</td>` : ''}<td style="text-align:right">${q(+n.surface)} m²</td></tr>`).join('')}
+      <tr><td><b>Total des niveaux</b></td><td></td>${hasB ? `<td style="text-align:right">${q(totB)} m²</td>` : ''}<td style="text-align:right"><b>${q(sdp)} m²</b></td></tr></tbody></table>`
       : '<p class="hint flag">Aucun niveau dans la maquette : placez les niveaux dans TerraModel (outil Niveaux) pour obtenir les surfaces de plancher.</p>'}
-    <dl class="kv">${s.horizontales ? `<dt>Surfaces horizontales</dt><dd>${q(s.horizontales)} m²</dd>` : ''}${s.verticales ? `<dt>Façades</dt><dd>${q(s.verticales)} m²</dd>` : ''}${s.volume ? `<dt>Volume</dt><dd>${q(s.volume)} m³</dd>` : ''}</dl>
+    <dl class="kv">${s.emprise ? `<dt>Emprise au sol</dt><dd>${q(s.emprise)} m²</dd>` : ''}${s.horizontales ? `<dt>Surfaces horizontales</dt><dd>${q(s.horizontales)} m²</dd>` : ''}${s.verticales ? `<dt>Façades</dt><dd>${q(s.verticales)} m²</dd>` : ''}${s.volume ? `<dt>Volume</dt><dd>${q(s.volume)} m³</dd>` : ''}</dl>
     ${sdp !== null ? (same ? '<p class="hint">La surface de l\'estimation est celle des niveaux de la maquette.</p>' : `<button class="btn" id="eModSurf" style="white-space:normal;text-align:left">Reprendre ${q(sdp)} m² comme surface de l'estimation</button>`) : ''}
-    <p class="hint">Surface de chaque niveau : section des volumes juste au-dessus du plancher, murs compris. Valeur approchée de la surface de plancher, avant déductions (trémies, gaines, hauteurs sous plafond).</p></section>`;
+    <p class="hint">${hasB ? 'Brute : section des volumes juste au-dessus du plancher. Plancher : surface de plancher approchée par TerraModel (hauteur sous plafond de plus de 1,80 m, murs extérieurs déduits).' : 'Surface de chaque niveau : section des volumes juste au-dessus du plancher, murs compris, trémies déduites. Valeur approchée de la surface de plancher : dans TerraModel (panneau Niveaux), l\'épaisseur des murs extérieurs l\'affine.'}</p></section>`;
 }
 function bindEstMod(id, e) {
   const b = $('#eModSurf'); if (b) b.onclick = () => { const v = modSdp(modOf(e)); if (v === null) return; e.surface = v; e.surfLabel = 'SDP'; Store.put('estimations', id, e); setStatus('Surface reprise de la maquette 3D : ' + NFq.format(v) + ' m²', 'ok'); renderAll(); };

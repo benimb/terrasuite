@@ -64,13 +64,13 @@ html.ts-embed .brand small{display:none}
 .tb kbd{position:absolute;right:2px;bottom:1px;font-family:var(--f-mono);font-size:9px;color:var(--muted)}
 .view{position:relative;flex:1;min-width:0;background:var(--view)}
 #cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;outline:none}
-.scenes{position:absolute;top:8px;left:8px;right:330px;display:flex;gap:3px;overflow-x:auto;scrollbar-width:thin;align-items:flex-start;z-index:1}
-.stab{display:inline-flex;align-items:center;flex:none;border:1px solid var(--line);background:color-mix(in srgb,var(--panel) 92%,transparent);border-radius:6px 6px 0 0;border-bottom:2px solid var(--line);box-shadow:0 1px 3px rgba(0,0,0,.12);font-size:12px}
+.scenes{position:absolute;top:8px;left:8px;right:330px;pointer-events:none;display:flex;gap:3px;overflow-x:auto;scrollbar-width:thin;align-items:flex-start;z-index:1}
+.stab{pointer-events:auto;display:inline-flex;align-items:center;flex:none;border:1px solid var(--line);background:color-mix(in srgb,var(--panel) 92%,transparent);border-radius:6px 6px 0 0;border-bottom:2px solid var(--line);box-shadow:0 1px 3px rgba(0,0,0,.12);font-size:12px}
 .stab.on{background:var(--accent-soft);border-color:var(--accent);border-bottom-color:var(--accent)}
 .stab button{border:0;background:transparent;cursor:pointer;padding:3px 9px;white-space:nowrap;max-width:180px;overflow:hidden;text-overflow:ellipsis}
 .stab .sact{padding:3px 5px;color:var(--muted)} .stab .sact:hover{color:var(--ink)}
 .stab.sadd{padding:3px 9px;cursor:pointer;color:var(--muted);border-style:dashed} .stab.sadd:hover{color:var(--ink);border-color:var(--muted)}
-@media (max-width:760px){ .scenes{right:8px;top:46px} }
+
 .vpanel{position:absolute;top:44px;right:8px;bottom:8px;width:min(340px,calc(100% - 16px));overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:8px 10px;z-index:3;display:flex;flex-direction:column;gap:6px}
 .vpanel .vhead{display:flex;align-items:center;justify-content:space-between}
 #annot{position:absolute;inset:0;pointer-events:none;overflow:hidden}
@@ -78,6 +78,10 @@ html.ts-embed .brand small{display:none}
 #annot .lbl.dim{border-color:#2563eb;color:#1e40af} #annot.act .lbl{pointer-events:auto;cursor:pointer} #annot .lbl[hidden]{display:none}
 .nivt{width:100%;border-collapse:collapse;font-size:13px} .nivt th,.nivt td{padding:2px 3px;border-bottom:1px solid var(--line);text-align:left} .nivt .num{text-align:right;white-space:nowrap} .nivt td:last-child{white-space:nowrap} .nivt input{width:100%;min-width:0;font:inherit;padding:2px 4px;border:1px solid var(--line);border-radius:4px}
 #bCut.on{background:#fde2e2;border-color:#D02020}
+.sws{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:4px}
+.sw{display:flex;align-items:center;gap:5px;border:1px solid var(--line);background:var(--panel);border-radius:6px;padding:3px 5px;cursor:pointer;font-size:11.5px;text-align:left;min-width:0}
+.sw i{width:16px;height:16px;border-radius:3px;border:1px solid rgba(0,0,0,.25);flex:none} .sw span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .sw small{color:var(--muted)}
+.sw.on{border-color:var(--accent);background:var(--accent-soft)} @media (max-width:760px){ #matP{max-height:40%} #matP .hint0:first-of-type{display:none} } #imgP .btn{text-align:left} input[type=color]{width:34px;height:26px;padding:0 2px;border:1px solid var(--line);border-radius:5px;background:var(--panel)}
 .vpanel .r{display:flex;align-items:center;gap:5px;flex-wrap:wrap} .vpanel .grow{flex:1}
 .btn.sm{padding:2px 7px;font-size:12px} .btn.danger{color:var(--err)}
 #vplan{width:100%;aspect-ratio:1;border:1px solid var(--line);border-radius:6px;touch-action:none;cursor:crosshair;flex:none}
@@ -96,7 +100,7 @@ html.ts-embed .brand small{display:none}
 .vcard input[type=number]{width:58px} .vcard label{font-size:12px;color:var(--muted);display:flex;gap:4px;align-items:center}
 .vcard .mono{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
 .stab.dirty .sgo{font-style:italic} .stab.dirty .sgo::after{content:" •";color:var(--accent)}
-.supd{flex:none;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:6px;padding:3px 10px;font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.2);white-space:nowrap}
+.supd{pointer-events:auto;flex:none;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:6px;padding:3px 10px;font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.2);white-space:nowrap}
 .btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .vth{width:80px;height:50px;object-fit:cover;border-radius:4px;border:1px solid var(--line);flex:none;background:var(--sunk)} .vth[data-empty]{visibility:hidden}
 .vtx{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0} .vtx input{width:100%}
@@ -115,7 +119,7 @@ html.ts-embed .brand small{display:none}
   .vpanel #vplan{width:min(100%,220px);align-self:center}
 }
 .stab.sadd.on{background:var(--accent-soft);border-color:var(--accent);border-style:solid;color:var(--ink)}
-.viewbar{position:absolute;top:8px;right:8px;display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100% - 16px)}
+.viewbar{position:absolute;top:8px;right:8px;z-index:2;display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100% - 16px)}
 .viewbar .btn{box-shadow:0 1px 3px rgba(0,0,0,.15);font-size:12px;padding:3px 8px}
 .info{position:absolute;left:8px;bottom:8px;background:color-mix(in srgb,var(--panel) 90%,transparent);border:1px solid var(--line);border-radius:7px;padding:6px 9px;font-size:12px;max-width:min(380px,calc(100% - 16px));pointer-events:none}
 .info .unit{color:var(--muted);font-size:11px;margin-top:2px} .info b{font-weight:600} .info .mono{font-family:var(--f-mono);font-size:11.5px}
@@ -152,10 +156,12 @@ html.ts-embed .brand small{display:none}
       <button class="btn" id="bImp" title="Importer un plan DXF (tracé 2D par calques) ou un modèle 3D OBJ, DAE (SketchUp), glTF">Importer</button>
       <button class="btn" id="bSave" title="Enregistrer la maquette (.json)">Enregistrer</button>
       <button class="btn" id="bObj" title="Exporter en OBJ (Blender, SketchUp, Twinmotion…)">Export OBJ</button>
+      <button class="btn" id="bDxf" title="Plan, coupe ou élévation en DXF 2D (vue parallèle) : arêtes vues, traits de coupe, cotations">Export DXF</button>
     </div>
     <div class="grp">
       <button class="btn" id="bUndo" title="Annuler (Ctrl+Z)">↶ Annuler</button>
       <button class="btn" id="bRedo" title="Rétablir (Ctrl+Y)">↷ Rétablir</button>
+      <button class="btn" id="bPaste" hidden title="Coller (Ctrl+V) : l'objet copié suit le curseur">Coller</button><button class="btn" id="bPasteH" hidden title="Coller sur place (Ctrl+Maj+V) : aux mêmes coordonnées">Sur place</button>
     </div>
     <span class="grow"></span>
     <span class="status" id="status" role="status"></span>
@@ -165,6 +171,7 @@ html.ts-embed .brand small{display:none}
     <nav class="tools" aria-label="Outils">
       <button class="tb" data-tool="select" title="Sélection (Espace)"><svg viewBox="0 0 24 24"><path d="M6 3l12 9-5.5 1.2L15 19l-2.4 1.1-2.6-5.8L6 18z"/></svg><kbd>␣</kbd></button>
       <button class="tb" data-tool="erase" title="Gomme (E) : clic sur une arête ou une face"><svg viewBox="0 0 24 24"><path d="M4 16l9-9 7 7-5 5H8z"/><path d="M9 11l7 7"/><path d="M8 19h12"/></svg><kbd>E</kbd></button>
+      <button class="tb" data-tool="paint" title="Peindre (B) : matériaux et couleurs ; Alt : pipette"><svg viewBox="0 0 24 24"><path d="M4 11l7-7 8 8-7 7z"/><path d="M4 11c-1 2-1 4 1 4s3-3 3-3"/><path d="M19 15s2 2.5 2 3.5a2 2 0 0 1-4 0c0-1 2-3.5 2-3.5z" fill="currentColor"/></svg><kbd>B</kbd></button>
       <div class="sep"></div>
       <button class="tb" data-tool="line" title="Ligne (L)"><svg viewBox="0 0 24 24"><path d="M5 19L19 5"/><circle cx="5" cy="19" r="1.6"/><circle cx="19" cy="5" r="1.6"/></svg><kbd>L</kbd></button>
       <button class="tb" data-tool="rect" title="Rectangle (R)"><svg viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12"/></svg><kbd>R</kbd></button>
@@ -175,6 +182,8 @@ html.ts-embed .brand small{display:none}
       <button class="tb" data-tool="push" title="Pousser/tirer (P)"><svg viewBox="0 0 24 24"><path d="M4 15l8-4 8 4-8 4z"/><path d="M12 11V3"/><path d="M9 6l3-3 3 3"/></svg><kbd>P</kbd></button>
       <button class="tb" data-tool="offset" title="Décalage (F) : clic sur une face"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16"/><rect x="7.5" y="8.5" width="9" height="7" stroke-dasharray="2 1.6"/></svg><kbd>F</kbd></button>
       <button class="tb" data-tool="rotate" title="Rotation (Q) : centre, départ, angle"><svg viewBox="0 0 24 24"><path d="M19 12a7 7 0 1 1-2.1-5"/><path d="M17.5 2.5l-.6 4.6-4.5-1"/><circle cx="12" cy="12" r="1.6"/></svg><kbd>Q</kbd></button>
+      <button class="tb" data-tool="scale" title="Échelle (S) : point fixe, référence, facteur ; négatif : symétrie"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="10" height="10"/><path d="M8 3h13v13" stroke-dasharray="2 1.6"/><path d="M13 11l6-6M15 5h4v4"/></svg><kbd>S</kbd></button>
+      <button class="tb" data-tool="follow" title="Suivez-moi (U) : sélectionnez le chemin, puis cliquez le profil"><svg viewBox="0 0 24 24"><path d="M4 20V9a5 5 0 0 1 5-5h11"/><path d="M2 20h5v-4H2zM17 2v5h4V2z" fill="currentColor" fill-opacity=".25"/></svg><kbd>U</kbd></button>
       <button class="tb" data-tool="move" title="Déplacer (M) ; Ctrl : copier, puis x5 ou /5 pour un réseau"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3"/><circle cx="12" cy="12" r="2.2"/></svg><kbd>M</kbd></button>
       <div class="sep"></div>
       <button class="tb" data-tool="tape" title="Mètre et lignes de construction (T)"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="13" height="10" rx="2"/><circle cx="9.5" cy="13" r="2.5"/><path d="M16 15h5v3h-5M18 15v1.5M20 15v1.5"/></svg><kbd>T</kbd></button>
@@ -200,6 +209,8 @@ html.ts-embed .brand small{display:none}
         <button class="btn" id="bImg" title="Enregistrer la vue actuelle en image (PNG)"><svg class="ic" viewBox="0 0 16 16"><path d="M2 4.5h2.5l1.2-1.8h4.6l1.2 1.8H14v8.3H2z"/><circle cx="8" cy="8.5" r="2.4"/></svg><span class="lg">Image</span></button>
         <button class="btn" id="bCut" title="Activer ou désactiver le plan de coupe"><span class="lg">Coupe</span><span class="sh">Cp</span></button>
         <button class="btn" id="bDisp" title="Balises, objets masqués, guides"><span class="lg">Affichage</span><span class="sh">Aff.</span></button>
+        <button class="btn" id="bSun" title="Ombres du soleil au lieu du projet : date et heure"><span class="lg">Ombres</span><span class="sh">☀</span></button>
+        <button class="btn" id="bComp" title="Composants de la maquette"><span class="lg">Composants</span><span class="sh">Comp.</span></button>
         <button class="btn" id="bNiv" title="Niveaux et surfaces de plancher"><span class="lg">Niveaux</span><span class="sh">Niv.</span></button>
         <button class="btn" id="bCenter" title="Centrer la vue sur la sélection, ou sur toute la maquette"><svg class="ic" viewBox="0 0 16 16"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"/><circle cx="8" cy="8" r="1.6"/></svg><span class="lg">Centrer</span></button>
       </div>
@@ -210,7 +221,7 @@ html.ts-embed .brand small{display:none}
         <div class="vsel r" id="vsel"></div>
         <div id="vlist"></div>
       </aside>
-      <aside class="vpanel" id="dispP" hidden aria-label="Affichage"></aside><aside class="vpanel" id="nivP" hidden aria-label="Niveaux"></aside><div id="annot"></div>
+      <aside class="vpanel" id="dispP" hidden aria-label="Affichage"></aside><aside class="vpanel" id="matP" hidden aria-label="Matériaux"></aside><aside class="vpanel" id="sunP" hidden aria-label="Ombres"></aside><aside class="vpanel" id="compP" hidden aria-label="Composants"></aside><aside class="vpanel" id="imgP" hidden aria-label="Image"></aside><aside class="vpanel" id="nivP" hidden aria-label="Niveaux"></aside><div id="annot"></div>
       <div class="ctxbar" id="ctxBar" hidden></div><div class="selbar" id="selBar" hidden></div><div class="imp" id="imp" hidden></div>
       <div class="info" id="info"></div>
       <div class="help" id="help" hidden></div>
@@ -251,9 +262,9 @@ const vdist = (a, b) => vlen(vsub(a, b));
 function newModel() { return { v: {}, f: {}, l: {}, n: 1 }; }
 const cloneModel = M => JSON.parse(JSON.stringify(M));
 function addV(M, p) { for (const k in M.v) if (vdist(M.v[k], p) < TOL) return +k; const id = M.n++; M.v[id] = [p[0], p[1], p[2]]; return id; }
-function addF(M, f) { const id = M.n++; M.f[id] = { o: f.o.slice(), h: (f.h || []).map(x => x.slice()) }; return id; }
+function addF(M, f) { const id = M.n++; M.f[id] = { o: f.o.slice(), h: (f.h || []).map(x => x.slice()) }; if (f.m) M.f[id].m = f.m; return id; }
 const loopsOf = f => [f.o, ...f.h];
-const revF = f => ({ o: f.o.slice().reverse(), h: f.h.map(x => x.slice().reverse()) });
+const revF = f => { const r = { o: f.o.slice().reverse(), h: f.h.map(x => x.slice().reverse()) }; if (f.m) r.m = f.m; return r; };
 const ekey = (a, b) => a < b ? a + '|' + b : b + '|' + a;
 
 function newell(M, L) {
@@ -436,7 +447,7 @@ function pushPull(M, fid, d) {
   }
   const off = vmul(n, d), map = new Map(); for (const id of vs) map.set(id, addV(M, vadd(M.v[id], off)));
   const m = id => map.get(id), fresh = new Set();
-  let top = { o: f.o.map(m), h: f.h.map(L => L.map(m)) }; const sides = [];
+  let top = { o: f.o.map(m), h: f.h.map(L => L.map(m)), m: f.m }; const sides = [];
   for (const L of loops) for (let i = 0; i < L.length; i++) { const a = L[i], b = L[(i + 1) % L.length]; sides.push({ o: [a, b, m(b), m(a)], h: [] }); }
   if (allShared) delete M.f[fid];                     // excroissance ou creux : la face part avec la poussée
   else if (d > 0) { M.f[fid] = revF(f); fresh.add(String(fid)); } // volume vers le haut : la face reste comme fond
@@ -571,7 +582,7 @@ function moveSel(M, t, d) {
 function copySel(M, t, d) {
   const map = new Map(), m = id => { if (!map.has(id)) map.set(id, addV(M, vadd(M.v[id], d))); return map.get(id); }, made = [];
   const src = (t.f || []).filter(k => M.f[k]).map(k => M.f[k]), edges = (t.e || []).map(e => String(e).split('|').map(Number)).filter(([a, b]) => M.v[a] && M.v[b]);
-  for (const f of src) { const id = addF(M, { o: f.o.map(m), h: f.h.map(L => L.map(m)) }); made.push(id); }
+  for (const f of src) { const id = addF(M, { o: f.o.map(m), h: f.h.map(L => L.map(m)), m: f.m }); made.push(id); }
   const lines = []; for (const [a, b] of edges) { const A = m(a), B = m(b); M.l[M.n++] = [A, B]; lines.push([A, B]); }
   if (made.length === 1) imprint(M, made[0]);
   cleanup(M);
@@ -593,7 +604,7 @@ function groupPts(g) { return Object.values(g.m.v).map(p => vadd(p, g.t)); }
 function flatModel(m) {
   const r = { v: { ...m.v }, f: { ...m.f }, l: { ...m.l }, n: m.n };
   for (const gid in m.G || {}) { const g = m.G[gid], map = {}; for (const k in g.m.v) { const id = r.n++; r.v[id] = vadd(g.m.v[k], g.t); map[k] = id; }
-    for (const k in g.m.f) { const f = g.m.f[k]; r.f[r.n++] = { o: f.o.map(i => map[i]), h: (f.h || []).map(L => L.map(i => map[i])) }; }
+    for (const k in g.m.f) { const f = g.m.f[k], nf = { o: f.o.map(i => map[i]), h: (f.h || []).map(L => L.map(i => map[i])) }; if (f.m || g.mat) nf.m = f.m || g.mat; r.f[r.n++] = nf; }
     for (const k in g.m.l || {}) { const [a, b] = g.m.l[k]; r.l[r.n++] = [map[a], map[b]]; } }
   return r;
 }
@@ -606,11 +617,11 @@ function makeGroup(M, fs, es, gids, nom) {
   if (!pts.length) return null;
   const t = [0, 1, 2].map(i => Math.min(...pts.map(p => p[i]))), sub = newModel(), map = new Map();
   const vid = (key, p) => { if (!map.has(key)) { const id = sub.n++; sub.v[id] = vsub(p, t); map.set(key, id); } return map.get(key); };
-  for (const k of fset) { const f = M.f[k]; if (!f) continue; addF(sub, { o: f.o.map(i => vid(i, M.v[i])), h: f.h.map(L => L.map(i => vid(i, M.v[i]))) }); }
+  for (const k of fset) { const f = M.f[k]; if (!f) continue; addF(sub, { o: f.o.map(i => vid(i, M.v[i])), h: f.h.map(L => L.map(i => vid(i, M.v[i]))), m: f.m }); }
   for (const lk of lines) { const [a, b] = M.l[lk]; sub.l[sub.n++] = [vid(a, M.v[a]), vid(b, M.v[b])]; }
   let soft = false;
   for (const g of gids) { const G0 = M.G[g]; if (!G0) continue; soft = soft || !!G0.soft; const off = vsub(G0.t, t), m2 = new Map(), v2 = k => { if (!m2.has(k)) { const id = sub.n++; sub.v[id] = vadd(G0.m.v[k], off); m2.set(k, id); } return m2.get(k); };
-    for (const k in G0.m.f) { const f = G0.m.f[k]; addF(sub, { o: f.o.map(v2), h: (f.h || []).map(L => L.map(v2)) }); }
+    for (const k in G0.m.f) { const f = G0.m.f[k]; addF(sub, { o: f.o.map(v2), h: (f.h || []).map(L => L.map(v2)), m: f.m || G0.mat }); }
     for (const k in G0.m.l || {}) { const [a, b] = G0.m.l[k]; sub.l[sub.n++] = [v2(a), v2(b)]; }
     delete M.G[g]; }
   for (const k of fset) delete M.f[k]; for (const lk of lines) delete M.l[lk];
@@ -620,7 +631,7 @@ function makeGroup(M, fs, es, gids, nom) {
 /* dégrouper : la géométrie revient dans la maquette (elle se soude au reste) */
 function explodeGroup(M, gid) {
   const g = M.G && M.G[gid]; if (!g) return false; const map = {}; for (const k in g.m.v) map[k] = addV(M, vadd(g.m.v[k], g.t));
-  for (const k in g.m.f) { const f = g.m.f[k]; addF(M, { o: f.o.map(i => map[i]), h: (f.h || []).map(L => L.map(i => map[i])) }); }
+  for (const k in g.m.f) { const f = g.m.f[k]; addF(M, { o: f.o.map(i => map[i]), h: (f.h || []).map(L => L.map(i => map[i])), m: f.m || g.mat }); }
   for (const k in g.m.l || {}) { const [a, b] = g.m.l[k]; M.l[M.n++] = [map[a], map[b]]; }
   delete M.G[gid]; cleanup(M); return true;
 }
@@ -659,12 +670,75 @@ function offsetLoop(M, f, d) {
 }
 /* rotation d'un point p autour de l'axe (c, u) d'un angle a */
 function rotP(p, c, u, a) { const v = vsub(p, c), co = Math.cos(a), si = Math.sin(a); return vadd(c, vadd(vadd(vmul(v, co), vmul(vcross(u, v), si)), vmul(u, vdot(u, v) * (1 - co)))); }
-/* rotation de la sélection (faces, arêtes, groupes) ; refusée si une face voisine ne resterait pas plane */
-function rotateSel(M, t, c, u, a) {
-  const vs = selVerts(M, t); for (const id of vs) M.v[id] = rotP(M.v[id], c, u, a);
+/* ---- matrices 3 × 3 (lignes) : rotation, échelle, symétrie ---- */
+const I3 = () => [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+const matV = (A, v) => [0, 1, 2].map(i => A[i][0] * v[0] + A[i][1] * v[1] + A[i][2] * v[2]);
+const matMul = (A, B) => [0, 1, 2].map(i => [0, 1, 2].map(j => A[i][0] * B[0][j] + A[i][1] * B[1][j] + A[i][2] * B[2][j]));
+const matDet = A => A[0][0] * (A[1][1] * A[2][2] - A[1][2] * A[2][1]) - A[0][1] * (A[1][0] * A[2][2] - A[1][2] * A[2][0]) + A[0][2] * (A[1][0] * A[2][1] - A[1][1] * A[2][0]);
+function matInv(A) { const d = matDet(A), c = (i, j) => { const r = [0, 1, 2].filter(x => x !== i), q = [0, 1, 2].filter(x => x !== j); return ((i + j) % 2 ? -1 : 1) * (A[r[0]][q[0]] * A[r[1]][q[1]] - A[r[0]][q[1]] * A[r[1]][q[0]]); }; return [0, 1, 2].map(i => [0, 1, 2].map(j => c(j, i) / d)); }
+function rotMat(u, a) { const C = [[1, 0, 0], [0, 1, 0], [0, 0, 1]].map(e => rotP(e, [0, 0, 0], u, a)); return [0, 1, 2].map(i => [C[0][i], C[1][i], C[2][i]]); }
+const diag = (x, y, z) => [[x, 0, 0], [0, y, 0], [0, 0, z]];
+/* maquette transformée par A (sommets ; faces retournées si A inverse l'orientation) */
+function xformModel(m, A) { for (const k in m.v) m.v[k] = matV(A, m.v[k]); if (matDet(A) < 0) for (const k in m.f) m.f[k] = revF(m.f[k]); return m; }
+/* transformation de la sélection (faces, arêtes, groupes) autour du point c ; refusée si une face voisine ne resterait pas plane */
+function xformSel(M, t, c, A) {
+  const vs = selVerts(M, t); for (const id of vs) M.v[id] = vadd(c, matV(A, vsub(M.v[id], c)));
   for (const k in M.f) { const f = M.f[k], all = loopsOf(f).flat(); if (!all.some(id => vs.has(id)) || all.every(id => vs.has(id))) continue; const nn = vnorm(newell(M, f.o)), p0 = M.v[f.o[0]]; if (all.some(id => Math.abs(vdot(nn, vsub(M.v[id], p0))) > 1e-5)) return false; }
-  for (const g of t.g || []) { const G0 = M.G && M.G[g]; if (!G0) continue; const nt = rotP(G0.t, c, u, a); for (const k in G0.m.v) G0.m.v[k] = rotP(G0.m.v[k], [0, 0, 0], u, a); G0.t = nt; }
+  if (matDet(A) < 0) for (const k in M.f) { const all = loopsOf(M.f[k]).flat(); if (all.every(id => vs.has(id))) M.f[k] = revF(M.f[k]); }
+  for (const g of t.g || []) { const G0 = M.G && M.G[g]; if (!G0) continue; G0.t = vadd(c, matV(A, vsub(G0.t, c))); xformModel(G0.m, A); if (G0.def) G0.R = matMul(A, G0.R || I3()); }
   if (vs.size) cleanup(M); return true;
+}
+/* rotation de la sélection autour de l'axe (c, u) d'un angle a */
+function rotateSel(M, t, c, u, a) { return xformSel(M, t, c, rotMat(u, a)); }
+/* ---- composants : M.D[did] = { nom, m } définition dans son repère propre ; une instance est un groupe qui porte g.def et g.R
+   (matrice de ses rotations, échelles, symétries) ; sa maquette g.m vaut R · définition. Modifier une instance modifie toutes les autres. ---- */
+function makeComponent(M, gid, nom) { const g = M.G && M.G[gid]; if (!g) return null; M.D = M.D || {}; const did = 'd' + (M.n++); M.D[did] = { nom: nom || g.nom, m: JSON.parse(JSON.stringify(g.m)) }; g.def = did; g.R = I3(); if (nom) g.nom = nom; return did; }
+function instanceModel(def, R) { return xformModel(JSON.parse(JSON.stringify(def.m)), R || I3()); }
+/* l'instance gid vient d'être modifiée : la définition et les autres instances suivent */
+function syncDef(M, gid) {
+  const g = M.G && M.G[gid]; if (!g || !g.def || !M.D || !M.D[g.def]) return 0; const def = M.D[g.def];
+  def.m = xformModel(JSON.parse(JSON.stringify(g.m)), matInv(g.R || I3())); let n = 0;
+  for (const k in M.G) { const h = M.G[k]; if (k === gid || h.def !== g.def) continue; h.m = instanceModel(def, h.R); n++; }
+  return n;
+}
+const instances = (M, did) => Object.keys(M.G || {}).filter(k => M.G[k].def === did);
+function makeUnique(M, gid) { const g = M.G && M.G[gid]; if (!g || !g.def) return; const did = g.def; delete g.def; delete g.R; if (!instances(M, did).length) delete M.D[did]; }
+/* ---- matériaux : une face nouvelle (division, fusion, imprimé) reprend le matériau de la face peinte, coplanaire, dont elle provient ---- */
+function inheritMat(old, m) {
+  const P = []; for (const k in old.f) { const f = old.f[k]; if (!f.m) continue; const n = faceN(old, f); P.push({ k, f, n, d: vdot(n, old.v[f.o[0]]) }); } if (!P.length) return;
+  for (const k in m.f) { const f = m.f[k]; if (f.m || old.f[k]) continue; const n = faceN(m, f), q = faceCentroidIn(m, f);
+    const src = P.find(x => vdot(x.n, n) > 1 - 1e-6 && Math.abs(vdot(x.n, q) - x.d) < 1e-4 && classifyPoint(old, x.f, q, 1e-6) !== 'out'); if (src) f.m = src.f.m; }
+}
+/* ---- Suivez-moi : le profil (face fid) balayé le long du chemin P (points), ouvert ou fermé ; joints en onglet ---- */
+function followMe(M, fid, P, closed) {
+  const f = M.f[fid]; if (!f || P.length < 2) return false; P = P.map(p => p.slice());
+  if (closed) { // le chemin commence au sommet le plus proche du profil
+    const c = faceCentroidIn(M, f); let bi = 0; P.forEach((p, i) => { if (vdist(p, c) < vdist(P[bi], c)) bi = i; }); P = P.slice(bi).concat(P.slice(0, bi)); }
+  const N = P.length, nseg = closed ? N : N - 1, D = []; for (let i = 0; i < nseg; i++) { const d = vsub(P[(i + 1) % N], P[i]); if (vlen(d) < TOL) return false; D.push(vnorm(d)); }
+  const miter = i => { if (!closed && i === 0) return D[0]; if (!closed && i === N - 1) return D[nseg - 1]; const a = D[(i - 1 + nseg) % nseg], b = D[i % nseg], s = vadd(a, b); return vlen(s) < 1e-6 ? b : vnorm(s); };
+  const along = (pts, d, o, n) => pts.map(p => { const den = vdot(n, d); return Math.abs(den) < 1e-9 ? p : vadd(p, vmul(d, vdot(n, vsub(o, p)) / den)); });
+  const loops0 = loopsOf(f).map(L => L.map(id => M.v[id]));
+  let cur = closed ? loops0.map(L => along(L, D[0], P[0], miter(0))) : loops0;
+  const keep = !closed, rings = [cur];
+  for (let i = 0; i < nseg; i++) { const j = (i + 1) % N; cur = cur.map(L => along(L, D[i], P[j], miter(j))); rings.push(cur); }
+  if (closed) rings[rings.length - 1] = rings[0];
+  const ids = rings.map(R => R.map(L => L.map(p => addV(M, p)))), made = [];
+  for (let r = 0; r + 1 < ids.length; r++) for (let l = 0; l < ids[r].length; l++) { const A = ids[r][l], B = ids[r + 1][l];
+    for (let i = 0; i < A.length; i++) { const i2 = (i + 1) % A.length, o = [A[i], A[i2], B[i2], B[i]].filter((x, k, a) => x !== a[(k + 1) % 4]); if (o.length >= 3 && vlen(newell(M, o)) > 1e-9) made.push(addF(M, { o, h: [], m: f.m })); } }
+  if (keep) { const E = ids[ids.length - 1]; made.push(addF(M, { o: E[0].slice(), h: E.slice(1).map(L => L.slice()), m: f.m })); M.f[fid] = revF(f); made.push(fid); }
+  else delete M.f[fid];
+  // orientation : volume positif
+  let vol = 0; for (const k of made) { const g = M.f[k]; if (g) vol += faceArea(M, g) * vdot(faceN(M, g), M.v[g.o[0]]); }
+  if (vol < 0) for (const k of made) if (M.f[k]) M.f[k] = revF(M.f[k]);
+  cleanup(M, new Set(made.map(String))); return true;
+}
+/* chemin ordonné à partir de traits (clés a|b) : { ids, closed } ou null s'il se ramifie */
+function chainEdges(es) {
+  const adj = new Map(), add = (a, b) => { if (!adj.has(a)) adj.set(a, []); adj.get(a).push(b); }; for (const [a, b] of es) { add(a, b); add(b, a); }
+  if ([...adj.values()].some(v => v.length > 2)) return null; const ends = [...adj.keys()].filter(k => adj.get(k).length === 1); if (ends.length !== 0 && ends.length !== 2) return null;
+  const start = ends.length ? ends[0] : es[0][0], out = [start]; let prev = null, cur = start;
+  for (;;) { const nx = adj.get(cur).find(x => x !== prev); if (nx === undefined || nx === start) break; out.push(nx); prev = cur; cur = nx; if (out.length > es.length + 1) return null; }
+  if (out.length !== (ends.length ? es.length + 1 : es.length)) return null; return { ids: out, closed: !ends.length };
 }
 /* arc de A à B, de flèche h (signe : côté de v), dans le plan de normale n ; nseg segments */
 function arcPts(A, B, h, n, nseg) {
@@ -676,7 +750,7 @@ function arcPts(A, B, h, n, nseg) {
 
 </script>
 <script>
-const APP_VERSION = '0.6.1';
+const APP_VERSION = '0.7';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const NF2 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 /* unités : la maquette est en mètres ; les longueurs s'affichent et se saisissent dans l'unité choisie (m, cm, mm) ; surfaces en m², volumes en m³ */
@@ -706,7 +780,7 @@ let saveT = null;
 function save() {
   clearTimeout(saveT); saveT = setTimeout(() => {
     const old = PR.recs[PR.rid];
-    PR.recs[PR.rid] = { id: PR.rid, projetId: PR.rid === LIBRE ? null : PR.rid, nom: PR.projet ? projLabel(PR.projet) : (old && old.nom) || 'Maquette sans projet', version: APP_VERSION, model: rootModel(), segs: ST.segs, units: UNIT, scenes: ST.scenes, surf: { ...surfaces(flatModel(rootModel())), niveaux: ST.ctx ? (old && old.surf && old.surf.niveaux) : nivAreas().map(n => ({ nom: n.nom, z: n.z, surface: Math.round(n.sdp * 100) / 100 })) }, cam: camJSON() };
+    PR.recs[PR.rid] = { id: PR.rid, projetId: PR.rid === LIBRE ? null : PR.rid, nom: PR.projet ? projLabel(PR.projet) : (old && old.nom) || 'Maquette sans projet', version: APP_VERSION, model: rootModel(), segs: ST.segs, units: UNIT, scenes: ST.scenes, surf: { ...surfaces(flatModel(rootModel())), niveaux: ST.ctx ? (old && old.surf && old.surf.niveaux) : nivAreas().map(n => ({ nom: n.nom, z: n.z, surface: Math.round(n.sdp * 100) / 100, brute: Math.round(n.brute * 100) / 100 })), emprise: ST.ctx ? (old && old.surf && old.surf.emprise) : Math.round(empriseM() * 100) / 100 }, style: ST.style, cam: camJSON() };
     storeRecs(); if (HAS_LINK) { clearTimeout(PR.pushT); PR.pushT = setTimeout(() => TSLink.push('terramodel', 'maquettes', syncView(), { projet: r => r.projetId }), 1500); }
   }, 300);
 }
@@ -740,7 +814,7 @@ async function projUI() {
   sel.innerHTML = TSP.options(PR.rid === LIBRE ? '' : PR.rid, list, { none: 'Maquette sans projet', create: false });
   if (PR.rid !== LIBRE && !list.some(p => p.id === PR.rid)) sel.insertAdjacentHTML('beforeend', `<option value="${PR.rid}" selected>Projet ${PR.rid}</option>`);
 }
-function doOp(fn) { const before = JSON.stringify(M), m = JSON.parse(before); const r = fn(m); if (r === false) return r; pushUndo(before); M = m; ST.last = null; changed(); return r; }
+function doOp(fn) { const before = JSON.stringify(M), m = JSON.parse(before); const r = fn(m); if (r === false) return r; try { inheritMat(M, m); } catch (e) {} pushUndo(before); M = m; ST.last = null; changed(); return r; }
 function pushUndo(before) { ST.undo.push(before); if (ST.undo.length > 200) ST.undo.shift(); ST.redo.length = 0; }
 function undo() { cancelTool(); if (!ST.undo.length) return; ST.redo.push(JSON.stringify(M)); M = JSON.parse(ST.undo.pop()); ST.last = null; clearSel(); changed(); }
 function redo() { cancelTool(); if (!ST.redo.length) return; ST.undo.push(JSON.stringify(M)); M = JSON.parse(ST.redo.pop()); ST.last = null; clearSel(); changed(); }
@@ -791,7 +865,9 @@ function buildGrid() {
   g.position.z = -0.002; g.renderOrder = -1; gridObj = g; scene.add(g);
 }
 let rq = false; function req() { if (rq) return; rq = true; requestAnimationFrame(() => { rq = false; renderer.render(scene, camera); updateAnnot(); }); }
-function resize() { const w = view.clientWidth, h = view.clientHeight; if (!w || !h) return; renderer.setSize(w, h, false); camP.aspect = w / h; camP.updateProjectionMatrix(); camO.left = -w / h; camO.right = w / h; camO.top = 1; camO.bottom = -1; camO.updateProjectionMatrix(); req(); }
+/* onglets des vues à gauche de la barre de vue ; en dessous quand la place manque */
+function layoutBars() { const sc = $('#scenes'), vb = document.querySelector('.viewbar'); if (!sc || !vb) return; const free = view.clientWidth - vb.offsetWidth - 24; if (free > 260 && vb.offsetHeight < 40) { sc.style.right = (vb.offsetWidth + 16) + 'px'; sc.style.top = '8px'; } else { sc.style.right = '8px'; sc.style.top = (vb.offsetHeight + 12) + 'px'; } }
+function resize() { layoutBars(); const w = view.clientWidth, h = view.clientHeight; if (!w || !h) return; renderer.setSize(w, h, false); camP.aspect = w / h; camP.updateProjectionMatrix(); camO.left = -w / h; camO.right = w / h; camO.top = 1; camO.bottom = -1; camO.updateProjectionMatrix(); req(); }
 new ResizeObserver(resize).observe(view);
 
 /* ================= Maillage d'affichage ================= */
@@ -821,9 +897,8 @@ const isG = fid => typeof fid === 'string' && fid.startsWith('g:');
 function rootModel() { if (!ST.ctx) return M; const r = JSON.parse(JSON.stringify(ST.root)), g = r.G[ST.ctx]; g.m = shiftModel(M, vmul(g.t, -1)); g.m.l = g.m.l || {}; return r; }
 function show(m) {
   if (G.group) { scene.remove(G.group); G.group.traverse(o => o.geometry && o.geometry.dispose()); }
-  const { g } = faceGeo(m, Object.keys(m.f)), grp = new THREE.Group();
-  grp.add(new THREE.Mesh(g, mat.front), new THREE.Mesh(g, mat.back), new THREE.LineSegments(linesGeo(m, visibleEdges(m)), mat.edge));
-  for (const gid in m.G || {}) { if (!gVis(m, gid)) continue; const w = gWorld(m.G[gid]), fg = faceGeo(w, Object.keys(w.f)).g; grp.add(new THREE.Mesh(fg, mat.front), new THREE.Mesh(fg, mat.back), new THREE.LineSegments(linesGeo(w, visibleEdges(w, m.G[gid].soft)), mat.edge)); }
+  const grp = new THREE.Group(); addMeshes(grp, m, '', false);
+  for (const gid in m.G || {}) { if (!gVis(m, gid)) continue; addMeshes(grp, gWorld(m.G[gid]), m.G[gid].mat, m.G[gid].soft); }
   if (ST.ctx && ST.root) { // groupe ouvert : le reste de la maquette en grisé
     const r = ST.root, rg = faceGeo(r, Object.keys(r.f)).g; grp.add(new THREE.Mesh(rg, mat.ghost), new THREE.LineSegments(linesGeo(r, visibleEdges(r)), mat.ghostEdge));
     for (const gid in r.G || {}) { if (gid === ST.ctx || !gVis(r, gid)) continue; const w = gWorld(r.G[gid]); grp.add(new THREE.Mesh(faceGeo(w, Object.keys(w.f)).g, mat.ghost), new THREE.LineSegments(linesGeo(w, visibleEdges(w, r.G[gid].soft)), mat.ghostEdge)); } }
@@ -835,7 +910,7 @@ function rebuild() {
   for (const gid in M.G || {}) { if (!gVis(M, gid)) continue; const w = gWorld(M.G[gid]); faceGeo(w, Object.keys(w.f), 'g:' + gid, acc); for (const k in w.v) G.GP.push(w.v[k]); for (const [a, b] of modelEdges(w)) G.GE.push({ pa: w.v[a], pb: w.v[b], g: gid }); }
   const pg = new THREE.BufferGeometry(); pg.setAttribute('position', new THREE.Float32BufferAttribute(acc.pos, 3)); pg.setAttribute('normal', new THREE.Float32BufferAttribute(acc.nor, 3)); G.pick = new THREE.Mesh(pg, mat.pick); G.tf = acc.tf;
   G.E = modelEdges(M).map(([a, b]) => ({ a, b, pa: M.v[a], pb: M.v[b], k: ekey(a, b) })); G.V = Object.keys(M.v).map(Number);
-  drawSel(); hover(null); applyCut(); buildAnno(); dispPanel(); nivPanel();
+  drawSel(); hover(null); applyCut(); buildAnno(); dispPanel(); nivPanel(); applySun(); matPanel(); compPanel(); sunPanel();
 }
 /* surbrillance : face ou arête survolée, sélection */
 let hoverObj = null, selObj = null, hovKey = '';
@@ -1160,13 +1235,13 @@ function vcbApply() {
   if (T && T.vcb && T.busy && T.busy()) done = T.vcb(t);
   else if (ST.last && ST.last.arr && /^\s*(?:[x*]\s*\d+|\d+\s*[x*]|\/\s*\d+)\s*$/i.test(t)) { const A = ST.last.arr, n = Math.min(200, parseInt(t.replace(/\D/g, ''), 10)), div = t.includes('/');
     if (n >= 1) { M = JSON.parse(ST.last.before); for (let i = 1; i <= n; i++) moveAny(M, A.t, vmul(A.dir, div ? A.len * i / n : A.len * i), true); changed(); done = true; } }
-  else if (ST.last) { const v = ST.last.parse(t); if (v != null) { M = JSON.parse(ST.last.before); ST.last.apply(M, v); if (ST.last.arr) ST.last.arr.len = v; changed(); done = true; } }
+  else if (ST.last) { const v = ST.last.parse(t); if (v != null) { M = JSON.parse(ST.last.before); ST.last.apply(M, v); try { inheritMat(JSON.parse(ST.last.before), M); } catch (e) {} if (ST.last.arr) ST.last.arr.len = v; changed(); done = true; } }
   vcb.value = ''; cv.focus(); const arrMsg = done && ST.last && ST.last.arr && /^\s*(?:[x*]\s*\d+|\d+\s*[x*]|\/\s*\d+)\s*$/i.test(t);
   if (arrMsg) { setStatus(t.includes('/') ? 'Copies réparties' : 'Copies au même pas', 'ok'); return; }
   if (!done) setStatus('Saisie non comprise : « ' + t + ' »', 'err'); else { setStatus(''); vcb.classList.add('flash'); setTimeout(() => vcb.classList.remove('flash'), 300); }
 }
 /* opération corrigeable : une nouvelle saisie juste après la refait avec la nouvelle valeur */
-function commitFrom(before, parse, apply, v) { const m = JSON.parse(before); apply(m, v); pushUndo(before); M = m; ST.last = { before, parse, apply }; changed(); }
+function commitFrom(before, parse, apply, v) { const m = JSON.parse(before); apply(m, v); try { inheritMat(JSON.parse(before), m); } catch (e) {} pushUndo(before); M = m; ST.last = { before, parse, apply }; changed(); }
 
 /* ================= Outils ================= */
 /* point libre (sans accroche) : cotes arrondies au millimètre */
@@ -1427,6 +1502,7 @@ function setTool(t) {
   const T = TOOLS[t]; hint(T.hint()); vcbShow(T.label || 'Mesures', '');
   const sg = t === 'circle' || t === 'poly' || t === 'arc'; $('#segsL').hidden = !sg; if (sg) { $('#segsT').textContent = t === 'poly' ? 'Côtés' : 'Segments'; $('#segs').value = ST.segs[t]; } ST.lock = null; if (ST.last && ST.last.arr) ST.last.arr = null; updateAnnot();
   cv.style.cursor = t === 'orbit' || t === 'pan' ? 'grab' : t === 'select' ? 'default' : 'crosshair'; hover(null);
+  if (t === 'paint') { ['dispP', 'nivP', 'sunP', 'compP', 'imgP'].forEach(id => $('#' + id).hidden = true); $('#matP').hidden = false; matPanel(); }
 }
 
 /* ================= Souris, toucher ================= */
@@ -1485,6 +1561,9 @@ document.addEventListener('keydown', ev => {
   if (ctrl && (k === 'y' || k === 'Y')) { ev.preventDefault(); redo(); return; }
   if (ctrl && (k === 's' || k === 'S')) { ev.preventDefault(); saveFile(); return; }
   if (ctrl && (k === 'g' || k === 'G')) { ev.preventDefault(); ev.shiftKey ? doUngroup() : doGroup(); return; }
+  if (ctrl && (k === 'c' || k === 'C')) { if (ST.sel.f.size || ST.sel.e.size || ST.sel.g.size) { ev.preventDefault(); copySelection(); } return; }
+  if (ctrl && (k === 'x' || k === 'X')) { if (ST.sel.f.size || ST.sel.e.size || ST.sel.g.size) { ev.preventDefault(); copySelection(true); } return; }
+  if (ctrl && (k === 'v' || k === 'V')) { ev.preventDefault(); if (ev.shiftKey) pasteInPlace(); else startPaste(getClip()); return; }
   if (ctrl && (k === 'a' || k === 'A')) { ev.preventDefault(); setTool('select'); Object.keys(M.f).forEach(f => ST.sel.f.add(f)); Object.keys(M.G || {}).forEach(g => ST.sel.g.add(g)); drawSel(); info(); selBar(); return; }
   if (ctrl) return;
   // chiffres, signe, séparateurs : saisie des cotes, comme dans SketchUp (on tape sans cliquer dans la case)
@@ -1497,7 +1576,7 @@ document.addEventListener('keydown', ev => {
   if (k === 'Shift') { if (!ST.lock && lockFrom(ST.lastSnap)) { const T = TOOLS[ST.tool]; T.move && T.move(mouse[0], mouse[1]); } return; }
   if (k === 'ArrowRight' || k === 'ArrowLeft' || k === 'ArrowUp') { const i = k === 'ArrowRight' ? 0 : k === 'ArrowLeft' ? 1 : 2; ev.preventDefault(); ST.lock = ST.lock && ST.lock.axis === i && !ST.lock.shift ? null : { dir: AXES[i], axis: i }; const T = TOOLS[ST.tool]; T.move && T.move(mouse[0], mouse[1]); return; }
   if (k === 'ArrowDown') { ev.preventDefault(); ST.lock = null; return; }
-  const map = { ' ': 'select', m: 'move', l: 'line', r: 'rect', c: 'circle', g: 'poly', p: 'push', o: 'orbit', h: 'pan', e: 'erase', t: 'tape', f: 'offset', q: 'rotate', a: 'arc', d: 'dim', x: 'text' }, t = map[k.toLowerCase()];
+  const map = { ' ': 'select', m: 'move', l: 'line', r: 'rect', c: 'circle', g: 'poly', p: 'push', o: 'orbit', h: 'pan', e: 'erase', t: 'tape', f: 'offset', q: 'rotate', a: 'arc', d: 'dim', x: 'text', b: 'paint', s: 'scale', u: 'follow' }, t = map[k.toLowerCase()];
   if (t && !ev.shiftKey) { ev.preventDefault(); setTool(t); }
 });
 function delSel() {
@@ -1691,6 +1770,7 @@ function panel(id, html) { const el = $('#' + id); el.innerHTML = html; el.hidde
 function dispPanel() {
   const el = $('#dispP'); if (el.hidden) return; const tags = Object.keys(M.tags || {}), G0 = M.G || {}, hid = Object.keys(G0).filter(g => G0[g].hid), cnt = t => Object.values(G0).filter(g => g.tag === t).length, nGd = Object.keys(M.gd || {}).length;
   panel('dispP', `<div class="vhead"><b>Affichage</b><button class="btn sm" data-a="x">Fermer ×</button></div>
+    <div class="r"><b>Style</b> <select class="btn sm" data-st="1">${STYLES.map(([k, n]) => `<option value="${k}"${ST.style === k ? ' selected' : ''}>${n}</option>`).join('')}</select></div>
     <div><b>Balises</b> <span class="hint0">(posées sur les groupes, depuis la barre de sélection)</span></div>
     ${tags.map(t => `<label class="r"><input type="checkbox" data-tag="${escH(t)}"${M.tags[t].vis !== false ? ' checked' : ''}> ${escH(t)} <small class="hint0">${cnt(t)} groupe(s)</small><span class="grow"></span><button class="btn sm" data-del="${escH(t)}" title="Supprimer la balise (les groupes la perdent)">×</button></label>`).join('') || '<div class="hint0">Aucune balise.</div>'}
     <div class="r"><button class="btn sm" data-a="newtag">+ Balise</button></div>
@@ -1703,16 +1783,24 @@ function dispPanel() {
     else if (a === 'cut') doOp(m => { m.cut.on = !m.cut.on; }); else if (a === 'cutx') doOp(m => { delete m.cut; });
     else if (b.dataset.del) { const t = b.dataset.del; doOp(m => { delete m.tags[t]; for (const g in m.G) if (m.G[g].tag === t) delete m.G[g].tag; }); }
     dispPanel(); cv.focus(); };
-  el.onchange = e => { const t = e.target.dataset.tag; if (t == null) return; doOp(m => { m.tags[t].vis = e.target.checked; }); clearSel(); dispPanel(); };
+  el.onchange = e => { if (e.target.dataset.st) { setStyle(e.target.value); return; } const t = e.target.dataset.tag; if (t == null) return; doOp(m => { m.tags[t].vis = e.target.checked; }); clearSel(); dispPanel(); };
 }
-function nivAreas() { const fm = flatModel(visModel(M)); return (M.niv || []).map(n => ({ nom: n.nom, z: n.z, sdp: Math.max(0, sectionArea(fm, n.z + 0.05)) })); }
+/* surface de chaque niveau : brute (section juste au-dessus du plancher) ; surface de plancher approchée : section à 1,80 m (hauteur sous plafond),
+   moins l'épaisseur des murs extérieurs (nu intérieur des façades) le long du contour */
+function nivAreas() {
+  const fm = flatModel(visModel(M)), N = (M.niv || []).slice().sort((a, b) => a.z - b.z), ep = Math.max(0, +M.nivEp || 0);
+  return (M.niv || []).map(n => { const brute = Math.max(0, sectionArea(fm, n.z + 0.05)), nx = N.find(x => x.z > n.z + 1e-6), hz = nx && nx.z - n.z <= 1.8 ? n.z + 0.05 : n.z + 1.8;
+    const segs = sliceModel(fm, [0, 0, 1], hz), a18 = Math.max(0, segs.reduce((a, [p, q]) => a + p[0] * q[1] - q[0] * p[1], 0) / 2), per = segs.reduce((a, [p, q]) => a + vdist(p, q), 0);
+    return { nom: n.nom, z: n.z, brute, sdp: Math.max(0, Math.min(brute, a18) - per * ep) }; });
+}
 function nivPanel() {
-  const el = $('#nivP'); if (el.hidden) return; const A = nivAreas(), tot = A.reduce((s, n) => s + n.sdp, 0);
+  const el = $('#nivP'); if (el.hidden) return; const A = nivAreas(), tot = A.reduce((s, n) => s + n.sdp, 0), totB = A.reduce((s, n) => s + n.brute, 0), emp = empriseM();
   panel('nivP', `<div class="vhead"><b>Niveaux</b><button class="btn sm" data-a="x">Fermer ×</button></div>
-    <div class="hint0">Surface de plancher brute de chaque niveau : section horizontale des volumes fermés, juste au-dessus du plancher (sans déduction des murs, trémies déduites).</div>
-    <table class="nivt"><thead><tr><th>Niveau</th><th>Altitude (${UNIT})</th><th class="num">Surface</th><th></th></tr></thead><tbody>
-    ${A.map((n, i) => `<tr><td><input type="text" data-nom="${i}" value="${escH(n.nom)}"></td><td><input type="text" inputmode="decimal" data-z="${i}" value="${numL(n.z)}"></td><td class="num mono">${fmtA(n.sdp)}</td><td><button class="btn sm" data-plan="${i}" title="Plan de ce niveau : coupe à 1,20 m au-dessus, vue de dessus">Plan</button><button class="btn sm" data-rm="${i}" aria-label="Supprimer">×</button></td></tr>`).join('') || '<tr><td colspan="4" class="hint0">Aucun niveau.</td></tr>'}
-    </tbody><tfoot><tr><td colspan="2"><b>Total</b></td><td class="num mono"><b>${fmtA(tot)}</b></td><td></td></tr></tfoot></table>
+    <div class="hint0">Brute : section des volumes fermés juste au-dessus du plancher, trémies déduites. Surface de plancher approchée : partie à plus de 1,80 m sous plafond, au nu intérieur des façades (épaisseur des murs extérieurs ci-dessous). Reprise par l'estimation.</div>
+    <table class="nivt"><thead><tr><th>Niveau</th><th>Altitude (${UNIT})</th><th class="num">Brute</th><th class="num">Plancher</th><th></th></tr></thead><tbody>
+    ${A.map((n, i) => `<tr><td><input type="text" data-nom="${i}" value="${escH(n.nom)}"></td><td><input type="text" inputmode="decimal" data-z="${i}" value="${numL(n.z)}"></td><td class="num mono">${fmtA(n.brute)}</td><td class="num mono">${fmtA(n.sdp)}</td><td><button class="btn sm" data-plan="${i}" title="Plan de ce niveau : coupe à 1,20 m au-dessus, vue de dessus">Plan</button><button class="btn sm" data-rm="${i}" aria-label="Supprimer">×</button></td></tr>`).join('') || '<tr><td colspan="4" class="hint0">Aucun niveau.</td></tr>'}
+    </tbody><tfoot><tr><td colspan="2"><b>Total</b></td><td class="num mono">${fmtA(totB)}</td><td class="num mono"><b>${fmtA(tot)}</b></td><td></td></tr></tfoot></table>
+    <div class="r"><span class="hint0">Murs extérieurs (${UNIT})</span><input type="text" inputmode="decimal" data-ep="1" value="${numL(+M.nivEp || 0)}" style="width:70px"><span class="grow"></span><span class="hint0">Emprise au sol</span> <b class="mono">${fmtA(emp)}</b></div>
     <div class="r"><button class="btn sm" data-a="add">+ Niveau</button><button class="btn sm" data-a="auto" title="Un niveau à chaque hauteur d'étage, du sol au sommet de la maquette">Répartir…</button>${M.cut ? '<button class="btn sm" data-a="nocut">Sans coupe</button>' : ''}</div>`);
   const rename = ['RDC', 'R+1', 'R+2', 'R+3', 'R+4', 'R+5', 'R+6', 'R+7', 'R+8', 'R+9'];
   el.onclick = e => { const b = e.target.closest('button'); if (!b) return; const a = b.dataset.a;
@@ -1723,7 +1811,7 @@ function nivPanel() {
     else if (b.dataset.rm) doOp(m => { m.niv.splice(+b.dataset.rm, 1); });
     else if (b.dataset.plan) { const z = M.niv[+b.dataset.plan].z; doOp(m => { m.cut = { p: [0, 0, z + 1.2], n: [0, 0, 1], on: true }; }); setView('top'); }
     nivPanel(); cv.focus(); };
-  el.onchange = e => { const i = e.target.dataset.nom ?? e.target.dataset.z; if (i == null) return; if (e.target.dataset.nom != null) doOp(m => { m.niv[+i].nom = e.target.value.trim() || m.niv[+i].nom; }); else { const v = parseLen(e.target.value); if (isFinite(v)) doOp(m => { m.niv[+i].z = v; m.niv.sort((a, b) => a.z - b.z); }); } nivPanel(); };
+  el.onchange = e => { if (e.target.dataset.ep) { const v = parseLen(e.target.value); if (isFinite(v) && v >= 0) doOp(m => { m.nivEp = v; }); nivPanel(); return; } const i = e.target.dataset.nom ?? e.target.dataset.z; if (i == null) return; if (e.target.dataset.nom != null) doOp(m => { m.niv[+i].nom = e.target.value.trim() || m.niv[+i].nom; }); else { const v = parseLen(e.target.value); if (isFinite(v)) doOp(m => { m.niv[+i].z = v; m.niv.sort((a, b) => a.z - b.z); }); } nivPanel(); };
 }
 
 /* ================= Groupes ================= */
@@ -1738,7 +1826,7 @@ function enterGroup(gid) {
   M = shiftModel(g.m, g.t); M.l = M.l || {}; clearSel(); changed(); setStatus('Groupe « ' + g.nom + ' » ouvert : Échap ou « Fermer le groupe » pour revenir');
 }
 function exitGroup(quiet) {
-  if (!ST.ctx) return; cancelTool(); const r = rootModel(), before = ST.ctxBefore; ST.undo.splice(0, ST.undo.length, ...ST.rootStacks[0]); ST.redo.splice(0, ST.redo.length, ...ST.rootStacks[1]);
+  if (!ST.ctx) return; cancelTool(); const r = rootModel(), before = ST.ctxBefore, nSync = JSON.stringify(r) !== before ? syncDef(r, ST.ctx) : 0; if (nSync) setTimeout(() => setStatus(nSync + ' autre(s) instance(s) du composant mise(s) à jour', 'ok'), 0); ST.undo.splice(0, ST.undo.length, ...ST.rootStacks[0]); ST.redo.splice(0, ST.redo.length, ...ST.rootStacks[1]);
   M = r; ST.ctx = null; ST.root = null; ST.last = null; if (JSON.stringify(r) !== before) pushUndo(before); if (!quiet) { clearSel(); changed(); setStatus(''); }
 }
 function ctxBar() { const el = $('#ctxBar'); if (!el) return; if (!ST.ctx || !ST.root) { el.hidden = true; return; } el.hidden = false; el.innerHTML = `Groupe « ${escH(ST.root.G[ST.ctx].nom)} » ouvert <button class="btn sm" id="ctxClose">Fermer le groupe</button>`; $('#ctxClose').onclick = () => { exitGroup(); cv.focus(); }; }
@@ -1747,9 +1835,12 @@ function selBar() {
   const one = ng === 1 && !nf && !ne ? [...ST.sel.g][0] : null; el.hidden = false;
   el.innerHTML = (!ST.ctx && (nf || ne || ng > 1) ? '<button class="btn sm" data-a="grp" title="Ctrl+G">Grouper</button>' : '') + (ng ? '<button class="btn sm" data-a="ungrp" title="Ctrl+Maj+G">Dégrouper</button>' : '')
     + (ng ? `<select class="btn sm" data-a="tag" title="Balise des groupes sélectionnés"><option value="">Balise…</option><option value="-">(aucune)</option>${Object.keys(M.tags || {}).map(t => `<option>${escH(t)}</option>`).join('')}<option value="+">Nouvelle…</option></select><button class="btn sm" data-a="hide">Masquer</button>` : '')
-    + (one && M.G[one] ? `<button class="btn sm" data-a="open">Ouvrir</button><button class="btn sm" data-a="ren" title="Renommer « ${escH(M.G[one].nom)} »">Renommer</button>` : '') + '<button class="btn sm danger" data-a="del">Supprimer</button>';
+    + (one && M.G[one] ? `<button class="btn sm" data-a="open">Ouvrir</button><button class="btn sm" data-a="ren" title="Renommer « ${escH(M.G[one].nom)} »">Renommer</button>` + (M.G[one].def ? '<button class="btn sm" data-a="uniq" title="Détacher cette instance du composant">Rendre unique</button>' : '<button class="btn sm" data-a="comp" title="Faire de ce groupe un composant : ses copies resteront liées">Composant</button>') : '')
+    + '<select class="btn sm" data-a="mir" title="Symétrie par rapport au centre de la sélection"><option value="">Symétrie…</option><option value="0">↔ axe rouge</option><option value="1">↕ axe vert</option><option value="2">⇅ axe bleu</option></select>'
+    + '<button class="btn sm" data-a="copy" title="Ctrl+C">Copier</button><button class="btn sm danger" data-a="del">Supprimer</button>';
+  const mr = el.querySelector('[data-a=mir]'); if (mr) mr.onchange = () => { if (mr.value !== '') mirrorSel(+mr.value); mr.value = ''; cv.focus(); };
   const tg = el.querySelector('[data-a=tag]'); if (tg) tg.onchange = () => { let v = tg.value; if (v === '+') { v = (prompt('Nom de la balise (ex. Existant, Projet, Tracé)') || '').trim(); if (!v) { tg.value = ''; return; } } const gs = [...ST.sel.g]; doOp(m => { m.tags = m.tags || {}; if (v !== '-' && !m.tags[v]) m.tags[v] = { vis: true }; for (const g of gs) if (m.G[g]) { if (v === '-') delete m.G[g].tag; else m.G[g].tag = v; } }); selBar(); cv.focus(); };
-  el.querySelectorAll('button').forEach(b => b.onclick = () => { const a = b.dataset.a; if (a === 'hide') { const gs = [...ST.sel.g]; doOp(m => { for (const g of gs) if (m.G[g]) m.G[g].hid = true; }); clearSel(); setStatus('Masqué : « Affichage » pour le réafficher'); } else if (a === 'grp') doGroup(); else if (a === 'ungrp') doUngroup(); else if (a === 'open') enterGroup(one); else if (a === 'del') delSel(); else if (a === 'ren') { const n = prompt('Nom du groupe', M.G[one].nom); if (n && n.trim()) doOp(m => { m.G[one].nom = n.trim().slice(0, 60); }); } cv.focus(); });
+  el.querySelectorAll('button').forEach(b => b.onclick = () => { const a = b.dataset.a; if (a === 'hide') { const gs = [...ST.sel.g]; doOp(m => { for (const g of gs) if (m.G[g]) m.G[g].hid = true; }); clearSel(); setStatus('Masqué : « Affichage » pour le réafficher'); } else if (a === 'grp') doGroup(); else if (a === 'ungrp') doUngroup(); else if (a === 'open') enterGroup(one); else if (a === 'del') delSel(); else if (a === 'copy') copySelection(); else if (a === 'comp') { const n = prompt('Nom du composant (ex. Fenêtre type, Lucarne)', M.G[one].nom); if (n && n.trim()) { doOp(m => { makeComponent(m, one, n.trim().slice(0, 60)); }); setStatus('Composant créé : ses copies (M avec Ctrl, ou Ctrl+C) resteront liées', 'ok'); selBar(); info(); } } else if (a === 'uniq') { doOp(m => { makeUnique(m, one); }); selBar(); info(); setStatus('Instance détachée du composant', 'ok'); } else if (a === 'ren') { const n = prompt('Nom du groupe', M.G[one].nom); if (n && n.trim()) doOp(m => { m.G[one].nom = n.trim().slice(0, 60); }); } cv.focus(); });
 }
 
 /* ================= Import : DXF (tracé 2D ou faces 3D, par calques), OBJ, DAE (SketchUp), glTF ================= */
@@ -1882,7 +1973,7 @@ function info() {
     const A = fs.reduce((t, k) => t + faceArea(M, M.f[k]), 0), L = es.reduce((t, k) => { const [a, b] = k.split('|'); return t + (M.v[a] && M.v[b] ? vdist(M.v[a], M.v[b]) : 0); }, 0);
     s += `<div><b>Sélection</b> · ${fs.length ? fs.length + ' face' + (fs.length > 1 ? 's' : '') + ' <span class="mono">' + fmtA(A) + '</span>' : ''}${fs.length && es.length ? ' · ' : ''}${es.length ? es.length + ' arête' + (es.length > 1 ? 's' : '') + ' <span class="mono">' + fmtL(L) + '</span>' : ''}</div>`;
   }
-  if (ST.sel.g.size) s += `<div><b>Sélection</b> · ${[...ST.sel.g].filter(g => M.G && M.G[g]).map(g => escH(M.G[g].nom)).join(', ')}</div>`;
+  if (ST.sel.g.size) s += `<div><b>Sélection</b> · ${[...ST.sel.g].filter(g => M.G && M.G[g]).map(g => escH(M.G[g].nom) + (M.G[g].def ? ' <small>(composant, ' + instances(M, M.G[g].def).length + ' instances)</small>' : '')).join(', ')}</div>`;
   if (ST.ctx && ST.root) s += `<div><b>Groupe ouvert</b> · ${escH(ST.root.G[ST.ctx].nom)}</div>`;
   if (nF || nL || nG) {
     const FM = nG ? flatModel(M) : M; let up = 0, vert = 0, tot = 0; for (const k in FM.f) { const f = FM.f[k], a = faceArea(FM, f), n = faceN(FM, f); tot += a; if (n[2] > 0.999) up += a; else if (Math.abs(n[2]) < 1e-3) vert += a; }
@@ -1911,16 +2002,20 @@ function dl(name, text, type) { const a = document.createElement('a'); a.href = 
 function saveFile() { dl(`TerraModel ${stamp()}.json`, JSON.stringify({ app: 'TerraModel', version: APP_VERSION, units: UNIT, scenes: ST.scenes, model: rootModel(), cam: camJSON(), segs: ST.segs }), 'application/json'); setStatus('Maquette enregistrée', 'ok'); }
 function loadData(d) {
   if (!d || !d.model || !d.model.v || !d.model.f) throw new Error('fichier TerraModel attendu');
-  ST.ctx = null; ST.root = null; M = d.model; M.l = M.l || {}; ST.undo.length = 0; ST.redo.length = 0; ST.last = null; if (d.segs) Object.assign(ST.segs, d.segs); setUnit(d.units || 'm', true); ST.scenes = Array.isArray(d.scenes) ? d.scenes : []; ST.scene = null; renderScenes();
+  ST.ctx = null; ST.root = null; M = d.model; M.l = M.l || {}; ST.style = d.style || 'mat'; clearMatCache(); ST.undo.length = 0; ST.redo.length = 0; ST.last = null; if (d.segs) Object.assign(ST.segs, d.segs); setUnit(d.units || 'm', true); ST.scenes = Array.isArray(d.scenes) ? d.scenes : []; ST.scene = null; renderScenes();
   clearSel(); changed();
   if (d.cam && d.cam.p) applyCam(d.cam); else setView('iso');
 }
 /* image de la vue actuelle (PNG), nommée d'après l'onglet actif ou la vue choisie */
-function saveImage() {
-  if (hoverObj) hover(null); const keep = [rubberObj, guideObj].filter(Boolean); keep.forEach(o => o.visible = false);
-  renderer.render(scene, camera); const sc = ST.scenes.find(s => s.id === ST.scene), vn = $('#vSel') && $('#vSel').selectedOptions[0];
+function saveImage(W, transp) {
+  if (hoverObj) hover(null); const keep = [rubberObj, guideObj, selObj].filter(Boolean); keep.forEach(o => o.visible = false);
+  const pr = renderer.getPixelRatio(), w0 = view.clientWidth, h0 = view.clientHeight, bg = scene.background, oc = renderer.getClearColor(new THREE.Color()), oa = renderer.getClearAlpha();
+  if (W) { renderer.setPixelRatio(1); renderer.setSize(W, Math.round(W * h0 / w0), false); }
+  if (transp) { scene.background = null; renderer.setClearColor(0x000000, 0); if (gridObj) gridObj.visible = false; }
+  renderer.render(scene, camera);
+  const restore = () => { if (transp) { scene.background = bg; renderer.setClearColor(oc, oa); if (gridObj) gridObj.visible = true; } if (W) { renderer.setPixelRatio(pr); resize(); } }; const sc = ST.scenes.find(s => s.id === ST.scene), vn = $('#vSel') && $('#vSel').selectedOptions[0];
   const nom = (sc ? sc.nom : ST.view && vn ? vn.textContent : 'Vue').replace(/[\\/:*?"<>|]/g, '-');
-  cv.toBlob(b => { keep.forEach(o => o.visible = true); req(); if (!b) { setStatus('Image impossible dans ce navigateur', 'err'); return; } const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `TerraModel ${nom} ${stamp()}.png`; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 800); setStatus('Image enregistrée : ' + nom, 'ok'); }, 'image/png');
+  cv.toBlob(b => { restore(); keep.forEach(o => o.visible = true); req(); if (!b) { setStatus('Image impossible dans ce navigateur', 'err'); return; } const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `TerraModel ${nom} ${stamp()}.png`; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 800); setStatus('Image enregistrée : ' + nom, 'ok'); }, 'image/png');
 }
 function exportOBJ() {
   const M = flatModel(rootModel());
@@ -1950,6 +2045,8 @@ const HELP = `<h3>Unités</h3><table>
 <tr><td>P sur un trait</td><td>Un trait, une polyligne ou le bord d'une face seule, tiré, donne une surface (un mur à partir d'un tracé au sol). Trait droit : dans toutes les directions perpendiculaires, axes proposés ; polyligne plane : perpendiculairement à son plan.</td></tr>
 <tr><td>Dans un volume</td><td>Une forme tracée sur une face s'y imprime : tirée vers l'extérieur elle fait une excroissance, poussée vers l'intérieur un creux. Poussée jusqu'à la face opposée ou au-delà, elle troue le volume (baie dans un mur, trémie dans une dalle).</td></tr>
 <tr><td>Double-clic</td><td>Refait la dernière distance de pousser/tirer sur la face cliquée.</td></tr>
+<tr><td>S</td><td>Échelle : point fixe, point de référence, puis le facteur à la souris ou au clavier : 1,5 ; trois facteurs X;Y;Z (2;1;1) ; ou la nouvelle longueur de la référence avec son unité (6m). Facteur négatif : symétrie. Barre de sélection, « Symétrie » : retourne la sélection selon l'axe rouge, vert ou bleu, autour de son centre.</td></tr>
+<tr><td>U</td><td>Suivez-moi : sélectionnez le chemin (traits bout à bout, ou une face pour suivre son contour : corniche, acrotère, bandeau), prenez l'outil puis cliquez la face du profil, posée au départ du chemin et perpendiculaire à lui. Joints en onglet.</td></tr>
 <tr><td>M</td><td>Déplacer : la sélection, ou la face ou l'arête visée. Monter le dessus allonge le volume, monter une arête fait un toit en pente. Ctrl : copier (une fenêtre copiée sur le même mur s'y imprime). Double-clic avec la sélection : tout le volume.</td></tr>
 <tr><td>Correction</td><td>Juste après un rectangle, un cercle ou un pousser/tirer, une nouvelle saisie au clavier corrige la cote.</td></tr></table>
 <h3>Vue</h3><table>
@@ -1959,9 +2056,16 @@ const HELP = `<h3>Unités</h3><table>
 <tr><td>Coupe</td><td>Outil Coupe : clic sur une face, ce qui est devant est caché et le trait de coupe s'affiche en rouge ; tapez une distance pour l'enfoncer. Bouton « Coupe » : l'activer ou la désactiver.</td></tr>
 <tr><td>Niveaux</td><td>Niveaux du projet (RDC, R+1…, ou « Répartir » par hauteur d'étage) et surface de plancher brute de chacun, reprise par l'estimation. « Plan » : coupe à 1,20 m au-dessus du niveau, vue de dessus.</td></tr>
 <tr><td>Affichage</td><td>Balises posées sur les groupes (Existant, Projet, Tracé…) à afficher ou masquer ; objets masqués ; guides ; coupe.</td></tr>
+<tr><td>B</td><td>Peindre : choisissez un matériau (bibliothèque : enduits, béton, brique, bois, zinc, verre, végétal ; existant, projet, à démolir) ou créez une couleur, puis cliquez les faces ou les groupes. Ctrl : tout le volume ; Maj : toutes les faces du même matériau ; Alt : pipette. Le matériau suit les faces divisées et tirées.</td></tr>
+<tr><td>Style</td><td>Dans « Affichage » : matériaux, monochrome, rayons X (faces transparentes), filaire, sans arêtes.</td></tr>
+<tr><td>Ombres</td><td>Soleil au lieu du projet (adresse localisée dans la fiche du projet, sinon Paris), à la date et à l'heure légale choisies ; raccourcis 20 mars, 21 juin, 21 décembre. Azimut et hauteur du soleil affichés. Les ombres portées tombent aussi sur le sol.</td></tr>
+<tr><td>Composants</td><td>Un groupe devient composant (barre de sélection, « Composant ») : ses copies restent liées, modifier une instance (double-clic) modifie les autres à la fermeture, même tournées ou retournées. « Rendre unique » détache une instance. Panneau « Composants » : sélectionner toutes les instances, en placer une nouvelle, renommer.</td></tr>
+<tr><td>Ctrl+C · X · V</td><td>Copier, couper, coller : l'objet collé suit le curseur (coin bas), clic pour le poser. Ctrl+Maj+V : coller sur place, aux mêmes coordonnées. Le presse-papiers passe d'une maquette à l'autre (autre projet, autre onglet). Boutons « Coller » et « Sur place » en haut.</td></tr>
 <tr><td>Groupes</td><td>Sélection puis « Grouper » (Ctrl+G) : la géométrie du groupe reste à part, elle ne se soude pas au reste. Un clic sélectionne tout le groupe, M le déplace (Ctrl : copie), double-clic l'ouvre pour le modifier (le reste passe en grisé), Échap le referme. « Dégrouper » (Ctrl+Maj+G) remet la géométrie dans la maquette.</td></tr>
 <tr><td>Importer</td><td>DXF : tracé 2D à plat par calques, pour dessiner dessus (les accroches suivent le tracé), ou faces 3D. Modèles OBJ, DAE (SketchUp : Exporter &gt; Modèle 3D), glTF. Chaque import arrive dans un groupe. DWG et SKP : passer par leurs exports DXF, DAE, OBJ.</td></tr>
-<tr><td>Image</td><td>Enregistre la vue actuelle en image PNG (dans les téléchargements du téléphone ou de l'ordinateur).</td></tr>
+<tr><td>Image</td><td>Enregistre la vue actuelle en image PNG, à la taille de l'écran ou en haute définition (Full HD, 4K, 8K), fond transparent au choix.</td></tr>
+<tr><td>Export DXF</td><td>En vue parallèle (plan, élévation, coupe) : dessin 2D en DXF, à l'échelle, dans l'unité choisie. Arêtes vues seulement (lignes cachées retirées), traits de coupe sur un calque COUPE, cotations et textes ; les groupes balisés sur un calque à leur nom. Avec un « Plan » de niveau : plan à 1,20 m.</td></tr>
+<tr><td>Emprise</td><td>Panneau Niveaux : emprise au sol (projection verticale des volumes), surfaces brute et de plancher approchée par niveau (hauteur sous plafond de plus de 1,80 m, murs extérieurs déduits selon leur épaisseur).</td></tr>
 <tr><td>Bouton du milieu</td><td>Orbite autour du point visé (Maj : panoramique). Double-clic du milieu : centrer sur ce point.</td></tr>
 <tr><td>Téléphone</td><td>Outil Sélection : un doigt fait tourner la vue, un toucher sélectionne ; deux doigts : zoom et déplacement. Autres outils : un doigt dessine.</td></tr>
 <tr><td>Clic droit</td><td>Panoramique. Molette : zoom vers le curseur. Deux doigts : zoom et déplacement.</td></tr>
@@ -1971,6 +2075,281 @@ const HELP = `<h3>Unités</h3><table>
 <tr><td>Espace · E</td><td>Sélection : clic, ou fenêtre en glissant (vers la droite : ce qui est entièrement dedans ; vers la gauche : ce qui touche le cadre) ; au doigt, appui long puis glisser. Gomme. Suppr : effacer la sélection.</td></tr>
 <tr><td>Ctrl+Z · Ctrl+Y</td><td>Annuler, rétablir. Ctrl+S : enregistrer le fichier.</td></tr>
 <tr><td>Faces</td><td>Face avant claire, face arrière bleutée (comme SketchUp). Une maquette par projet TerraSuite, gardée dans ce navigateur et synchronisée entre les appareils de l'agence.</td></tr></table>`;
+
+/* ================= Matériaux (pot de peinture) =================
+   M.mat[id] = { nom, c: '#rrggbb', a: opacité } ; une face porte f.m, un groupe g.mat (pour ses faces sans matériau) */
+const PRESETS = [
+  ['enduit', 'Enduit blanc', '#EEEAE2'], ['enduit-ocre', 'Enduit ocre', '#D9B98A'], ['beton', 'Béton', '#B9B6AE'], ['brique', 'Brique rouge', '#A4553D'], ['brique-claire', 'Brique claire', '#D8C3A0'],
+  ['pierre', 'Pierre', '#D7CDB8'], ['bois', 'Bois clair', '#C9A36B'], ['bois-fonce', 'Bois foncé', '#7A5232'], ['zinc', 'Zinc', '#8E9599'], ['tuile', 'Tuile', '#B05A3A'], ['ardoise', 'Ardoise', '#4A4F57'],
+  ['metal', 'Métal noir', '#3A3A3A'], ['verre', 'Verre', '#9EC9DE', 0.4], ['vegetal', 'Végétal', '#7FA05A'], ['gazon', 'Gazon', '#8DB255'], ['eau', 'Eau', '#6FA8C7', 0.7],
+  ['existant', 'Existant (gris)', '#BDBDBD'], ['projet', 'Projet (ocre)', '#E2B66B'], ['demoli', 'À démolir (rouge)', '#E06A5A', 0.6]
+];
+const presetOf = id => { const p = PRESETS.find(x => x[0] === id); return p ? { nom: p[1], c: p[2], a: p[3] || 1 } : null; };
+const matOf = (m, id) => (id && ((m.mat && m.mat[id]) || presetOf(id))) || null;
+ST.paint = 'brique'; ST.style = 'mat';
+const MC = new Map();
+function faceMat(id, back) {
+  const st = ST.style, d = id ? matOf(rootM(), id) : null, k = (back ? 'b' : 'f') + '|' + st + '|' + (d ? d.c + '|' + (d.a || 1) : '');
+  if (MC.has(k)) return MC.get(k);
+  const op = st === 'xray' ? 0.42 : d && st !== 'mono' ? (d.a || 1) : 1, color = back ? (css('--back') || '#A9B7C6') : d && st !== 'mono' ? d.c : (css('--face') || '#F2EFE9');
+  const mt = new THREE.MeshLambertMaterial({ color, side: back ? THREE.BackSide : THREE.FrontSide, transparent: op < 1, opacity: op, depthWrite: op >= 1, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
+  MC.set(k, mt); return mt;
+}
+const rootM = () => (ST.ctx && ST.root) || M;
+function clearMatCache() { for (const m of MC.values()) m.dispose(); MC.clear(); }
+/* faces d'une maquette rangées par matériau */
+function byMat(m, keys, dflt) { const b = new Map(); for (const k of keys) { const f = m.f[k]; if (!f) continue; const id = ST.style === 'mono' ? '' : (f.m || dflt || ''); if (!b.has(id)) b.set(id, []); b.get(id).push(k); } return b; }
+/* maillage d'une maquette selon le style (matériaux, monochrome, rayons X, filaire, sans arêtes) et les ombres */
+function addMeshes(grp, m, dflt, soft) {
+  const st = ST.style, sh = sunOn();
+  if (st !== 'wire') for (const [id, keys] of byMat(m, Object.keys(m.f), dflt)) { const g = faceGeo(m, keys).g, a = new THREE.Mesh(g, faceMat(id)), b = new THREE.Mesh(g, faceMat(id, true)); a.castShadow = b.castShadow = a.receiveShadow = b.receiveShadow = sh; grp.add(a, b); }
+  if (st !== 'noedge') grp.add(new THREE.LineSegments(linesGeo(m, visibleEdges(m, soft)), mat.edge));
+}
+function matEnsure(m, id) { if (!id) return; m.mat = m.mat || {}; if (!m.mat[id]) { const p = presetOf(id); if (p) m.mat[id] = p; } }
+const matCount = id => { let n = 0; const R = rootM(); for (const k in R.f) if (R.f[k].m === id) n++; for (const g in R.G || {}) { const G0 = R.G[g]; if (G0.mat === id) n++; for (const k in G0.m.f) if (G0.m.f[k].m === id) n++; } return n; };
+TOOLS.paint = {
+  label: 'Mesures',
+  hint() { const d = matOf(rootM(), ST.paint); return `Clic : peindre la face ou le groupe en « ${d ? d.nom : 'matériau par défaut'} » · Ctrl : tout le volume · Maj : toutes les faces du même matériau · Alt : pipette (prendre le matériau)`; },
+  move(sx, sy) { const h = pickFace(sx, sy); hover(h ? { fid: h.fid } : null); },
+  down(sx, sy, ev) {
+    const h = pickFace(sx, sy); if (!h) return; const cur = ST.paint || '';
+    if (isG(h.fid)) { const gid = h.fid.slice(2); if (ev.altKey) { ST.paint = M.G[gid].mat || ''; matPanel(); hint(this.hint()); return; } doOp(m => { matEnsure(m, cur); if (cur) m.G[gid].mat = cur; else delete m.G[gid].mat; }); matPanel(); return; }
+    const f = M.f[h.fid]; if (!f) return;
+    if (ev.altKey) { ST.paint = f.m || ''; matPanel(); hint(this.hint()); setStatus('Matériau pris : ' + ((matOf(M, ST.paint) || {}).nom || 'par défaut'), 'ok'); return; }
+    const keys = ev.ctrlKey || ev.metaKey ? [...connected(M, h.fid)] : ev.shiftKey ? Object.keys(M.f).filter(k => (M.f[k].m || '') === (f.m || '')) : [h.fid];
+    doOp(m => { matEnsure(m, cur); for (const k of keys) if (m.f[k]) { if (cur) m.f[k].m = cur; else delete m.f[k].m; } }); matPanel();
+  }
+};
+function matPanel() {
+  const el = $('#matP'); if (!el || el.hidden) return; const R = rootM(), used = Object.keys(R.mat || {}), cur = ST.paint || '';
+  const sw = (id, d, extra = '') => `<button class="sw${cur === id ? ' on' : ''}" data-m="${escH(id)}" title="${escH(d ? d.nom : 'Matériau par défaut')}"><i style="background:${d ? d.c : 'var(--face)'};opacity:${d ? Math.max(.35, d.a || 1) : 1}"></i><span>${escH(d ? d.nom : 'Par défaut')}</span>${extra}</button>`;
+  panel('matP', `<div class="vhead"><b>Matériaux</b><button class="btn sm" data-a="x">Fermer ×</button></div>
+    <div class="hint0">Choisissez un matériau puis cliquez les faces (outil Peindre, B). Ctrl : tout le volume ; Maj : toutes les faces du même matériau ; Alt : pipette.</div>
+    <div><b>Dans la maquette</b></div><div class="sws">${sw('', null)}${used.map(id => sw(id, R.mat[id], `<small>${matCount(id)}</small>`)).join('')}</div>
+    ${cur && R.mat && R.mat[cur] ? `<div class="r"><input type="color" data-a="col" value="${escH(R.mat[cur].c)}" title="Couleur"><input type="text" data-a="nom" value="${escH(R.mat[cur].nom)}" style="flex:1;min-width:0"><label class="hint0"><input type="checkbox" data-a="tr"${(R.mat[cur].a || 1) < 1 ? ' checked' : ''}> transparent</label><button class="btn sm danger" data-a="del" title="Retirer ce matériau des faces et de la maquette">×</button></div>` : ''}
+    <div><b>Bibliothèque</b></div><div class="sws">${PRESETS.filter(p => !used.includes(p[0])).map(p => sw(p[0], presetOf(p[0]))).join('')}</div>
+    <div class="r"><button class="btn sm" data-a="new">+ Couleur…</button></div>`);
+  el.onclick = e => { const b = e.target.closest('button'); if (!b) return; const a = b.dataset.a;
+    if (a === 'x') { el.hidden = true; return; } if (b.dataset.m !== undefined) { ST.paint = b.dataset.m; if (ST.tool !== 'paint') setTool('paint'); else hint(TOOLS.paint.hint()); matPanel(); return; }
+    if (a === 'new') { const nom = (prompt('Nom du matériau (ex. Bardage bois, Enduit gris)') || '').trim(); if (!nom) return; const id = 'c' + Date.now().toString(36); doOp(m => { m.mat = m.mat || {}; m.mat[id] = { nom, c: '#C8A878', a: 1 }; }); ST.paint = id; matPanel(); return; }
+    if (a === 'del') { const id = cur; doOp(m => { delete m.mat[id]; for (const k in m.f) if (m.f[k].m === id) delete m.f[k].m; for (const g in m.G || {}) { if (m.G[g].mat === id) delete m.G[g].mat; for (const k in m.G[g].m.f) if (m.G[g].m.f[k].m === id) delete m.G[g].m.f[k].m; } }); ST.paint = ''; matPanel(); } };
+  el.onchange = e => { const a = e.target.dataset.a, id = cur; if (!id || !rootM().mat || !rootM().mat[id]) return; const v = a === 'col' ? e.target.value : a === 'nom' ? e.target.value.trim() : e.target.checked;
+    const set = m => { if (a === 'col') m.mat[id].c = v; else if (a === 'nom' && v) m.mat[id].nom = v; else if (a === 'tr') m.mat[id].a = v ? 0.4 : 1; };
+    if (ST.ctx) { set(ST.root); show(M); save(); } else doOp(set); clearMatCache(); show(M); matPanel(); };
+}
+
+/* ================= Styles d'affichage ================= */
+const STYLES = [['mat', 'Matériaux'], ['mono', 'Monochrome'], ['xray', 'Rayons X'], ['wire', 'Filaire'], ['noedge', 'Sans arêtes']];
+function setStyle(s) { if (!STYLES.some(x => x[0] === s)) s = 'mat'; ST.style = s; clearMatCache(); applySun(); show(M); dispPanel(); save(); }
+
+/* ================= Ombres solaires : position du soleil au lieu du projet, à la date et à l'heure légale ================= */
+const hemi = scene.children.find(o => o.isHemisphereLight);
+const sunOn = () => !!(M.sun && M.sun.on) || !!(ST.root && ST.root.sun && ST.root.sun.on);
+const sunCfg = () => (ST.ctx && ST.root ? ST.root.sun : M.sun) || {};
+function siteLL() { const g = PR.projet && PR.projet.geo; return g && isFinite(g.lat) && isFinite(g.lon) ? { lat: +g.lat, lon: +g.lon, nom: g.city || g.label || 'lieu du projet' } : { lat: 48.8566, lon: 2.3522, nom: 'Paris (projet sans adresse localisée)' }; }
+/* heure légale française : UTC+2 du dernier dimanche de mars au dernier dimanche d'octobre (1 h UTC), sinon UTC+1 */
+function frUTC(ds, h) {
+  const [y, mo, d] = ds.split('-').map(Number), lastSun = m => { const t = new Date(Date.UTC(y, m + 1, 0)); return Date.UTC(y, m, t.getUTCDate() - t.getUTCDay(), 1); };
+  const t1 = Date.UTC(y, mo - 1, d) + (h - 1) * 3600e3; return t1 >= lastSun(2) && t1 < lastSun(9) ? t1 - 3600e3 : t1;
+}
+/* azimut (depuis le nord, sens horaire) et hauteur du soleil, en radians ; algorithme simplifié (précision de l'ordre de 0,1°) */
+function sunPos(ms, lat, lon) {
+  const r = Math.PI / 180, d = ms / 864e5 + 2440587.5 - 2451545, g = (357.529 + 0.98560028 * d) * r, q = 280.459 + 0.98564736 * d, L = (q + 1.915 * Math.sin(g) + 0.020 * Math.sin(2 * g)) * r, e = (23.439 - 3.6e-7 * d) * r;
+  const ra = Math.atan2(Math.cos(e) * Math.sin(L), Math.cos(L)), dec = Math.asin(Math.sin(e) * Math.sin(L)), gmst = (18.697374558 + 24.06570982441908 * d) % 24, H = (gmst * 15 + lon) * r - ra, la = lat * r;
+  const alt = Math.asin(Math.sin(la) * Math.sin(dec) + Math.cos(la) * Math.cos(dec) * Math.cos(H)), az = Math.atan2(-Math.sin(H), Math.tan(dec) * Math.cos(la) - Math.sin(la) * Math.cos(H));
+  return { az: (az + 2 * Math.PI) % (2 * Math.PI), alt };
+}
+let groundSh = null;
+function applySun() {
+  const on = sunOn() && ST.style !== 'wire', c = sunCfg();
+  let dir = null; if (on) { const L = siteLL(), p = sunPos(frUTC(c.d || new Date().toISOString().slice(0, 10), c.h ?? 14), L.lat, L.lon); if (p.alt > 0.005) dir = [Math.cos(p.alt) * Math.sin(p.az), Math.cos(p.alt) * Math.cos(p.az), Math.sin(p.alt)]; ST.sunInfo = { ...p, L }; }
+  const was = renderer.shadowMap.enabled; renderer.shadowMap.enabled = !!dir; sun.castShadow = !!dir;
+  if (was !== !!dir) { for (const m of MC.values()) m.needsUpdate = true; mat.front.needsUpdate = mat.back.needsUpdate = true; }
+  if (dir) {
+    const b = bounds() || { c: [0, 0, 0], r: 10 }, R = Math.max(5, b.r * 1.6);
+    sun.position.set(...vadd(b.c, vmul(dir, R * 3))); sun.target.position.set(...b.c); if (!sun.target.parent) scene.add(sun.target);
+    const S = sun.shadow; S.mapSize.set(4096, 4096); S.bias = -0.0004; S.normalBias = 0.02; Object.assign(S.camera, { left: -R, right: R, top: R, bottom: -R, near: 0.1, far: R * 6 }); S.camera.updateProjectionMatrix(); if (S.map) { S.map.dispose(); S.map = null; }
+    sun.intensity = 0.7 * Math.min(1, 0.35 + Math.sin(ST.sunInfo.alt) * 1.4); hemi.intensity = 0.72;
+    if (!groundSh) { groundSh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.ShadowMaterial({ opacity: 0.3 })); groundSh.receiveShadow = true; groundSh.renderOrder = -1; scene.add(groundSh); }
+    groundSh.scale.set(R * 8, R * 8, 1); groundSh.position.set(b.c[0], b.c[1], 0.001); groundSh.visible = true;
+  } else { sun.position.set(-0.6, -1, 1.3); sun.target.position.set(0, 0, 0); sun.intensity = 0.38; hemi.intensity = 0.92; if (groundSh) groundSh.visible = false; }
+  req();
+}
+function sunPanel() {
+  const el = $('#sunP'); if (!el || el.hidden) return; const c = sunCfg(), L = siteLL(), d = c.d || new Date().toISOString().slice(0, 10), h = c.h ?? 14, I = ST.sunInfo;
+  const hh = x => String(Math.floor(x)).padStart(2, '0') + ':' + String(Math.round((x % 1) * 60)).padStart(2, '0'), deg = x => Math.round(x * 180 / Math.PI);
+  panel('sunP', `<div class="vhead"><b>Ombres</b><button class="btn sm" data-a="x">Fermer ×</button></div>
+    <label class="r"><input type="checkbox" data-k="on"${c.on ? ' checked' : ''}> Afficher les ombres du soleil</label>
+    <div class="r"><span class="hint0" style="min-width:42px">Date</span><input type="date" data-k="d" value="${d}"> <button class="btn sm" data-a="d" data-v="-03-20" title="Équinoxe de printemps">20 mars</button><button class="btn sm" data-a="d" data-v="-06-21" title="Solstice d'été">21 juin</button><button class="btn sm" data-a="d" data-v="-12-21" title="Solstice d'hiver">21 déc.</button></div>
+    <div class="r"><span class="hint0" style="min-width:42px">Heure</span><input type="range" data-k="h" min="5" max="22" step="0.25" value="${h}" style="flex:1"><b class="mono" id="sunH">${hh(h)}</b></div>
+    <div class="hint0">Heure légale française. Lieu : ${escH(L.nom)} (${L.lat.toFixed(3).replace('.', ',')}°, ${L.lon.toFixed(3).replace('.', ',')}°). Nord : axe vert.${c.on && I ? ` Soleil : azimut ${deg(I.az)}°, hauteur ${deg(I.alt)}°${I.alt <= 0.005 ? ' (couché)' : ''}.` : ''}</div>`);
+  const set = (k, v) => { const R = rootM(); R.sun = { on: !!(R.sun && R.sun.on), d, h, ...(R.sun || {}), [k]: v }; if (!R.sun.d) R.sun.d = d; applySun(); show(M); save(); sunPanel(); };
+  el.onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.a === 'x') el.hidden = true; else if (b.dataset.a === 'd') set('d', d.slice(0, 4) + b.dataset.v); };
+  el.onchange = e => { const k = e.target.dataset.k; if (k === 'on') set('on', e.target.checked); else if (k === 'd' && e.target.value) set('d', e.target.value); else if (k === 'h') set('h', +e.target.value); };
+  el.oninput = e => { if (e.target.dataset.k !== 'h') return; const R = rootM(); R.sun = { ...(R.sun || {}), d, h: +e.target.value }; $('#sunH').textContent = hh(+e.target.value); applySun(); };
+}
+
+/* ================= Échelle et symétrie ================= */
+function pickTarget(sx, sy, whole) { if (ST.sel.f.size || ST.sel.e.size || ST.sel.g.size) return { f: [...ST.sel.f], e: [...ST.sel.e], g: [...ST.sel.g] }; const h = (whole && pickFace(sx, sy)) || pickEdgeOrFace(sx, sy); return !h ? null : isG(h.fid) ? { f: [], e: [], g: [h.fid.slice(2)] } : h.fid ? { f: whole ? [...connected(M, h.fid)] : [h.fid], e: [] } : whole && (edgeFaces(M).get(h.e.k) || []).length ? { f: [...connected(M, edgeFaces(M).get(h.e.k)[0])], e: [] } : { f: [], e: [h.e.k] }; }
+TOOLS.scale = {
+  s: null, label: 'Échelle',
+  hint() { return !this.s ? 'Clic : point fixe · met à l\'échelle la sélection, à défaut le volume cliqué' : !this.s.r ? 'Clic : point de référence (sa distance au point fixe sert d\'étalon)' : 'Clic : facteur · tapez un facteur (1,5), trois facteurs X;Y;Z (2;1;1), ou la nouvelle longueur avec son unité (6m) puis Entrée · facteur négatif : symétrie'; },
+  busy() { return !!this.s; }, reset() { if (this.s) { this.s = null; show(M); } rubber(); guide(); },
+  k(p) { const S = this.s, r = S.r, k = vdot(vsub(p, S.c), r) / vdot(r, r); return Math.round(k * 100) / 100; },
+  move(sx, sy) {
+    const S = this.s; if (!S) { marker(snap(sx, sy)); return; }
+    if (!S.r) { const s = snap(sx, sy, { from: S.c }); if (!s) return; rubber([S.c, s.p]); marker(s, fmtL(vdist(S.c, s.p))); return; }
+    const s = snap(sx, sy, { from: S.c }); if (!s) return; const k = this.k(s.p); S.k = k; const m = JSON.parse(S.base), ok = Math.abs(k) > 1e-3 && xformSel(m, S.t, S.c, diag(k, k, k)); show(ok ? m : M);
+    guide(S.c, vadd(S.c, vmul(S.r, k))); marker(s, ok ? 'Échelle ' + String(k).replace('.', ',') : 'Impossible : une face voisine ne resterait pas plane'); vcbShow('Échelle', String(k).replace('.', ','));
+  },
+  down(sx, sy) {
+    const S = this.s; if (!S) { const t = pickTarget(sx, sy, true), s = snap(sx, sy); if (!t) { setStatus('Sélectionnez d\'abord ce qu\'il faut mettre à l\'échelle (ou cliquez sur l\'objet)'); return; } if (!s) return; this.s = { t, c: s.p, base: JSON.stringify(M) }; hint(this.hint()); return; }
+    const s = snap(sx, sy, { from: S.c }); if (!s) return; if (!S.r) { const r = vsub(s.p, S.c); if (vlen(r) < TOL) return; S.r = r; hint(this.hint()); return; }
+    this.make([S.k || 1, S.k || 1, S.k || 1]);
+  },
+  make(K) {
+    const S = this.s; this.s = null; rubber(); guide(); marker(null); if (K.some(x => Math.abs(x) < 1e-6) || K.every(x => Math.abs(x - 1) < 1e-9)) { show(M); hint(this.hint()); return; }
+    if (!xformSel(JSON.parse(S.base), S.t, S.c, diag(...K))) { show(M); setStatus('Échelle impossible : une face voisine ne resterait pas plane', 'err'); hint(this.hint()); return; }
+    const t = S.t, c = S.c; commitFrom(S.base, txt => { const v = parseFloat(String(txt).replace(',', '.')); return isFinite(v) && v ? v : null; }, (m, v) => xformSel(m, t, c, diag(...(K.every(x => x === K[0]) ? [v, v, v] : K))), K[0]);
+    setStatus('Échelle ' + K.map(x => String(x).replace('.', ',')).join(' ; '), 'ok'); hint(this.hint());
+  },
+  vcb(txt) {
+    const S = this.s; if (!S || !S.r) return false; const t = txt.trim();
+    if (t.includes(';')) { const K = t.split(';').map(x => parseFloat(x.replace(',', '.'))); if (K.length !== 3 || K.some(x => !isFinite(x))) return false; this.make(K); return true; }
+    if (/[a-z]/i.test(t)) { const L = parseLen(t); if (!isFinite(L) || L <= 0) return false; const k = L / vlen(S.r); this.make([k, k, k]); return true; }
+    const k = parseFloat(t.replace(',', '.')); if (!isFinite(k)) return false; this.make([k, k, k]); return true;
+  }
+};
+/* symétrie de la sélection par rapport au plan passant par son centre, perpendiculaire à l'axe i (0 rouge, 1 vert, 2 bleu) */
+function mirrorSel(i) {
+  const t = { f: [...ST.sel.f], e: [...ST.sel.e], g: [...ST.sel.g] }, b = bounds(ST.sel); if (!b) return; const K = [1, 1, 1]; K[i] = -1;
+  const r = doOp(m => xformSel(m, t, b.c, diag(...K)) ? undefined : false); if (r === false) setStatus('Symétrie impossible : une face voisine ne resterait pas plane', 'err'); else setStatus('Symétrie selon l\'axe ' + ['rouge', 'vert', 'bleu'][i], 'ok');
+}
+
+/* ================= Suivez-moi : un profil balayé le long d'un chemin ================= */
+TOOLS.follow = {
+  label: 'Mesures',
+  path() {
+    const es = [...ST.sel.e].map(k => k.split('|').map(Number)).filter(([a, b]) => M.v[a] && M.v[b]);
+    if (es.length) { const c = chainEdges(es); return c ? { pts: c.ids.map(id => M.v[id]), closed: c.closed, skip: new Set() } : null; }
+    if (ST.sel.f.size === 1) { const k = [...ST.sel.f][0], f = M.f[k]; if (f) return { pts: f.o.map(id => M.v[id]), closed: true, skip: new Set([k]) }; }
+    return null;
+  },
+  hint() { return this.path() ? 'Clic sur la face du profil : elle est balayée le long du chemin sélectionné (joints en onglet)' : 'Sélectionnez d\'abord le chemin : des traits qui se suivent, ou une face (son contour), puis prenez Suivez-moi et cliquez le profil. Le profil se place au départ du chemin, perpendiculaire à lui'; },
+  move(sx, sy) { const h = pickFace(sx, sy), P = this.path(); hover(h && P && !isG(h.fid) && !P.skip.has(String(h.fid)) ? { fid: h.fid } : null); },
+  down(sx, sy) {
+    const P = this.path(); if (!P) { setStatus('Chemin à sélectionner d\'abord : traits bout à bout, sans embranchement, ou une face', 'err'); return; }
+    const h = pickFace(sx, sy); if (!h || isG(h.fid) || P.skip.has(String(h.fid))) return; const fid = h.fid;
+    const r = doOp(m => followMe(m, fid, P.pts, P.closed) ? undefined : false); if (r === false) { setStatus('Suivez-moi impossible : chemin dégénéré', 'err'); return; }
+    clearSel(); setStatus('Profil balayé le long du chemin', 'ok'); hint(this.hint());
+  }
+};
+
+/* ================= Composants ================= */
+function compPanel() {
+  const el = $('#compP'); if (!el || el.hidden) return; const R = rootM(), D = R.D || {}, ids = Object.keys(D);
+  panel('compP', `<div class="vhead"><b>Composants</b><button class="btn sm" data-a="x">Fermer ×</button></div>
+    <div class="hint0">Un composant est un groupe dont toutes les copies restent liées : en modifier une (double-clic) modifie les autres à la fermeture. Pour en créer un : sélectionnez un groupe, « Composant ». Copier une instance (M avec Ctrl, ou Ctrl+C) donne une nouvelle instance.</div>
+    ${ids.map(id => `<div class="r"><b style="flex:1">${escH(D[id].nom)}</b><small class="hint0">${instances(R, id).length} instance(s)</small><button class="btn sm" data-sel="${id}">Sélectionner</button><button class="btn sm" data-place="${id}">Placer</button><button class="btn sm" data-ren="${id}">Renommer</button></div>`).join('') || '<div class="hint0">Aucun composant dans la maquette.</div>'}`);
+  el.onclick = e => { const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.a === 'x') el.hidden = true;
+    else if (b.dataset.sel) { if (ST.ctx) exitGroup(); clearSel(); for (const g of instances(M, b.dataset.sel)) ST.sel.g.add(g); drawSel(); info(); selBar(); }
+    else if (b.dataset.place) { if (ST.ctx) exitGroup(); const g0 = instances(M, b.dataset.place)[0]; const G0 = g0 ? JSON.parse(JSON.stringify(M.G[g0])) : { nom: M.D[b.dataset.place].nom, t: [0, 0, 0], m: instanceModel(M.D[b.dataset.place]), def: b.dataset.place, R: I3() };
+      startPaste({ m: newModel(), G: { x: G0 }, D: {}, mat: {} }, 'Placer « ' + M.D[b.dataset.place].nom + ' »'); }
+    else if (b.dataset.ren) { const id = b.dataset.ren, n = prompt('Nom du composant', M.D[id].nom); if (n && n.trim()) doOp(m => { m.D[id].nom = n.trim().slice(0, 60); for (const g of instances(m, id)) m.G[g].nom = n.trim().slice(0, 60); }); }
+    compPanel(); cv.focus(); };
+}
+
+/* ================= Copier, couper, coller (aussi d'une maquette à l'autre) ================= */
+const CLIP_KEY = 'terramodel-clip'; let CLIP = null;
+function getClip() { if (CLIP) return CLIP; try { CLIP = JSON.parse(localStorage.getItem(CLIP_KEY) || 'null'); } catch (e) { CLIP = null; } return CLIP; }
+function copySelection(cut) {
+  const fs = [...ST.sel.f].filter(k => M.f[k]), es = [...ST.sel.e], gs = [...ST.sel.g].filter(g => M.G && M.G[g]); if (!fs.length && !es.length && !gs.length) { setStatus('Rien de sélectionné'); return; }
+  const sub = newModel(), map = new Map(), vid = id => { if (!map.has(id)) { const n = sub.n++; sub.v[n] = M.v[id].slice(); map.set(id, n); } return map.get(id); }, mats = new Set();
+  for (const k of fs) { const f = M.f[k]; addF(sub, { o: f.o.map(vid), h: f.h.map(L => L.map(vid)), m: f.m }); if (f.m) mats.add(f.m); }
+  for (const e of es) { const [a, b] = e.split('|').map(Number); if (Object.values(M.l).some(l => ekey(l[0], l[1]) === ekey(a, b)) || !fs.length) sub.l[sub.n++] = [vid(a), vid(b)]; }
+  const G = {}, D = {}; for (const g of gs) { G[g] = JSON.parse(JSON.stringify(M.G[g])); if (G[g].def && M.D && M.D[G[g].def]) D[G[g].def] = M.D[G[g].def]; if (G[g].mat) mats.add(G[g].mat); for (const k in G[g].m.f) if (G[g].m.f[k].m) mats.add(G[g].m.f[k].m); }
+  const mat = {}; for (const id of mats) { const d = matOf(rootM(), id); if (d) mat[id] = d; }
+  CLIP = { app: 'TerraModel', m: sub, G, D, mat }; try { localStorage.setItem(CLIP_KEY, JSON.stringify(CLIP)); } catch (e) {}
+  if (cut) delSel(); setStatus((cut ? 'Coupé' : 'Copié') + ' : Ctrl+V pour coller (aussi dans une autre maquette), Ctrl+Maj+V pour coller sur place', 'ok'); pasteBtns();
+}
+function clipBox(c) { const P = Object.values(c.m.v); for (const g in c.G) P.push(...groupPts(c.G[g])); if (!P.length) return null; return [0, 1, 2].map(i => Math.min(...P.map(p => p[i]))); }
+function pasteInto(m, c, d) {
+  const map = {}; for (const k in c.m.v) map[k] = addV(m, vadd(c.m.v[k], d)); const made = [];
+  for (const k in c.m.f) { const f = c.m.f[k]; made.push(addF(m, { o: f.o.map(i => map[i]), h: (f.h || []).map(L => L.map(i => map[i])), m: f.m })); }
+  for (const k in c.m.l || {}) { const [a, b] = c.m.l[k]; m.l[m.n++] = [map[a], map[b]]; }
+  if (made.length || Object.keys(c.m.l || {}).length) cleanup(m);
+  const ng = []; m.G = m.G || {}; for (const g in c.G) { const id = 'g' + (m.n++), G0 = JSON.parse(JSON.stringify(c.G[g])); G0.t = vadd(G0.t, d); if (G0.def && !(m.D && m.D[G0.def])) { if (c.D[G0.def]) { m.D = m.D || {}; m.D[G0.def] = JSON.parse(JSON.stringify(c.D[G0.def])); } else { delete G0.def; delete G0.R; } } m.G[id] = G0; ng.push(id); }
+  for (const id in c.mat || {}) { m.mat = m.mat || {}; if (!m.mat[id]) m.mat[id] = c.mat[id]; }
+  return ng;
+}
+function startPaste(c, label) { if (!c) { setStatus('Presse-papiers vide'); return; } setTool('paste'); TOOLS.paste.c = c; TOOLS.paste.base = clipBox(c) || [0, 0, 0]; TOOLS.paste.lab = label || 'Coller'; hint(TOOLS.paste.hint()); }
+function pasteInPlace() { const c = getClip(); if (!c) { setStatus('Presse-papiers vide'); return; } let ng = []; doOp(m => { ng = pasteInto(m, c, [0, 0, 0]); }); clearSel(); ng.forEach(g => ST.sel.g.add(g)); drawSel(); info(); selBar(); setStatus('Collé sur place', 'ok'); }
+TOOLS.paste = {
+  c: null, base: null, cur: null, label: 'Mesures',
+  hint() { return (this.lab || 'Coller') + ' : clic pour poser (le coin bas de l\'objet suit le curseur, avec les accroches) · Échap : annuler'; },
+  busy() { return !!this.c; }, reset() { if (this.c) { this.c = null; show(M); } },
+  move(sx, sy) { if (!this.c) return; const s = snap(sx, sy); if (!s) return; this.cur = s; const m = JSON.parse(JSON.stringify(M)); pasteInto(m, this.c, vsub(s.p, this.base)); show(m); marker(s); },
+  down(sx, sy) { if (!this.c) return; const s = snap(sx, sy); if (!s) return; const c = this.c, d = vsub(s.p, this.base); this.c = null; marker(null); let ng = []; doOp(m => { ng = pasteInto(m, c, d); }); clearSel(); ng.forEach(g => ST.sel.g.add(g)); drawSel(); info(); selBar(); setTool('select'); setStatus('Posé', 'ok'); }
+};
+function pasteBtns() { const c = getClip(), a = $('#bPaste'), b = $('#bPasteH'); if (a) a.hidden = !c; if (b) b.hidden = !c; }
+
+/* ================= Image en haute définition ================= */
+function imgPanel() {
+  const el = $('#imgP'); if (!el || el.hidden) return; const w = Math.round(view.clientWidth * renderer.getPixelRatio()), h = Math.round(view.clientHeight * renderer.getPixelRatio()), r = view.clientHeight / view.clientWidth;
+  panel('imgP', `<div class="vhead"><b>Image de la vue</b><button class="btn sm" data-a="x">Fermer ×</button></div>
+    <div class="hint0">PNG au cadrage de l'écran (proportions ${w} × ${h}).</div>
+    ${[[0, 'Écran', w], [1920, 'Full HD', 1920], [3840, '4K', 3840], [7680, '8K', 7680]].map(([W, n, ww]) => `<button class="btn" data-w="${W}">${n} <small class="hint0">${ww} × ${Math.round(ww * r)}</small></button>`).join('')}
+    <label class="r"><input type="checkbox" id="imgTr"> Fond transparent (sans grille ni axes)</label>`);
+  el.onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.a === 'x') { el.hidden = true; return; } if (b.dataset.w !== undefined) { saveImage(+b.dataset.w, $('#imgTr').checked); el.hidden = true; } };
+}
+
+/* ================= Export DXF 2D : arêtes vues (lignes cachées retirées), traits de coupe, cotations et textes, dans le plan de la vue parallèle ================= */
+function exportDXF2D() {
+  if (!isO()) { setStatus('DXF 2D : passez d\'abord en vue parallèle (plan, élévation, ou bouton Perspective)', 'err'); return; }
+  if (ST.ctx) exitGroup();
+  const W0 = view.clientWidth, H0 = view.clientHeight, K = Math.min(4, Math.floor(4096 / Math.max(W0, H0))) || 1, W = W0 * K, H = H0 * K;
+  // profondeur des faces visibles
+  const fm = flatModel(visModel(M)), dScene = new THREE.Scene(), geo = faceGeo(fm, Object.keys(fm.f)).g;
+  dScene.add(new THREE.Mesh(geo, new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking, side: THREE.DoubleSide })));
+  const rt = new THREE.WebGLRenderTarget(W, H), px = new Uint8Array(W * H * 4), old = renderer.getClearColor(new THREE.Color()), oa = renderer.getClearAlpha();
+  renderer.setRenderTarget(rt); renderer.setClearColor(0xffffff, 1); renderer.clear(); renderer.render(dScene, camera); renderer.readRenderTargetPixels(rt, 0, 0, W, H, px); renderer.setRenderTarget(null); renderer.setClearColor(old, oa); rt.dispose(); geo.dispose();
+  const k = 255 / 256 / 255, dep = (x, y) => { const i = (y * W + x) * 4; return px[i] * k / 16777216 + px[i + 1] * k / 65536 + px[i + 2] * k / 256 + px[i + 3] * k; };
+  const eps = 0.03 / (camera.far - camera.near), v3 = new THREE.Vector3();
+  const vis = p => { if (clipped(p)) return false; v3.set(p[0], p[1], p[2]).project(camera); const x = Math.round((v3.x + 1) / 2 * W - .5), y = Math.round((v3.y + 1) / 2 * H - .5); if (x < 0 || y < 0 || x >= W || y >= H) return false; const z = (v3.z + 1) / 2; let mx = 0; for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const xx = x + dx, yy = y + dy; if (xx < 0 || yy < 0 || xx >= W || yy >= H) { mx = 1; continue; } mx = Math.max(mx, dep(xx, yy)); } return z <= mx + eps; };
+  // repère du dessin : axes de la caméra
+  camera.updateMatrixWorld(); const e = camera.matrixWorld.elements, U = [e[0], e[1], e[2]], V = [e[4], e[5], e[6]], k2 = UN().k, to2 = p => [vdot(p, U) * k2, vdot(p, V) * k2];
+  const out = [], layers = new Set(['ARETES']), lay = n => { const s = String(n).toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Z0-9_-]+/g, '_').slice(0, 31) || 'ARETES'; layers.add(s); return s; };
+  const line = (a, b, L) => out.push(['LINE', L, to2(a), to2(b)]);
+  const edgesOf = (m, soft, L) => { for (const [a, b] of visibleEdges(m, soft)) { const A = m.v[a], B = m.v[b], sa = toScreen(A), sb = toScreen(B); if (!sa || !sb) continue; const n = Math.max(2, Math.ceil(Math.hypot(sb[0] - sa[0], sb[1] - sa[1]) * K / 1.5));
+    let run = null; for (let i = 0; i <= n; i++) { const t = i / n, p = vadd(A, vmul(vsub(B, A), t)), ok = vis(p); if (ok && run === null) run = t; if ((!ok || i === n) && run !== null) { const t1 = ok ? t : (i - 1) / n; if (t1 > run) line(vadd(A, vmul(vsub(B, A), run)), vadd(A, vmul(vsub(B, A), t1)), L); run = null; } } } };
+  edgesOf(M, false, 'ARETES'); for (const g in M.G || {}) if (gVis(M, g)) edgesOf(gWorld(M.G[g]), M.G[g].soft, M.G[g].tag ? lay(M.G[g].tag) : 'ARETES');
+  const c = cutPlane(); if (c) { layers.add('COUPE'); for (const [p, q] of sliceModel(fm, c.n, vdot(c.n, c.p))) line(p, q, 'COUPE'); }
+  const th = Math.max(0.1, worldPx(null) * 14) * k2;
+  for (const id in M.an || {}) { const a = M.an[id];
+    if (a.k === 'dim') { layers.add('COTATIONS'); const A2 = vadd(a.a, a.o), B2 = vadd(a.b, a.o); line(a.a, A2, 'COTATIONS'); line(a.b, B2, 'COTATIONS'); line(A2, B2, 'COTATIONS'); const m2 = to2(vmul(vadd(A2, B2), .5)); out.push(['TEXT', 'COTATIONS', m2, th, annText(a)]); }
+    else { layers.add('TEXTES'); if (vdist(a.a, a.q) > 1e-6) line(a.a, a.q, 'TEXTES'); out.push(['TEXT', 'TEXTES', to2(a.q), th, annText(a)]); } }
+  const col = { ARETES: 7, COUPE: 1, COTATIONS: 5, TEXTES: 3 }, f = n => (+n).toFixed(4);
+  let s = '0\nSECTION\n2\nHEADER\n9\n$ACADVER\n1\nAC1009\n9\n$INSUNITS\n70\n' + ({ m: 6, cm: 5, mm: 4 }[UNIT]) + '\n0\nENDSEC\n0\nSECTION\n2\nTABLES\n0\nTABLE\n2\nLAYER\n70\n' + layers.size + '\n';
+  for (const L of layers) s += `0\nLAYER\n2\n${L}\n70\n0\n62\n${col[L] || 7}\n6\nCONTINUOUS\n`;
+  s += '0\nENDTAB\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n';
+  for (const o of out) { if (o[0] === 'LINE') s += `0\nLINE\n8\n${o[1]}\n10\n${f(o[2][0])}\n20\n${f(o[2][1])}\n30\n0\n11\n${f(o[3][0])}\n21\n${f(o[3][1])}\n31\n0\n`; else s += `0\nTEXT\n8\n${o[1]}\n10\n${f(o[2][0])}\n20\n${f(o[2][1])}\n30\n0\n40\n${f(o[3])}\n1\n${String(o[4]).replace(/\n/g, ' ')}\n72\n1\n11\n${f(o[2][0])}\n21\n${f(o[2][1])}\n31\n0\n`; }
+  s += '0\nENDSEC\n0\nEOF\n';
+  const sc = ST.scenes.find(x => x.id === ST.scene), vn = $('#vSel') && $('#vSel').selectedOptions[0], nom = (sc ? sc.nom : ST.view && vn ? vn.textContent : 'Vue').replace(/[\\/:*?"<>|()]/g, '-');
+  dl(`TerraModel ${nom} ${stamp()}.dxf`, s, 'application/dxf'); setStatus(`DXF 2D enregistré : ${out.length} entités, unité ${UNIT}`, 'ok'); return { n: out.length, layers: [...layers] };
+}
+
+/* ================= Emprise au sol : projection verticale des volumes (tramée au centimètre près environ) ================= */
+const EMP = new WeakMap(); function empriseM() { const k = M; if (!EMP.has(k)) EMP.set(k, emprise(flatModel(visModel(M)))); return EMP.get(k); }
+function emprise(fm) {
+  const T = []; for (const k in fm.f) { const f = fm.f[k], n = faceN(fm, f); if (Math.abs(n[2]) < 1e-6) continue; const { tris, ids } = triFace(fm, f); for (const t of tris) T.push(t.map(i => fm.v[ids[i]])); }
+  if (!T.length) return 0; let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity; for (const t of T) for (const p of t) { x0 = Math.min(x0, p[0]); y0 = Math.min(y0, p[1]); x1 = Math.max(x1, p[0]); y1 = Math.max(y1, p[1]); }
+  const cs = Math.max(0.01, Math.max(x1 - x0, y1 - y0) / 1500), nx = Math.ceil((x1 - x0) / cs) + 1, ny = Math.ceil((y1 - y0) / cs) + 1, g = new Uint8Array(nx * ny); let n = 0;
+  for (const [a, b, c] of T) { const ax = Math.max(0, Math.floor((Math.min(a[0], b[0], c[0]) - x0) / cs)), bx = Math.min(nx - 1, Math.ceil((Math.max(a[0], b[0], c[0]) - x0) / cs)), ay = Math.max(0, Math.floor((Math.min(a[1], b[1], c[1]) - y0) / cs)), by = Math.min(ny - 1, Math.ceil((Math.max(a[1], b[1], c[1]) - y0) / cs));
+    const s = (p, q, x, y) => (q[0] - p[0]) * (y - p[1]) - (q[1] - p[1]) * (x - p[0]), ar = s(a, b, c[0], c[1]); if (Math.abs(ar) < 1e-12) continue;
+    for (let j = ay; j <= by; j++) { const y = y0 + (j + .5) * cs; for (let i = ax; i <= bx; i++) { const x = x0 + (i + .5) * cs, w0 = s(b, c, x, y) * ar, w1 = s(c, a, x, y) * ar, w2 = s(a, b, x, y) * ar; if (w0 >= 0 && w1 >= 0 && w2 >= 0 && !g[j * nx + i]) { g[j * nx + i] = 1; n++; } } } }
+  return n * cs * cs;
+}
 
 /* ================= Démarrage ================= */
 (function init() {
@@ -2002,11 +2381,14 @@ const HELP = `<h3>Unités</h3><table>
     new ResizeObserver(() => drawPlan()).observe(pc); }
   { const el = $('#scenes'); renderScenes();
     el.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; if (b.id === 'sAdd') sceneAdd(); else if (b.id === 'sMgr') openPanel(); else if (b.classList.contains('supd')) sceneAct(b.dataset.id, 'upd'); else { const id = b.closest('.stab').dataset.id; if (b.dataset.a) sceneAct(id, b.dataset.a); else if (e.detail === 2) sceneAct(id, 'ren'); else if (e.detail < 2) sceneGo(id); } cv.focus(); }); }
-  $('#bCenter').onclick = centerView; $('#bImg').onclick = () => { saveImage(); cv.focus(); };
+  $('#bCenter').onclick = centerView;
+  const panes = ['dispP', 'nivP', 'sunP', 'compP', 'imgP', 'matP'], toggle = (id, fn) => { const p = $('#' + id); const was = p.hidden; panes.forEach(x => $('#' + x).hidden = true); p.hidden = !was; fn(); };
+  $('#bImg').onclick = () => toggle('imgP', imgPanel); $('#bSun').onclick = () => toggle('sunP', sunPanel); $('#bComp').onclick = () => toggle('compP', compPanel);
+  $('#bDxf').onclick = () => { exportDXF2D(); cv.focus(); }; $('#bPaste').onclick = () => { startPaste(getClip()); cv.focus(); }; $('#bPasteH').onclick = () => { pasteInPlace(); cv.focus(); }; pasteBtns();
+  window.addEventListener('storage', e => { if (e.key === CLIP_KEY) { CLIP = null; pasteBtns(); } });
   $('#bUndo').onclick = undo; $('#bRedo').onclick = redo;
   $('#bNew').onclick = () => { if (Object.keys(M.f).length + Object.keys(M.l).length && !confirm('Effacer la maquette en cours ? (Ctrl+Z permet de revenir en arrière)')) return; doOp(m => { m.v = {}; m.f = {}; m.l = {}; }); clearSel(); };
-  $('#bDisp').onclick = () => { const p = $('#dispP'); p.hidden = !p.hidden; $('#nivP').hidden = true; dispPanel(); };
-  $('#bNiv').onclick = () => { const p = $('#nivP'); p.hidden = !p.hidden; $('#dispP').hidden = true; nivPanel(); };
+  $('#bDisp').onclick = () => toggle('dispP', dispPanel); $('#bNiv').onclick = () => toggle('nivP', nivPanel);
   $('#bCut').onclick = () => { if (M.cut) doOp(m => { m.cut.on = !m.cut.on; }); };
   $('#annot').addEventListener('click', e => { const l = e.target.closest('[data-an]'); if (!l) return; const id = l.dataset.an; if (ST.tool === 'erase') doOp(m => { delete m.an[id]; }); else if (ST.tool === 'text') { const a = M.an[id]; const t = prompt('Texte (vide : aire de la face)', a.t || ''); if (t !== null) doOp(m => { m.an[id].t = t.trim(); }); } });
   renderer.localClippingEnabled = true;
@@ -2024,7 +2406,7 @@ const HELP = `<h3>Unités</h3><table>
     $('#bMenus').onclick = () => { try { parent.postMessage({ ts: 'menus' }, '*'); } catch (e) {} };
   }
   setTool('rect'); cv.focus();
-  window.TM = { gVis, nivAreas, visModel, sectionArea, get lock() { return ST.lock; }, G, PR, openRid, setProjection, isO, get camera() { return camera; }, get M() { return M; }, set M(v) { M = v; changed(); }, ST, TOOLS, setTool, snap, pickFace, toScreen, req, show, rebuild, frameView, bounds, setView, setUnit, sceneAdd, sceneGo, cameraAdd, openPanel, applyCam, closedVolume, get UNIT() { return UNIT; } };
+  window.TM = { exportDXF2D, emprise, sunPos, frUTC, applySun, setStyle, copySelection, pasteInPlace, startPaste, getClip, mirrorSel, flatModel, get style() { return ST.style; }, gVis, nivAreas, visModel, sectionArea, get lock() { return ST.lock; }, G, PR, openRid, setProjection, isO, get camera() { return camera; }, get M() { return M; }, set M(v) { M = v; changed(); }, ST, TOOLS, setTool, snap, pickFace, toScreen, req, show, rebuild, frameView, bounds, setView, setUnit, sceneAdd, sceneGo, cameraAdd, openPanel, applyCam, closedVolume, get UNIT() { return UNIT; } };
 })();
 
 </script>
