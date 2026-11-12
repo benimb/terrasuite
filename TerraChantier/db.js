@@ -1,6 +1,7 @@
 /* TerraSuite en ligne (TerraChantier, TerraContacts) : base locale (IndexedDB), commune aux deux applications.
    Chaque fiche porte un identifiant unique, sa date de mise à jour et un drapeau « à synchroniser ».
    Une suppression est un marquage (deleted), pour qu'elle se propage aux autres appareils. */
+const UNDO_LAB = { chantiers: 'fiche du chantier', plans: 'plan', photos: 'photo', visites: 'compte-rendu', reserves: 'réserve', contacts: 'contact' };
 const DB = (() => {
   const NAME = 'terrachantier', VER = 4, STORES = ['chantiers', 'plans', 'photos', 'visites', 'reserves', 'contacts', 'projets', 'docs']; // « contacts » : carnet TerraContacts (v2) ; « projets » : projets de l'agence (v3) ; « docs » : données des autres applications (v4, ts-link.js)
   let dbp = null;
@@ -20,7 +21,14 @@ const DB = (() => {
   const uid = () => (crypto.randomUUID ? crypto.randomUUID() : 'id-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10));
   return {
     uid,
-    async put(store, o, { remote = false } = {}) { if (!o.id) o.id = uid(); if (!remote) { o.updatedAt = new Date().toISOString(); o.dirty = 1; } else o.dirty = 0; await tx([store], 'readwrite', t => t.objectStore(store).put(o)); return o; },
+    /* annulation (ts-undo.js) : chaque écriture faite par l'utilisateur garde la fiche d'avant ; écritures reçues des autres appareils et mises à niveau (quiet) exclues */
+    quiet: 0,
+    async put(store, o, { remote = false } = {}) { if (!o.id) o.id = uid(); const U = !remote && !this.quiet && typeof TSUndo !== 'undefined' && UNDO_LAB[store], before = U ? await this.get(store, o.id) : null;
+      if (!remote) { o.updatedAt = new Date().toISOString(); o.dirty = 1; } else o.dirty = 0; await tx([store], 'readwrite', t => t.objectStore(store).put(o));
+      if (U) TSUndo.record([{ s: store, id: o.id, before: before && !before.deleted ? before : null, after: o.deleted ? null : o }], UNDO_LAB[store]); return o; },
+    /* remise d'une fiche dans l'état demandé par l'annulation (null : fiche supprimée) */
+    async undoApply(items) { for (const { s, id, value } of items) { if (value) await this.put(s, value); else { const cur = await this.get(s, id); if (cur && !cur.deleted) { cur.deleted = true; await this.put(s, cur); } } } },
+    async silent(fn) { this.quiet++; try { return await fn(); } finally { this.quiet--; } },
     async get(store, id) { return tx([store], 'readonly', t => req(t.objectStore(store).get(id))); },
     async all(store, chantierId, { withDeleted = false } = {}) {
       const rows = await tx([store], 'readonly', t => { const os = t.objectStore(store); return req(chantierId ? os.index('chantierId').getAll(chantierId) : os.getAll()); });

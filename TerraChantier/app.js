@@ -1,5 +1,5 @@
 /* TerraChantier : comptes-rendus de chantier, OPR et photos localisées sur plan */
-const APP_VERSION = '0.12';
+const APP_VERSION = '0.13';
 /* outils communs ($, esc, dates, ICON, ROLES, sheet, toast…) : common.js ; carnet de contacts : carnet.js */
 const intervenants = () => ((S.ch && S.ch.entreprises) || []).map(e => (e.role ? e : Object.assign(e, { role: 'ENT' }))).slice().sort((a, b) => roleRank(a.role) - roleRank(b.role) || (a.nom || '').localeCompare(b.nom || ''));
 /* mode terrain (téléphone) : prise de vues, CR, réserves ; la préparation (chantiers, plans, intervenants, lots) se fait dans la version complète */
@@ -29,7 +29,8 @@ const phTodo = p => !phTxt(p).trim() || !phDest(p).length;
 const lotEnt = lotId => { const l = lotById(lotId); return l && l.entrepriseId && entById(l.entrepriseId) ? l.entrepriseId : ''; };
 const locList = () => [...new Set([...S.photos.map(p => p.localisation), ...S.reserves.map(r => r.localisation)].filter(Boolean).map(s => s.trim()))].sort((a, b) => a.localeCompare(b, 'fr', { numeric: true }));
 
-async function loadChantier(id) {
+async function loadChantier(id) { return DB.silent(() => loadChantier0(id)); } // mises à niveau au chargement : hors annulation
+async function loadChantier0(id) {
   if (S.ch && S.ch.id === id && S._fresh) return;
   S.ch = await DB.get('chantiers', id); if (!S.ch || S.ch.deleted) { S.ch = null; return; }
   [S.plans, S.photos, S.visites, S.reserves] = await Promise.all(['plans', 'photos', 'visites', 'reserves'].map(s => DB.all(s, id)));
@@ -57,7 +58,7 @@ async function render() {
 }
 window.addEventListener('hashchange', render);
 const topBar = (title, sub, { back, extra = '' } = {}) => `<div class="top">${back ? `<a class="icon-btn" href="${back}" aria-label="Retour">${ICON.back}</a>` : suiteBtn()}<h1>${title}${sub ? `<small>${esc(sub)}</small>` : ''}</h1>${extra}<span class="sync" id="syncSt" title="Synchronisation"><i></i></span><button class="icon-btn" id="bSet" aria-label="Réglages">${ICON.gear}</button></div>`;
-function bindTop(app) { const b = $('#bSet', app); if (b) b.onclick = settingsSheet; Sync.paint(); }
+function bindTop(app) { const b = $('#bSet', app); if (b) b.onclick = settingsSheet; const t = $('.top', app); if (t && typeof TSUndo !== 'undefined' && !t.querySelector('.ts-undo')) TSUndo.buttons(t, { cls: 'icon-btn', before: $('#syncSt', app) }); Sync.paint(); }
 
 /* ================= Accueil : chantiers ================= */
 async function viewHome(app) {
@@ -655,7 +656,7 @@ async function backupExport() {
 async function backupImport(file) {
   const d = JSON.parse(await file.text()); if (d.app !== 'TerraChantier') throw new Error('ce n\'est pas une sauvegarde TerraChantier'); let n = 0;
   for (const [id, b] of Object.entries(d.blobs || {})) { const bin = atob(b.data), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); await DB.putBlob(new Blob([u], { type: b.type }), id); }
-  for (const s of DB.STORES) for (const o of d.stores[s] || []) { const cur = await DB.get(s, o.id); if (!cur || (o.updatedAt || '') > (cur.updatedAt || '')) { await DB.put(s, o); n++; } }
+  await DB.silent(async () => { for (const s of DB.STORES) for (const o of d.stores[s] || []) { const cur = await DB.get(s, o.id); if (!cur || (o.updatedAt || '') > (cur.updatedAt || '')) { await DB.put(s, o); n++; } } });
   return n;
 }
 
@@ -663,6 +664,7 @@ async function backupImport(file) {
 (async function init() {
   S.auteur = (await DB.meta('auteur')) || ''; S.mode = (await DB.meta('mode')) || 'auto'; S.camMode = (await DB.meta('camMode')) || 'auto'; S.lastPlan = await DB.meta('lastPlan');
   if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
-  registerSW(); await Carnet.load();
+  registerSW(); await DB.silent(() => Carnet.load());
+  if (typeof TSUndo !== 'undefined') TSUndo.init(async items => { await DB.undoApply(items); S._fresh = false; await Carnet.load(true); Sync.soon(); await render(); toast('Annulé ou rétabli'); });
   await render(); Sync.start();
 })();

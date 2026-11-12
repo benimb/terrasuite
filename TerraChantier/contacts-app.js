@@ -1,6 +1,6 @@
 /* TerraContacts : carnet de contacts de la suite (maîtres d'ouvrage, bureaux d'études, entreprises…) et fiche de l'agence.
    Les contacts servent aux chantiers (intervenants, destinataires des photos et des CR) et, par le format d'échange, aux autres applications. */
-const APP_VERSION = '0.7';
+const APP_VERSION = '0.8';
 const S = { _fresh: true }; // utilisé par la synchronisation
 let F = { role: '', q: '' };
 
@@ -9,9 +9,9 @@ const tabs = cur => `<nav class="tabs">${[['projets', 'Projets'], ['', 'Contacts
 
 async function render() {
   const r = location.hash.replace(/^#\/?/, '').split('/')[0], app = $('#app');
-  await Carnet.load();
+  await DB.silent(() => Carnet.load());
   app.innerHTML = topBar() + tabs(r) + '<main id="main"></main>';
-  $('#bSet').onclick = settingsSheet; Sync.paint();
+  $('#bSet').onclick = settingsSheet; if (typeof TSUndo !== 'undefined') TSUndo.buttons($('.top'), { cls: 'icon-btn', before: $('#syncSt') }); Sync.paint();
   const seg = location.hash.replace(/^#\/?/, '').split('/');
   if (r === 'projets') return seg[1] ? Projets.fiche($('#main'), seg[1]) : Projets.list($('#main'));
   if (r === 'compte') return viewCompte($('#main'));
@@ -89,5 +89,6 @@ async function settingsSheet() {
 
 (async function init() {
   if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+  if (typeof TSUndo !== 'undefined') TSUndo.init(async items => { await DB.undoApply(items); await Carnet.load(true); Sync.soon(); await render(); });
   registerSW(); await render(); Sync.start();
 })();

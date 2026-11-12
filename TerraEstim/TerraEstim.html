@@ -160,7 +160,7 @@ input.bad{border-color:var(--err);box-shadow:0 0 0 1px var(--err)}
 </style>
 <div id="app">
   <header class="top">
-    <div class="brand">TerraEstim <span class="ver" title="Version bêta">v0.20 bêta</span><small>Base de prix et estimations</small></div>
+    <div class="brand">TerraEstim <span class="ver" title="Version bêta">v0.22 bêta</span><small>Base de prix et estimations</small></div>
     <nav class="tabs" role="tablist" aria-label="Vues">
       <button role="tab" data-tab="home" aria-selected="false">Accueil</button>
       <button role="tab" data-tab="lib" aria-selected="true">Bibliothèque<span class="n" id="nLib"></span></button>
@@ -194,6 +194,7 @@ input.bad{border-color:var(--err);box-shadow:0 0 0 1px var(--err)}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script src="../TerraChantier/projets-api.js" onerror="this.remove()"></script>
 <script src="../TerraChantier/ts-link.js" onerror="this.remove()"></script>
+<script src="../TerraChantier/ts-undo.js" onerror="this.remove()"></script>
 <style>.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn{display:none!important}</style>
 <script src="../TerraChantier/terrasuite-compte.js" onerror="this.remove()"></script>
 <script src="TerraEstim-donnees.js"></script>
@@ -377,12 +378,20 @@ function migrateLots(D) {
 }
 /* index par défaut de chaque lot (modifiable dans Indices et réglages) */
 const LOT_INDEX = Object.fromEntries(NOMENCLATURE.map(([c, , i]) => [c, i]));
-const APP_VERSION = '0.21';
+const APP_VERSION = '0.22';
 const LOTS_DEFAULT = NOMENCLATURE.map(([code, nom]) => ({ code, nom, indice: '' }));
 const SETTINGS_DEFAULT = { lots: LOTS_DEFAULT, stat: 'median', partFixe: 0, retenuesOnly: false, defIndex: 'BT01', tva: 20, aleas: 5, locNorm: true };
 
 /* ---------- État ---------- */
 const COLS = ['prestations', 'sources', 'indices', 'estimations', 'settings', 'articles'];
+/* annulation (ts-undo.js) : état de chaque fiche au dernier enregistrement, pour retrouver l'état d'avant une modification faite sur place */
+const USNAP = new Map(), ULAB = { prestations: 'prestation', sources: 'DPGF', indices: 'indice', estimations: 'estimation', articles: 'article du CCTP' };
+function undoSnap(c) { for (const cc of c === '*' ? COLS : [c]) { if (cc === 'settings' || !st.data[cc]) continue; for (const k of [...USNAP.keys()]) if (k.startsWith(cc + '/')) USNAP.delete(k); for (const [id, v] of st.data[cc]) USNAP.set(cc + '/' + id, JSON.stringify(v)); } }
+function undoRec(c, id, obj) {
+  if (c === 'settings' || !ULAB[c]) return; const k = c + '/' + id, b = USNAP.has(k) ? USNAP.get(k) : null, a = obj ? JSON.stringify(obj) : null;
+  if (a == null) USNAP.delete(k); else USNAP.set(k, a);
+  if (typeof TSUndo !== 'undefined' && st.loaded) TSUndo.record([{ s: c, id, before: b, after: a }], ULAB[c]);
+}
 const st = {
   tab: 'lib', T: null, data: { prestations: new Map(), sources: new Map(), indices: new Map(), estimations: new Map(), settings: new Map(), articles: new Map() },
   artQ: '', artLot: '', rc: '', artSel: null, artEmpty: false, artCache: null, docsAll: false,
@@ -413,6 +422,7 @@ const IDB = {
 const Store = {
   kind: 'none', db: null,
   async start(onData) {
+    { const od = onData; onData = c => { undoSnap(c); od(c); }; }
     this.onData = onData;
     let db = null;
     try { if (window.claude && window.claude.use) db = await window.claude.use('db'); } catch (e) { db = null; }
@@ -524,6 +534,7 @@ const Store = {
   /* écrit tout de suite en mémoire, puis dans la base après une courte pause */
   put(c, id, obj, delay = 400) {
     obj.updated = Date.now();
+    undoRec(c, id, obj);
     st.data[c].set(id, obj);
     if (c === 'sources' || c === 'prestations') st.obsCache = null;
     if (c === 'prestations') st.tokCache.delete(id);
@@ -551,6 +562,7 @@ const Store = {
     }
   },
   async del(c, id) {
+    undoRec(c, id, null);
     st.data[c].delete(id);
     if (c === 'articles') st.artCache = null;
     const k = c + '/' + id; clearTimeout(this.timers.get(k)); st.pending.delete(k);
@@ -3054,6 +3066,10 @@ window.addEventListener('hashchange', async () => { openFromHash(); await openPr
   // TerraDocs modifié dans un autre onglet du même dossier
   window.addEventListener('storage', ev => { if (ev.key === 'terradocs.v1' && st.tab === 'cctp') renderAll(false); });
   renderAll();
+  if (typeof TSUndo !== 'undefined') {
+    TSUndo.init(async items => { for (const { s, id, value } of items) { if (value == null) await Store.del(s, id); else Store.put(s, id, fixUnits(s, value), 0); } st.artCache = null; st.obsCache = null; st.tokCache = new Map(); renderAll(); });
+    TSUndo.buttons(document.querySelector('header.top'), { before: $('#status') });
+  }
   Store.start(c => {
     const first = !st.loaded;
     st.loaded = true; st.obsCache = null;
