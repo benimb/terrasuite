@@ -206,7 +206,7 @@ body.wide3d .work{grid-template-columns:1fr} body.wide3d .side{display:none}
 <style>.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn{display:none!important}</style>
 <script src="../TerraChantier/terrasuite-compte.js" onerror="this.remove()"></script>
 <script>
-const APP_VERSION = '0.22.3';
+const APP_VERSION = '0.22.4';
 /* ================= Outils ================= */
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -1593,7 +1593,7 @@ function gLoad() {
     window.gm_authFailure = () => { G3.authErr = true; gInfo('Clé Google refusée : vérifiez-la avec le bouton « Clé… », puis rechargez la page.', true); };
     window.__tgG = () => google.maps.importLibrary('maps3d').then(l => { G3.lib = l; res(l); }, rej);
     const sc = document.createElement('script'); sc.async = true; sc.onerror = () => rej(new Error('service Google inaccessible (connexion internet ?)'));
-    sc.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(G3.key) + '&v=beta&loading=async&language=fr&region=FR&callback=__tgG'; document.head.appendChild(sc);
+    sc.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(G3.key) + '&v=alpha&loading=async&language=fr&region=FR&callback=__tgG'; document.head.appendChild(sc);
   });
   G3.loading.catch(() => { G3.loading = null; }); return G3.loading;
 }
@@ -1625,6 +1625,13 @@ function gOverlay() {
     try { const l = new Polyline3DElement({ altitudeMode: 'CLAMP_TO_GROUND', strokeColor: '#c2410c', strokeWidth: 4, drawsOccludedSegments: true }); l.path = r; G3.el.append(l); G3.extras.push(l); } catch (e) { console.warn('contour Google', e); }
     if (G3.flat && FlattenerElement) { try { const f = new FlattenerElement(); f.path = r; G3.el.append(f); G3.extras.push(f); } catch (e) { console.warn('aplanir', e); } }
   }
+  // projet dans le site : les bâtiments masqués dans la maquette IGN sont aplanis dans la vue Google (emprise élargie de 0,5 m)
+  G3.nFlatBat = 0; G3.noFlat = !FlattenerElement;
+  const S = site(), H = new Set(batHidden()), D = v3.data;
+  if (FlattenerElement && S.mq && S.mq.on && H.size) for (const ft of D.bat) { if (!H.has(batKey(ft))) continue;
+    for (const poly of ringsOf(ft.geometry)) { const r = poly[0]; if (!r || r.length < 4) continue; const cx = r.reduce((a, c) => a + c[0], 0) / r.length, cy = r.reduce((a, c) => a + c[1], 0) / r.length;
+      const path = r.map(c => { const dx = c[0] - cx, dy = c[1] - cy, L = Math.hypot(dx, dy) || 1; return llOf(c[0] + dx / L * 0.5, c[1] + dy / L * 0.5); });
+      try { const f = new FlattenerElement(); f.path = path; G3.el.append(f); G3.extras.push(f); G3.nFlatBat++; } catch (e) { console.warn('aplanir le bâti masqué', e); } } }
   G3.forData = v3.data; G3.nRings = rings.length; gModel();
 }
 /* maquette du projet (TerraModel) dans la vue Google 3D : glTF binaire en coordonnées locales est, nord, haut (mètres),
@@ -1645,14 +1652,17 @@ function gModel() {
       G3.el.append(m); G3.extras.push(m); G3.mqOk = true; gMsg(); } catch (e) { console.warn('maquette Google', e); gInfo('Maquette du projet impossible à afficher dans la vue Google : ' + esc(e.message || String(e)), true); }
   }, e => console.warn('glTF maquette', e), { binary: true });
 }
-function gMsg() { gInfo(`Vue Google 3D : affichage seul. Exports, image de la vue et planches restent ceux de la maquette IGN. Parcelle${G3.nRings > 1 ? 's' : ''} sélectionnée${G3.nRings > 1 ? 's' : ''} en rouge${G3.flat ? ', aplanie' + (G3.nRings > 1 ? 's' : '') : ''}.${G3.mqOk ? ' Maquette du projet posée au point d\'insertion' + (G3.flat ? '' : ' (« Aplanir la parcelle » retire le bâti Google qui la cache)') + '.' : site().mq && site().mq.on ? '' : ' Pour voir le projet : « Projet dans le site », puis cliquez le point d\'insertion.'} Images © Google.`); }
+function gMsg() { gInfo(`Vue Google 3D : affichage seul. Exports, image de la vue et planches restent ceux de la maquette IGN. Parcelle${G3.nRings > 1 ? 's' : ''} sélectionnée${G3.nRings > 1 ? 's' : ''} en rouge${G3.flat ? ', aplanie' + (G3.nRings > 1 ? 's' : '') : ''}.${G3.mqOk ? ' Maquette du projet posée au point d\'insertion' + (G3.nFlatBat ? ', bâtiment' + (G3.nFlatBat > 1 ? 's' : '') + ' masqué' + (G3.nFlatBat > 1 ? 's' : '') + ' aplani' + (G3.nFlatBat > 1 ? 's' : '') : G3.noFlat ? ' (aplanissement du bâti indisponible avec cette clé Google)' : (G3.flat ? '' : ' (« Aplanir la parcelle » retire le bâti Google qui la cache)')) + '.' : site().mq && site().mq.on ? '' : ' Pour voir le projet : « Projet dans le site », puis cliquez le point d\'insertion.'} Images © Google.`); }
 async function gOpen() {
   if (!v3.data) { setStatus('Attendez la fin du chargement de la maquette 3D', 'err'); return; }
   if (!G3.key) { $('#gkey').hidden = false; $('#gkeyIn').focus(); return; }
   G3.on = true; gInfo('Chargement de la vue Google 3D…');
   let lib; try { lib = await gLoad(); } catch (e) { G3.on = false; gInfo('Vue Google 3D indisponible : ' + esc(e.message || String(e)), true); return; }
   if (!G3.on) return;
-  if (!G3.el) { G3.el = new lib.Map3DElement({ mode: 'SATELLITE', defaultUIHidden: false }); $('#g3d').appendChild(G3.el); }
+  if (!G3.el) { G3.el = new lib.Map3DElement({ mode: 'SATELLITE', defaultUIHidden: false }); $('#g3d').appendChild(G3.el);
+    // zoom à la molette : la vue Google ne le prend pas dans la page, on règle sa distance (range) directement
+    $('#g3d').addEventListener('wheel', e => { if (!G3.el) return; e.preventDefault(); e.stopPropagation(); const k = Math.max(-3, Math.min(3, e.deltaY / (e.deltaMode ? 1 : 100)));
+      G3.el.range = Math.max(5, Math.min(20000, (G3.el.range || 300) * Math.pow(1.18, k))); }, { capture: true, passive: false }); }
   $('#g3d').hidden = false; $('#c3d').style.visibility = 'hidden'; $('#v3d').classList.add('gmode');
   $('#b3g').classList.add('on'); $('#b3flat').hidden = false; $('#b3gk').hidden = false; ['#b3terrain', '#b3roof', '#b3simple', '#b3ortho', '#b3plu', '#b3fac', '#b3tif'].forEach(q => $(q).disabled = true);
   gOverlay(); gSync(); gMsg();
