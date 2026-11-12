@@ -92,6 +92,9 @@ const TSLink = (() => {
     } catch (e) { console.warn('TSLink.push', app, coll, e); return 0; }
   }
 
+  /* lecture seule des fiches d'une autre application (ex. maquettes TerraModel lues par TerraEstim) : Map rid → fiche */
+  async function read(app, coll) { const m = new Map(); try { for (const [rid, d] of await docsOf(app, coll)) if (!d.deleted && d.data) m.set(rid, d.data); } catch (e) {} return m; }
+
   /* raccordement d'une application : appelle onRemote() quand des fiches arrivent d'un autre appareil (synchronisation faite ici ou dans un autre onglet) */
   const listeners = new Set();
   if (chan) chan.onmessage = e => { if (e.data && e.data.type === 'received') listeners.forEach(f => { try { f(e.data); } catch (x) {} }); };
@@ -103,5 +106,5 @@ const TSLink = (() => {
   /* application ouverte dans l'application TerraSuite (cadre) : pas de lien de retour propre */
   const embedded = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
   if (embedded) document.documentElement.classList.add('ts-embed');
-  return { pull, push, onRemote, received, hash, docId, seedHashes, embedded, synced, open };
+  return { pull, push, read, onRemote, received, hash, docId, seedHashes, embedded, synced, open };
 })();

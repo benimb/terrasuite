@@ -676,7 +676,7 @@ function arcPts(A, B, h, n, nseg) {
 
 </script>
 <script>
-const APP_VERSION = '0.6';
+const APP_VERSION = '0.6.1';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const NF2 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 /* unités : la maquette est en mètres ; les longueurs s'affichent et se saisissent dans l'unité choisie (m, cm, mm) ; surfaces en m², volumes en m³ */
@@ -706,7 +706,7 @@ let saveT = null;
 function save() {
   clearTimeout(saveT); saveT = setTimeout(() => {
     const old = PR.recs[PR.rid];
-    PR.recs[PR.rid] = { id: PR.rid, projetId: PR.rid === LIBRE ? null : PR.rid, nom: PR.projet ? projLabel(PR.projet) : (old && old.nom) || 'Maquette sans projet', version: APP_VERSION, model: rootModel(), segs: ST.segs, units: UNIT, scenes: ST.scenes, surf: { ...surfaces(flatModel(rootModel())), niveaux: ST.ctx ? undefined : nivAreas().map(n => ({ nom: n.nom, z: n.z, surface: Math.round(n.sdp * 100) / 100 })) }, cam: camJSON() };
+    PR.recs[PR.rid] = { id: PR.rid, projetId: PR.rid === LIBRE ? null : PR.rid, nom: PR.projet ? projLabel(PR.projet) : (old && old.nom) || 'Maquette sans projet', version: APP_VERSION, model: rootModel(), segs: ST.segs, units: UNIT, scenes: ST.scenes, surf: { ...surfaces(flatModel(rootModel())), niveaux: ST.ctx ? (old && old.surf && old.surf.niveaux) : nivAreas().map(n => ({ nom: n.nom, z: n.z, surface: Math.round(n.sdp * 100) / 100 })) }, cam: camJSON() };
     storeRecs(); if (HAS_LINK) { clearTimeout(PR.pushT); PR.pushT = setTimeout(() => TSLink.push('terramodel', 'maquettes', syncView(), { projet: r => r.projetId }), 1500); }
   }, 300);
 }

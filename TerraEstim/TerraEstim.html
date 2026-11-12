@@ -160,7 +160,7 @@ input.bad{border-color:var(--err);box-shadow:0 0 0 1px var(--err)}
 </style>
 <div id="app">
   <header class="top">
-    <div class="brand">TerraEstim <span class="ver" title="Version bêta">v0.22 bêta</span><small>Base de prix et estimations</small></div>
+    <div class="brand">TerraEstim <span class="ver" title="Version bêta">v0.23 bêta</span><small>Base de prix et estimations</small></div>
     <nav class="tabs" role="tablist" aria-label="Vues">
       <button role="tab" data-tab="home" aria-selected="false">Accueil</button>
       <button role="tab" data-tab="lib" aria-selected="true">Bibliothèque<span class="n" id="nLib"></span></button>
@@ -378,7 +378,7 @@ function migrateLots(D) {
 }
 /* index par défaut de chaque lot (modifiable dans Indices et réglages) */
 const LOT_INDEX = Object.fromEntries(NOMENCLATURE.map(([c, , i]) => [c, i]));
-const APP_VERSION = '0.22';
+const APP_VERSION = '0.23';
 const LOTS_DEFAULT = NOMENCLATURE.map(([code, nom]) => ({ code, nom, indice: '' }));
 const SETTINGS_DEFAULT = { lots: LOTS_DEFAULT, stat: 'median', partFixe: 0, retenuesOnly: false, defIndex: 'BT01', tva: 20, aleas: 5, locNorm: true };
 
@@ -1740,7 +1740,7 @@ async function openProjetHash() {
   const ex = [...st.data.estimations].filter(([, e]) => e.projet === pid).sort((a, b) => (b[1].updated || 0) - (a[1].updated || 0))[0];
   if (ex) { st.estSel = ex[0]; setStatus('Estimation du projet ' + TSP.label(p), 'ok'); return true; }
   const ph = ['ESQ', 'APS', 'APD', 'PRO', 'DCE'].includes(p.phase) ? p.phase : 'APD';
-  st.estSel = newEstimation({ title: (p.code ? p.code + ' · ' : '') + 'Estimation ' + ph, operation: p.nom || '', moa: p.moa || '', phase: ph, projet: pid, vue: 'marche', surface: parseNum(p.surface || '') });
+  st.estSel = newEstimation({ title: (p.code ? p.code + ' · ' : '') + 'Estimation ' + ph, operation: p.nom || '', moa: p.moa || '', phase: ph, projet: pid, vue: 'marche', surface: parseNum(p.surface || '') ?? modSdp(modOfP(pid)) });
   setStatus('Nouvelle estimation créée pour le projet ' + TSP.label(p), 'ok'); return true;
 }
 
@@ -1784,6 +1784,36 @@ function compOptions(e, al) {
   const R = e.cctp ? recueil(e.cctp) : null;
   if (R && R.pieces) h += `<optgroup label="Pièces du ${esc(rcName(e.cctp))}">${Object.keys(R.pieces).sort(codeCmp).map(k => opt('P:' + k, pieceName(e.cctp, k))).join('')}</optgroup>`;
   return h;
+}
+/* maquette 3D du projet (TerraModel) : surfaces par niveau, reprises comme surface de l'estimation.
+   Lue dans le navigateur (maquettes gardées par TerraModel) et dans la base TerraSuite (maquettes reçues des autres appareils). */
+st.mods = new Map();
+async function loadMods() {
+  const m = new Map(), keep = v => ({ nom: v.nom || '', surf: v.surf || null });
+  if (typeof TSLink !== 'undefined' && TSLink.read) for (const [k, v] of await TSLink.read('terramodel', 'maquettes')) if (v && v.projetId) m.set(String(v.projetId), keep(v));
+  try { const L = JSON.parse(localStorage.getItem('terramodel-maquettes') || '{}'); for (const v of Object.values(L)) if (v && v.projetId) m.set(String(v.projetId), keep(v)); } catch (e) {}
+  const changed = JSON.stringify([...m]) !== JSON.stringify([...st.mods]); st.mods = m; return changed;
+}
+const modOfP = pid => (pid && st.mods.get(String(pid))) || null;
+const modOf = e => { const p = projOf(e); return p ? modOfP(p.id) : null; };
+const modNiv = m => m && m.surf && Array.isArray(m.surf.niveaux) ? m.surf.niveaux.filter(n => n && +n.surface > 0) : [];
+const modSdp = m => { const N = modNiv(m); return N.length ? Math.round(N.reduce((s, n) => s + +n.surface, 0) * 100) / 100 : null; };
+function estModCard(e) {
+  const p = projOf(e); if (!p) return '';
+  const m = modOf(e), s = m && m.surf, N = modNiv(m), sdp = modSdp(m), q = x => NFq.format(Math.round(x * 100) / 100);
+  if (!s || !s.total) return `<section class="card" style="gap:6px" id="estMod"><h3>Maquette 3D</h3><p class="hint">Aucune maquette 3D pour ce projet. Dessinez-la dans TerraSuite (ESQ, Maquette 3D) et placez ses niveaux (outil Niveaux) : leurs surfaces s'afficheront ici.</p></section>`;
+  const same = sdp !== null && e.surface !== null && e.surface !== undefined && Math.abs(+e.surface - sdp) < 0.01;
+  return `<section class="card" style="gap:8px" id="estMod"><h3>Maquette 3D</h3>
+    ${N.length ? `<table class="t"><thead><tr><th style="text-align:left">Niveau</th><th style="text-align:right">Altitude</th><th style="text-align:right">Surface</th></tr></thead><tbody>
+      ${N.slice().sort((a, b) => (+a.z || 0) - (+b.z || 0)).map(n => `<tr><td>${esc(n.nom || '')}</td><td style="text-align:right">${String(Math.round((+n.z || 0) * 100) / 100).replace('.', ',')} m</td><td style="text-align:right">${q(+n.surface)} m²</td></tr>`).join('')}
+      <tr><td><b>Total des niveaux</b></td><td></td><td style="text-align:right"><b>${q(sdp)} m²</b></td></tr></tbody></table>`
+      : '<p class="hint flag">Aucun niveau dans la maquette : placez les niveaux dans TerraModel (outil Niveaux) pour obtenir les surfaces de plancher.</p>'}
+    <dl class="kv">${s.horizontales ? `<dt>Surfaces horizontales</dt><dd>${q(s.horizontales)} m²</dd>` : ''}${s.verticales ? `<dt>Façades</dt><dd>${q(s.verticales)} m²</dd>` : ''}${s.volume ? `<dt>Volume</dt><dd>${q(s.volume)} m³</dd>` : ''}</dl>
+    ${sdp !== null ? (same ? '<p class="hint">La surface de l\'estimation est celle des niveaux de la maquette.</p>' : `<button class="btn" id="eModSurf" style="white-space:normal;text-align:left">Reprendre ${q(sdp)} m² comme surface de l'estimation</button>`) : ''}
+    <p class="hint">Surface de chaque niveau : section des volumes juste au-dessus du plancher, murs compris. Valeur approchée de la surface de plancher, avant déductions (trémies, gaines, hauteurs sous plafond).</p></section>`;
+}
+function bindEstMod(id, e) {
+  const b = $('#eModSurf'); if (b) b.onclick = () => { const v = modSdp(modOf(e)); if (v === null) return; e.surface = v; e.surfLabel = 'SDP'; Store.put('estimations', id, e); setStatus('Surface reprise de la maquette 3D : ' + NFq.format(v) + ' m²', 'ok'); renderAll(); };
 }
 function estAllotCard(e, C) {
   const al = allotOf(e), proj = projOf(e), ok = TSP_OK() && st.projets !== null;
@@ -2026,6 +2056,7 @@ function estSide(e, C) {
       <label class="chk"><input type="checkbox" id="eNumC"${e.numCctp !== false ? ' checked' : ''}> Numéroter les lignes selon les articles du CCTP</label>
     </section>
     ${estAllotCard(e, C)}
+    ${estModCard(e)}
     ${estEntCard(e, C)}
     <section class="card" style="gap:8px"><h3>Récapitulatif</h3>
       <dl class="totals" style="max-width:none">
@@ -2095,7 +2126,7 @@ function bindEst(id, e) {
 }
 function bindEstMeta(id, e) {
   const save = () => Store.put('estimations', id, e);
-  bindEstEnt(id, e); bindEstAllot(id, e);
+  bindEstEnt(id, e); bindEstAllot(id, e); bindEstMod(id, e);
   const nc = $('#eNumC'); if (nc) nc.onchange = ev => { e.numCctp = ev.target.checked; save(); renderAll(); };
   $$('#estMeta [data-e]').forEach(el => {
     const k = el.dataset.e;
@@ -3065,6 +3096,12 @@ window.addEventListener('hashchange', async () => { openFromHash(); await openPr
   $('#docsIn').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (f) importDocsFile(f); });
   // TerraDocs modifié dans un autre onglet du même dossier
   window.addEventListener('storage', ev => { if (ev.key === 'terradocs.v1' && st.tab === 'cctp') renderAll(false); });
+  // maquette 3D modifiée dans TerraModel (autre onglet, autre cadre de TerraSuite) ou reçue d'un autre appareil
+  const modRe = async () => { if (await loadMods() && st.tab === 'est') renderAll(false); };
+  window.addEventListener('storage', ev => { if (ev.key === 'terramodel-maquettes') modRe(); });
+  if (typeof TSLink !== 'undefined') TSLink.onRemote(modRe);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) modRe(); });
+  modRe();
   renderAll();
   if (typeof TSUndo !== 'undefined') {
     TSUndo.init(async items => { for (const { s, id, value } of items) { if (value == null) await Store.del(s, id); else Store.put(s, id, fixUnits(s, value), 0); } st.artCache = null; st.obsCache = null; st.tokCache = new Map(); renderAll(); });

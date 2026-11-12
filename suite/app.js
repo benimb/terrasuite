@@ -3,7 +3,7 @@
    plus le planning et la fiche, transversaux. Les modules existants (TerraGeo, TerraEstim, TerraPlanning, TerraChantier,
    TerraDocs, TerraContacts, TerraModel) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
    Les bibliothèques communes à tous les projets (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont à part. */
-const TS_VERSION = '0.6.13';
+const TS_VERSION = '0.6.14';
 const TSApp = (() => {
   const SVG = {
     back: '<path d="M15 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
@@ -250,7 +250,8 @@ const TSApp = (() => {
   const NFm = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 });
   function modTxt(m) {
     const s = m && m.surf; if (!s || !s.total) return '';
-    return 'Maquette 3D : ' + [s.horizontales ? NFm.format(s.horizontales) + ' m² horizontaux' : '', s.verticales ? NFm.format(s.verticales) + ' m² de façades' : '', s.volume ? NFm.format(s.volume) + ' m³' : ''].filter(Boolean).join(', ');
+    const N = Array.isArray(s.niveaux) ? s.niveaux.filter(x => x && +x.surface > 0) : [], sdp = N.reduce((a, x) => a + +x.surface, 0);
+    return 'Maquette 3D : ' + [sdp ? NFm.format(sdp) + ' m² de plancher (' + N.length + ' niveau' + (N.length > 1 ? 'x' : '') + ')' : '', s.horizontales ? NFm.format(s.horizontales) + ' m² horizontaux' : '', s.verticales ? NFm.format(s.verticales) + ' m² de façades' : '', s.volume ? NFm.format(s.volume) + ' m³' : ''].filter(Boolean).join(', ');
   }
   /* ---------- vue d'ensemble ---------- */
   async function drawOverview(p, body, curTab) {
