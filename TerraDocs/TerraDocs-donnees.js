@@ -1,8 +1,8 @@
 window.TD_DONNEES = {
  "app": "TerraDocs",
  "format": 1,
- "stamp": "base-publique-2026-11-13b",
- "label": "base publique : gammes de fabricants de tous corps d'état, carrelage (VitrA Tiles, Mosa, Villeroy & Boch), verre émaillé et laqué (Saint-Gobain, AGC), mosaïques (Bisazza, Émaux de Briare), mobilier LAGO, ArcelorMittal (cassettes, bardages, bacs), Sto, nora, Geggus, Koramic, panneaux décoratifs et acoustiques (Arpa Industriale FENIX, Resopal, Hubler, Marotte), Dekton sur ITE (Cosentino DKS), chauffage et fumisterie (Poujoulat, Atlantic, Viessmann, Finimetal)",
+ "stamp": "base-publique-2026-11-13c",
+ "label": "base publique : gammes de fabricants de tous corps d'état, carrelage (VitrA Tiles, Mosa, Villeroy & Boch), verre émaillé et laqué (Saint-Gobain, AGC), mosaïques (Bisazza, Émaux de Briare), mobilier LAGO, ArcelorMittal (cassettes, bardages, bacs), Sto, nora, Geggus, Koramic, panneaux décoratifs et acoustiques (Arpa Industriale FENIX, Resopal, Hubler, Marotte), Dekton sur ITE (Cosentino DKS), chauffage et fumisterie (Poujoulat, Atlantic, Viessmann, Finimetal), Hudevad, Estrada, Acova, Stûv, Godin, Campa, Rothelec, Chappée, elm.leblanc, Sofath, Butagaz, Acome, Roth",
  "lots": [
   {
    "id": "L00",
@@ -173,7 +173,9 @@ window.TD_DONNEES = {
     "Diffusion d'air",
     "Chaudières et production de chaleur",
     "Radiateurs et sèche-serviettes",
-    "Conduits de fumée et cheminées"
+    "Conduits de fumée et cheminées",
+    "Poêles, inserts et foyers",
+    "Gaz propane et citernes"
    ]
   },
   {
@@ -25579,6 +25581,549 @@ window.TD_DONNEES = {
    "verifie": "",
    "cree": "2026-11-13",
    "maj": "2026-11-13"
+  },
+  {
+   "id": "hudevad-p5",
+   "lot": "L15",
+   "nom": "Radiateurs design à eau chaude Hudevad P5, P5K, P5V",
+   "fabricant": "Hudevad",
+   "reference": "P5, P5K, P5V, P5KV",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "radiateur",
+    "eau chaude",
+    "design",
+    "horizontal",
+    "vertical"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.hudevad.com",
+     "titre": "Hudevad"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/gamme-de-radiateurs-a-eau-chaude-p69109498.html",
+     "titre": "Fiche P5 / P5K (Batiproduits)"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/gamme-de-radiateurs-a-eau-chaude-p69109503.html",
+     "titre": "Fiche P5V / P5KV vertical (Batiproduits)"
+    }
+   ],
+   "sous": "Radiateurs et sèche-serviettes",
+   "perf": "Jusqu'à 95 °C, 10 bars ; tuyauterie dissimulée en face arrière (UR-Flex)",
+   "projets": "",
+   "notes": "Distribué en France par Plomb'Art.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "hudevad-plan",
+   "lot": "L15",
+   "nom": "Radiateurs à eau chaude Hudevad Plan, P200 plinthe, Consilio, Fionia",
+   "fabricant": "Hudevad",
+   "reference": "Plan, P200, Consilio, Fionia",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "radiateur",
+    "eau chaude",
+    "plinthe",
+    "banc"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.hudevad.com",
+     "titre": "Hudevad"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/radiateur-simple-ou-double-a-eau-chaude-p69109508.html",
+     "titre": "Fiche Hudevad Plan"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/radiateur-plinthe-a-simple-ou-double-epaisseur-p69109473.html",
+     "titre": "Fiche P200 plinthe"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/radiateur-et-meuble-tout-en-un-p69109448.html",
+     "titre": "Fiche Consilio (radiateur meuble)"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/radiateur-mural-ou-de-sol-a-eau-chaude-p69109488.html",
+     "titre": "Fiche Fionia"
+    }
+   ],
+   "sous": "Radiateurs et sèche-serviettes",
+   "perf": "Plan : jusqu'à 95 °C, 10 bars, 455 à 3 018 W/m ; P200 : 93 °C, 13 bars ; Consilio : H 426 mm, P 228 mm, 1 130 W/m",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "estrada-radiateurs",
+   "lot": "L15",
+   "nom": "Radiateurs d'exception Estrada (Sevilla, sélection électrique et eau chaude)",
+   "fabricant": "Estrada",
+   "reference": "Sevilla",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "radiateur",
+    "électrique",
+    "inertie",
+    "design",
+    "showroom"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.estrada.fr",
+     "titre": "Estrada"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.estrada.fr/categorie-produit/radiateur-exception/",
+     "titre": "Radiateurs d'exception"
+    }
+   ],
+   "sous": "Radiateurs et sèche-serviettes",
+   "perf": "Sevilla : radiateur à inertie rayonnant, programmable et connecté",
+   "projets": "",
+   "notes": "Distributeur et concepteur parisien (showrooms Paris, dont 97 bd Raspail) : revend aussi Acova, Campa, Cinier, Noirot, Thermor.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "acova-seche-serviettes",
+   "lot": "L15",
+   "nom": "Sèche-serviettes Acova (Kapla, Cala, Atoll, Régate, Altaï Spa, Clipper)",
+   "fabricant": "Acova",
+   "reference": "Kapla, Cala, Atoll, Régate",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "sèche-serviettes",
+    "électrique",
+    "eau chaude",
+    "mixte",
+    "salle de bains"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.acova.fr",
+     "titre": "Acova"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.acova.fr/sites/default/files/2025-07/acova_kapla_bd-pap_13062025.pdf",
+     "titre": "Brochure Kapla (2025)"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/seche-serviette-electriruqe-a-tubes-plats-graph-p489274736.html",
+     "titre": "Fiche Kapla"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/seche-serviettes-vertical-a-eau-chaude-p69065173.html",
+     "titre": "Fiche Atoll"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/seche-serviettes-electriques-ou-a-eau-chaude-p69065058.html",
+     "titre": "Fiche Cala"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/seche-serviettes-pour-chauffage-central-electri-p69064998.html",
+     "titre": "Fiche Clipper"
+    }
+   ],
+   "sous": "Radiateurs et sèche-serviettes",
+   "perf": "Kapla : électrique, chauffage central ou mixte, 500 à 900 W, 46 teintes ; Atoll : 283 à 1 154 W",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "stuv-poeles-bois",
+   "lot": "L15",
+   "nom": "Poêles à bois Stûv 6, 16, 30",
+   "fabricant": "Stûv",
+   "reference": "Stûv 6-H, 16-D4, 30",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "poêle",
+    "bois",
+    "Ecodesign",
+    "foyer"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.stuv.com",
+     "titre": "Stûv"
+    },
+    {
+     "type": "ft",
+     "url": "https://stuv.com/sites/default/files/fiches_6h_btob_260302_fr.pdf",
+     "titre": "Fiches techniques Stûv 6-H (03/2026)"
+    },
+    {
+     "type": "ft",
+     "url": "https://stuv.com/sites/default/files/fiches_16d4_btob_260303_fr.pdf",
+     "titre": "Fiches techniques Stûv 16-D4 (03/2026)"
+    }
+   ],
+   "sous": "Poêles, inserts et foyers",
+   "perf": "6-H : acier et fonte, bûches 33 cm, Ecodesign 2022 ; 16-D4 : bûches 50 cm, 226 kg",
+   "projets": "",
+   "notes": "Fabricant belge (Bois-de-Villers).",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "stuv-poeles-granules",
+   "lot": "L15",
+   "nom": "Poêles à granulés Stûv P-10 et P-20",
+   "fabricant": "Stûv",
+   "reference": "P-10, P-20s",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "poêle",
+    "granulés",
+    "pellets"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.stuv.com",
+     "titre": "Stûv"
+    },
+    {
+     "type": "ft",
+     "url": "https://stuv.com/sites/default/files/fiches_p-10_btob_260423_fr.pdf",
+     "titre": "Fiches techniques P-10 (04/2026)"
+    },
+    {
+     "type": "cat",
+     "url": "https://stuv.com/sites/default/files/stuv_p20_brochure_10_fr_web.pdf",
+     "titre": "Brochure P-20s"
+    }
+   ],
+   "sous": "Poêles, inserts et foyers",
+   "perf": "P-20s : émissions de particules inférieures aux exigences Ecodesign 2022 (selon fabricant)",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "godin-poeles",
+   "lot": "L15",
+   "nom": "Poêles, inserts et cuisinières à bois en fonte Godin",
+   "fabricant": "Godin",
+   "reference": "Gamme bois et granulés",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "poêle",
+    "insert",
+    "fonte",
+    "bois"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.godin.fr",
+     "titre": "Godin"
+    }
+   ],
+   "sous": "Poêles, inserts et foyers",
+   "perf": "",
+   "projets": "",
+   "notes": "Lien non vérifié.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "campa-radiateurs",
+   "lot": "L15",
+   "nom": "Radiateurs électriques design Campa",
+   "fabricant": "Campa",
+   "reference": "Gamme électrique",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "radiateur",
+    "électrique",
+    "design"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.campa.fr",
+     "titre": "Campa"
+    }
+   ],
+   "sous": "Radiateurs et sèche-serviettes",
+   "perf": "",
+   "projets": "",
+   "notes": "Marque du groupe Intuis. Lien non vérifié.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "rothelec-radiateurs",
+   "lot": "L15",
+   "nom": "Radiateurs électriques à inertie Rothelec",
+   "fabricant": "Rothelec",
+   "reference": "Gamme éco-électrique",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "radiateur",
+    "électrique",
+    "inertie"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.rothelec.fr",
+     "titre": "Rothelec"
+    }
+   ],
+   "sous": "Radiateurs et sèche-serviettes",
+   "perf": "",
+   "projets": "",
+   "notes": "Régulation vendue séparément des radiateurs. Lien non vérifié.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "chappee-chaudieres",
+   "lot": "L15",
+   "nom": "Chaudières et pompes à chaleur Chappée",
+   "fabricant": "Chappée",
+   "reference": "Gamme résidentielle et collective",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "chaudière",
+    "condensation",
+    "pompe à chaleur"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.chappee.com",
+     "titre": "Chappée"
+    }
+   ],
+   "sous": "Chaudières et production de chaleur",
+   "perf": "",
+   "projets": "",
+   "notes": "Marque du groupe BDR Thermea. Lien non vérifié.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "elmleblanc-chaudieres",
+   "lot": "L15",
+   "nom": "Chaudières gaz et chauffe-bains elm.leblanc",
+   "fabricant": "elm.leblanc",
+   "reference": "Gamme gaz",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "chaudière",
+    "gaz",
+    "chauffe-bains",
+    "condensation"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.elmleblanc.fr",
+     "titre": "elm.leblanc"
+    }
+   ],
+   "sous": "Chaudières et production de chaleur",
+   "perf": "",
+   "projets": "",
+   "notes": "Marque du groupe Bosch. Lien non vérifié.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "sofath-pac",
+   "lot": "L15",
+   "nom": "Pompes à chaleur géothermiques Sofath",
+   "fabricant": "Sofath",
+   "reference": "Gamme géothermie",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "pompe à chaleur",
+    "géothermie",
+    "sol-eau"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.sofath.com",
+     "titre": "Sofath"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "",
+   "projets": "",
+   "notes": "Marque du groupe BDR Thermea. Lien non vérifié.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "butagaz-propane",
+   "lot": "L15",
+   "nom": "Gaz propane en citerne Butagaz",
+   "fabricant": "Butagaz",
+   "reference": "Propane citerne",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "gaz",
+    "propane",
+    "citerne",
+    "énergie"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.butagaz.fr",
+     "titre": "Butagaz"
+    }
+   ],
+   "sous": "Gaz propane et citernes",
+   "perf": "",
+   "projets": "",
+   "notes": "Fournisseur d'énergie, pas fabricant d'équipement. Lien non vérifié.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "acome-thermacome",
+   "lot": "L15",
+   "nom": "Plancher chauffant-rafraîchissant Thermacome (PER, Eco Thermacome, DTEK)",
+   "fabricant": "Acome",
+   "reference": "Thermacome, Eco Thermacome, DTEK",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "plancher chauffant",
+    "rafraîchissant",
+    "PER",
+    "liège"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.acome.com",
+     "titre": "Acome"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/plancher-chauffant-sur-dalle-de-liege-p68926303.html",
+     "titre": "Fiche Eco Thermacome sur dalle de liège"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.richardson.fr/files/richardson/technical_document/498/892191_t63642.pdf",
+     "titre": "Fiche DTEK Thermacome, tubes détectables (copie distributeur)"
+    }
+   ],
+   "sous": "Planchers chauffants",
+   "perf": "DTEK : tube PEXc avec fil conducteur détectable sur toute la surface",
+   "projets": "",
+   "notes": "Acome produit aussi câbles et câblage télécom du bâtiment (lot L16).",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "roth-climacomfort",
+   "lot": "L15",
+   "nom": "Planchers chauffants-rafraîchissants Roth ClimaComfort (Compact, TBS, Panel) et dalles Rothaflex",
+   "fabricant": "Roth",
+   "reference": "ClimaComfort Compact, TBS, Panel R, Rothaflex",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "plancher chauffant",
+    "rafraîchissant",
+    "rénovation",
+    "faible épaisseur"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.roth-france.fr",
+     "titre": "Roth France"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.roth-france.fr/documents/69942a4754f29.pdf",
+     "titre": "Fiche produit ClimaComfort Compact"
+    },
+    {
+     "type": "ft",
+     "url": "https://professionnels.roth-france.fr/documents/642d2b4f1b1f5.pdf",
+     "titre": "Fiche technique ClimaComfort TBS"
+    },
+    {
+     "type": "ft",
+     "url": "https://professionnels.roth-france.fr/documents/6225fc9ea8227.pdf",
+     "titre": "Fiche ClimaComfort Panel R"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.roth-france.fr/documents/62333e6fb2748.pdf",
+     "titre": "Fiche technique dalle plane PUR Rothaflex"
+    }
+   ],
+   "sous": "Planchers chauffants",
+   "perf": "Rothaflex : dalles PUR 1 200 x 1 000 mm, classement SC1a2Ch, quadrillage 10 cm",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
   }
  ],
  "societes": {
@@ -25921,6 +26466,60 @@ window.TD_DONNEES = {
    "site": "purmo.com",
    "docs": "https://www.batiproduits.com/fiche/produits/radiateur-avec-panneaux-en-acier-reggane-3010-co-p316341280.html",
    "notes": "Marque de radiateurs du groupe Purmo (fiches techniques hébergées sur purmo.com)."
+  },
+  "hudevad": {
+   "site": "hudevad.com",
+   "notes": "Radiateurs danois, distribués en France par Plomb'Art."
+  },
+  "estrada": {
+   "site": "estrada.fr",
+   "commercial": {
+    "nom": "Showroom Estrada Raspail",
+    "tel": "01 48 78 80 59"
+   },
+   "notes": "97 boulevard Raspail, 75006 Paris. Distributeur et concepteur de radiateurs."
+  },
+  "acova": {
+   "site": "acova.fr",
+   "notes": "Radiateurs et sèche-serviettes, groupe Zehnder."
+  },
+  "stuv": {
+   "site": "stuv.com",
+   "notes": "Fabricant belge de poêles et foyers, Bois-de-Villers."
+  },
+  "godin": {
+   "site": "godin.fr"
+  },
+  "campa": {
+   "site": "campa.fr"
+  },
+  "rothelec": {
+   "site": "rothelec.fr"
+  },
+  "chappee": {
+   "site": "chappee.com"
+  },
+  "elmleblanc": {
+   "site": "elmleblanc.fr"
+  },
+  "sofath": {
+   "site": "sofath.com"
+  },
+  "butagaz": {
+   "site": "butagaz.fr"
+  },
+  "acome": {
+   "site": "acome.com",
+   "notes": "Plancher chauffant Thermacome, câbles et câblage du bâtiment."
+  },
+  "roth": {
+   "site": "roth-france.fr",
+   "commercial": {
+    "nom": "Bureau d'études Roth France",
+    "tel": "01 64 12 44 44",
+    "mail": "etudes@roth-france.fr"
+   },
+   "notes": "Roth France SAS, 78 rue Ampère, ZI, CS 20090, 77465 Lagny-sur-Marne Cedex."
   }
  },
  "liensRemplaces": {
