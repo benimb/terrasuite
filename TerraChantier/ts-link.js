@@ -105,6 +105,11 @@ const TSLink = (() => {
   function seedHashes(obj) { const m = new Map(); for (const [k, v] of toList(obj)) m.set(String(k), hash(v)); return m; }
   /* application ouverte dans l'application TerraSuite (cadre) : pas de lien de retour propre */
   const embedded = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
-  if (embedded) document.documentElement.classList.add('ts-embed');
+  if (embedded) {
+    document.documentElement.classList.add('ts-embed');
+    /* dans TerraSuite, l'en-tête du projet suffit : pas de sous-titre d'application ni de sous-titre de chantier */
+    const s = document.createElement('style'); s.textContent = '.ts-embed .brand small,.ts-embed .top h1 small{display:none!important}';
+    (document.head || document.documentElement).appendChild(s);
+  }
   return { pull, push, read, onRemote, received, hash, docId, seedHashes, embedded, synced, open };
 })();

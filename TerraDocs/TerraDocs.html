@@ -428,7 +428,7 @@ function save(){
   clearTimeout(saveT); saveT = setTimeout(writeFile, 800);
 }
 async function writeFile(){
-  if(!fileHandle){ setStatus(D.produits.length ? 'Enregistré dans ce navigateur' : '', ''); return; }
+  if(!fileHandle){ setStatus(D.produits.length ? ((typeof TSLink !== 'undefined' && TSLink.embedded) ? 'Enregistré' : 'Enregistré dans ce navigateur') : '', ''); return; }
   try{
     const w = await fileHandle.createWritable(); await w.write(JSON.stringify(D,null,1)); await w.close();
     setStatus('Enregistré dans ' + fileHandle.name + ' à ' + new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}),'ok');

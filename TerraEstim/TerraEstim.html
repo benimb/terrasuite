@@ -160,7 +160,7 @@ input.bad{border-color:var(--err);box-shadow:0 0 0 1px var(--err)}
 </style>
 <div id="app">
   <header class="top">
-    <div class="brand">TerraEstim <span class="ver" title="Version bêta">v0.23.2 bêta</span><small>Base de prix et estimations</small></div>
+    <div class="brand">TerraEstim <span class="ver" title="Version bêta">v0.23.3 bêta</span><small>Base de prix et estimations</small></div>
     <nav class="tabs" role="tablist" aria-label="Vues">
       <button role="tab" data-tab="home" aria-selected="false">Accueil</button>
       <button role="tab" data-tab="lib" aria-selected="true">Bibliothèque<span class="n" id="nLib"></span></button>
@@ -378,7 +378,7 @@ function migrateLots(D) {
 }
 /* index par défaut de chaque lot (modifiable dans Indices et réglages) */
 const LOT_INDEX = Object.fromEntries(NOMENCLATURE.map(([c, , i]) => [c, i]));
-const APP_VERSION = '0.23.2';
+const APP_VERSION = '0.23.3';
 const LOTS_DEFAULT = NOMENCLATURE.map(([code, nom]) => ({ code, nom, indice: '' }));
 const SETTINGS_DEFAULT = { lots: LOTS_DEFAULT, stat: 'median', partFixe: 0, retenuesOnly: false, defIndex: 'BT01', tva: 20, aleas: 5, locNorm: true };
 
@@ -554,7 +554,7 @@ const Store = {
       if (this.kind === 'db') await this.db.collection(c).doc(id).set(obj);
       else this.saveLocal(c);
       if (st.pending.get(k) === obj) st.pending.delete(k);
-      if (!st.pending.size) setStatus(this.kind === 'db' ? 'Enregistré' : 'Enregistré dans ce navigateur', 'ok');
+      if (!st.pending.size) setStatus(this.kind === 'db' || (typeof TSLink !== 'undefined' && TSLink.embedded) ? 'Enregistré' : 'Enregistré dans ce navigateur', 'ok');
     } catch (e) {
       st.pending.delete(k);
       const why = e && e.code === 'invalid_argument' ? 'élément trop volumineux (256 Ko au plus)' : e && e.code === 'quota_exceeded' ? 'base pleine' : e && e.code === 'permission_denied' ? 'droits insuffisants' : (e && e.code) || 'erreur';
@@ -2017,7 +2017,7 @@ function renderEst() {
   const usedLots = new Set(C.lots.map(g => g.lot));
   const addLot = `<select id="estAddLot"><option value="">+ Ajouter un lot…</option>${lots().filter(l => !usedLots.has(l.code)).map(l => `<option value="${esc(l.code)}">${esc(l.code + ' ' + l.nom)}</option>`).join('')}</select>`;
   v.innerHTML = tb + `<div class="work"><div class="scroller"><table class="t"><thead><tr><th>N°</th><th>Désignation</th><th>U</th><th class="num">Quantité</th><th class="num">PU € HT</th><th class="num">Montant € HT</th><th></th></tr></thead>
-    <tbody>${rows.join('')}</tbody></table><div style="padding:12px 8px 40px">${C.allot ? '<span class="hint">Lots du marché : voir la carte « Lots du marché » à droite.</span>' : addLot}</div></div>
+    <tbody>${rows.join('')}</tbody></table><div style="padding:12px 8px 40px">${C.allot ? '' : addLot}</div></div>
     <aside class="side" id="estSide">${estSide(e, C)}</aside></div>`;
   bindEst(id, e);
 }
@@ -2051,8 +2051,8 @@ function estSide(e, C) {
         <div class="fld"><label for="eSurf">Surface (${esc(e.surfLabel || 'SDP')}) m²</label><input type="text" id="eSurf" data-e="surface" value="${e.surface ?? ''}" inputmode="decimal"></div></div>
       <div class="row2"><div class="fld"><label for="eAl">Aléas et imprévus %</label><input type="text" id="eAl" data-e="aleas" value="${e.aleas ?? ''}" inputmode="decimal"></div>
         <div class="fld"><label for="eTva">TVA %</label><input type="text" id="eTva" data-e="tva" value="${e.tva ?? ''}" inputmode="decimal"></div></div>
-      <div class="fld"><label for="eLoc">Indice de prix du lieu</label><input type="text" id="eLoc" data-e="loc" value="${e.loc !== undefined && e.loc !== null && e.loc !== '' ? String(e.loc).replace('.', ',') : ''}" placeholder="${String(estLoc({ ...e, loc: null }).k).replace('.', ',')}" inputmode="decimal">
-        <p class="hint">${(() => { const L = estLoc({ ...e, loc: null }); return L.src ? `Projet : ${String(L.k).replace('.', ',')} (${esc(L.src === 'projet' ? 'valeur saisie au projet' : L.src)}).` : 'Aucun lieu : rattachez l\'estimation à un projet dont l\'adresse est renseignée, ou saisissez l\'indice.'; })()} Appliqué aux prix de référence (1 = médiane des départements) ; les prix saisis à la ligne ne changent pas.</p></div>
+      <div class="fld"><label for="eLoc" title="Appliqué aux prix de référence (1 = médiane des départements) ; les prix saisis à la ligne ne changent pas.">Indice de prix du lieu</label><input type="text" id="eLoc" data-e="loc" value="${e.loc !== undefined && e.loc !== null && e.loc !== '' ? String(e.loc).replace('.', ',') : ''}" placeholder="${String(estLoc({ ...e, loc: null }).k).replace('.', ',')}" inputmode="decimal">
+        ${(() => { const L = estLoc({ ...e, loc: null }); return L.src ? `<p class="hint">${esc(L.src === 'projet' ? 'Valeur du projet' : L.src)}</p>` : ''; })()}</div>
       <div class="fld"><label for="eRc">Articles du CCTP</label><select id="eRc" data-e="cctp"><option value="">Bibliothèque type</option>${recueils().map(r => `<option value="${esc(r.id)}"${(e.cctp || '') === r.id ? ' selected' : ''}>CCTP ${esc(r.nom)}</option>`).join('')}</select></div>
       <label class="chk"><input type="checkbox" id="eNumC"${e.numCctp !== false ? ' checked' : ''}> Numéroter les lignes selon les articles du CCTP</label>
     </section>
@@ -3144,7 +3144,7 @@ window.addEventListener('hashchange', async () => { openFromHash(); await openPr
     try { await loadProjets(); await initProjets(); initProjetsDpgf(); h = await openProjetHash(); renderAll();
       if (TSP_OK()) TSP.onChange(async () => { if (await loadProjets()) rerender(); }); } catch (e) { console.warn('projets', e); }
     if (h) return;
-    if (Store.kind === 'local' && !Store.saveErr) setStatus([Store.lotMsg, Store.seedMsg].filter(Boolean).join(' · ') || 'Enregistrement dans ce navigateur uniquement', Store.seedMsg || Store.lotMsg ? 'ok' : ''); });
+    if (Store.kind === 'local' && !Store.saveErr && !(typeof TSLink !== 'undefined' && TSLink.embedded)) setStatus([Store.lotMsg, Store.seedMsg].filter(Boolean).join(' · ') || 'Enregistrement dans ce navigateur uniquement', Store.seedMsg || Store.lotMsg ? 'ok' : ''); });
   window.TE = { st, Store, refPrice, computeEst, newPrestation, newEstimation, parseIndexText, buildLines, artOf, lineArt, newArticle, exportCctpDocx, docxBlob, cctpBody, recueils, rcPrest, artList };
 })();
 

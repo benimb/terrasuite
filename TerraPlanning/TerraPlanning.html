@@ -216,7 +216,7 @@ textarea{width:100%;resize:vertical}
 <div id="app">
   <header class="top">
     <a class="btn" href="../terrasuite.html" style="text-decoration:none;color:inherit" id="homeLink">← TerraSuite</a>
-    <div class="brand">TerraPlanning <span class="ver" title="Version bêta">v0.15.1 bêta</span><small>Plannings de projet</small></div>
+    <div class="brand">TerraPlanning <span class="ver" title="Version bêta">v0.15.2 bêta</span><small>Plannings de projet</small></div>
     <button class="btn icon" id="btnMenu" aria-label="Menu">☰</button>
     <div class="projsel"><label for="projSel" class="lbl">Planning</label><select id="projSel"></select></div>
     <div class="topacts" style="display:flex;gap:6px;flex-wrap:wrap">
@@ -1688,7 +1688,7 @@ async function save() {
   st.saving = true; st.dirty = false;
   const P = st.P; P.rev = (P.rev || 0) + 1;
   const data = JSON.parse(JSON.stringify({ name: P.meta?.operation || P.title || 'Sans titre', updatedAt: Date.now(), rev: P.rev, project: P }));
-  try { await Store.put(st.curId, data); setStatus(Store.kind === 'db' ? 'Enregistré' : 'Enregistré dans ce navigateur', 'ok'); }
+  try { await Store.put(st.curId, data); setStatus(Store.kind === 'db' || (typeof TSLink !== 'undefined' && TSLink.embedded) ? 'Enregistré' : 'Enregistré dans ce navigateur', 'ok'); }
   catch (e) {
     st.dirty = true;
     const why = e && e.code === 'quota_exceeded' ? 'espace de stockage plein' : e && e.code === 'invalid_argument' ? 'planning trop volumineux' : 'connexion indisponible';
@@ -3628,7 +3628,7 @@ if (location.protocol !== 'file:') { const h = document.getElementById('homeLink
 bind();
 renderAll();
 Store.start(onList).then(async () => {
-  if (Store.kind === 'local') setStatus('Enregistrement dans ce navigateur uniquement');
+  if (Store.kind === 'local' && !(typeof TSLink !== 'undefined' && TSLink.embedded)) setStatus('Enregistrement dans ce navigateur uniquement');
   try { await Store.linkPull(); Store.linkPush(); if (typeof TSLink !== 'undefined') TSLink.onRemote(async () => { if (await Store.linkPull() && st.curId && !st.undo.length) openProject(st.curId, true); }); } catch (e) { console.warn('synchronisation', e); }
   try { await loadProjets(); await openProjetHash(); renderAll(); if (TSP_OK()) TSP.onChange(async () => { if (await loadProjets() && !['edit', 'view'].includes(st.tab)) renderAll(); }); } catch (e) { console.warn('projets', e); }
 });
