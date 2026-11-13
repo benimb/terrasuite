@@ -1,6 +1,6 @@
 /* TerraContacts : carnet de contacts de la suite (maîtres d'ouvrage, bureaux d'études, entreprises…) et fiche de l'agence.
    Les contacts servent aux chantiers (intervenants, destinataires des photos et des CR) et, par le format d'échange, aux autres applications. */
-const APP_VERSION = '0.9';
+const APP_VERSION = '0.9.1';
 const S = { _fresh: true }; // utilisé par la synchronisation
 let F = { role: '', q: '' };
 
