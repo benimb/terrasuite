@@ -1,23 +1,52 @@
 /* TerraContacts : carnet de contacts de la suite (maîtres d'ouvrage, bureaux d'études, entreprises…) et fiche de l'agence.
    Les contacts servent aux chantiers (intervenants, destinataires des photos et des CR) et, par le format d'échange, aux autres applications. */
-const APP_VERSION = '0.8';
+const APP_VERSION = '0.9';
 const S = { _fresh: true }; // utilisé par la synchronisation
 let F = { role: '', q: '' };
 
 const topBar = () => `<div class="top">${suiteBtn()}<h1><span class="brand">Terra<b>Contacts</b></span> <span class="ver">v${APP_VERSION} bêta</span><small>Projets, contacts et agence</small></h1><span class="sync" id="syncSt" title="Synchronisation"><i></i></span><button class="icon-btn" id="bSet" aria-label="Réglages">${ICON.gear}</button></div>`;
-const tabs = cur => `<nav class="tabs">${[['projets', 'Projets'], ['', 'Contacts'], ['agence', 'Mon agence'], ['compte', 'Mon compte']].map(([k, t]) => `<a href="#/${k}" class="${k === cur ? 'on' : ''}">${t}</a>`).join('')}<a href="./">TerraChantier →</a></nav>`;
+/* accueil : page d'entrée quand TerraContacts est ouvert seul ; dans TerraSuite (cadre), la bibliothèque « Contacts » ouvre directement le carnet */
+const EMBED = window.self !== window.top;
+const tabs = cur => `<nav class="tabs">${[...(EMBED ? [] : [['accueil', 'Accueil']]), ['projets', 'Projets'], ['contacts', 'Contacts'], ['agence', 'Mon agence'], ['compte', 'Mon compte']].map(([k, t]) => `<a href="#/${k}" class="${k === cur ? 'on' : ''}">${t}</a>`).join('')}<a href="./">TerraChantier →</a></nav>`;
 
 async function render() {
-  const r = location.hash.replace(/^#\/?/, '').split('/')[0], app = $('#app');
+  let r = location.hash.replace(/^#\/?/, '').split('/')[0]; const app = $('#app');
+  if (!r) r = EMBED ? 'contacts' : 'accueil';
   await DB.silent(() => Carnet.load());
   app.innerHTML = topBar() + tabs(r) + '<main id="main"></main>';
   $('#bSet').onclick = settingsSheet; if (typeof TSUndo !== 'undefined') TSUndo.buttons($('.top'), { cls: 'icon-btn', before: $('#syncSt') }); Sync.paint();
   const seg = location.hash.replace(/^#\/?/, '').split('/');
   if (r === 'projets') return seg[1] ? Projets.fiche($('#main'), seg[1]) : Projets.list($('#main'));
   if (r === 'compte') return viewCompte($('#main'));
+  if (r === 'accueil') return viewAccueil($('#main'));
   (r === 'agence' ? viewAgence : viewList)($('#main'));
 }
 window.addEventListener('hashchange', render);
+
+/* ---------- accueil : grandes actions et projets récents ---------- */
+async function viewAccueil(m) {
+  m.style.padding = '0'; m.innerHTML = '<div id="oriC"></div>';
+  const all = await TSP.all(), act = all.filter(p => p.statut !== 'archive' && p.statut !== 'termine').sort((a, b) => String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')));
+  const nC = Carnet.sorted().length, ag = Carnet.agence();
+  const newContact = async () => { if (await Carnet.edit(null, { role: 'ENT' })) { location.hash = '#/contacts'; render(); } };
+  const imp = () => { location.hash = '#/contacts'; setTimeout(() => { const b = $('#bImp'); if (b) b.click(); }, 300); };
+  Ori.render($('#oriC'), {
+    titre: 'TerraContacts',
+    lead: 'Projets de l\'agence, carnet des intervenants (maîtres d\'ouvrage, bureaux d\'études, entreprises) et fiche de votre agence, communs à toute la suite.',
+    reprendre: act[0] ? { t: TSP.label(act[0]), s: 'Dernier projet modifié', go: () => { location.hash = '#/projets/' + act[0].id; } } : null,
+    actions: [
+      { ic: 'plus', pri: true, t: 'Nouveau projet', s: 'Créé une fois ici, puis retrouvé dans chaque application.', go: async () => { const p = await TSP.create({ nom: '' }); if (typeof Sync !== 'undefined') Sync.soon(); location.hash = '#/projets/' + p.id; } },
+      { ic: 'plus', t: 'Nouveau contact', s: 'Maître d\'ouvrage, bureau d\'études, entreprise…', go: newContact },
+      { ic: 'grid', t: 'Carnet de contacts', s: (nC ? nC + ' fiche' + (nC > 1 ? 's' : '') : 'Aucune fiche') + ' : rechercher, filtrer par rôle, exporter.', go: () => { location.hash = '#/contacts'; } },
+      { ic: 'doc', t: ag ? 'Mon agence' : 'Renseigner mon agence', s: ag ? ag.nom : 'Nom, logo, architectes : en tête des CR et des PV.', go: () => { location.hash = '#/agence'; } },
+      { ic: 'up', t: 'Importer des contacts', s: 'Excel, CSV, vCard ou JSON TerraSuite.', go: imp },
+      { ic: 'link', t: 'Mon compte', s: 'Compte TerraSuite, synchronisation.', go: () => { location.hash = '#/compte'; } }
+    ],
+    liste: { titre: 'Projets en cours', vide: 'Aucun projet : créez le premier.', recherche: true, items: act.map(p => ({ c: p.code || '', t: p.nom || '(sans nom)', s: [p.ville, p.phase].filter(Boolean).join(' · '), go: () => { location.hash = '#/projets/' + p.id; } })) },
+    etapes: ['<b>Renseignez votre agence</b> une fois : elle signe les comptes-rendus et les documents.', '<b>Créez un projet</b> : il apparaît dans TerraEstim, TerraPlanning, TerraGeo et TerraChantier.', '<b>Ajoutez les intervenants</b> au carnet, ou reprenez ceux de vos chantiers.'],
+    pied: 'Données enregistrées dans ce navigateur et synchronisées entre vos appareils (Réglages).'
+  });
+}
 
 /* ---------- liste ---------- */
 async function viewList(m) {

@@ -55,7 +55,7 @@ html.ts-embed .brand small{display:none}
 }
 .status{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:320px}
 .status.err{color:var(--err)} .status.ok{color:var(--ok)}
-.work{flex:1;min-height:0;display:flex}
+.work{flex:1;min-height:0;display:flex;position:relative}
 .tools{display:flex;flex-direction:column;gap:3px;padding:8px 6px;background:var(--panel);border-right:1px solid var(--line);overflow:auto}
 .tools .sep{height:1px;background:var(--line);margin:4px 2px}
 .tb{width:40px;height:40px;border:1px solid transparent;border-radius:7px;background:transparent;cursor:pointer;display:grid;place-items:center;color:var(--ink);position:relative}
@@ -141,6 +141,36 @@ html.ts-embed .brand small{display:none}
   .work{flex-direction:column-reverse} .tools{flex-direction:row;border-right:0;border-top:1px solid var(--line);padding:4px 6px} .tools .sep{width:1px;height:auto;margin:2px 4px}
   .tb kbd{display:none} .status{max-width:100%} .brand small{display:none} #vcb{width:120px}
 }
+
+/* 0.8 : menus déroulants, outils légendés, autres outils dans « Plus », navigation dans un pavé, accueil */
+.ibtn{border:1px solid var(--line);background:var(--panel);border-radius:6px;width:32px;height:30px;display:inline-grid;place-items:center;cursor:pointer;padding:0;color:var(--ink)}
+.ibtn:hover{border-color:var(--muted)} .ibtn:disabled{opacity:.4;cursor:default} .ibtn.on{background:var(--accent-soft);border-color:var(--accent)}
+.ibtn svg,.btn.ico svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.btn.ico{display:inline-flex;align-items:center;gap:6px}
+.dd{position:relative}
+.menu{position:absolute;top:calc(100% + 4px);left:0;z-index:60;min-width:240px;background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.16);padding:4px;display:flex;flex-direction:column}
+.menu.r{left:auto;right:0}
+.menu button,.menu label{display:flex;align-items:center;gap:8px;border:0;background:transparent;text-align:left;padding:7px 10px;border-radius:5px;cursor:pointer;font-size:13px;color:var(--ink);white-space:nowrap;box-shadow:none}
+.menu button:hover,.menu label:hover{background:var(--sel)}
+.menu button .k{margin-left:auto;font-family:var(--f-mono);font-size:11px;color:var(--muted);padding-left:16px}
+.menu button.on::after{content:'✓';margin-left:auto;color:var(--accent)}
+.menu hr{border:0;border-top:1px solid var(--line2);margin:4px 6px}
+.menu .mh{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:6px 10px 2px;font-weight:600}
+.menu input[type=checkbox]{accent-color:var(--accent)}
+.menu.more{left:calc(100% + 6px);top:auto;bottom:0} .menu.more svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.menu .mt kbd{margin-left:auto;font-family:var(--f-mono);font-size:11px;color:var(--muted);padding-left:16px}
+.menu .mt.on{background:var(--accent-soft)}
+.tools{overflow:visible}
+.tools .tb{width:58px;height:52px;flex-direction:column;gap:2px;display:flex;align-items:center;justify-content:center}
+.tools .tb .lb{font-size:10.5px;line-height:1.1;color:var(--muted);text-align:center}
+.tools .tb.on .lb{color:var(--ink);font-weight:600}
+.tools.nokeys kbd{display:none}
+.navpad{position:absolute;right:8px;bottom:8px;display:flex;flex-direction:column;gap:4px;z-index:2}
+.navpad .ibtn{width:36px;height:36px;box-shadow:0 1px 3px rgba(0,0,0,.15)} .navpad .ibtn svg{width:20px;height:20px}
+.info{margin-right:56px}
+#home{position:absolute;inset:0;z-index:40;background:var(--bg);overflow:auto}
+#projName{font-weight:600;font-size:13px;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:760px){ .tools .tb{width:44px;height:44px} .tools .tb .lb{display:none} .menu.more{left:auto;right:0;bottom:calc(100% + 6px)} .tools{overflow-x:auto} .btn.ico .lg{display:none} #projName{display:none} }
 </style>
 </head>
 <body>
@@ -148,52 +178,57 @@ html.ts-embed .brand small{display:none}
   <header class="top">
     <button class="btn" id="bMenus" hidden title="Afficher les menus de TerraSuite" aria-label="Afficher les menus de TerraSuite">☰</button>
     <a class="btn" href="../terrasuite.html" id="homeLink">← TerraSuite</a>
-    <div class="brand">TerraModel <span class="ver" id="ver"></span><small>Maquette 3D, pousser/tirer</small></div>
-    <select class="btn" id="proj" hidden aria-label="Projet de la maquette" title="Projet de la maquette"></select>
-    <div class="grp" id="gFile">
-      <button class="btn" id="bNew" title="Nouvelle maquette">Nouveau</button>
-      <button class="btn" id="bOpen" title="Ouvrir une maquette (.json)">Ouvrir</button>
-      <button class="btn" id="bImp" title="Importer un plan DXF (tracé 2D par calques) ou un modèle 3D OBJ, DAE (SketchUp), glTF">Importer</button>
-      <button class="btn" id="bSave" title="Enregistrer la maquette (.json)">Enregistrer</button>
-      <button class="btn" id="bObj" title="Exporter en OBJ (Blender, SketchUp, Twinmotion…)">Export OBJ</button>
-      <button class="btn" id="bDxf" title="Plan, coupe ou élévation en DXF 2D (vue parallèle) : arêtes vues, traits de coupe, cotations">Export DXF</button>
+    <div class="brand">TerraModel <span class="ver" id="ver"></span><small>Maquette 3D</small></div>
+    <button class="btn ico" id="bHome" title="Accueil de TerraModel : maquettes et projets"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg><span class="lg">Accueil</span></button>
+    <span id="projName" title="Maquette ouverte"></span>
+    <div class="dd" id="gFile">
+      <button class="btn" id="bFile" aria-haspopup="true">Fichier ▾</button>
+      <div class="menu" id="mFile" hidden>
+        <button id="bNew">Nouvelle maquette (vide)</button>
+        <button id="bOpen">Ouvrir un fichier…<span class="k">.json</span></button>
+        <button id="bImp">Importer…<span class="k">DXF, OBJ, DAE, glTF</span></button>
+        <button id="bSave">Enregistrer une copie<span class="k">Ctrl+S</span></button>
+        <hr>
+        <button id="bObj">Exporter en OBJ<span class="k">Blender, SketchUp…</span></button>
+        <button id="bDxf">Exporter en DXF 2D<span class="k">plan, coupe, élévation</span></button>
+        <button id="bImgM">Image de la vue (PNG)…</button>
+      </div>
     </div>
     <div class="grp">
-      <button class="btn" id="bUndo" title="Annuler (Ctrl+Z)">↶ Annuler</button>
-      <button class="btn" id="bRedo" title="Rétablir (Ctrl+Y)">↷ Rétablir</button>
+      <button class="ibtn" id="bUndo" title="Annuler (Ctrl+Z)" aria-label="Annuler"><svg viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button>
+      <button class="ibtn" id="bRedo" title="Rétablir (Ctrl+Y)" aria-label="Rétablir"><svg viewBox="0 0 24 24"><path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg></button>
       <button class="btn" id="bPaste" hidden title="Coller (Ctrl+V) : l'objet copié suit le curseur">Coller</button><button class="btn" id="bPasteH" hidden title="Coller sur place (Ctrl+Maj+V) : aux mêmes coordonnées">Sur place</button>
     </div>
     <span class="grow"></span>
     <span class="status" id="status" role="status"></span>
+    <div class="dd">
+      <button class="btn" id="bOpt" aria-haspopup="true" title="Affichage, ombres, raccourcis, projet">Options ▾</button>
+      <div class="menu r" id="mOpt" hidden>
+        <button id="bDispM">Affichage (balises, objets masqués, guides)…</button>
+        <button id="bSunM">Ombres du soleil…</button>
+        <hr>
+        <label><input type="checkbox" id="oKeys"> Raccourcis clavier sur les outils</label>
+        <div class="mh">Projet</div>
+        <select class="btn" id="proj" hidden aria-label="Projet de la maquette" title="Projet de la maquette" style="margin:2px 8px 6px"></select>
+      </div>
+    </div>
     <button class="btn" id="bHelp" aria-expanded="false">Aide</button>
   </header>
   <div class="work">
-    <nav class="tools" aria-label="Outils">
-      <button class="tb" data-tool="select" title="Sélection (Espace)"><svg viewBox="0 0 24 24"><path d="M6 3l12 9-5.5 1.2L15 19l-2.4 1.1-2.6-5.8L6 18z"/></svg><kbd>␣</kbd></button>
-      <button class="tb" data-tool="erase" title="Gomme (E) : clic sur une arête ou une face"><svg viewBox="0 0 24 24"><path d="M4 16l9-9 7 7-5 5H8z"/><path d="M9 11l7 7"/><path d="M8 19h12"/></svg><kbd>E</kbd></button>
-      <button class="tb" data-tool="paint" title="Peindre (B) : matériaux et couleurs ; Alt : pipette"><svg viewBox="0 0 24 24"><path d="M4 11l7-7 8 8-7 7z"/><path d="M4 11c-1 2-1 4 1 4s3-3 3-3"/><path d="M19 15s2 2.5 2 3.5a2 2 0 0 1-4 0c0-1 2-3.5 2-3.5z" fill="currentColor"/></svg><kbd>B</kbd></button>
+    <nav class="tools nokeys" aria-label="Outils">
+      <button class="tb" data-tool="select" title="Sélection (Espace)"><svg viewBox="0 0 24 24"><path d="M6 3l12 9-5.5 1.2L15 19l-2.4 1.1-2.6-5.8L6 18z"/></svg><span class="lb">Sélection</span><kbd>␣</kbd></button>
       <div class="sep"></div>
-      <button class="tb" data-tool="line" title="Ligne (L)"><svg viewBox="0 0 24 24"><path d="M5 19L19 5"/><circle cx="5" cy="19" r="1.6"/><circle cx="19" cy="5" r="1.6"/></svg><kbd>L</kbd></button>
-      <button class="tb" data-tool="rect" title="Rectangle (R)"><svg viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12"/></svg><kbd>R</kbd></button>
-      <button class="tb" data-tool="circle" title="Cercle (C)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 12h8"/></svg><kbd>C</kbd></button>
-      <button class="tb" data-tool="arc" title="Arc (A) : début, fin, flèche"><svg viewBox="0 0 24 24"><path d="M4 18a8 8 0 0 1 16 0"/><circle cx="4" cy="18" r="1.6"/><circle cx="20" cy="18" r="1.6"/></svg><kbd>A</kbd></button>
-      <button class="tb" data-tool="poly" title="Polygone (G)"><svg viewBox="0 0 24 24"><path d="M12 3.5l7.4 4.25v8.5L12 20.5l-7.4-4.25v-8.5z"/></svg><kbd>G</kbd></button>
+      <button class="tb" data-tool="rect" title="Rectangle (R)"><svg viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12"/></svg><span class="lb">Rectangle</span><kbd>R</kbd></button>
+      <button class="tb" data-tool="line" title="Ligne (L)"><svg viewBox="0 0 24 24"><path d="M5 19L19 5"/><circle cx="5" cy="19" r="1.6"/><circle cx="19" cy="5" r="1.6"/></svg><span class="lb">Ligne</span><kbd>L</kbd></button>
+      <button class="tb" data-tool="circle" title="Cercle (C)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 12h8"/></svg><span class="lb">Cercle</span><kbd>C</kbd></button>
       <div class="sep"></div>
-      <button class="tb" data-tool="push" title="Pousser/tirer (P)"><svg viewBox="0 0 24 24"><path d="M4 15l8-4 8 4-8 4z"/><path d="M12 11V3"/><path d="M9 6l3-3 3 3"/></svg><kbd>P</kbd></button>
-      <button class="tb" data-tool="offset" title="Décalage (F) : clic sur une face"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16"/><rect x="7.5" y="8.5" width="9" height="7" stroke-dasharray="2 1.6"/></svg><kbd>F</kbd></button>
-      <button class="tb" data-tool="rotate" title="Rotation (Q) : centre, départ, angle"><svg viewBox="0 0 24 24"><path d="M19 12a7 7 0 1 1-2.1-5"/><path d="M17.5 2.5l-.6 4.6-4.5-1"/><circle cx="12" cy="12" r="1.6"/></svg><kbd>Q</kbd></button>
-      <button class="tb" data-tool="scale" title="Échelle (S) : point fixe, référence, facteur ; négatif : symétrie"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="10" height="10"/><path d="M8 3h13v13" stroke-dasharray="2 1.6"/><path d="M13 11l6-6M15 5h4v4"/></svg><kbd>S</kbd></button>
-      <button class="tb" data-tool="follow" title="Suivez-moi (U) : sélectionnez le chemin, puis cliquez le profil"><svg viewBox="0 0 24 24"><path d="M4 20V9a5 5 0 0 1 5-5h11"/><path d="M2 20h5v-4H2zM17 2v5h4V2z" fill="currentColor" fill-opacity=".25"/></svg><kbd>U</kbd></button>
-      <button class="tb" data-tool="move" title="Déplacer (M) ; Ctrl : copier, puis x5 ou /5 pour un réseau"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3"/><circle cx="12" cy="12" r="2.2"/></svg><kbd>M</kbd></button>
+      <button class="tb" data-tool="push" title="Pousser/tirer (P)"><svg viewBox="0 0 24 24"><path d="M4 15l8-4 8 4-8 4z"/><path d="M12 11V3"/><path d="M9 6l3-3 3 3"/></svg><span class="lb">Pousser</span><kbd>P</kbd></button>
+      <button class="tb" data-tool="move" title="Déplacer (M) ; Ctrl : copier, puis x5 ou /5 pour un réseau"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3"/><circle cx="12" cy="12" r="2.2"/></svg><span class="lb">Déplacer</span><kbd>M</kbd></button>
       <div class="sep"></div>
-      <button class="tb" data-tool="tape" title="Mètre et lignes de construction (T)"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="13" height="10" rx="2"/><circle cx="9.5" cy="13" r="2.5"/><path d="M16 15h5v3h-5M18 15v1.5M20 15v1.5"/></svg><kbd>T</kbd></button>
-      <button class="tb" data-tool="dim" title="Cotation (D)"><svg viewBox="0 0 24 24"><path d="M4 6v12M20 6v12M4 12h16M7 9.5L4 12l3 2.5M17 9.5l3 2.5-3 2.5"/></svg><kbd>D</kbd></button>
-      <button class="tb" data-tool="text" title="Texte, étiquette d'aire (X)"><svg viewBox="0 0 24 24"><path d="M5 6h14M12 6v13M9 19h6"/></svg><kbd>X</kbd></button>
-      <button class="tb" data-tool="section" title="Plan de coupe : clic sur une face"><svg viewBox="0 0 24 24"><path d="M4 8l8-4 8 4v8l-8 4-8-4z"/><path d="M2 13l10-5 10 5" stroke="#D02020"/></svg></button>
+      <button class="tb" data-tool="erase" title="Gomme (E) : clic sur une arête ou une face"><svg viewBox="0 0 24 24"><path d="M4 16l9-9 7 7-5 5H8z"/><path d="M9 11l7 7"/><path d="M8 19h12"/></svg><span class="lb">Gomme</span><kbd>E</kbd></button>
+      <button class="tb" data-tool="paint" title="Peindre (B) : matériaux et couleurs ; Alt : pipette"><svg viewBox="0 0 24 24"><path d="M4 11l7-7 8 8-7 7z"/><path d="M4 11c-1 2-1 4 1 4s3-3 3-3"/><path d="M19 15s2 2.5 2 3.5a2 2 0 0 1-4 0c0-1 2-3.5 2-3.5z" fill="currentColor"/></svg><span class="lb">Peindre</span><kbd>B</kbd></button>
       <div class="sep"></div>
-      <button class="tb" data-tool="orbit" title="Orbite (O) ; aussi bouton du milieu de la souris"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="4.5"/><path d="M12 3v18"/><path d="M18 5.5l2.2 2.4-3 .9"/></svg><kbd>O</kbd></button>
-      <button class="tb" data-tool="pan" title="Panoramique (H) ; aussi Maj + bouton du milieu, ou clic droit"><svg viewBox="0 0 24 24"><path d="M8 13V6.5a1.5 1.5 0 0 1 3 0V12M11 11V4.5a1.5 1.5 0 0 1 3 0V11M14 11V5.5a1.5 1.5 0 0 1 3 0V13M17 10.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1.5a6 6 0 0 1-4.6-2.2L4.5 14.6a1.5 1.5 0 0 1 2.3-1.9L8 14"/></svg><kbd>H</kbd></button>
-      <button class="tb" id="tZoomExt" title="Zoom étendu (Maj+Z)"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><rect x="9" y="9" width="6" height="6"/></svg></button>
+      <div class="dd" id="ddMore"><button class="tb" id="bMore" title="Autres outils : arc, polygone, décalage, rotation, échelle, suivez-moi, mètre, cotation, texte, coupe" aria-haspopup="true"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg><span class="lb">Plus</span></button><div class="menu more" id="mMore" hidden><div class="mh">Tracer</div><button class="mt" data-tool="arc" title="Arc (A) : début, fin, flèche"><svg viewBox="0 0 24 24"><path d="M4 18a8 8 0 0 1 16 0"/><circle cx="4" cy="18" r="1.6"/><circle cx="20" cy="18" r="1.6"/></svg><span>Arc</span><kbd>A</kbd></button><button class="mt" data-tool="poly" title="Polygone (G)"><svg viewBox="0 0 24 24"><path d="M12 3.5l7.4 4.25v8.5L12 20.5l-7.4-4.25v-8.5z"/></svg><span>Polygone</span><kbd>G</kbd></button><div class="mh">Modifier</div><button class="mt" data-tool="offset" title="Décalage (F) : clic sur une face"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16"/><rect x="7.5" y="8.5" width="9" height="7" stroke-dasharray="2 1.6"/></svg><span>Décalage</span><kbd>F</kbd></button><button class="mt" data-tool="rotate" title="Rotation (Q) : centre, départ, angle"><svg viewBox="0 0 24 24"><path d="M19 12a7 7 0 1 1-2.1-5"/><path d="M17.5 2.5l-.6 4.6-4.5-1"/><circle cx="12" cy="12" r="1.6"/></svg><span>Rotation</span><kbd>Q</kbd></button><button class="mt" data-tool="scale" title="Échelle (S) : point fixe, référence, facteur ; négatif : symétrie"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="10" height="10"/><path d="M8 3h13v13" stroke-dasharray="2 1.6"/><path d="M13 11l6-6M15 5h4v4"/></svg><span>Échelle</span><kbd>S</kbd></button><button class="mt" data-tool="follow" title="Suivez-moi (U) : sélectionnez le chemin, puis cliquez le profil"><svg viewBox="0 0 24 24"><path d="M4 20V9a5 5 0 0 1 5-5h11"/><path d="M2 20h5v-4H2zM17 2v5h4V2z" fill="currentColor" fill-opacity=".25"/></svg><span>Suivez-moi</span><kbd>U</kbd></button><div class="mh">Mesurer, annoter</div><button class="mt" data-tool="tape" title="Mètre et lignes de construction (T)"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="13" height="10" rx="2"/><circle cx="9.5" cy="13" r="2.5"/><path d="M16 15h5v3h-5M18 15v1.5M20 15v1.5"/></svg><span>Mètre</span><kbd>T</kbd></button><button class="mt" data-tool="dim" title="Cotation (D)"><svg viewBox="0 0 24 24"><path d="M4 6v12M20 6v12M4 12h16M7 9.5L4 12l3 2.5M17 9.5l3 2.5-3 2.5"/></svg><span>Cotation</span><kbd>D</kbd></button><button class="mt" data-tool="text" title="Texte, étiquette d'aire (X)"><svg viewBox="0 0 24 24"><path d="M5 6h14M12 6v13M9 19h6"/></svg><span>Texte</span><kbd>X</kbd></button><button class="mt" data-tool="section" title="Plan de coupe : clic sur une face"><svg viewBox="0 0 24 24"><path d="M4 8l8-4 8 4v8l-8 4-8-4z"/><path d="M2 13l10-5 10 5" stroke="#D02020"/></svg><span>Coupe</span></button></div></div>
     </nav>
     <div class="view" id="view">
       <canvas id="cv" tabindex="0" aria-label="Vue 3D de la maquette"></canvas>
@@ -205,14 +240,24 @@ html.ts-embed .brand small{display:none}
           <optgroup label="Vues 3D"><option value="iso">Perspective</option><option value="axo">Axonométrie</option></optgroup>
           <optgroup label="Géométraux, sans perspective"><option value="top">Plan (vue de dessus)</option><option value="front">Élévation sud</option><option value="right">Élévation est</option><option value="back">Élévation nord</option><option value="left">Élévation ouest</option><option value="bottom">Vue de dessous</option></optgroup>
         </select>
-        <button class="btn" id="bProj" title="Perspective ou vue parallèle (projection orthogonale)"><span class="lg">Perspective</span><span class="sh">Persp.</span></button>
-        <button class="btn" id="bImg" title="Enregistrer la vue actuelle en image (PNG)"><svg class="ic" viewBox="0 0 16 16"><path d="M2 4.5h2.5l1.2-1.8h4.6l1.2 1.8H14v8.3H2z"/><circle cx="8" cy="8.5" r="2.4"/></svg><span class="lg">Image</span></button>
-        <button class="btn" id="bCut" title="Activer ou désactiver le plan de coupe"><span class="lg">Coupe</span><span class="sh">Cp</span></button>
-        <button class="btn" id="bDisp" title="Balises, objets masqués, guides"><span class="lg">Affichage</span><span class="sh">Aff.</span></button>
-        <button class="btn" id="bSun" title="Ombres du soleil au lieu du projet : date et heure"><span class="lg">Ombres</span><span class="sh">☀</span></button>
-        <button class="btn" id="bComp" title="Composants de la maquette"><span class="lg">Composants</span><span class="sh">Comp.</span></button>
-        <button class="btn" id="bNiv" title="Niveaux et surfaces de plancher"><span class="lg">Niveaux</span><span class="sh">Niv.</span></button>
+        <div class="dd">
+          <button class="btn" id="bPanels" aria-haspopup="true" title="Composants, niveaux, coupe, projection, image"><span class="lg">Outils de vue ▾</span><span class="sh">▾</span></button>
+          <div class="menu r" id="mPanels" hidden>
+            <button id="bComp">Composants de la maquette…</button>
+            <button id="bNiv">Niveaux et surfaces de plancher…</button>
+            <hr>
+            <button id="bProj">Perspective</button>
+            <button id="bCut">Plan de coupe actif</button>
+            <button id="bImg">Image de la vue (PNG)…</button>
+          </div>
+        </div>
         <button class="btn" id="bCenter" title="Centrer la vue sur la sélection, ou sur toute la maquette"><svg class="ic" viewBox="0 0 16 16"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"/><circle cx="8" cy="8" r="1.6"/></svg><span class="lg">Centrer</span></button>
+        <button id="bDisp" hidden></button><button id="bSun" hidden></button>
+      </div>
+      <div class="navpad" aria-label="Navigation">
+        <button class="ibtn" data-tool="orbit" title="Orbite (O) ; à la souris : bouton du milieu" aria-label="Orbite"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="4.5"/><path d="M12 3v18"/><path d="M18 5.5l2.2 2.4-3 .9"/></svg></button>
+        <button class="ibtn" data-tool="pan" title="Panoramique (H) ; à la souris : clic droit" aria-label="Panoramique"><svg viewBox="0 0 24 24"><path d="M8 13V6.5a1.5 1.5 0 0 1 3 0V12M11 11V4.5a1.5 1.5 0 0 1 3 0V11M14 11V5.5a1.5 1.5 0 0 1 3 0V13M17 10.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1.5a6 6 0 0 1-4.6-2.2L4.5 14.6a1.5 1.5 0 0 1 2.3-1.9L8 14"/></svg></button>
+        <button class="ibtn" id="tZoomExt" title="Tout voir (Maj+Z)" aria-label="Tout voir"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><rect x="9" y="9" width="6" height="6"/></svg></button>
       </div>
       <aside class="vpanel" id="vpanel" hidden aria-label="Vues et caméras">
         <div class="vhead"><b>Vues et caméras</b><button class="btn sm" id="vClose">Fermer ×</button></div>
@@ -226,6 +271,7 @@ html.ts-embed .brand small{display:none}
       <div class="info" id="info"></div>
       <div class="help" id="help" hidden></div>
     </div>
+    <div id="home" hidden></div>
   </div>
   <footer class="bar">
     <span class="hint" id="hint"></span>
@@ -239,6 +285,7 @@ html.ts-embed .brand small{display:none}
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
 <script src="../TerraChantier/projets-api.js"></script>
 <script src="../TerraChantier/ts-link.js"></script>
+<script src="../TerraChantier/ori.js" onerror="this.remove()"></script>
 <script>
 /* ================= TerraModel : noyau géométrique =================
    Modèle : sommets partagés M.v[id] = [x, y, z] (mètres, Z vers le haut),
@@ -750,7 +797,7 @@ function arcPts(A, B, h, n, nseg) {
 
 </script>
 <script>
-const APP_VERSION = '0.7';
+const APP_VERSION = '0.8';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const NF2 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 /* unités : la maquette est en mètres ; les longueurs s'affichent et se saisissent dans l'unité choisie (m, cm, mm) ; surfaces en m², volumes en m³ */
@@ -780,7 +827,7 @@ let saveT = null;
 function save() {
   clearTimeout(saveT); saveT = setTimeout(() => {
     const old = PR.recs[PR.rid];
-    PR.recs[PR.rid] = { id: PR.rid, projetId: PR.rid === LIBRE ? null : PR.rid, nom: PR.projet ? projLabel(PR.projet) : (old && old.nom) || 'Maquette sans projet', version: APP_VERSION, model: rootModel(), segs: ST.segs, units: UNIT, scenes: ST.scenes, surf: { ...surfaces(flatModel(rootModel())), niveaux: ST.ctx ? (old && old.surf && old.surf.niveaux) : nivAreas().map(n => ({ nom: n.nom, z: n.z, surface: Math.round(n.sdp * 100) / 100, brute: Math.round(n.brute * 100) / 100 })), emprise: ST.ctx ? (old && old.surf && old.surf.emprise) : Math.round(empriseM() * 100) / 100 }, style: ST.style, cam: camJSON() };
+    PR.recs[PR.rid] = { id: PR.rid, projetId: PR.rid === LIBRE ? null : PR.rid, nom: PR.projet ? projLabel(PR.projet) : (old && old.nom) || 'Maquette sans projet', version: APP_VERSION, maj: new Date().toISOString(), model: rootModel(), segs: ST.segs, units: UNIT, scenes: ST.scenes, surf: { ...surfaces(flatModel(rootModel())), niveaux: ST.ctx ? (old && old.surf && old.surf.niveaux) : nivAreas().map(n => ({ nom: n.nom, z: n.z, surface: Math.round(n.sdp * 100) / 100, brute: Math.round(n.brute * 100) / 100 })), emprise: ST.ctx ? (old && old.surf && old.surf.emprise) : Math.round(empriseM() * 100) / 100 }, style: ST.style, cam: camJSON() };
     storeRecs(); if (HAS_LINK) { clearTimeout(PR.pushT); PR.pushT = setTimeout(() => TSLink.push('terramodel', 'maquettes', syncView(), { projet: r => r.projetId }), 1500); }
   }, 300);
 }
@@ -808,6 +855,7 @@ async function openRid(rid) {
   projUI();
 }
 async function projUI() {
+  const pn = $('#projName'); if (pn) pn.textContent = PR.rid === LIBRE ? 'Maquette sans projet' : (PR.projet ? projLabel(PR.projet) : 'Projet');
   const sel = $('#proj'); if (!sel) return;
   if (!HAS_TSP || (HAS_LINK && TSLink.embedded)) { sel.hidden = true; return; }
   const list = await TSP.all(); sel.hidden = false;
@@ -1001,7 +1049,7 @@ function setProjection(ortho, fromView) {
     else { const d = 1 / camO.zoom / t; camP.quaternion.copy(camO.quaternion); camP.position.set(...vsub(P, vmul(f, d))); camera = camP; }
     camera.updateMatrixWorld(); ST.focus = P;
   }
-  const b = $('#bProj'); if (b) { b.classList.toggle('on', isO()); b.innerHTML = isO() ? '<span class="lg">Parallèle</span><span class="sh">Par.</span>' : '<span class="lg">Perspective</span><span class="sh">Persp.</span>'; }
+  const b = $('#bProj'); if (b) { b.classList.toggle('on', isO()); b.textContent = isO() ? 'Vue parallèle (sans perspective)' : 'Perspective'; }
   if (!fromView) viewSel(ST.view === 'iso' && isO() ? 'axo' : ST.view === 'axo' && !isO() ? 'iso' : isO() ? ST.view : '');
   hover(null); req(); save();
 }
@@ -1498,7 +1546,7 @@ TOOLS.orbit = { hint: () => 'Glisser : tourner autour du point visé · double-c
 TOOLS.pan = { hint: () => 'Glisser : déplacer la vue · double-clic : centrer la vue sur ce point', label: 'Mesures', nav: 'pan' };
 function cancelTool() { const T = TOOLS[ST.tool]; if (T && T.reset) T.reset(); marker(null); rubber(); guide(); }
 function setTool(t) {
-  if (!TOOLS[t]) return; cancelTool(); ST.tool = t; $$('.tb[data-tool]').forEach(b => b.classList.toggle('on', b.dataset.tool === t));
+  if (!TOOLS[t]) return; cancelTool(); ST.tool = t; $$('[data-tool]').forEach(b => b.classList.toggle('on', b.dataset.tool === t)); { const bm = $('#bMore'); if (bm) bm.classList.toggle('on', !!document.querySelector('#mMore [data-tool="' + t + '"]')); }
   const T = TOOLS[t]; hint(T.hint()); vcbShow(T.label || 'Mesures', '');
   const sg = t === 'circle' || t === 'poly' || t === 'arc'; $('#segsL').hidden = !sg; if (sg) { $('#segsT').textContent = t === 'poly' ? 'Côtés' : 'Segments'; $('#segs').value = ST.segs[t]; } ST.lock = null; if (ST.last && ST.last.arr) ST.last.arr = null; updateAnnot();
   cv.style.cursor = t === 'orbit' || t === 'pan' ? 'grab' : t === 'select' ? 'default' : 'crosshair'; hover(null);
@@ -1569,6 +1617,8 @@ document.addEventListener('keydown', ev => {
   // chiffres, signe, séparateurs : saisie des cotes, comme dans SketchUp (on tape sans cliquer dans la case)
   if (ST.last && ST.last.arr && /^[x*/]$/i.test(k) && !(TOOLS[ST.tool].busy && TOOLS[ST.tool].busy())) { ev.preventDefault(); vcb.value = k; vcb.focus(); return; }
   if (/^[0-9.,;\-+]$/.test(k)) { ev.preventDefault(); if (document.activeElement !== vcb) vcb.value = ''; vcb.focus(); vcb.value += k; return; }
+  if (k === 'Escape' && document.querySelector('.menu:not([hidden])')) { $$('.menu').forEach(x => x.hidden = true); return; }
+  if (k === 'Escape' && !$('#home').hidden && PR.opened) { showHome(false); return; }
   if (k === 'Escape') { const T = TOOLS[ST.tool]; if (T.busy && T.busy()) cancelTool(); else if (ST.ctx && !ST.sel.f.size && !ST.sel.e.size) exitGroup(); else clearSel(); hint(T.hint()); return; }
   if (k === 'Delete' || k === 'Backspace') { ev.preventDefault(); delSel(); return; }
   if (k === 'Z' && ev.shiftKey) { frameView(bounds()); save(); return; }
@@ -2351,19 +2401,57 @@ function emprise(fm) {
   return n * cs * cs;
 }
 
+/* ================= Accueil (TerraModel ouvert seul) ================= */
+const fmtDate = s => { const d = new Date(s); return isNaN(d) ? '' : d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }); };
+async function showHome(on) {
+  const el = $('#home'); if (!el) return;
+  if (!on || typeof Ori === 'undefined') { el.hidden = true; $('#bHome') && $('#bHome').classList.remove('on'); return; }
+  const projets = HAS_TSP ? await TSP.all() : [];
+  const recs = Object.values(PR.recs).filter(r => r && r.model && Object.keys((r.model && r.model.f) || {}).length).sort((a, b) => String(b.maj || '').localeCompare(String(a.maj || '')));
+  const go = rid => { el.hidden = true; $('#bHome').classList.remove('on'); const h = rid && rid !== LIBRE ? '#projet=' + rid : ''; if (location.hash.replace(/^#/, '') !== h.replace(/^#/, '')) { location.hash = h; if (!h) openRid(LIBRE); } else openRid(rid || LIBRE); setTimeout(() => { resize(); cv.focus(); }, 30); };
+  const surfTxt = r => r.surf ? [r.surf.horizontales ? NF2.format(r.surf.horizontales) + ' m² au sol et planchers' : '', r.surf.volume ? NF2.format(r.surf.volume) + ' m³' : ''].filter(Boolean).join(' · ') : '';
+  const last = recs[0];
+  const sans = projets.filter(p => p.statut !== 'archive' && p.statut !== 'termine' && !(PR.recs[p.id] && PR.recs[p.id].model && Object.keys(PR.recs[p.id].model.f || {}).length));
+  Ori.render(el, {
+    titre: 'TerraModel',
+    lead: 'Maquette 3D de volumes, comme SketchUp : tracer au sol, pousser/tirer, déplacer. Une maquette par projet, surfaces reprises pour l\'estimation.',
+    reprendre: last ? { t: last.nom || 'Maquette', s: [surfTxt(last), last.maj ? 'modifiée le ' + fmtDate(last.maj) : ''].filter(Boolean).join(' · '), go: () => go(last.id) } : null,
+    actions: [
+      { ic: 'plus', pri: true, t: 'Nouvelle maquette', s: 'Maquette sans projet, sur un sol vide.', go: () => { go(LIBRE); if (Object.keys(M.f).length + Object.keys(M.l).length && confirm('La maquette sans projet contient déjà des volumes. Les effacer pour repartir de zéro ? (Ctrl+Z pour revenir)')) { doOp(m => { m.v = {}; m.f = {}; m.l = {}; }); clearSel(); } } },
+      ...(projets.length ? [{ ic: 'proj', t: 'Maquette d\'un projet', s: 'Choisir le projet dans la liste ci-dessous.', go: () => { const b = el.querySelector('.ori-pj button'); if (b) b.focus(); } }] : []),
+      { ic: 'open', t: 'Ouvrir un fichier', s: 'Maquette TerraModel enregistrée (.json).', go: () => { go(PR.rid); $('#fileIn').click(); } },
+      { ic: 'doc', t: 'Prise en main', s: 'Outils, raccourcis et cotes au clavier.', go: () => { go(PR.rid); const h = $('#help'); h.hidden = false; $('#bHelp').classList.add('on'); } }
+    ],
+    liste: { titre: 'Vos maquettes', vide: 'Aucune maquette : commencez par une nouvelle maquette ou un projet.', items: recs.map(r => ({ t: r.nom || (r.id === LIBRE ? 'Maquette sans projet' : 'Projet'), s: [surfTxt(r), r.maj ? fmtDate(r.maj) : ''].filter(Boolean).join(' · '), go: () => go(r.id) })) },
+    projets: projets.length ? { titre: 'Projets sans maquette', vide: 'Tous les projets en cours ont leur maquette.', items: sans.map(p => ({ c: p.code || '', t: p.nom || '', boutons: [{ t: 'Créer la maquette', go: () => go(p.id) }] })) } : null,
+    etapes: ['<b>Rectangle</b> (R) : deux clics au sol ; tapez 8;12 puis Entrée pour les cotes exactes.', '<b>Pousser</b> (P) : clic sur la face, montez, tapez la hauteur.', '<b>Déplacer</b> (M) une arête du dessus pour faire un toit ; <b>Ligne</b> (L) pour diviser une face.', 'Navigation : bouton du milieu pour tourner, clic droit pour se déplacer, molette pour zoomer ; sur tablette, deux doigts.']
+  });
+  el.hidden = false; $('#bHome') && $('#bHome').classList.add('on');
+}
+
 /* ================= Démarrage ================= */
 (function init() {
   $('#ver').textContent = 'v' + APP_VERSION + ' bêta';
   if (location.protocol !== 'file:' || (HAS_LINK && TSLink.embedded)) { const h = $('#homeLink'); if (h) h.remove(); }
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme); applyTheme();
   resize(); loadRecs();
-  openRid(HAS_TSP ? TSP.fromHash() : ((location.hash.match(/projet=([\w-]+)/) || [])[1] || '')).then(pullRemote);
+  const rid0 = HAS_TSP ? TSP.fromHash() : ((location.hash.match(/projet=([\w-]+)/) || [])[1] || '');
+  openRid(rid0).then(pullRemote).then(() => { if (!rid0 && !(HAS_LINK && TSLink.embedded)) showHome(true); });
   if (HAS_LINK) TSLink.onRemote(pullRemote);
   if (HAS_TSP && TSP.onChange) TSP.onChange(projUI);
-  window.addEventListener('hashchange', () => openRid(HAS_TSP ? TSP.fromHash() : ((location.hash.match(/projet=([\w-]+)/) || [])[1] || '')));
+  window.addEventListener('hashchange', () => { showHome(false); openRid(HAS_TSP ? TSP.fromHash() : ((location.hash.match(/projet=([\w-]+)/) || [])[1] || '')); });
   { const sel = $('#proj'); if (sel) sel.onchange = () => { location.hash = sel.value ? '#projet=' + sel.value : ''; cv.focus(); }; }
   $('#bProj').onclick = () => setProjection(!isO());
-  $$('.tb[data-tool]').forEach(b => b.onclick = () => { setTool(b.dataset.tool); cv.focus(); });
+  $$('[data-tool]').forEach(b => b.onclick = () => { setTool(b.dataset.tool); cv.focus(); });
+  /* menus déroulants : Fichier, Options, Outils de vue, Plus (autres outils) */
+  { const menus = [['#bFile', '#mFile'], ['#bOpt', '#mOpt'], ['#bPanels', '#mPanels'], ['#bMore', '#mMore']];
+    const closeMenus = except => menus.forEach(([, m]) => { if (m !== except) $(m).hidden = true; });
+    menus.forEach(([b, m]) => { $(b).addEventListener('click', e => { e.stopPropagation(); const mm = $(m); closeMenus(m); mm.hidden = !mm.hidden; }); $(m).addEventListener('click', e => { if (e.target.closest('button')) { $(m).hidden = true; } e.stopPropagation(); }); });
+    document.addEventListener('pointerdown', e => { if (!e.target.closest('.dd')) closeMenus(); });
+    $('#bDispM').onclick = () => $('#bDisp').click(); $('#bSunM').onclick = () => $('#bSun').click(); $('#bImgM').onclick = () => $('#bImg').click();
+    const KK = 'terramodel-raccourcis', ok = $('#oKeys'); try { ok.checked = localStorage.getItem(KK) === '1'; } catch (e) {} $('.tools').classList.toggle('nokeys', !ok.checked);
+    ok.onchange = () => { $('.tools').classList.toggle('nokeys', !ok.checked); try { localStorage.setItem(KK, ok.checked ? '1' : '0'); } catch (e) {} };
+    $('#bHome').onclick = () => showHome(true); if (HAS_LINK && TSLink.embedded) $('#bHome').remove(); }
   $('#tZoomExt').onclick = () => { frameView(bounds()); save(); };
   $('#vSel').onchange = e => { setView(e.target.value); cv.focus(); };
   $('#unit').onchange = e => { setUnit(e.target.value); cv.focus(); };
@@ -2401,7 +2489,7 @@ function emprise(fm) {
   /* dans TerraSuite : la suite masque ses menus pendant l'édition (téléphone, tablette) ; ☰ les fait revenir */
   if (HAS_LINK && TSLink.embedded) {
     let lastEdit = 0; const edit = () => { const t = Date.now(); if (t - lastEdit < 1500) return; lastEdit = t; try { parent.postMessage({ ts: 'edit' }, '*'); } catch (e) {} };
-    cv.addEventListener('pointerdown', edit); $$('.tb').forEach(b => b.addEventListener('click', edit));
+    cv.addEventListener('pointerdown', edit); $$('[data-tool]').forEach(b => b.addEventListener('click', edit));
     window.addEventListener('message', e => { const d = e.data; if (d && d.ts === 'immersive') { $('#bMenus').hidden = !d.on; setTimeout(resize, 50); } });
     $('#bMenus').onclick = () => { try { parent.postMessage({ ts: 'menus' }, '*'); } catch (e) {} };
   }

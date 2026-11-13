@@ -1,5 +1,5 @@
 /* TerraChantier : comptes-rendus de chantier, OPR et photos localisées sur plan */
-const APP_VERSION = '0.13';
+const APP_VERSION = '0.13.1';
 /* outils communs ($, esc, dates, ICON, ROLES, sheet, toast…) : common.js ; carnet de contacts : carnet.js */
 const intervenants = () => ((S.ch && S.ch.entreprises) || []).map(e => (e.role ? e : Object.assign(e, { role: 'ENT' }))).slice().sort((a, b) => roleRank(a.role) - roleRank(b.role) || (a.nom || '').localeCompare(b.nom || ''));
 /* mode terrain (téléphone) : prise de vues, CR, réserves ; la préparation (chantiers, plans, intervenants, lots) se fait dans la version complète */
@@ -69,7 +69,7 @@ async function viewHome(app) {
     ${!standalone && ios ? `<div class="install"><div class="grow"><b>Installer sur l'iPhone</b><div class="small muted">Dans Safari : bouton Partager, puis « Sur l'écran d'accueil ».</div></div></div>` : ''}
     ${!isField() && !Carnet.agence() ? `<div class="install"><div class="grow"><b>Renseignez votre agence</b><div class="small muted">Nom, coordonnées, logo et architecte par défaut : ils signent les comptes-rendus et les photos. À faire une fois dans TerraContacts.</div></div><a class="btn pri" href="contacts.html#/agence">Mon agence</a></div>` : ''}
     ${isField() ? '' : '<div id="oriBox" style="margin:-16px -16px 8px"></div>'}
-    <div class="bar"><h2 class="grow" style="font-size:20px">Chantiers</h2><a class="btn" href="contacts.html">Contacts</a>${isField() ? '' : '<button class="btn pri" id="bNew">+ Nouveau chantier</button>'}</div>
+    <div class="bar"><h2 class="grow" style="font-size:20px">Chantiers</h2><a class="btn" href="contacts.html#/contacts">Contacts</a>${isField() ? '' : '<button class="btn pri" id="bNew">+ Nouveau chantier</button>'}</div>
     ${isField() ? `<div class="hint" style="margin-bottom:10px">Mode terrain : les chantiers, plans et intervenants se préparent dans la version complète (PC ou tablette) et arrivent ici par la synchronisation.${list.length ? '' : ' <a href="#" id="lSet">Régler la synchronisation</a>'}</div>` : ''}
     <div class="list">${list.map(c => `<a class="card ch" href="#/c/${c.id}"><span class="ico">${esc((c.code || c.nom || '?').slice(0, 3).toUpperCase())}</span><span class="grow"><b>${esc(c.nom)}</b><div class="small muted">${esc([c.adresse, c.moa].filter(Boolean).join(' · '))}</div></span></a>`).join('') || (isField() ? '<div class="empty"><b>Aucun chantier sur ce téléphone</b>Créez le chantier sur le PC, puis connectez les deux appareils à la synchronisation (Réglages).</div>' : '<div class="empty"><b>Aucun chantier</b>Créez votre premier chantier, puis importez ses plans de niveaux.</div>')}</div></main>`;
   bindTop(app);
@@ -593,7 +593,7 @@ function tabFiche(m) {
     <div class="persbox"><h3 class="fsec">Interlocuteur (personne)</h3><div class="grid2"><label class="f">Nom de la personne<input type="text" data-f="contact" value="${esc(e.contact)}" placeholder="Prénom Nom"></label><label class="f">Fonction de la personne<input type="text" data-f="fonction" value="${esc(e.fonction || '')}" placeholder="Chargé d'opération, conducteur de travaux…"></label>
     <label class="f">Téléphone<input type="tel" data-f="tel" value="${esc(e.tel)}"></label><label class="f">E-mail<input type="email" data-f="email" value="${esc(e.email)}"></label></div></div>
     <div class="row" style="margin-top:6px;flex-wrap:wrap">${conv(e)}<span class="grow"></span><button class="btn sm" data-ksave title="Crée la fiche dans TerraContacts et la relie à ce chantier">Enregistrer dans le carnet</button><button class="btn sm danger" data-rm>Retirer</button></div></div>`;
-  m.innerHTML = `<div class="bar"><h2 class="grow" style="font-size:18px">${esc(c.nom)}</h2>${field ? '' : '<a class="btn" href="contacts.html">Carnet de contacts</a><button class="btn" id="bEdC">Modifier le chantier</button>'}</div>
+  m.innerHTML = `<div class="bar"><h2 class="grow" style="font-size:18px">${esc(c.nom)}</h2>${field ? '' : '<a class="btn" href="contacts.html#/contacts">Carnet de contacts</a><button class="btn" id="bEdC">Modifier le chantier</button>'}</div>
     ${c.adresse ? `<div class="card small muted" style="margin-bottom:14px">${esc(c.adresse)}</div>` : ''}
     ${field ? '' : `<div class="card" style="margin-bottom:14px"><label class="f">Émetteur des comptes-rendus et des photos (par défaut l'architecte du chantier)<select id="emSel">${L.map(e => `<option value="${e.id}"${em && em.id === e.id ? ' selected' : ''}>${esc(roleName(e.role) + ' · ' + entLabel(e))}</option>`).join('')}${em ? '' : '<option value="" selected>(à choisir)</option>'}</select></label></div>`}
     <div class="bar"><h3 class="grow" style="font-size:16px">Intervenants</h3>${field ? '' : `<select id="addRole" style="width:auto">${roleOptions('')}</select><button class="btn pri" id="bAddK">+ Depuis le carnet</button><button class="btn" id="bAddE">+ Saisie libre</button>`}</div>
