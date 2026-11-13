@@ -3,7 +3,7 @@
    plus le planning et la fiche, transversaux. Les modules existants (TerraGeo, TerraEstim, TerraPlanning, TerraChantier,
    TerraDocs, TerraContacts, TerraModel) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
    Les bibliothèques communes à tous les projets (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont à part. */
-const TS_VERSION = '0.6.24';
+const TS_VERSION = '0.7.0';
 const TSApp = (() => {
   const SVG = {
     back: '<path d="M15 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
@@ -26,7 +26,7 @@ const TSApp = (() => {
     { id: 'esq', nom: 'ESQ', c: '#8a5a12', subs: [['site', 'Site', 'frame', T_GEO], ['m3d', 'Maquette 3D', 'frame', T_MOD], ['esq', 'Estimation sommaire', 'soon']] },
     { id: 'avp', nom: 'AVP', c: '#a16207', subs: [['plans', 'Plans et notice', 'native'], ['estimA', 'Estimation', 'frame', T_EST], ['auto', 'PC, DP, modificatifs', 'native']] },
     { id: 'pro', nom: 'PRO / DCE', c: '#2f8f5b', subs: [['estim', 'Estimation', 'frame', T_EST], ['desc', 'Descriptif (CCTP)', 'frame', T_EST, '[data-tab=cctp]'], ['produits', 'Produits', 'frame', p => `TerraDocs/TerraDocs.html#projet=${p.id}`], ['dce', 'Dossier DCE', 'native']] },
-    { id: 'act', nom: 'Analyse des offres', c: '#0f766e', subs: [['offres', 'Offres reçues', 'frame', p => `TerraEstim/TerraEstim.html#dpgf=${p.id}`], ['rapport', "Rapport d'analyse", 'soon'], ['marches', 'Marchés', 'soon']] },
+    { id: 'act', nom: 'Analyse des offres', c: '#0f766e', subs: [['offres', "Devis d'entreprises", 'frame', p => `TerraEstim/TerraEstim.html#dpgf=${p.id}`], ['rapport', "Rapport d'analyse", 'soon'], ['marches', 'Marchés', 'soon']] },
     { id: 'chantier', nom: 'Chantier', c: '#7a4fb0', subs: [['chantier', 'Visites et CR', 'frame', T_CH], ['os', 'Ordres de service', 'native'], ['situations', 'Situations', 'native']] },
     { id: 'opr', nom: 'OPR', c: '#c2410c', subs: [['opr', 'Réserves', 'frame', T_CH], ['pvopr', "PV d'OPR", 'native']] },
     { id: 'recep', nom: 'Réception', c: '#b45309', subs: [['pv', 'PV de réception, levée des réserves', 'native'], ['doe', 'DOE, DIUO', 'native']] },
@@ -50,6 +50,8 @@ const TSApp = (() => {
     fingpa: ['Fin de GPA', 'Courrier de fin de garantie de parfait achèvement, libération des retenues de garantie.']
   };
   const PH2TAB = { 'Faisabilité': 'esq', ESQ: 'esq', APS: 'avp', APD: 'avp', PC: 'avp', PRO: 'pro', DCE: 'pro', ACT: 'act', VISA: 'chantier', DET: 'chantier', AOR: 'opr', GPA: 'gpa' };
+  const GRP = { esq: 'Études', avp: 'Études', pro: 'Études', act: 'Études', chantier: 'Chantier', opr: 'Chantier', recep: 'Chantier', gpa: 'Chantier', planning: 'Projet', projet: 'Projet' };
+  const FULL = { esq: 'Esquisse', avp: 'Avant-projet, permis de construire', pro: 'Projet, dossier de consultation des entreprises', act: 'Assistance aux contrats de travaux', opr: 'Opérations préalables à la réception', gpa: 'Garantie de parfait achèvement' };
   const PHASE_ORDER = TABS.filter(t => !t.tr && t.id !== 'apercu').map(t => t.id);
   const tabOf = id => TABS.find(t => t.id === id);
 
@@ -107,8 +109,33 @@ const TSApp = (() => {
   }
 
   /* ---------- colonne de gauche ---------- */
+  /* position dans le projet : onglet et sous-onglet (adresse, sinon dernier onglet ouvert) */
+  function where(p, tabId, subId) {
+    const tab = tabOf(tabId || LS.get('ts-tab-' + p.id, null) || 'apercu') || TABS[0];
+    return { tab, sub: tab.subs.find(s => s[0] === subId) || tab.subs[0] };
+  }
+  const phaseBadge = (p, t) => { const curIdx = PHASE_ORDER.indexOf(PH2TAB[p.phase] || ''), i = PHASE_ORDER.indexOf(t.id); return i < 0 || curIdx < 0 ? '' : i < curIdx ? '<span class="badge done" title="Phase faite">✓</span>' : i === curIdx ? '<span class="badge cur">en cours</span>' : ''; };
+  function drawProjSide(p) {
+    const { tab, sub } = where(p, st.route[2], st.route[3]);
+    let g0 = '', h = '';
+    for (const t of TABS) {
+      const g = GRP[t.id] || ''; if (g && g !== g0) { h += `<span class="cap tcap">${E(g)}</span>`; g0 = g; }
+      const on = t.id === tab.id;
+      h += `<a class="titem${on ? ' on' : ''}" href="#/p/${p.id}/${t.id}" style="--c:${t.c}" ${FULL[t.id] ? `title="${E(FULL[t.id])}"` : ''}><span class="dot" style="background:${t.c}"></span><span class="tn">${E(t.nom)}</span>${phaseBadge(p, t)}</a>`;
+      if (on && t.subs.length > 1) h += `<div class="tsubs">${t.subs.map(s => `<a class="tsub${s[0] === sub[0] ? ' on' : ''}" href="#/p/${p.id}/${t.id}/${s[0]}" style="--c:${t.c}">${E(s[1])}${s[2] === 'soon' ? '<span class="soon">à venir</span>' : ''}</a>`).join('')}</div>`;
+    }
+    document.getElementById('side').innerHTML = `
+      <a class="brand" href="#/"><img class="logo" src="suite/logo.svg" alt=""><b>Terra<span>Suite</span></b><span class="ver">${TS_VERSION} bêta</span></a>
+      <a class="pback" href="#/projets">${ico('back')}Tous les projets</a>
+      <div class="pcur"><b>${E(p.code || '—')}</b><span>${E(p.nom || 'Projet sans nom')}</span></div>
+      <nav class="ptree" aria-label="Rubriques du projet">${h}</nav>
+      <a class="litem libs-link" href="#/b">${ico('lib')}Bibliothèques communes</a>
+      <div class="side-f"><a class="sync" id="syncSt" href="#/compte"><span id="syncTx">Synchronisation</span></a><a href="#/compte">Compte</a></div>`;
+    paintSync();
+  }
   function drawSide() {
     const r = st.route, curP = r[0] === 'p' ? r[1] : '', curL = r[0] === 'b' ? r[1] : '';
+    const pp = curP && st.projets.find(x => x.id === curP); if (pp) return drawProjSide(pp);
     const q = norm(st.q), L = st.projets.filter(p => !q || norm([p.code, p.nom, p.ville, p.moa].join(' ')).includes(q));
     const act = L.filter(p => p.statut !== 'archive' && p.statut !== 'termine'), old = L.filter(p => p.statut === 'archive' || p.statut === 'termine');
     const item = p => `<a class="pitem${p.id === curP ? ' on' : ''}${p.statut === 'archive' ? ' arch' : ''}" href="#/p/${p.id}"><span class="l1"><b>${E(p.code || '—')}</b><span class="ph">${E(p.phase || '')}</span></span><span class="nm">${E(p.nom || 'Projet sans nom')}</span></a>`;
@@ -195,19 +222,24 @@ const TSApp = (() => {
     const p = st.projets.find(x => x.id === id) || await TSP.get(id);
     if (!p) { $m().innerHTML = `<div class="body"><p class="empty">Projet introuvable sur cet appareil. Il apparaîtra après la synchronisation s'il a été créé ailleurs.</p><a class="btn" href="#/">Projets</a></div>`; return; }
     LS.set('ts-last-projet', p.id); LS.set('ts-recents', [p.id, ...(LS.get('ts-recents', []) || []).filter(x => x !== p.id)].slice(0, 8));
-    const curTab = PH2TAB[p.phase] || '', curIdx = PHASE_ORDER.indexOf(curTab);
-    if (!tabId) { const last = LS.get('ts-tab-' + p.id, null); tabId = last || 'apercu'; }
-    const tab = tabOf(tabId) || TABS[0], sub = tab.subs.find(s => s[0] === subId) || tab.subs[0];
+    const curTab = PH2TAB[p.phase] || '';
+    const { tab, sub } = where(p, tabId, subId);
     LS.set('ts-tab-' + p.id, tab.id);
+    if (!st.projets.some(x => x.id === p.id)) drawProjSide(p);
     const statut = (TSP.STATUTS.find(s => s[0] === p.statut) || [, ''])[1];
-    const tabsH = TABS.map(t => { const i = PHASE_ORDER.indexOf(t.id), b = i < 0 || curIdx < 0 ? '' : i < curIdx ? '<span class="badge done" title="Phase faite">✓</span>' : i === curIdx ? '<span class="badge cur">en cours</span>' : '';
-      return `<a class="tab${t.id === tab.id ? ' on' : ''}${t.tr ? ' tr' : ''}" href="#/p/${p.id}/${t.id}" style="--c:${t.c}"><span class="dot" style="background:${t.c}"></span>${E(t.nom)}${b}</a>`; }).join('');
-    const subsH = tab.subs.length > 1 ? `<nav class="subs" aria-label="Sous-onglets">${tab.subs.map(s => `<a class="sub${s[0] === sub[0] ? ' on' : ''}" href="#/p/${p.id}/${tab.id}/${s[0]}" style="${s[0] === sub[0] ? `background:${tab.c};border-color:${tab.c}` : ''}">${E(s[1])}${s[2] === 'soon' ? '<span class="soon">à venir</span>' : ''}</a>`).join('')}</nav>` : '<div style="height:10px"></div>';
     const url = sub[2] === 'frame' ? sub[3](p) : '';
-    $m().innerHTML = `<div class="phead"><div class="t"><a class="btn icon back" href="#/" aria-label="Projets">${ico('back')}</a><div style="flex:1;min-width:0">${tab.id === 'apercu' ? `<div class="k">Projet${statut ? ' · ' + E(statut) : ''}${p.phase ? ' · phase ' + E(p.phase) : ''}</div>` : ''}<h1>${E(p.code || '—')} · ${E(p.nom || 'Projet sans nom')}</h1>${tab.id === 'apercu' ? `<div class="w">${E([p.adresse, [p.cp, p.ville].filter(Boolean).join(' ')].filter(Boolean).join(', ') || 'Adresse à renseigner dans la fiche')}</div>` : ''}</div>
-        <div class="acts"><a class="btn sm desk${tab.id === 'planning' ? ' on' : ''}" href="#/p/${p.id}/planning" style="--c:#2f6fb5"><span class="dot" style="background:#2f6fb5"></span>Planning</a><a class="btn sm desk${tab.id === 'projet' ? ' on' : ''}" href="#/p/${p.id}/projet" style="--c:#9a3b6b"><span class="dot" style="background:#9a3b6b"></span>Fiche et intervenants</a>${url ? `<a class="btn sm wide" href="${E(url)}" target="_blank" rel="noopener" title="Ouvrir dans un nouvel onglet">${ico('ext')}Plein écran</a><button class="btn sm" id="reF" title="Recharger le module" aria-label="Recharger le module">${ico('reload')}</button>` : ''}<a class="btn sm" href="#/p/${p.id}/chantier/chantier" style="color:#7a4fb0">${ico('cam')}<span class="wide">Visite de chantier</span></a></div></div>
-      <nav class="tabs" aria-label="Phases du projet">${tabsH}</nav>${subsH}</div><div class="body" id="pbody"></div>`;
-    const sel = document.querySelector('.tab.on'); if (sel) sel.scrollIntoView({ block: 'nearest', inline: 'center' });
+    /* téléphone et tablette : choix de la rubrique dans une liste, sous-onglets en pastilles */
+    let og = '', g0 = null;
+    TABS.forEach(t => { const g = GRP[t.id] || ''; if (g !== g0) { og += (g0 !== null && g0 ? '</optgroup>' : '') + (g ? `<optgroup label="${E(g)}">` : ''); g0 = g; } og += `<option value="${t.id}"${t.id === tab.id ? ' selected' : ''}>${E(t.nom)}</option>`; });
+    og += g0 ? '</optgroup>' : '';
+    const pills = tab.subs.length > 1 ? tab.subs.map(s => `<a class="sub${s[0] === sub[0] ? ' on' : ''}" href="#/p/${p.id}/${tab.id}/${s[0]}" style="${s[0] === sub[0] ? `background:${tab.c};border-color:${tab.c}` : ''}">${E(s[1])}</a>`).join('') : '';
+    const ov = tab.id === 'apercu';
+    const crumb = ov ? '' : `<span class="crumb"><span class="sep">›</span>${E(tab.nom)}${tab.subs.length > 1 ? `<span class="sep">›</span>${E(sub[1])}` : ''}</span>`;
+    $m().innerHTML = `<div class="phead${ov ? '' : ' slim'}"><div class="t"><a class="btn icon back" href="#/projets" aria-label="Projets">${ico('back')}</a><div class="ttl">${ov ? `<div class="k">Projet${statut ? ' · ' + E(statut) : ''}${p.phase ? ' · phase ' + E(p.phase) : ''}</div>` : ''}<h1><span class="pn">${E(p.code || '—')} · ${E(p.nom || 'Projet sans nom')}</span>${crumb}</h1>${ov ? `<div class="w">${E([p.adresse, [p.cp, p.ville].filter(Boolean).join(' ')].filter(Boolean).join(', ') || 'Adresse à renseigner dans la fiche')}</div>` : ''}</div>
+        <div class="acts">${url ? `<a class="btn icon wide" href="${E(url)}" target="_blank" rel="noopener" title="Ouvrir en plein écran, dans un nouvel onglet" aria-label="Plein écran">${ico('ext')}</a><button class="btn icon wide" id="reF" title="Recharger" aria-label="Recharger">${ico('reload')}</button>` : ''}<a class="btn visit" href="#/p/${p.id}/chantier/chantier" title="Visite de chantier">${ico('cam')}<span class="wide">Visite de chantier</span></a></div></div>
+      <div class="mnav"><label class="phsel" style="--c:${tab.c}"><span class="dot" style="background:${tab.c}"></span><select id="phSel" aria-label="Rubrique du projet">${og}</select></label>${pills ? `<nav class="subs" aria-label="Sous-onglets">${pills}</nav>` : ''}</div></div><div class="body" id="pbody"></div>`;
+    document.getElementById('phSel').onchange = e => go(`#/p/${p.id}/${e.target.value}`);
+    const sel = document.querySelector('.mnav .sub.on'); if (sel) sel.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     const body = document.getElementById('pbody');
     st.imm = IMMERSIVE.has(sub[0]); setImm(false);
     if (sub[2] === 'frame') { body.className = 'body frame'; mountFrame(body, url, sub[4]); const rf = document.getElementById('reF'); if (rf) rf.onclick = () => { st.frames.delete(url); mountFrame(body, url, sub[4], true); }; return; }

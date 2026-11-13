@@ -132,3 +132,9 @@ label.f.adr{position:relative}
 .adrs button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:none;padding:7px 10px;cursor:pointer;font-weight:600;font-size:14px;color:var(--ink)}
 .adrs button:last-child{border-bottom:0}.adrs button:hover,.adrs button.on{background:var(--soft)}
 .adrs small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+.empty-start{max-width:560px;margin:48px auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
+.empty-start h2{font-size:20px;margin:0}
+.empty-start .btn{margin-top:8px;height:44px;padding:0 20px;font-size:15px}
+.in-proj main>.bar>.btn.sm,.in-proj main>.bar>h2{display:none}
+.in-proj main>.bar{justify-content:flex-end}
+.in-proj main>.bar .btn.danger{font-size:13px;padding:6px 12px}

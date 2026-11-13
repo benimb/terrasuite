@@ -108,7 +108,16 @@ const TSLink = (() => {
   if (embedded) {
     document.documentElement.classList.add('ts-embed');
     /* dans TerraSuite, l'en-tête du projet suffit : pas de sous-titre d'application ni de sous-titre de chantier */
-    const s = document.createElement('style'); s.textContent = '.ts-embed .brand small,.ts-embed .top h1 small{display:none!important}';
+    const s = document.createElement('style'); s.textContent = '.ts-embed .brand,.ts-embed .top h1 .ver,.ts-embed .top h1 small,.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn,'
+      + '.ts-embed [data-tab=home],.ts-embed [data-tab=accueil],.ts-embed #bHome{display:none!important}'
+      /* charte commune de TerraSuite : une couleur d'action, la police de la suite, des boutons de taille confortable */
+      + 'html.ts-embed{--accent:#b5532f;--accent-ink:#fff;--accent-soft:#f6e9e3;--f-ui:Inter,system-ui,sans-serif}'
+      + '@media (prefers-color-scheme:dark){html.ts-embed:not([data-theme=light]){--accent:#d97a55;--accent-ink:#1a0f0a;--accent-soft:#3a251c}}'
+      + 'html.ts-embed body{font-family:Inter,system-ui,sans-serif}'
+      + '.ts-embed .btn:not(.sm):not(.ico){min-height:36px;padding:6px 14px;border-radius:8px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:6px}'
+      + '.ts-embed .top select,.ts-embed .toolbar select,.ts-embed .toolbar input{min-height:36px;border-radius:8px}'
+      + '.ts-embed .tabs [role=tab]{min-height:36px}'
+      + '@media (pointer:coarse){.ts-embed .btn:not(.sm),.ts-embed .top select,.ts-embed .toolbar select,.ts-embed .tabs [role=tab]{min-height:44px}}';
     (document.head || document.documentElement).appendChild(s);
   }
   return { pull, push, read, onRemote, received, hash, docId, seedHashes, embedded, synced, open };

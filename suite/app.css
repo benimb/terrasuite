@@ -209,3 +209,50 @@ tfoot td{border-top:2px solid var(--line)}
 /* édition plein écran (maquette 3D sur téléphone et tablette) */
 .ts.immersive .phead,.ts.immersive .ts-bottom{display:none}
 .ts.immersive .ts-main{padding-bottom:0}
+
+/* ---------- 0.7 : rubriques du projet dans la colonne de gauche ---------- */
+.pback{display:flex;align-items:center;gap:6px;margin:0 10px;padding:0 8px;height:36px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:14px;font-weight:600}
+.pback:hover{background:var(--sunk);color:var(--ink)}
+.pback svg.i{width:18px;height:18px}
+.pcur{display:flex;flex-direction:column;padding:8px 18px 10px;border-bottom:1px solid var(--line)}
+.pcur b{font:700 20px "Space Grotesk",sans-serif}
+.pcur span{color:var(--muted);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ptree{flex:1;overflow:auto;padding:8px 8px 12px;display:flex;flex-direction:column;gap:1px}
+.tcap{display:block;padding:12px 10px 4px}
+.titem{display:flex;align-items:center;gap:10px;min-height:40px;padding:0 10px;border-radius:8px;text-decoration:none;color:var(--ink);font-size:15px;font-weight:600}
+.titem:hover{background:var(--sunk)}
+.titem.on{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--c)}
+.titem .tn{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.titem .dot{width:9px;height:9px}
+.tsubs{display:flex;flex-direction:column;gap:1px;margin:2px 0 6px 19px;padding-left:10px;border-left:2px solid var(--line)}
+.tsub{display:flex;align-items:center;min-height:38px;padding:0 10px;border-radius:8px;text-decoration:none;color:var(--muted);font-size:14.5px;font-weight:500}
+.tsub:hover{background:var(--sunk);color:var(--ink)}
+.tsub.on{color:var(--ink);font-weight:700;background:var(--sunk);box-shadow:inset 3px 0 0 var(--c)}
+.tsub .soon{font-size:11px;margin-left:auto;padding-left:8px;opacity:.7;font-weight:500}
+/* en-tête : une ligne ; rubrique rappelée après le nom du projet */
+.phead .ttl{flex:1;min-width:0}
+.phead h1 .crumb{font:600 17px Inter,sans-serif;color:var(--muted);letter-spacing:0}
+.phead h1 .sep{margin:0 8px;opacity:.6}
+.phead.slim{padding-top:calc(10px + var(--safe-t));padding-bottom:10px}
+.phead.slim h1{font-size:20px;margin:0;line-height:40px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.phead:not(.slim){padding-bottom:14px}
+.btn.icon{width:40px;padding:0;justify-content:center}
+.btn.visit{color:#7a4fb0}
+.mnav{display:none}
+@media (max-width:899px){
+  .phead,.phead.slim{padding:calc(8px + var(--safe-t)) 12px 0}
+  .phead h1,.phead.slim h1{font-size:18px;line-height:40px}
+  .phead h1 .crumb{display:none}
+  .phead .k,.phead .w{display:none}
+  .btn.icon,.btn.visit{width:44px;height:44px;padding:0;justify-content:center}
+  .btn.back{width:44px;height:44px}
+  .mnav{display:flex;gap:8px;align-items:center;padding:8px 0 10px;overflow:hidden}
+  .phsel{flex:none;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 10px 0 12px;border:1px solid var(--c);border-radius:10px;background:var(--surface);position:relative}
+  .phsel select{border:0;background:transparent;font-weight:700;font-size:15px;height:42px;padding-right:4px;max-width:46vw;appearance:auto}
+  .mnav .subs{padding:0;flex:1;min-width:0}
+  .mnav .sub{height:44px;border-radius:22px;padding:0 16px;font-size:14px}
+}
+.libs-link{margin:0 8px 6px;border-top:1px solid var(--line);border-radius:0;padding-top:6px;height:46px;color:var(--muted);font-weight:600}
+.libs-link svg.i{width:18px;height:18px}
+.titem{min-height:38px}.tsub{min-height:36px}.tcap{padding:10px 10px 3px}
+@media (pointer:coarse){.titem,.tsub{min-height:44px}}

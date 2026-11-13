@@ -188,7 +188,7 @@ dialog .act{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
 <div id="app">
   <header class="top">
     <a class="btn sm" id="back" href="../terrasuite.html" title="Page d'accueil TerraSuite">← TerraSuite</a>
-    <div class="brand">TerraDocs <span class="ver">v0.13.1</span><small>Produits et documentation par lot</small></div>
+    <div class="brand">TerraDocs <span class="ver">v0.13.2</span><small>Produits et documentation par lot</small></div>
     <nav class="tabs" role="tablist">
       <button role="tab" data-tab="accueil" aria-selected="false">Accueil</button>
       <button role="tab" data-tab="produits" aria-selected="true">Produits</button>
@@ -667,11 +667,9 @@ function renderDetail(){
   const el = $('#detail');
   if(!p){
     const n = D.produits.length, comp = D.produits.filter(p=>CLES.every(t=>p.liens.some(l=>l.type===t.id&&l.url))).length;
-    el.innerHTML = `<div class="card"><h3>TerraDocs</h3>
-      <p style="margin:0">Bibliothèque des produits et de leur documentation, classée par lot : pages produits, fiches techniques, DoP, FDES, FDS, avis techniques, PV, notices.</p>
-      ${n?`<p class="hint">${n} produit${n>1?'s':''}, dont ${comp} avec les cinq documents clés (FT, DoP, FDES, FDS, AT).</p>`:''}
-      <p class="hint">Sélectionnez un produit pour afficher et modifier sa fiche. Raccourcis : « / » recherche, « n » nouveau produit.</p>
-      <p class="hint">${fileHandle?'Données enregistrées dans '+esc(fileHandle.name)+' et dans ce navigateur.':'Données enregistrées dans ce navigateur. Pour les partager entre vos postes : Fichier › Lier un fichier de données.'}</p></div>`;
+    el.innerHTML = `<div class="card detail-empty"><h3>Aucun produit sélectionné</h3>
+      <p class="muted" style="margin:0">Choisissez un produit dans la liste pour voir ses documents, ou ajoutez-en un avec « + Produit ».</p>
+      ${n?`<p class="hint">${n} produit${n>1?'s':''}, dont ${comp} avec les cinq documents clés (FT, DoP, FDES, FDS, AT).</p>`:''}</div>`;
     return;
   }
   const lotOpts = sortedLots().map(l=>`<option value="${l.id}" ${l.id===p.lot?'selected':''}>${esc(l.code)} · ${esc(l.nom)}</option>`).join('');

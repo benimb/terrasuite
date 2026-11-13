@@ -1,5 +1,5 @@
 /* TerraChantier : comptes-rendus de chantier, OPR et photos localisées sur plan */
-const APP_VERSION = '0.13.1';
+const APP_VERSION = '0.13.2';
 /* outils communs ($, esc, dates, ICON, ROLES, sheet, toast…) : common.js ; carnet de contacts : carnet.js */
 const intervenants = () => ((S.ch && S.ch.entreprises) || []).map(e => (e.role ? e : Object.assign(e, { role: 'ENT' }))).slice().sort((a, b) => roleRank(a.role) - roleRank(b.role) || (a.nom || '').localeCompare(b.nom || ''));
 /* mode terrain (téléphone) : prise de vues, CR, réserves ; la préparation (chantiers, plans, intervenants, lots) se fait dans la version complète */
@@ -53,7 +53,10 @@ async function render() {
     return viewChantier(app, tab);
   }
   S.ch = null; S._fresh = false; await viewHome(app);
-  if (r[0] === 'projet' && r[1]) { const ch = (await DB.all('chantiers')).filter(c => c.projetId === r[1]).sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''))[0]; if (ch) { location.replace('#/c/' + ch.id); return; } history.replaceState(null, '', '#/'); editChantier(null, r[1]); return; }
+  if (r[0] === 'projet' && r[1]) { const ch = (await DB.all('chantiers')).filter(c => c.projetId === r[1]).sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''))[0]; if (ch) { location.replace('#/c/' + ch.id); return; }
+    /* dans TerraSuite : page simple avec un bouton, sans fenêtre ouverte d'office */
+    if (window.self !== window.top) { app.innerHTML = `<main><div class="empty-start"><h2>Pas encore de chantier pour ce projet</h2><p class="muted">Le chantier reprend le nom, l'adresse, le maître d'ouvrage et les lots du projet. Vous y importerez ensuite les plans de niveaux.</p><button class="btn pri" id="bOpenCh">Ouvrir le chantier</button></div></main>`; $('#bOpenCh', app).onclick = () => editChantier(null, r[1]); return; }
+    history.replaceState(null, '', '#/'); editChantier(null, r[1]); return; }
   if (r[0] === 'nouveau') { const pid = r[1] || ''; history.replaceState(null, '', '#/'); editChantier(null, pid); }
 }
 window.addEventListener('hashchange', render);

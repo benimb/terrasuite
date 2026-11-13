@@ -1,6 +1,6 @@
 /* TerraContacts : carnet de contacts de la suite (maîtres d'ouvrage, bureaux d'études, entreprises…) et fiche de l'agence.
    Les contacts servent aux chantiers (intervenants, destinataires des photos et des CR) et, par le format d'échange, aux autres applications. */
-const APP_VERSION = '0.9.1';
+const APP_VERSION = '0.9.2';
 const S = { _fresh: true }; // utilisé par la synchronisation
 let F = { role: '', q: '' };
 
@@ -13,7 +13,10 @@ async function render() {
   let r = location.hash.replace(/^#\/?/, '').split('/')[0]; const app = $('#app');
   if (!r) r = EMBED ? 'contacts' : 'accueil';
   await DB.silent(() => Carnet.load());
-  app.innerHTML = topBar() + tabs(r) + '<main id="main"></main>';
+  /* fiche d'un projet ouverte dans TerraSuite : la suite donne déjà le projet et la navigation */
+  const inProj = EMBED && r === 'projets' && /^#\/?projets\/[^/]+/.test(location.hash);
+  app.classList.toggle('in-proj', inProj);
+  app.innerHTML = topBar() + (inProj ? '' : tabs(r)) + '<main id="main"></main>';
   $('#bSet').onclick = settingsSheet; if (typeof TSUndo !== 'undefined') TSUndo.buttons($('.top'), { cls: 'icon-btn', before: $('#syncSt') }); Sync.paint();
   const seg = location.hash.replace(/^#\/?/, '').split('/');
   if (r === 'projets') return seg[1] ? Projets.fiche($('#main'), seg[1]) : Projets.list($('#main'));

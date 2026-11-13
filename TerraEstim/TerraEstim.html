@@ -160,19 +160,19 @@ input.bad{border-color:var(--err);box-shadow:0 0 0 1px var(--err)}
 </style>
 <div id="app">
   <header class="top">
-    <div class="brand">TerraEstim <span class="ver" title="Version bêta">v0.23.3 bêta</span><small>Base de prix et estimations</small></div>
+    <div class="brand">TerraEstim <span class="ver" title="Version bêta">v0.24 bêta</span><small>Base de prix et estimations</small></div>
     <nav class="tabs" role="tablist" aria-label="Vues">
       <button role="tab" data-tab="home" aria-selected="false">Accueil</button>
       <button role="tab" data-tab="lib" aria-selected="true">Bibliothèque<span class="n" id="nLib"></span></button>
-      <button role="tab" data-tab="src" aria-selected="false">DPGF importées<span class="n" id="nSrc"></span></button>
+      <button role="tab" data-tab="src" aria-selected="false">Devis d'entreprises<span class="n" id="nSrc"></span></button>
       <button role="tab" data-tab="cctp" aria-selected="false">CCTP<span class="n" id="nCctp"></span></button>
       <button role="tab" data-tab="est" aria-selected="false">Estimations<span class="n" id="nEst"></span></button>
       <button role="tab" data-tab="idx" aria-selected="false">Indices et réglages</button>
     </nav>
     <span class="grow"></span>
-    <label class="lbl" for="selT" title="Mois auquel les prix sont revalorisés">Prix valeur</label>
+    <label class="lbl" for="selT" title="Mois auquel les prix sont revalorisés">Date des prix</label>
     <select id="selT"></select>
-    <button class="btn pri" id="btnImport">Importer une DPGF</button>
+    <button class="btn pri" id="btnImport" title="Fichier Excel ou CSV remis par une entreprise">Importer un devis</button>
     <div class="expwrap"><button class="btn" id="btnSave" aria-haspopup="true">Sauvegarde ▾</button>
       <div class="menu" id="saveMenu" hidden role="menu">
         <button data-act="backup" role="menuitem"><b>Exporter toute la base</b> (.json)<span>Prestations, DPGF, indices, estimations et réglages</span></button>
@@ -195,7 +195,11 @@ input.bad{border-color:var(--err);box-shadow:0 0 0 1px var(--err)}
 <script src="../TerraChantier/projets-api.js" onerror="this.remove()"></script>
 <script src="../TerraChantier/ts-link.js" onerror="this.remove()"></script>
 <script src="../TerraChantier/ts-undo.js" onerror="this.remove()"></script>
-<style>.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn{display:none!important}</style>
+<style>.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn{display:none!important}
+/* ouvert dans un projet de TerraSuite : la suite fournit la navigation ; la base (onglets, sauvegarde) reste dans Bibliothèques */
+.proj-embed .top .tabs,.proj-embed .expwrap:has(#btnSave){display:none!important}.pe-est #btnImport{display:none!important}.pe-dpgf .top:has(+ #view .empty #emImp) #btnImport{display:none!important}
+.est-empty td{padding:28px 12px!important;text-align:center;color:var(--muted,#666);font-size:14px}</style>
+<script>if (window.self !== window.top && /[#&](projet|dpgf|est)=/.test(location.hash)) document.documentElement.classList.add('proj-embed', /[#&]dpgf=/.test(location.hash) ? 'pe-dpgf' : 'pe-est');</script>
 <script src="../TerraChantier/terrasuite-compte.js" onerror="this.remove()"></script>
 <script src="TerraEstim-donnees.js"></script>
 <script>
@@ -378,7 +382,7 @@ function migrateLots(D) {
 }
 /* index par défaut de chaque lot (modifiable dans Indices et réglages) */
 const LOT_INDEX = Object.fromEntries(NOMENCLATURE.map(([c, , i]) => [c, i]));
-const APP_VERSION = '0.23.3';
+const APP_VERSION = '0.24';
 const LOTS_DEFAULT = NOMENCLATURE.map(([code, nom]) => ({ code, nom, indice: '' }));
 const SETTINGS_DEFAULT = { lots: LOTS_DEFAULT, stat: 'median', partFixe: 0, retenuesOnly: false, defIndex: 'BT01', tva: 20, aleas: 5, locNorm: true };
 
@@ -1558,9 +1562,9 @@ function renderSrc() {
   if (st.srcProj && st.srcProj !== '__sans' && !projs.some(p => p.id === st.srcProj)) st.srcProj = '';
   const list = all.filter(s => !st.srcProj || (st.srcProj === '__sans' ? !s.projet : s.projet === st.srcProj));
   if (!all.length) {
-    v.innerHTML = `<div class="empty"><h2>Aucune DPGF importée</h2><p>Importez les DPGF remplies par les entreprises lors de vos appels d'offres : chaque ligne de prix rattachée à une prestation type alimente la bibliothèque.</p>
-      <p>Formats lus : Excel (.xlsx, .xls), OpenDocument (.ods), CSV. Vous pouvez aussi coller un tableau copié depuis Excel.</p>
-      <button class="btn pri" id="emImp">Importer une DPGF</button></div>`;
+    v.innerHTML = `<div class="empty"><h2>Aucun devis d'entreprise</h2><p>Importez les devis (DPGF remplies) reçus des entreprises : ils se comparent ligne à ligne et leurs prix alimentent la base de prix.</p>
+      <p>Excel, OpenDocument ou CSV ; un tableau copié depuis Excel se colle aussi.</p>
+      <button class="btn pri" id="emImp">Importer un devis</button></div>`;
     $('#emImp').onclick = () => $('#fileIn').click();
     return;
   }
@@ -1982,10 +1986,15 @@ function renderEst() {
   const del = st.confirm === 'delE:' + id;
   const tb = `<div class="toolbar">
     <select id="estPick" style="max-width:320px">${list.map(([k, x]) => `<option value="${k}"${k === id ? ' selected' : ''}>${esc(x.title)}${x.operation ? ' · ' + esc(x.operation) : ''}</option>`).join('')}</select>
-    <button class="btn" id="estNew">+ Nouvelle</button><button class="btn" id="estDup">Dupliquer</button>
-    <button class="btn danger" id="estDel">${del ? 'Confirmer la suppression' : 'Supprimer'}</button>
-    <span class="sep"></span><button class="btn" id="estSort" title="Range les lignes de chaque lot dans l'ordre des articles du CCTP">Trier selon le CCTP</button>
-    ${C.noArt ? `<span class="tag warn" title="Lignes dont la prestation n'est rattachée à aucun article">${C.noArt} sans article</span>` : '<span class="tag ok">toutes les lignes ont un article</span>'}
+    <button class="btn" id="estNew">+ Nouvelle</button>
+    <div class="expwrap"><button class="btn" id="estMore" aria-haspopup="true" title="Autres actions" aria-label="Autres actions">⋯</button>
+      <div class="menu" id="estMoreMenu" hidden role="menu">
+        <button id="estDup" role="menuitem"><b>Dupliquer</b><span>Copie de cette estimation</span></button>
+        <button id="estSort" role="menuitem"><b>Trier selon le CCTP</b><span>Range les lignes de chaque lot dans l'ordre des articles du CCTP</span></button>
+        <button id="estDel" role="menuitem" class="danger"><b>Supprimer l'estimation</b></button>
+      </div></div>
+    ${del ? '<button class="btn danger" id="estDel2">Confirmer la suppression</button>' : ''}
+    ${C.noArt ? `<span class="tag warn" title="Lignes dont la prestation n'est rattachée à aucun article">${C.noArt} sans article</span>` : ''}
     <span class="grow"></span>
     <div class="expwrap"><button class="btn" id="estExp" aria-haspopup="true">Exporter ▾</button>
       <div class="menu" id="estMenu" hidden role="menu">
@@ -2017,7 +2026,7 @@ function renderEst() {
   const usedLots = new Set(C.lots.map(g => g.lot));
   const addLot = `<select id="estAddLot"><option value="">+ Ajouter un lot…</option>${lots().filter(l => !usedLots.has(l.code)).map(l => `<option value="${esc(l.code)}">${esc(l.code + ' ' + l.nom)}</option>`).join('')}</select>`;
   v.innerHTML = tb + `<div class="work"><div class="scroller"><table class="t"><thead><tr><th>N°</th><th>Désignation</th><th>U</th><th class="num">Quantité</th><th class="num">PU € HT</th><th class="num">Montant € HT</th><th></th></tr></thead>
-    <tbody>${rows.join('')}</tbody></table><div style="padding:12px 8px 40px">${C.allot ? '' : addLot}</div></div>
+    <tbody>${rows.join('') || `<tr class="est-empty"><td colspan="12">${C.allot ? 'Aucune ligne : ajoutez un lot du marché dans la carte de droite, puis ses prestations.' : 'Aucune ligne : choisissez un lot ci-dessous, puis ses prestations.'}</td></tr>`}</tbody></table><div style="padding:12px 8px 40px">${C.allot ? '' : addLot}</div></div>
     <aside class="side" id="estSide">${estSide(e, C)}</aside></div>`;
   bindEst(id, e);
 }
@@ -2047,7 +2056,7 @@ function estSide(e, C) {
       <div class="fld"><label for="eOp">Opération</label><input type="text" id="eOp" data-e="operation" value="${esc(e.operation)}"></div>
       <div class="row2"><div class="fld"><label for="eMoa">Maître d'ouvrage</label><input type="text" id="eMoa" data-e="moa" value="${esc(e.moa)}"></div>
         <div class="fld"><label for="ePh">Phase</label><select id="ePh" data-e="phase">${['ESQ', 'APS', 'APD', 'PRO', 'DCE', 'Autre'].map(x => `<option${e.phase === x ? ' selected' : ''}>${x}</option>`).join('')}</select></div></div>
-      <div class="row2"><div class="fld"><label for="eMois">Prix valeur</label>${monthField('eMois', 'data-e="mois"', e.mois)}</div>
+      <div class="row2"><div class="fld"><label for="eMois">Date des prix</label>${monthField('eMois', 'data-e="mois"', e.mois)}</div>
         <div class="fld"><label for="eSurf">Surface (${esc(e.surfLabel || 'SDP')}) m²</label><input type="text" id="eSurf" data-e="surface" value="${e.surface ?? ''}" inputmode="decimal"></div></div>
       <div class="row2"><div class="fld"><label for="eAl">Aléas et imprévus %</label><input type="text" id="eAl" data-e="aleas" value="${e.aleas ?? ''}" inputmode="decimal"></div>
         <div class="fld"><label for="eTva">TVA %</label><input type="text" id="eTva" data-e="tva" value="${e.tva ?? ''}" inputmode="decimal"></div></div>
@@ -2081,6 +2090,8 @@ function bindEst(id, e) {
   $('#estPick').onchange = ev => { st.estSel = ev.target.value; st.estLine = null; st.confirm = null; renderAll(); };
   $('#estNew').onclick = () => { st.estSel = newEstimation(); st.estLine = null; renderAll(); later(() => { const t = $('#eTitle'); if (t) { t.focus(); t.select(); } }); };
   $('#estDup').onclick = () => { const c = clone(e); delete c.updated; c.title += ' (copie)'; c.created = Date.now(); c.lignes.forEach(l => l.id = uid()); st.estSel = newEstimation(c); renderAll(); };
+  $('#estMore').onclick = ev => { ev.stopPropagation(); $('#estMoreMenu').hidden = !$('#estMoreMenu').hidden; };
+  if ($('#estDel2')) $('#estDel2').onclick = () => $('#estDel').onclick();
   $('#estDel').onclick = () => { if (st.confirm !== 'delE:' + id) { st.confirm = 'delE:' + id; return renderAll(); } st.confirm = null; Store.del('estimations', id); st.estSel = null; renderAll(); };
   $('#estExp').onclick = ev => { ev.stopPropagation(); $('#estMenu').hidden = !$('#estMenu').hidden; };
   $('#estMenu').onclick = ev => { const b = ev.target.closest('button'); if (!b) return; $('#estMenu').hidden = true; if (b.dataset.x === 'xlsx') exportEstXlsx(e, false); if (b.dataset.x === 'dpgf') exportEstXlsx(e, true); if (b.dataset.x === 'pdf') exportEstPdf(e); if (b.dataset.x === 'cctp') exportCctpDocx(e); };
@@ -3112,7 +3123,7 @@ window.addEventListener('hashchange', async () => { openFromHash(); await openPr
   st.tab = 'home'; // on arrive toujours sur l'accueil (orientation) ; les liens directs (#est, #projet, #dpgf, #art) ouvrent leur vue
   if (!st.T) st.T = lastMonth('BT01') || today();
   if (location.protocol === 'file:') {
-    const a = document.createElement('a'); a.href = '../terrasuite.html'; a.className = 'btn'; a.textContent = '← TerraSuite'; a.style.textDecoration = 'none'; a.style.color = 'inherit';
+    const a = document.createElement('a'); a.href = '../terrasuite.html'; a.className = 'btn'; a.id = 'homeLink'; a.textContent = '← TerraSuite'; a.style.textDecoration = 'none'; a.style.color = 'inherit';
     $('.top').prepend(a);
   }
   bindTop();
