@@ -3,7 +3,7 @@
    plus le planning et la fiche, transversaux. Les modules existants (TerraGeo, TerraEstim, TerraPlanning, TerraChantier,
    TerraDocs, TerraContacts, TerraModel) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
    Les bibliothèques communes à tous les projets (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont à part. */
-const TS_VERSION = '0.7.0';
+const TS_VERSION = '0.7.1';
 const TSApp = (() => {
   const SVG = {
     back: '<path d="M15 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
@@ -117,13 +117,13 @@ const TSApp = (() => {
   const phaseBadge = (p, t) => { const curIdx = PHASE_ORDER.indexOf(PH2TAB[p.phase] || ''), i = PHASE_ORDER.indexOf(t.id); return i < 0 || curIdx < 0 ? '' : i < curIdx ? '<span class="badge done" title="Phase faite">✓</span>' : i === curIdx ? '<span class="badge cur">en cours</span>' : ''; };
   function drawProjSide(p) {
     const { tab, sub } = where(p, st.route[2], st.route[3]);
-    let g0 = '', h = '';
-    for (const t of TABS) {
-      const g = GRP[t.id] || ''; if (g && g !== g0) { h += `<span class="cap tcap">${E(g)}</span>`; g0 = g; }
-      const on = t.id === tab.id;
-      h += `<a class="titem${on ? ' on' : ''}" href="#/p/${p.id}/${t.id}" style="--c:${t.c}" ${FULL[t.id] ? `title="${E(FULL[t.id])}"` : ''}><span class="dot" style="background:${t.c}"></span><span class="tn">${E(t.nom)}</span>${phaseBadge(p, t)}</a>`;
-      if (on && t.subs.length > 1) h += `<div class="tsubs">${t.subs.map(s => `<a class="tsub${s[0] === sub[0] ? ' on' : ''}" href="#/p/${p.id}/${t.id}/${s[0]}" style="--c:${t.c}">${E(s[1])}${s[2] === 'soon' ? '<span class="soon">à venir</span>' : ''}</a>`).join('')}</div>`;
-    }
+    /* la mission comme un fil : esquisse → garantie ; phases faites pleines, phase en cours cerclée */
+    const curIdx = PHASE_ORDER.indexOf(PH2TAB[p.phase] || '');
+    const subsOf = t => t.id === tab.id && t.subs.length > 1 ? `<div class="tsubs">${t.subs.map(s => `<a class="tsub${s[0] === sub[0] ? ' on' : ''}" href="#/p/${p.id}/${t.id}/${s[0]}" style="--c:${t.c}">${E(s[1])}${s[2] === 'soon' ? '<span class="soon">à venir</span>' : ''}</a>`).join('')}</div>` : '';
+    const item = (t, cls = '') => { const i = PHASE_ORDER.indexOf(t.id), stt = i < 0 || curIdx < 0 ? '' : i < curIdx ? 'done' : i === curIdx ? 'cur' : 'todo';
+      return `<div class="tnode ${cls} ${stt}" style="--c:${t.c}"><a class="titem${t.id === tab.id ? ' on' : ''}" href="#/p/${p.id}/${t.id}" ${FULL[t.id] ? `title="${E(FULL[t.id])}"` : ''}><span class="knot" aria-hidden="true"></span><span class="tn">${E(t.nom)}${stt === 'cur' ? '<small>phase en cours</small>' : ''}</span></a>${subsOf(t)}</div>`; };
+    const ph = TABS.filter(t => PHASE_ORDER.includes(t.id)), tr = TABS.filter(t => t.tr);
+    const h = item(TABS[0], 'solo') + `<span class="cap tcap">Mission</span><div class="thread">${ph.map(t => item(t)).join('')}</div><span class="cap tcap">Projet</span>${tr.map(t => item(t, 'solo')).join('')}`;
     document.getElementById('side').innerHTML = `
       <a class="brand" href="#/"><img class="logo" src="suite/logo.svg" alt=""><b>Terra<span>Suite</span></b><span class="ver">${TS_VERSION} bêta</span></a>
       <a class="pback" href="#/projets">${ico('back')}Tous les projets</a>
@@ -235,7 +235,7 @@ const TSApp = (() => {
     const pills = tab.subs.length > 1 ? tab.subs.map(s => `<a class="sub${s[0] === sub[0] ? ' on' : ''}" href="#/p/${p.id}/${tab.id}/${s[0]}" style="${s[0] === sub[0] ? `background:${tab.c};border-color:${tab.c}` : ''}">${E(s[1])}</a>`).join('') : '';
     const ov = tab.id === 'apercu';
     const crumb = ov ? '' : `<span class="crumb"><span class="sep">›</span>${E(tab.nom)}${tab.subs.length > 1 ? `<span class="sep">›</span>${E(sub[1])}` : ''}</span>`;
-    $m().innerHTML = `<div class="phead${ov ? '' : ' slim'}"><div class="t"><a class="btn icon back" href="#/projets" aria-label="Projets">${ico('back')}</a><div class="ttl">${ov ? `<div class="k">Projet${statut ? ' · ' + E(statut) : ''}${p.phase ? ' · phase ' + E(p.phase) : ''}</div>` : ''}<h1><span class="pn">${E(p.code || '—')} · ${E(p.nom || 'Projet sans nom')}</span>${crumb}</h1>${ov ? `<div class="w">${E([p.adresse, [p.cp, p.ville].filter(Boolean).join(' ')].filter(Boolean).join(', ') || 'Adresse à renseigner dans la fiche')}</div>` : ''}</div>
+    $m().innerHTML = `<div class="phead${ov ? '' : ' slim'}" style="--c:${tab.c}"><div class="t"><a class="btn icon back" href="#/projets" aria-label="Projets">${ico('back')}</a><div class="ttl">${ov ? `<div class="k">Projet${statut ? ' · ' + E(statut) : ''}${p.phase ? ' · phase ' + E(p.phase) : ''}</div>` : ''}<h1><span class="pn">${E(p.code || '—')} · ${E(p.nom || 'Projet sans nom')}</span>${crumb}</h1>${ov ? `<div class="w">${E([p.adresse, [p.cp, p.ville].filter(Boolean).join(' ')].filter(Boolean).join(', ') || 'Adresse à renseigner dans la fiche')}</div>` : ''}</div>
         <div class="acts">${url ? `<a class="btn icon wide" href="${E(url)}" target="_blank" rel="noopener" title="Ouvrir en plein écran, dans un nouvel onglet" aria-label="Plein écran">${ico('ext')}</a><button class="btn icon wide" id="reF" title="Recharger" aria-label="Recharger">${ico('reload')}</button>` : ''}<a class="btn visit" href="#/p/${p.id}/chantier/chantier" title="Visite de chantier">${ico('cam')}<span class="wide">Visite de chantier</span></a></div></div>
       <div class="mnav"><label class="phsel" style="--c:${tab.c}"><span class="dot" style="background:${tab.c}"></span><select id="phSel" aria-label="Rubrique du projet">${og}</select></label>${pills ? `<nav class="subs" aria-label="Sous-onglets">${pills}</nav>` : ''}</div></div><div class="body" id="pbody"></div>`;
     document.getElementById('phSel').onchange = e => go(`#/p/${p.id}/${e.target.value}`);
@@ -311,7 +311,7 @@ const TSApp = (() => {
     body.innerHTML = `<div class="wrap">
       <div class="grid">${TABS.filter(t => t.id !== 'apercu').map(t => { const c = C[t.id]; const i = PHASE_ORDER.indexOf(t.id), ci = PHASE_ORDER.indexOf(curTab);
         const etat = i < 0 ? '' : ci < 0 ? '' : i < ci ? 'fait' : i === ci ? 'en cours' : '';
-        return `<a class="card pcard" href="#/p/${p.id}/${t.id}/${c[2]}"><span class="h"><span class="dot" style="background:${t.c}"></span>${E(t.nom)}${etat ? `<span class="badge${etat === 'en cours' ? ' cur' : ''}" style="margin-left:auto">${etat}</span>` : ''}</span><span class="v">${E(c[0])}</span><span class="d">${E(c[1])}</span></a>`; }).join('')}</div>
+        return `<a class="card pcard${etat === 'en cours' ? ' cur' : etat === 'fait' ? ' done' : ''}" style="--c:${t.c}" href="#/p/${p.id}/${t.id}/${c[2]}"><span class="h"><span class="dot" style="background:${t.c}"></span>${E(t.nom)}${etat ? `<span class="badge${etat === 'en cours' ? ' cur' : ''}" style="margin-left:auto">${etat}</span>` : ''}</span><span class="v">${E(c[0])}</span><span class="d">${E(c[1])}</span></a>`; }).join('')}</div>
       <div class="grid3" style="margin-top:14px">
         <div class="card"><h2>Activité récente</h2>${act.length ? `<div class="list">${act.map(a => `<div class="li"><span class="dot" style="background:${a.c};margin-top:7px"></span><div><div>${E(a.s)}</div><div class="m">${E(fmtD(a.t) || '')}</div></div></div>`).join('')}</div>` : '<p class="empty">Rien encore sur cet appareil.</p>'}</div>
         <div class="card"><h2>Projet</h2><div class="list">
