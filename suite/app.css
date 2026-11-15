@@ -333,3 +333,8 @@ tfoot td{border-top:2px solid var(--line)}
 .pemL .ck{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:13px;font-weight:700;color:#fff;margin-top:1px}
 .pemL li.ok .ck{background:var(--ok);border-color:var(--ok)}.pemL li.ok b{color:var(--muted);font-weight:500;text-decoration:line-through}
 .pemL a{font-weight:600;color:var(--accent-deep)}
+
+.plur{padding:10px 0;border-top:1px solid var(--line2)}
+.plur blockquote{margin:6px 0;padding:6px 12px;border-left:3px solid var(--accent);background:var(--sunk);font-size:13.5px;color:var(--ink)}
+.pluc{margin-top:8px}
+.pluc{grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}

@@ -175,6 +175,7 @@ table.t{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px}
         <button data-act="xlsx" role="menuitem"><b>Suivi des réponses</b> (.xlsx)<span>Un tableau par ligne de suivi, pour Excel</span></button>
         <button data-act="csv" role="menuitem"><b>Résultats affichés</b> (.csv)<span>La liste de la recherche en cours</span></button>
         <button data-act="backup" role="menuitem"><b>Exporter tout</b> (.json)<span>Veilles, suivi, refusés, avis vus</span></button>
+        <button data-act="claude" role="menuitem"><b>Importer l'analyse de Claude</b> (.json)<span>Note sur 100, résumé, points forts et risques des avis suivis</span></button>
         <button data-act="restore" role="menuitem"><b>Restaurer une sauvegarde</b><span>Ajoute ou remplace les éléments de même identifiant</span></button>
       </div></div>
     <span class="status" id="status" role="status"></span>
@@ -187,7 +188,7 @@ table.t{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px}
 <script src="../TerraChantier/ts-undo.js" onerror="this.remove()"></script>
 <script>
 /* ================= TerraSourcing : noyau ================= */
-const APP_VERSION = '0.4.2';
+const APP_VERSION = '0.5';
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -851,6 +852,13 @@ async function saveAct(act) {
   const stamp = today();
   if (act === 'backup') dl(`TerraSourcing ${stamp}.json`, JSON.stringify({ app: 'TerraSourcing', version: APP_VERSION, at: new Date().toISOString(), profiles: st.profiles, suivi: st.suivi, refus: st.refus, seen: st.seen, filters: st.f }, null, 1), 'application/json');
   if (act === 'restore') $('#jsonIn').click();
+  /* analyse des DCE par Claude (format terrasuite-ao) : la note et la synthèse s'ajoutent aux notes de chaque avis suivi */
+  if (act === 'claude') { const i = document.createElement('input'); i.type = 'file'; i.accept = '.json,application/json'; i.onchange = async () => { try {
+    const J = JSON.parse(await i.files[0].text()); if (J.format !== 'terrasuite-ao') throw new Error('format terrasuite-ao attendu'); let n = 0, out = 0;
+    for (const a of J.avis || []) { const o = st.suivi[a.idweb]; if (!o) { out++; continue; }
+      const txt = [`Analyse Claude du ${new Date().toLocaleDateString('fr-FR')} : ${a.note != null ? a.note + '/100' : ''}`, a.resume, a.points && a.points.length ? 'Points forts : ' + a.points.join(' ; ') : '', a.risques && a.risques.length ? 'Risques : ' + a.risques.join(' ; ') : '', a.pieces && a.pieces.length ? 'Pièces demandées : ' + a.pieces.join(' ; ') : ''].filter(Boolean).join('\n');
+      o.noteClaude = a.note ?? null; o.notes = [txt, o.notes].filter(Boolean).join('\n\n'); if (a.pieces && a.pieces.length && !o.pieces) o.pieces = a.pieces.join(', '); o.updated = Date.now(); n++; }
+    saveSuivi(); render(); setStatus(`${n} avis complété(s)${out ? `, ${out} absent(s) du suivi` : ''}`, 'ok'); } catch (e) { setStatus('Import impossible : ' + (e.message || e), 'err'); } }; i.click(); }
   if (act === 'csv') {
     const rows = [['Source', 'Référence', 'Objet', 'Acheteur', 'Départements', 'Procédure', 'Parution', 'Date limite', 'Repères', 'Lien avis', 'Lien DCE'], ...st.res.map(o => [o._plat ? o.source : 'BOAMP', o.idweb, o.objet, o.acheteur, o.depts.join(' '), o.procedure, fmtDay(o.parution), fmtDl(o.dl), o.flags.map(x => x[1]).join(', '), o.url, (o.links[0] || [])[1] || ''])];
     dl(`TerraSourcing recherche ${stamp}.csv`, '﻿' + rows.map(r => r.map(csvCell).join(';')).join('\r\n'), 'text/csv');

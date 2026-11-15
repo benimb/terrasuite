@@ -1,5 +1,5 @@
 /* TerraChantier : comptes-rendus de chantier, OPR et photos localisées sur plan */
-const APP_VERSION = '0.13.3';
+const APP_VERSION = '0.14';
 /* outils communs ($, esc, dates, ICON, ROLES, sheet, toast…) : common.js ; carnet de contacts : carnet.js */
 const intervenants = () => ((S.ch && S.ch.entreprises) || []).map(e => (e.role ? e : Object.assign(e, { role: 'ENT' }))).slice().sort((a, b) => roleRank(a.role) - roleRank(b.role) || (a.nom || '').localeCompare(b.nom || ''));
 /* mode terrain (téléphone) : prise de vues, CR, réserves ; la préparation (chantiers, plans, intervenants, lots) se fait dans la version complète */
@@ -345,6 +345,21 @@ async function numberQuestions() {
       if (twin) Object.assign(o, { cr: twin.cr, seq: twin.seq, qid: twin.qid }); else { const home = src || v; o.cr = home.numero; o.crt = vType(home); o.seq = nextSeq(home); o.qid = DB.uid(); if (home !== v) await save('visites', home); } }
     if (ch) await save('visites', v); }
 }
+/* compte-rendu préparé par Claude (format terrasuite-cr) : nouveau CR du type indiqué, questions en cours reprises comme d'habitude,
+   puis questions réglées marquées, nouvelles questions ajoutées par lot, présences et prochaine réunion ; tout reste modifiable */
+async function importCR(J) {
+  if (!J || J.format !== 'terrasuite-cr') throw new Error('fichier non reconnu (format terrasuite-cr attendu)');
+  const type = CR_TYPES[J.type] ? J.type : 'C', v = await newVisite(type, J.date || today(), J.heure || '');
+  const lotOf = c => { const k = norm(String(c || '')); if (!k) return ''; const l = (S.ch.lots || []).find(x => norm(x.code) === k || norm(x.nom) === k || norm(x.code + ' ' + x.nom) === k); return l ? l.id : ''; };
+  const reg = new Set((J.reglees || []).map(String));
+  let nReg = 0; (v.observations || []).forEach(o => { if (reg.has(qNum(o))) { o.statut = 'fait'; o.regleeAu = crName(v); nReg++; } });
+  for (const r of J.reprises || []) { const o = (v.observations || []).find(x => qNum(x) === String(r.question)); if (o && r.texte) o.texte = [o.texte, r.texte].filter(Boolean).join('\n'); if (o && r.echeance) o.echeance = r.echeance; }
+  for (const q of J.observations || []) { if (!(q.texte || q.titre)) continue; const o = newObs(v, lotOf(q.lot), q.texte || '', [], q.localisation || ''); if (q.titre) o.titre = q.titre; if (q.echeance) o.echeance = q.echeance; v.observations.push(o); }
+  const E = S.ch.entreprises || [];
+  for (const [nom, val] of Object.entries(J.presents || {})) { const e = E.find(x => norm(x.nom) === norm(nom) || (x.contact && norm(x.contact) === norm(nom))); if (e && ['O', 'N', 'R', 'E'].includes(val)) { v.presents = v.presents || {}; v.presents[e.id] = val; } }
+  if (J.prochaine) v.prochaine = J.prochaine; if (J.meteo) v.meteo = J.meteo; if (J.autres) v.autres = J.autres;
+  await save('visites', v); toast(`${crName(v)} importé : ${(J.observations || []).length} question(s), ${nReg} réglée(s) — à relire avant diffusion`); return v;
+}
 async function newVisite(type = 'C', date = today(), heure = '') {
   const prev = S.visites.filter(x => vType(x) === type).sort((a, b) => b.numero - a.numero)[0];
   const v = { id: DB.uid(), chantierId: S.ch.id, type, numero: (prev ? prev.numero : 0) + 1, date, heure, meteo: '', redacteur: S.auteur || (emetteurOf() || {}).contact || '', presents: {}, convoques: {}, autres: '', observations: [], prochaine: '', diffusion: '' };
@@ -381,10 +396,11 @@ async function changeCrType(v, t) {
 async function addObsFromPhoto(p) { const v = await visiteDuJour(); const o = obsFromPhoto(v, p); v.observations.push(o); await save('visites', v); toast(`Question ${qNum(o)} ajoutée au ${crName(v)}`); }
 function tabVisites(m) {
   const flt = CR_TYPES[S._crFlt] ? S._crFlt : 'all', types = Object.keys(CR_TYPES).filter(k => S.visites.some(v => vType(v) === k)), list = S.visites.filter(v => flt === 'all' || vType(v) === flt);
-  m.innerHTML = `<div class="bar"><h2 class="grow" style="font-size:18px">Comptes-rendus</h2><button class="btn pri" id="bNv">+ Nouveau compte-rendu</button></div>
+  m.innerHTML = `<div class="bar"><h2 class="grow" style="font-size:18px">Comptes-rendus</h2><button class="btn" id="bImpCR" title="Compte-rendu préparé par Claude à partir de vos notes ou d'une dictée (fichier .json)">Importer un CR</button><button class="btn pri" id="bNv">+ Nouveau compte-rendu</button></div>
     ${types.length > 1 || (types.length === 1 && types[0] !== 'C') ? `<div class="levels bar"><button class="chip${flt === 'all' ? ' on' : ''}" data-cf="all">Tous (${S.visites.length})</button>${types.map(k => `<button class="chip${flt === k ? ' on' : ''}" data-cf="${k}" title="${esc(CR_TYPES[k][0])}">${k} · ${esc(CR_TYPES[k][0])} (${S.visites.filter(v => vType(v) === k).length})</button>`).join('')}</div>` : ''}
     <div class="list">${list.map(v => { const o = v.observations || [], n = s => o.filter(x => qSect(v, x) === s).length; return `<a class="card ch" href="#/c/${S.ch.id}/v/${v.id}"><span class="ico">${crName(v)}</span><span class="grow"><b>${crName(v)} · ${fmtDL(v.date)}</b><div class="small muted">${esc(CR_TYPES[vType(v)][0])} · ${n('jour')} du jour, ${n('encours')} en cours, ${n('reglees')} réglée(s)${v.diffuseLe ? ' · diffusé le ' + fmtD(v.diffuseLe) : ''}</div></span></a>`; }).join('') || '<div class="empty"><b>Aucun compte-rendu</b>Créez le compte-rendu de la réunion (chantier, préparation, OPC, MOE, MOE-MOA, synthèse) : les questions en cours du CR précédent du même type sont reprises, les photos du jour vous sont proposées.</div>'}</div>`;
   $$('[data-cf]', m).forEach(b => b.onclick = () => { S._crFlt = b.dataset.cf; tabVisites(m); });
+  $('#bImpCR').onclick = () => { const i = document.createElement('input'); i.type = 'file'; i.accept = '.json,application/json'; i.onchange = async () => { try { const v = await importCR(JSON.parse(await i.files[0].text())); location.hash = `#/c/${S.ch.id}/v/${v.id}`; } catch (e) { toast('Import impossible : ' + (e.message || e)); } }; i.click(); };
   $('#bNv').onclick = async () => { const t = await pickCrType(); if (!t) return; const v = await newVisite(t); if ((v.observations || []).length) toast(`${v.observations.length} question(s) reprise(s) en questions en cours`); location.hash = `#/c/${S.ch.id}/v/${v.id}`; };
 }
 async function viewVisite(app, id) {

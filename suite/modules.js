@@ -215,11 +215,31 @@ const TSMod = (() => {
     body.querySelector('#rPr').onclick = () => printDoc("Rapport d'analyse des offres", p, blocks.map(b => `<h2>Lot ${E(b.lot)}</h2>${tbl(b, 'pt')}`).join('') + sign(["Maître d'œuvre"]));
   }
 
+  /* ---------- règles du PLU : analyse du règlement préparée par Claude (format terrasuite-plu), règle par règle avec l'extrait cité ---------- */
+  async function plu(p, body) {
+    const recs = await SD.list('plu', p.id), r = recs.sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))[0];
+    const imp = `<button class="btn${r ? '' : ' pri'}" id="pluImp">${r ? 'Remplacer par une nouvelle analyse' : "Importer l'analyse du PLU"}</button>`;
+    if (!r) { body.innerHTML = `<div class="wrap"><div class="card"><h2 style="margin-top:0">Règles du PLU</h2><p class="muted">Déposez le règlement du PLU (PDF, Géoportail de l'urbanisme) dans une conversation avec Claude, avec l'adresse ou les parcelles du projet. Claude relève la zone et chaque règle utile (destinations, implantation, hauteur, emprise, aspect, stationnement, espaces verts, réseaux) avec l'extrait exact et l'article, et vous renvoie un fichier à importer ici.</p>${imp}</div></div>`; bindImp(); return; }
+    const R = Array.isArray(r.regles) ? r.regles : [], G = new Map(); R.forEach(x => { const k = x.theme || 'Autres règles'; if (!G.has(k)) G.set(k, []); G.get(k).push(x); });
+    const C = r.constructible || {}, cKeys = Object.entries(C).filter(([, v]) => v !== '' && v !== null && v !== undefined);
+    const regle = x => `<div class="plur"><div class="row" style="justify-content:space-between;gap:8px;align-items:baseline"><b>${E(x.regle || '')}</b>${x.valeur ? `<span class="badge cur">${E(x.valeur)}</span>` : ''}</div>${x.extrait ? `<blockquote>${E(x.extrait)}</blockquote>` : ''}<div class="hint">${E([x.article, x.page ? 'p. ' + x.page : ''].filter(Boolean).join(' · '))}${x.attention ? ` · <span style="color:var(--warn)">${E(x.attention)}</span>` : ''}</div></div>`;
+    body.innerHTML = `<div class="wrap" style="max-width:980px"><div class="card">
+      <div class="row" style="justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:8px"><h2 style="margin:0">Règles du PLU${r.zone ? ' · zone ' + E(r.zone) : ''}</h2><div class="row">${imp}<button class="btn" id="pluPr">Imprimer</button></div></div>
+      <p class="muted" style="margin:0 0 10px">${E([r.commune, r.document, r.version ? 'version ' + r.version : '', r.date ? 'analyse du ' + dFr(r.date) : ''].filter(Boolean).join(' · '))}</p>
+      ${cKeys.length ? `<div class="grid3 pluc">${cKeys.map(([k, v]) => `<div class="card" style="padding:10px 12px"><div class="hint">${E(k)}</div><div style="font-weight:700">${E(v)}</div></div>`).join('')}</div>` : ''}
+      ${r.synthese ? `<p style="margin:12px 0">${E(r.synthese)}</p>` : ''}
+      ${[...G.entries()].map(([g, L]) => `<h3 style="margin:16px 0 6px">${E(g)}</h3>${L.map(regle).join('')}`).join('')}
+      <p class="hint" style="margin-top:14px">Analyse préparée par Claude à partir du règlement fourni ; seul le règlement opposable fait foi. Vérifiez les extraits avant tout dépôt.</p></div></div>`;
+    bindImp();
+    body.querySelector('#pluPr').onclick = () => printDoc('Règles du PLU' + (r.zone ? ' · zone ' + r.zone : ''), p, `<p>${E([r.commune, r.document, r.version].filter(Boolean).join(' · '))}</p>${cKeys.length ? `<table class="pt"><tbody>${cKeys.map(([k, v]) => `<tr><th>${E(k)}</th><td>${E(v)}</td></tr>`).join('')}</tbody></table>` : ''}${[...G.entries()].map(([g, L]) => `<h2>${E(g)}</h2><table class="pt"><thead><tr><th>Règle</th><th>Valeur</th><th>Extrait</th><th>Article</th></tr></thead><tbody>${L.map(x => `<tr><td>${E(x.regle || '')}</td><td>${E(x.valeur || '')}</td><td>${E(x.extrait || '')}</td><td>${E([x.article, x.page ? 'p. ' + x.page : ''].filter(Boolean).join(' · '))}</td></tr>`).join('')}</tbody></table>`).join('')}`);
+    function bindImp() { body.querySelector('#pluImp').onclick = () => { const i = document.createElement('input'); i.type = 'file'; i.accept = '.json,application/json'; i.onchange = async () => { try { const J = JSON.parse(await i.files[0].text()); if (J.format !== 'terrasuite-plu') throw new Error('format terrasuite-plu attendu'); for (const o of recs) await SD.del('plu', p.id, o); await SD.put('plu', p.id, { ...J, date: J.date || today() }); plu(p, body); } catch (e) { alert('Import impossible : ' + (e.message || e)); } }; i.click(); }; }
+  }
+
   const MODS = {
     plans: (p, b) => documents(b, p, { coll: 'plans', title: "Plans et notice de l'avant-projet", hint: 'Plans, coupes, façades, notice descriptive, perspectives : avec indice et date ; repris pour le dossier de PC.', accept: '.pdf,image/*,.dwg,.dxf,.docx' }),
     dce: (p, b) => documents(b, p, { coll: 'dce', title: 'Dossier de consultation des entreprises', hint: 'Pièces du DCE : RC, CCAP, CCTP par lot, DPGF vierges, plans, planning. Le CCTP et la DPGF se génèrent dans le sous-onglet Descriptif (TerraEstim).', lot: true }),
     doe: (p, b) => documents(b, p, { coll: 'doe', title: 'DOE, DIUO', hint: "Dossiers des ouvrages exécutés reçus par lot (plans d'exécution, notices, fiches techniques, PV d'essais), DIUO du coordonnateur SPS.", lot: true }),
-    marches, rapport, os: osModule, situations, pvopr: pvOpr, pv: pvReception, gpa, fingpa: finGpa
+    plu, marches, rapport, os: osModule, situations, pvopr: pvOpr, pv: pvReception, gpa, fingpa: finGpa
   };
   return { MODS, SD };
 })();
