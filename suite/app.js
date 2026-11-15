@@ -3,7 +3,7 @@
    plus le planning et la fiche, transversaux. Les modules existants (TerraGeo, TerraEstim, TerraPlanning, TerraChantier,
    TerraDocs, TerraContacts, TerraModel) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
    Les bibliothèques communes à tous les projets (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont à part. */
-const TS_VERSION = '0.8.1';
+const TS_VERSION = '0.9.0';
 const TSApp = (() => {
   const SVG = {
     back: '<path d="M15 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
@@ -68,6 +68,7 @@ const TSApp = (() => {
   const st = { projets: [], q: '', route: [], frames: new Map(), installEvt: null, counts: {} };
   const $m = () => document.getElementById('main');
   const go = h => { if (location.hash !== h) location.hash = h; else draw(); };
+  const CTX = { main: () => $m(), ico: n => ico(n), projets: () => st.projets, go: h => go(h), reload: () => loadProjets() };
 
   /* ---------- données d'un projet, lues dans les bases de l'appareil ---------- */
   function idbGet(dbName, store, key) {
@@ -141,12 +142,13 @@ const TSApp = (() => {
     const item = p => `<a class="pitem${p.id === curP ? ' on' : ''}${p.statut === 'archive' ? ' arch' : ''}" href="#/p/${p.id}"><span class="l1"><b>${E(p.code || '—')}</b><span class="ph">${E(p.phase || '')}</span></span><span class="nm">${E(p.nom || 'Projet sans nom')}</span></a>`;
     document.getElementById('side').innerHTML = `
       <a class="brand" href="#/"><img class="logo" src="suite/logo.svg" alt=""><b>Terra<span>Suite</span></b><span class="ver">${TS_VERSION} bêta</span></a>
-      <div class="search"><label class="hint" for="pq">Chercher un projet</label><input id="pq" type="search" placeholder="Code, nom, commune" value="${E(st.q)}"></div>
+      <div class="search"><label class="hint" for="pq">Chercher</label><input id="pq" type="search" placeholder="Projet, contact, produit, CR…" value="${E(st.q)}" title="Filtre les projets ; Entrée : chercher dans toute l'agence"></div>
       <div class="side-h"><span class="cap">Projets</span><button class="btn sm pri" id="newP">${ico('plus')}Projet</button></div>
-      <nav class="plist" aria-label="Projets">${act.map(item).join('') || '<div class="empty" style="padding:8px 12px">Aucun projet</div>'}${old.length ? `<details style="margin-top:6px"><summary class="hint" style="padding:6px 12px;cursor:pointer">Terminés, archivés (${old.length})</summary>${old.map(item).join('')}</details>` : ''}</nav>
+      <nav class="plist" aria-label="Projets">${st.q.trim().length >= 2 ? `<a class="pitem gall" href="#/cherche/${encodeURIComponent(st.q.trim())}">${ico('list')}Chercher « ${E(st.q.trim())} » partout</a>` : ''}${act.map(item).join('') || (st.q ? '' : '<div class="empty" style="padding:8px 12px">Aucun projet</div>')}${old.length ? `<details style="margin-top:6px"><summary class="hint" style="padding:6px 12px;cursor:pointer">Terminés, archivés (${old.length})</summary>${old.map(item).join('')}</details>` : ''}</nav>
       <div class="libs"><span class="cap">Commun à tous les projets</span>${LIBS.map(b => `<a class="litem${curL === b.id ? ' on' : ''}" href="#/b/${b.id}"><span class="dot" style="background:${b.c}"></span>${E(b.nom)}<span class="n">${E(st.counts[b.id] ?? '')}</span></a>`).join('')}</div>
       <div class="side-f"><a class="sync" id="syncSt" href="#/compte"><span id="syncTx">Synchronisation</span></a><a href="#/compte">Compte</a></div>`;
     const qi = document.getElementById('pq'); qi.oninput = () => { st.q = qi.value; const pos = qi.selectionStart; drawSide(); const n = document.getElementById('pq'); n.focus(); n.setSelectionRange(pos, pos); if (st.route[0] === 'projets') drawHome(); };
+    qi.onkeydown = e => { if (e.key === 'Enter' && qi.value.trim().length >= 2) go('#/cherche/' + encodeURIComponent(qi.value.trim())); };
     document.getElementById('newP').onclick = newProject;
     paintSync();
   }
@@ -175,16 +177,21 @@ const TSApp = (() => {
     $m().innerHTML = `<div class="body home"><div class="wrap" style="max-width:980px">
       <div class="suite-id"><img src="suite/logo.svg" alt="" width="64" height="64"><div><div class="wm">Terra<span>Suite</span></div><div class="tag">Le projet d'architecture, de l'esquisse à la garantie de parfait achèvement</div></div></div>
       <div class="hhead"><span id="agLogoH" class="hlogo"></span><div>${ag && ag.nom ? `<div class="k">${E(ag.nom)}</div>` : ''}<h1>${E(hello)}</h1></div></div>
-      ${(() => { const S = [!et.pret ? ['Se connecter', 'Sans compte, les projets restent sur cet appareil. Connecté, ils suivent sur le PC, la tablette et le téléphone.', '#/compte', 'Se connecter'] : null, !ag && !LS.get('ts-agence-plus-tard', false) ? ["Renseigner le profil de l'agence", 'Nom, adresse, logo, architectes : en tête des CR, des PV et des documents.', '#/agence', 'Renseigner'] : null].filter(Boolean);
-        return S.length ? `<div class="card note start"><div style="flex:1;min-width:240px"><b>Pour commencer</b><ol class="steps">${S.map(s => `<li><a href="${s[2]}">${E(s[0])}</a><span class="muted"> · ${E(s[1])}</span></li>`).join('')}</ol></div>${!ag && !LS.get('ts-agence-plus-tard', false) ? '<button class="btn sm" id="agLater">Masquer</button>' : ''}</div>` : ''; })()}
+      ${(() => { const S = [!et.pret ? ['Se connecter', 'Sans compte, les projets restent sur cet appareil. Connecté, ils suivent sur le PC, la tablette et le téléphone.', '#/compte', 'Se connecter'] : null, null].filter(Boolean);
+        return S.length ? `<div class="card note start"><div style="flex:1;min-width:240px"><b>Pour commencer</b><ol class="steps">${S.map(s => `<li><a href="${s[2]}">${E(s[0])}</a><span class="muted"> · ${E(s[1])}</span></li>`).join('')}</ol></div></div>` : ''; })()}
+      <div class="hsearch"><input class="inp" id="hq" type="search" placeholder="Chercher dans toute l'agence : projet, contact, produit, article de CCTP, CR…" aria-label="Chercher dans toute l'agence"></div>
+      ${act.length ? '<div id="homeX" class="homex" style="margin:0 0 14px"></div>' : ''}
       <div class="choices">
         ${act.length ? `<a class="choice" href="#/projets"><span class="ci">${HOUSE(false)}</span><span class="ct">Travailler sur un projet</span><span class="cd">${act.length} projet${act.length > 1 ? 's' : ''} en cours</span></a>` : `<div class="choice off" aria-disabled="true"><span class="ci">${HOUSE(false)}</span><span class="ct">Travailler sur un projet</span><span class="cd">Aucun projet pour l'instant : créez le premier à côté.</span></div>`}
         <button class="choice" id="newP3"><span class="ci">${HOUSE(true)}</span><span class="ct">Créer un projet</span><span class="cd">Code, nom, phase : le reste se complète au fil des phases</span></button>
       </div>
+      ${act.length ? '' : '<div id="homeX" class="homex"></div>'}
       ${quick.length ? `<div class="cap" style="margin:22px 0 8px">${rec.length ? 'Ouverts récemment' : 'Projets en cours'}</div><div class="grid">${quick.map(p => `<a class="card pcard" href="#/p/${p.id}" style="min-height:0"><span class="h"><span class="dot" style="background:${(tabOf(PH2TAB[p.phase]) || TABS[0]).c}"></span>${E(p.code || '—')}<span class="hint" style="margin-left:auto">${E(p.phase || '')}</span></span><span class="d" style="color:var(--ink);font-size:14px">${E(p.nom || '')}</span></a>`).join('')}</div>` : ''}
       <div class="hlinks"><a href="#/agence">${ag ? "Compléter ou corriger le profil de l'agence" : "Profil de l'agence"}</a><a href="#/b">Bibliothèques</a><a href="#/compte">Compte et appareils</a></div>
     </div></div>`;
     document.getElementById('newP3').onclick = newProject;
+    const hq = document.getElementById('hq'); hq.onkeydown = e => { if (e.key === 'Enter' && hq.value.trim().length >= 2) go('#/cherche/' + encodeURIComponent(hq.value.trim())); };
+    TSX.homeBlocks(CTX, document.getElementById('homeX'));
     const later = document.getElementById('agLater'); if (later) later.onclick = () => { LS.set('ts-agence-plus-tard', true); drawAccueil(); };
     if (ag && ag.logoId && typeof BlobURL === 'function') BlobURL(ag.logoId).then(u => { const el = document.getElementById('agLogoH'); if (u && el) el.innerHTML = `<img src="${u}" alt="Logo de l'agence">`; });
   }
@@ -323,8 +330,9 @@ const TSApp = (() => {
           <div class="li"><div><div class="m">Type, nature des travaux</div>${E([p.typeOuvrage, p.nature].filter(Boolean).join(' · ') || '—')}</div></div>
           <div class="li"><div><div class="m">Surface</div>${E(p.surface ? p.surface + ' m²' : '—')}</div></div>
           <div class="li"><div><div class="m">Indice de prix du lieu</div>${(() => { const l = TSP.loc(p); return E(String(l.coef).replace('.', ',') + (l.nom ? ' (' + l.nom + ')' : '')); })()}</div></div>
-        </div><a class="btn sm" href="#/p/${p.id}/projet/fiche" style="margin-top:10px">Compléter la fiche</a></div>
+        </div><div class="row" style="margin-top:10px;gap:8px;flex-wrap:wrap"><a class="btn sm" href="#/p/${p.id}/projet/fiche">Compléter la fiche</a><button class="btn sm" id="shareP" title="Page autonome (lots, marchés, autorisations, réunions, réserves ouvertes) à envoyer au maître d'ouvrage ou aux entreprises">Partager l'état du projet</button></div></div>
       </div></div>`;
+    const sh = document.getElementById('shareP'); if (sh) sh.onclick = () => TSX.share(p);
   }
 
   /* ---------- fiche du projet ---------- */
@@ -372,7 +380,7 @@ const TSApp = (() => {
   }
 
   /* ---------- bibliothèques ---------- */
-  function drawLib(id) {
+  function drawLib(id, extra) {
     const small = matchMedia('(max-width:899px)').matches;
     if (!id && small) {
       $m().innerHTML = `<div class="phead"><div class="t"><div><div class="k">Commun à tous les projets</div><h1>Bibliothèques</h1></div></div><div style="height:14px"></div></div><div class="body"><div class="wrap">${LIBS.map(b => `<a class="mitem" href="#/b/${b.id}"><span style="display:flex;gap:12px;align-items:center"><span class="dot" style="background:${b.c};width:10px;height:10px"></span><b style="font-size:16px">${E(b.nom)}</b></span><span class="nm">${E(st.counts[b.id] ?? '')}</span></a>`).join('')}</div></div>`;
@@ -380,7 +388,7 @@ const TSApp = (() => {
     }
     const b = LIBS.find(x => x.id === id) || LIBS[0];
     $m().innerHTML = `<div class="phead"><div class="t"><a class="btn icon back" href="#/b" aria-label="Bibliothèques">${ico('back')}</a><div style="flex:1"><div class="k">Bibliothèque de l'agence · commune à tous les projets</div><h1>${E(b.nom)}</h1></div><div class="acts"><a class="btn sm wide" href="${E(b.url)}" target="_blank" rel="noopener">${ico('ext')}Plein écran</a></div></div><div style="height:12px"></div></div><div class="body frame" id="lbody"></div>`;
-    mountFrame(document.getElementById('lbody'), b.url + (b.click ? '' : ''), b.click);
+    mountFrame(document.getElementById('lbody'), b.url + (extra ? '#' + extra : ''), extra ? null : b.click);
   }
 
   /* ---------- compte, synchronisation, installation ---------- */
@@ -429,7 +437,9 @@ const TSApp = (() => {
     if (r[0] === 'photo') { const last = LS.get('ts-last-projet', null); if (last && st.projets.some(p => p.id === last)) return go(`#/p/${last}/chantier/chantier`); toast('Ouvrez un projet, puis « Visite de chantier »'); return go('#/'); }
     drawSide(); drawBottom();
     if (r[0] === 'p' && r[1]) return drawProject(r[1], r[2], r[3]);
-    if (r[0] === 'b') return drawLib(r[1]);
+    if (r[0] === 'b') return drawLib(r[1], r[2]);
+    if (r[0] === 'cherche') return TSX.search(CTX, r[1] || '');
+    if (r[0] === 'semaine') return TSX.week(CTX);
     if (r[0] === 'compte') return drawCompte();
     if (r[0] === 'agence') return drawAgence();
     if (r[0] === 'projets') return drawHome();
