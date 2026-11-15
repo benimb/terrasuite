@@ -1,13 +1,13 @@
 /* TerraContacts : carnet de contacts de la suite (maîtres d'ouvrage, bureaux d'études, entreprises…) et fiche de l'agence.
    Les contacts servent aux chantiers (intervenants, destinataires des photos et des CR) et, par le format d'échange, aux autres applications. */
-const APP_VERSION = '0.9.2';
+const APP_VERSION = '0.9.3';
 const S = { _fresh: true }; // utilisé par la synchronisation
 let F = { role: '', q: '' };
 
 const topBar = () => `<div class="top">${suiteBtn()}<h1><span class="brand">Terra<b>Contacts</b></span> <span class="ver">v${APP_VERSION} bêta</span><small>Projets, contacts et agence</small></h1><span class="sync" id="syncSt" title="Synchronisation"><i></i></span><button class="icon-btn" id="bSet" aria-label="Réglages">${ICON.gear}</button></div>`;
 /* accueil : page d'entrée quand TerraContacts est ouvert seul ; dans TerraSuite (cadre), la bibliothèque « Contacts » ouvre directement le carnet */
 const EMBED = window.self !== window.top;
-const tabs = cur => `<nav class="tabs">${[...(EMBED ? [] : [['accueil', 'Accueil']]), ['projets', 'Projets'], ['contacts', 'Contacts'], ['agence', 'Mon agence'], ['compte', 'Mon compte']].map(([k, t]) => `<a href="#/${k}" class="${k === cur ? 'on' : ''}">${t}</a>`).join('')}<a href="./">TerraChantier →</a></nav>`;
+const tabs = cur => EMBED ? '' : `<nav class="tabs">${[...(EMBED ? [] : [['accueil', 'Accueil']]), ['projets', 'Projets'], ['contacts', 'Contacts'], ['agence', 'Mon agence'], ['compte', 'Mon compte']].map(([k, t]) => `<a href="#/${k}" class="${k === cur ? 'on' : ''}">${t}</a>`).join('')}<a href="./">TerraChantier →</a></nav>`;
 
 async function render() {
   let r = location.hash.replace(/^#\/?/, '').split('/')[0]; const app = $('#app');

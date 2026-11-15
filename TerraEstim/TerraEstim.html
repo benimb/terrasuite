@@ -382,7 +382,7 @@ function migrateLots(D) {
 }
 /* index par défaut de chaque lot (modifiable dans Indices et réglages) */
 const LOT_INDEX = Object.fromEntries(NOMENCLATURE.map(([c, , i]) => [c, i]));
-const APP_VERSION = '0.25';
+const APP_VERSION = '0.26';
 const LOTS_DEFAULT = NOMENCLATURE.map(([code, nom]) => ({ code, nom, indice: '' }));
 const SETTINGS_DEFAULT = { lots: LOTS_DEFAULT, stat: 'median', partFixe: 0, retenuesOnly: false, defIndex: 'BT01', tva: 20, aleas: 5, locNorm: true };
 
@@ -939,9 +939,11 @@ function renderLib() {
       <td class="num range hide-sm">${s && s.n > 1 ? `${eur0(s.min)} – ${eur0(s.max)}` : ''}</td>
       <td class="num muted hide-sm">${lastObs ? mFmt(lastObs) : ''}</td></tr>`);
   }
-  v.innerHTML = tb + `<div class="work"><div class="scroller"><table class="t"><thead><tr><th>Code</th><th>Désignation</th><th>U</th><th class="num">Prix</th><th class="num">PU réf. €HT</th><th class="num hide-sm">Fourchette</th><th class="num hide-sm">Dernier</th></tr></thead><tbody>${rows.join('') || '<tr><td colspan="7" class="muted">Aucune prestation ne correspond.</td></tr>'}</tbody></table></div>
+  const noPx = !st.data.sources.size ? `<div class="note-px" style="margin:8px 12px;padding:10px 12px;border-radius:10px;background:var(--accent-soft,#f6e9e3);font-size:14px"><b>Pas encore de prix.</b> La base contient les ${NFq.format(st.data.prestations.size)} prestations types, sans prix : les prix viennent des devis (DPGF) d'entreprises que vous importez. Chaque prix relevé est ensuite revalorisé à la date choisie et ramené au lieu du projet. <button class="btn sm" id="noPxImp" style="margin-left:6px">Importer un devis</button></div>` : '';
+  v.innerHTML = tb + noPx + `<div class="work"><div class="scroller"><table class="t"><thead><tr><th>Code</th><th>Désignation</th><th>U</th><th class="num">Prix</th><th class="num">PU réf. €HT</th><th class="num hide-sm">Fourchette</th><th class="num hide-sm">Dernier</th></tr></thead><tbody>${rows.join('') || '<tr><td colspan="7" class="muted">Aucune prestation ne correspond.</td></tr>'}</tbody></table></div>
     <aside class="side" id="libSide">${libSide()}</aside></div>`;
   bindLibTb();
+  const ni = $('#noPxImp'); if (ni) ni.onclick = () => { const b = $('#btnImport'); if (b) b.click(); };
   $$('#view tr.row').forEach(tr => tr.addEventListener('click', () => { st.libSel = tr.dataset.id; st.confirm = null; renderAll(); }));
   bindLibSide();
 }

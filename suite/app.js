@@ -3,7 +3,7 @@
    plus le planning et la fiche, transversaux. Les modules existants (TerraGeo, TerraEstim, TerraPlanning, TerraChantier,
    TerraDocs, TerraContacts, TerraModel) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
    Les bibliothèques communes à tous les projets (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont à part. */
-const TS_VERSION = '0.8.0';
+const TS_VERSION = '0.8.1';
 const TSApp = (() => {
   const SVG = {
     back: '<path d="M15 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
@@ -26,7 +26,7 @@ const TSApp = (() => {
     { id: 'esq', nom: 'ESQ', c: '#8a5a12', subs: [['site', 'Site', 'frame', T_GEO], ['m3d', 'Maquette 3D', 'frame', T_MOD], ['esq', 'Estimation', 'frame', T_EST('ESQ'), '[data-tab=est]']] },
     { id: 'avp', nom: 'AVP', c: '#a16207', subs: [['plans', 'Plans et notice', 'native'], ['estimA', 'Estimation', 'frame', T_EST('AVP'), '[data-tab=est]'], ['auto', 'PC, DP, modificatifs', 'native']] },
     { id: 'pro', nom: 'PRO / DCE', c: '#2f8f5b', subs: [['estim', 'Estimation', 'frame', T_EST('PRO'), '[data-tab=est]'], ['desc', 'Descriptif (CCTP)', 'frame', T_EST('PRO'), '[data-tab=cctp]'], ['produits', 'Produits', 'frame', p => `TerraDocs/TerraDocs.html#projet=${p.id}`], ['dce', 'Dossier DCE', 'native']] },
-    { id: 'act', nom: 'Analyse des offres', c: '#0f766e', subs: [['offres', "Devis d'entreprises", 'frame', p => `TerraEstim/TerraEstim.html#dpgf=${p.id}`], ['rapport', "Rapport d'analyse", 'soon'], ['marches', 'Marchés', 'soon']] },
+    { id: 'act', nom: 'Analyse des offres', c: '#0f766e', subs: [['offres', "Devis d'entreprises", 'frame', p => `TerraEstim/TerraEstim.html#dpgf=${p.id}`], ['rapport', "Rapport d'analyse", 'native'], ['marches', 'Marchés', 'native']] },
     { id: 'chantier', nom: 'Chantier', c: '#7a4fb0', subs: [['chantier', 'Visites et CR', 'frame', T_CH('visites')], ['os', 'Ordres de service', 'native'], ['situations', 'Situations', 'native']] },
     { id: 'opr', nom: 'OPR', c: '#c2410c', subs: [['opr', 'Réserves', 'frame', T_CH('reserves')], ['pvopr', "PV d'OPR", 'native']] },
     { id: 'recep', nom: 'Réception', c: '#b45309', subs: [['pv', 'PV de réception, levée des réserves', 'native'], ['doe', 'DOE, DIUO', 'native']] },

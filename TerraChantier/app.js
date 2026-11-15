@@ -1,5 +1,5 @@
 /* TerraChantier : comptes-rendus de chantier, OPR et photos localisées sur plan */
-const APP_VERSION = '0.13.2';
+const APP_VERSION = '0.13.3';
 /* outils communs ($, esc, dates, ICON, ROLES, sheet, toast…) : common.js ; carnet de contacts : carnet.js */
 const intervenants = () => ((S.ch && S.ch.entreprises) || []).map(e => (e.role ? e : Object.assign(e, { role: 'ENT' }))).slice().sort((a, b) => roleRank(a.role) - roleRank(b.role) || (a.nom || '').localeCompare(b.nom || ''));
 /* mode terrain (téléphone) : prise de vues, CR, réserves ; la préparation (chantiers, plans, intervenants, lots) se fait dans la version complète */
@@ -143,7 +143,7 @@ async function editChantier(c, projetId = '', opt = {}) {
 /* ================= Chantier ================= */
 function viewChantier(app, tab) {
   const c = S.ch, nP = S.photos.filter(p => !p.planId || phTodo(p)).length, nR = S.reserves.filter(r => r.statut === 'ouverte').length;
-  app.innerHTML = topBar(esc(c.nom), [c.adresse, c.moa].filter(Boolean).join(' · '), { back: '#/' }) +
+  app.innerHTML = (window.self !== window.top ? topBar('', '', {}) : topBar(esc(c.nom), [c.adresse, c.moa].filter(Boolean).join(' · '), { back: '#/' })) +
     `<nav class="tabs">${[['photos', 'Photos' + (nP ? ` (${nP} à compléter)` : '')], ['visites', 'Comptes-rendus'], ['reserves', 'Réserves' + (nR ? ` (${nR})` : '')], ['plans', 'Plans'], ['fiche', isField() ? 'Intervenants' : 'Intervenants et lots']].map(([k, t]) => `<a href="#/c/${c.id}/${k}" class="${k === tab ? 'on' : ''}">${t}</a>`).join('')}</nav><main id="main"></main>
     <button class="fab" id="fab" aria-label="Prendre une photo">${ICON.cam}</button>`;
   bindTop(app); $('#fab').onclick = () => takePhoto({});

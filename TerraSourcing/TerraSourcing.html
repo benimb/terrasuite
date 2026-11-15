@@ -156,6 +156,8 @@ table.t{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px}
 </head>
 <body>
 <div id="app">
+  <script>/* ouvert dans TerraSuite (bibliothèque « Veille appels d'offres ») : la suite donne le nom et la navigation ; pas de marque, pas d'accueil, ouverture sur la recherche */
+  if (window.self !== window.top) { document.documentElement.classList.add('ts-embed'); const s = document.createElement('style'); s.textContent = '.ts-embed .brand,.ts-embed #homeLink,.ts-embed [data-tab=home]{display:none!important}html.ts-embed{--accent:#b5532f}'; document.head.appendChild(s); document.addEventListener('DOMContentLoaded', () => document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === 'search')))); }</script>
   <header class="top">
     <a class="btn" href="../terrasuite.html" id="homeLink">← TerraSuite</a>
     <div class="brand">TerraSourcing <span class="ver" id="ver" title="Version bêta"></span><small>Appels d'offres publics</small></div>
@@ -185,7 +187,7 @@ table.t{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px}
 <script src="../TerraChantier/ts-undo.js" onerror="this.remove()"></script>
 <script>
 /* ================= TerraSourcing : noyau ================= */
-const APP_VERSION = '0.4.1';
+const APP_VERSION = '0.4.2';
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -463,7 +465,7 @@ const Ori = (() => {
 
 /* ================= TerraSourcing : interface ================= */
 const st = {
-  tab: 'home', f: Object.assign(clone(FILTER_DEFAULT), LS.get('filters', {})), res: [], total: 0, offset: 0, loading: false, err: '', sel: null,
+  tab: (window.self !== window.top ? 'search' : 'home'), f: Object.assign(clone(FILTER_DEFAULT), LS.get('filters', {})), res: [], total: 0, offset: 0, loading: false, err: '', sel: null,
   profiles: LS.get('profiles', []), suivi: LS.get('suivi', {}), seen: LS.get('seen', {}), descOpts: LS.get('desc-opts', null),
   newCounts: {}, suiviSel: null, suiviFilter: 'actifs', attr: { f: { kw: '', tit: '', days: 365 }, res: [], total: 0, facets: null, sel: null, loading: false },
   plat: null, srcFilter: LS.get('srcFilter', 'tout'), refus: LS.get('refus', {}), refusSel: null

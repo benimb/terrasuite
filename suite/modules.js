@@ -173,11 +173,53 @@ const TSMod = (() => {
     const b = body.querySelector('#fPr'); if (b && rec) b.onclick = () => printDoc('Fin de la garantie de parfait achèvement', p, `<p>Réception prononcée le <b>${dFr(rec.date)}</b>. La garantie de parfait achèvement (article 1792-6 du Code civil) prend fin le <b>${dFr(fin)}</b>.</p>${ouverts.length ? `<p>Désordres signalés et non réglés à ce jour :</p><table class="pt"><thead><tr><th>Signalé le</th><th>Localisation</th><th>Désordre</th><th>Lot, entreprise</th><th>État</th></tr></thead><tbody>${ouverts.map(d => `<tr><td>${dFr(d.date)}</td><td>${E(d.localisation)}</td><td>${E(d.description)}</td><td>${E(d.lot)}</td><td>${E(d.etat)}</td></tr>`).join('')}</tbody></table>` : '<p>Aucun désordre signalé ne reste à régler.</p>'}${sign(['Maître d\'ouvrage', 'Maître d\'œuvre'])}`);
   }
 
+  /* ---------- marchés de travaux : un marché par lot du marché du projet (entreprise retenue dans la fiche, montant, dates) ---------- */
+  async function marches(p, body) {
+    const P = (typeof TSP !== 'undefined' && await TSP.get(p.id)) || p, L = (P.lots || []).slice().sort((a, b) => String(a.num || '').localeCompare(String(b.num || ''), 'fr', { numeric: true }));
+    const recs = await SD.list('marches', p.id), by = new Map(recs.map(r => [r.lotId, r]));
+    const fiche = `#/p/${p.id}/projet/fiche`;
+    if (!L.length) { body.innerHTML = `<div class="wrap"><div class="card"><h2 style="margin-top:0">Marchés de travaux</h2><p class="muted">Aucun lot du marché pour ce projet. Les lots du marché (allotissement) et les entreprises retenues se définissent dans la fiche du projet ; un marché est ensuite suivi ici pour chaque lot.</p><a class="btn pri" href="${fiche}">Définir les lots du marché</a></div></div>`; return; }
+    const rec = l => by.get(l.id) || { lotId: l.id, montant: '', signe: '', notifie: '', delai: '', notes: '' };
+    const tot = L.reduce((a, l) => a + num(rec(l).montant), 0);
+    body.innerHTML = `<div class="wrap"><div class="card">
+      <div class="row" style="justify-content:space-between;margin-bottom:8px"><h2 style="margin:0">Marchés de travaux</h2><div class="row"><a class="btn" href="${fiche}">Lots et entreprises</a><button class="btn" id="mPr">Imprimer</button></div></div>
+      <div class="tscroll"><table class="t"><thead><tr><th style="min-width:200px">Lot du marché</th><th style="min-width:200px">Entreprise retenue</th><th style="min-width:130px;text-align:right">Montant HT</th><th>Signé le</th><th>Notifié le</th><th style="min-width:90px">Délai (mois)</th><th style="min-width:180px">Notes</th></tr></thead><tbody>
+      ${L.map(l => { const r = rec(l); return `<tr data-l="${E(l.id)}"><td><b>${E(l.num || '')}</b> ${E(l.nom || '')}</td><td>${l.ent && l.ent.nom ? E(l.ent.nom) : `<a href="${fiche}">à désigner</a>`}</td>
+        <td><input data-k="montant" value="${E(r.montant)}" inputmode="decimal" style="text-align:right" aria-label="Montant HT"></td><td><input data-k="signe" type="date" value="${E(r.signe)}" aria-label="Signé le"></td><td><input data-k="notifie" type="date" value="${E(r.notifie)}" aria-label="Notifié le"></td><td><input data-k="delai" value="${E(r.delai)}" inputmode="decimal" aria-label="Délai en mois"></td><td><input data-k="notes" value="${E(r.notes)}" aria-label="Notes"></td></tr>`; }).join('')}
+      </tbody><tfoot><tr><td colspan="2" style="text-align:right;font-weight:700">Total des marchés</td><td style="text-align:right;font-weight:700;padding-right:18px">${eur(tot)}</td><td colspan="4"></td></tr></tfoot></table></div>
+      <p class="hint" style="margin:10px 0 0">L'entreprise retenue vient de la fiche du projet (lots du marché) ou de l'offre marquée « retenue » dans Devis d'entreprises.</p></div></div>`;
+    body.querySelectorAll('tr[data-l] [data-k]').forEach(el => el.addEventListener('change', async () => { const l = L.find(x => x.id === el.closest('tr').dataset.l), r = rec(l); r[el.dataset.k] = el.value; by.set(l.id, await SD.put('marches', p.id, r)); if (el.dataset.k === 'montant') marches(p, body); }));
+    body.querySelector('#mPr').onclick = () => printDoc('Récapitulatif des marchés de travaux', p, `<table class="pt"><thead><tr><th>Lot</th><th>Entreprise</th><th>Montant HT</th><th>Signé le</th><th>Notifié le</th><th>Délai</th></tr></thead><tbody>${L.map(l => { const r = rec(l); return `<tr><td>${E([l.num, l.nom].filter(Boolean).join(' '))}</td><td>${E(l.ent && l.ent.nom || '')}</td><td style="text-align:right">${eur(r.montant)}</td><td>${dFr(r.signe)}</td><td>${dFr(r.notifie)}</td><td>${E(r.delai ? r.delai + ' mois' : '')}</td></tr>`; }).join('')}<tr><td colspan="2"><b>Total</b></td><td style="text-align:right"><b>${eur(tot)}</b></td><td colspan="3"></td></tr></tbody></table>`);
+  }
+
+  /* ---------- rapport d'analyse des offres : offres reçues (DPGF importées dans TerraEstim) comparées par lot ---------- */
+  function idbKV(dbName, key) { return new Promise(ok => { try { const r = indexedDB.open(dbName); r.onupgradeneeded = () => { try { r.transaction.abort(); } catch (e) {} ok(null); }; r.onsuccess = () => { const d = r.result; if (!d.objectStoreNames.contains('kv')) { d.close(); return ok(null); } const q = d.transaction('kv').objectStore('kv').get(key); q.onsuccess = () => { ok(q.result || null); d.close(); }; q.onerror = () => { ok(null); d.close(); }; }; r.onerror = () => ok(null); } catch (e) { ok(null); } }); }
+  async function rapport(p, body) {
+    const src = new Map();
+    try { (await DB.all('docs')).filter(d => d.app === 'estim' && d.coll === 'sources' && !d.deleted && d.data && (d.projetId === p.id || d.data.projet === p.id)).forEach(d => src.set(String(d.rid), d.data)); } catch (e) {}
+    const kv = await idbKV('terraestim', 'te-sources'); Object.entries(kv || {}).filter(([, s]) => s && s.projet === p.id).forEach(([k, s]) => src.set(k, s));
+    const S = [...src.entries()].map(([id, s]) => ({ id, ...s }));
+    const offres = `#/p/${p.id}/act/offres`;
+    if (!S.length) { body.innerHTML = `<div class="wrap"><div class="card"><h2 style="margin-top:0">Rapport d'analyse des offres</h2><p class="muted">Aucune offre reçue pour ce projet. Importez les DPGF remplies par les entreprises dans « Devis d'entreprises » : elles sont comparées ici lot par lot (montant, rang, écarts).</p><a class="btn pri" href="${offres}">Importer des offres</a></div></div>`; return; }
+    const G = new Map(); S.forEach(s => { const k = (s.lots && s.lots.length ? s.lots.join(' + ') : s.lot) || 'Sans lot'; if (!G.has(k)) G.set(k, []); G.get(k).push(s); });
+    const pct = (a, b) => b ? (a - b) / b * 100 : 0, fP = v => (v > 0 ? '+' : '') + v.toFixed(1).replace('.', ',') + ' %';
+    const blocks = [...G.entries()].sort((a, b) => String(a[0]).localeCompare(String(b[0]), 'fr', { numeric: true })).map(([lot, L]) => {
+      L.sort((a, b) => num(a.montant) - num(b.montant)); const min = num(L[0].montant), moy = L.reduce((a, s) => a + num(s.montant), 0) / L.length;
+      return { lot, rows: L.map((s, i) => ({ ent: s.entreprise || '—', m: num(s.montant), rang: i + 1, eMin: pct(num(s.montant), min), eMoy: pct(num(s.montant), moy), ret: !!s.retenue, mois: s.mois || '' })), moy };
+    });
+    const tbl = (b, cls) => `<table class="${cls}"><thead><tr><th>Rang</th><th>Entreprise</th><th style="text-align:right">Montant HT</th><th style="text-align:right">Écart au moins-disant</th><th style="text-align:right">Écart à la moyenne</th><th></th></tr></thead><tbody>${b.rows.map(r => `<tr><td>${r.rang}</td><td>${E(r.ent)}</td><td style="text-align:right">${eur(r.m)}</td><td style="text-align:right">${r.rang === 1 ? '—' : fP(r.eMin)}</td><td style="text-align:right">${fP(r.eMoy)}</td><td>${r.ret ? '<b>retenue</b>' : ''}</td></tr>`).join('')}</tbody></table>`;
+    body.innerHTML = `<div class="wrap"><div class="card">
+      <div class="row" style="justify-content:space-between;margin-bottom:8px"><h2 style="margin:0">Rapport d'analyse des offres</h2><div class="row"><a class="btn" href="${offres}">Offres reçues</a><button class="btn" id="rPr">Imprimer</button></div></div>
+      <p class="muted" style="margin:0 0 10px">${S.length} offre${S.length > 1 ? 's' : ''} sur ${G.size} lot${G.size > 1 ? 's' : ''}. La comparaison ligne à ligne et le choix de l'entreprise retenue se font dans « Devis d'entreprises ».</p>
+      ${blocks.map(b => `<h3 style="margin:14px 0 6px">Lot ${E(b.lot)} <span class="hint">· ${b.rows.length} offre${b.rows.length > 1 ? 's' : ''}, moyenne ${eur(b.moy)}</span></h3><div class="tscroll">${tbl(b, 't')}</div>`).join('')}</div></div>`;
+    body.querySelector('#rPr').onclick = () => printDoc("Rapport d'analyse des offres", p, blocks.map(b => `<h2>Lot ${E(b.lot)}</h2>${tbl(b, 'pt')}`).join('') + sign(["Maître d'œuvre"]));
+  }
+
   const MODS = {
     plans: (p, b) => documents(b, p, { coll: 'plans', title: "Plans et notice de l'avant-projet", hint: 'Plans, coupes, façades, notice descriptive, perspectives : avec indice et date ; repris pour le dossier de PC.', accept: '.pdf,image/*,.dwg,.dxf,.docx' }),
     dce: (p, b) => documents(b, p, { coll: 'dce', title: 'Dossier de consultation des entreprises', hint: 'Pièces du DCE : RC, CCAP, CCTP par lot, DPGF vierges, plans, planning. Le CCTP et la DPGF se génèrent dans le sous-onglet Descriptif (TerraEstim).', lot: true }),
     doe: (p, b) => documents(b, p, { coll: 'doe', title: 'DOE, DIUO', hint: "Dossiers des ouvrages exécutés reçus par lot (plans d'exécution, notices, fiches techniques, PV d'essais), DIUO du coordonnateur SPS.", lot: true }),
-    os: osModule, situations, pvopr: pvOpr, pv: pvReception, gpa, fingpa: finGpa
+    marches, rapport, os: osModule, situations, pvopr: pvOpr, pv: pvReception, gpa, fingpa: finGpa
   };
   return { MODS, SD };
 })();
