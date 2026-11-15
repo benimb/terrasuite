@@ -5,6 +5,11 @@
 const TSP = (() => {
   const NAME = 'terrachantier', STORES = ['chantiers', 'plans', 'photos', 'visites', 'reserves', 'contacts', 'projets', 'docs'];
   const PHASES = ['Faisabilité', 'ESQ', 'APS', 'APD', 'PC', 'PRO', 'DCE', 'ACT', 'VISA', 'DET', 'AOR', 'GPA'];
+  /* les phases de la mission, rangées comme les rubriques de TerraSuite (une seule liste dans toutes les applications) */
+  const PHASE_GRP = [['ESQ', [['Faisabilité', 'Faisabilité'], ['ESQ', 'ESQ · esquisse']]], ['AVP', [['APS', 'APS · avant-projet sommaire'], ['APD', 'APD · avant-projet définitif'], ['PC', 'PC · permis de construire']]],
+    ['PRO / DCE', [['PRO', 'PRO · projet'], ['DCE', 'DCE · consultation des entreprises']]], ['Analyse des offres', [['ACT', 'ACT · analyse des offres, marchés']]],
+    ['Chantier', [['VISA', 'VISA · visa des études d\'exécution'], ['DET', 'DET · direction des travaux']]], ['OPR, réception', [['AOR', 'AOR · OPR et réception']]], ['GPA', [['GPA', 'GPA · garantie de parfait achèvement']]]];
+  const phaseOptions = (v, blank) => (blank ? '<option value=""></option>' : '') + PHASE_GRP.map(([g, L]) => `<optgroup label="${g}">${L.map(([k, n]) => `<option value="${k}"${k === v ? ' selected' : ''}>${n}</option>`).join('')}</optgroup>`).join('') + (v && !PHASES.includes(v) ? `<option selected>${String(v).replace(/</g, '&lt;')}</option>` : '');
   /* typologie, pour comparer les projets entre eux dans la base commune */
   const TYPES = ['Logement collectif', 'Logement individuel', 'Bureaux', 'Enseignement', 'Petite enfance', 'Santé, médico-social', 'Équipement sportif', 'Culture, loisirs', 'Commerce', 'Hôtellerie, restauration', 'Administration, services publics', 'Industrie, logistique', 'Patrimoine, monument', 'Autre'];
   const NATURES = ['Construction neuve', 'Extension', 'Réhabilitation lourde', 'Rénovation, réhabilitation légère', 'Restructuration', 'Aménagement intérieur', 'Rénovation énergétique', 'Entretien, mise en conformité'];
@@ -41,7 +46,7 @@ const TSP = (() => {
   const emit = () => { listeners.forEach(f => { try { f(); } catch (e) {} }); };
   if (bc) bc.onmessage = emit;
   return {
-    PHASES, STATUTS, TYPES, NATURES, uid, label, fix, LOC, dept: deptOf,
+    PHASES, PHASE_GRP, phaseOptions, STATUTS, TYPES, NATURES, uid, label, fix, LOC, dept: deptOf,
     /* indice de localisation du projet : valeur saisie au projet, sinon celle de son département */
     loc(p) { const d = deptOf(p), t = LOC[d], m = p && p.coefLoc !== undefined && p.coefLoc !== null && p.coefLoc !== '' && isFinite(+p.coefLoc) ? +p.coefLoc : null;
       return { coef: m !== null ? m : t ? t[1] : 1, table: t ? t[1] : null, dept: d, nom: t ? t[0] : '', manuel: m !== null }; },

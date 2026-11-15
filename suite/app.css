@@ -296,3 +296,22 @@ tfoot td{border-top:2px solid var(--line)}
 .pcard.done .v{color:var(--muted)}
 .card{border-radius:14px}
 @media (prefers-reduced-motion:reduce){.pcard{transition:none}.pcard:hover{transform:none}}
+
+/* ---------- 0.8 : lot 1 de l'audit d'ergonomie ---------- */
+.note.start{align-items:flex-start}
+.steps{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px;font-size:14px}
+.steps a{font-weight:600;color:var(--accent-deep)}
+.choice.off{cursor:default;opacity:.62}
+.choice.off:hover{border-color:var(--line);box-shadow:none}
+@media (max-width:899px){
+  /* sous-rubriques : toutes visibles, sur une ou deux lignes, au lieu d'un ruban qui défile */
+  .mnav{flex-wrap:wrap;overflow:visible}
+  .mnav .phsel{flex:1 1 100%}
+  .phsel select{max-width:none;flex:1}
+  .mnav .subs{flex-wrap:wrap;overflow:visible;gap:6px}
+  .mnav .sub{height:38px;border-radius:19px;padding:0 14px;font-size:13.5px}
+  /* l'appareil photo est dans la barre du bas */
+  .phead .btn.visit{display:none}
+  /* tableaux plus larges que l'écran : ombre à droite tant qu'il reste à faire défiler */
+  .tscroll{background:linear-gradient(to right,var(--surface) 30%,transparent) left/40px 100% no-repeat local,linear-gradient(to left,var(--surface) 30%,transparent) right/40px 100% no-repeat local,radial-gradient(farthest-side at 0 50%,rgba(0,0,0,.16),transparent) left/12px 100% no-repeat scroll,radial-gradient(farthest-side at 100% 50%,rgba(0,0,0,.16),transparent) right/12px 100% no-repeat scroll}
+}

@@ -53,9 +53,10 @@ async function render() {
     return viewChantier(app, tab);
   }
   S.ch = null; S._fresh = false; await viewHome(app);
-  if (r[0] === 'projet' && r[1]) { const ch = (await DB.all('chantiers')).filter(c => c.projetId === r[1]).sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''))[0]; if (ch) { location.replace('#/c/' + ch.id); return; }
-    /* dans TerraSuite : page simple avec un bouton, sans fenêtre ouverte d'office */
-    if (window.self !== window.top) { app.innerHTML = `<main><div class="empty-start"><h2>Pas encore de chantier pour ce projet</h2><p class="muted">Le chantier reprend le nom, l'adresse, le maître d'ouvrage et les lots du projet. Vous y importerez ensuite les plans de niveaux.</p><button class="btn pri" id="bOpenCh">Ouvrir le chantier</button></div></main>`; $('#bOpenCh', app).onclick = () => editChantier(null, r[1]); return; }
+  if (r[0] === 'projet' && r[1]) { const sub = ['photos', 'visites', 'reserves', 'plans', 'fiche'].includes(r[2]) ? r[2] : '';
+    const ch = (await DB.all('chantiers')).filter(c => c.projetId === r[1]).sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''))[0]; if (ch) { location.replace('#/c/' + ch.id + (sub ? '/' + sub : '')); return; }
+    /* dans TerraSuite : le chantier fait partie du projet ; il est créé d'office, sans étape, avec le nom, l'adresse, le maître d'ouvrage et les lots du projet */
+    if (window.self !== window.top) { editChantier(null, r[1], { auto: true, tab: sub || 'plans' }); return; }
     history.replaceState(null, '', '#/'); editChantier(null, r[1]); return; }
   if (r[0] === 'nouveau') { const pid = r[1] || ''; history.replaceState(null, '', '#/'); editChantier(null, pid); }
 }
@@ -96,7 +97,7 @@ async function viewHome(app) {
   if ($('#bInst')) $('#bInst').onclick = async () => { installEvt.prompt(); await installEvt.userChoice; installEvt = null; render(); };
 }
 const TSP_OK = () => typeof TSP !== 'undefined';
-async function editChantier(c, projetId = '') {
+async function editChantier(c, projetId = '', opt = {}) {
   const isNew = !c, ag = Carnet.agence(); c = c || { nom: '', code: '', adresse: '', moa: '', moe: ag ? ag.nom : '', lots: [], entreprises: [] };
   let moaPick = null; // maître d'ouvrage choisi dans le carnet
   /* projet de l'agence (TerraContacts, onglet Projets) : identité, intervenants, lots du marché et entreprises repris à la création */
@@ -114,7 +115,7 @@ async function editChantier(c, projetId = '') {
     ${isNew && ag ? `<div class="hint">Émetteur des comptes-rendus et des photos : ${esc(ag.nom)}${Carnet.architecte() ? ', ' + esc(Carnet.fullName(Carnet.architecte())) : ''} (modifiable dans « Intervenants et lots »).</div>` : ''}
     ${isNew ? '<label class="row small"><input type="checkbox" id="cLots" checked> Créer la liste de lots habituelle (modifiable ensuite)</label>' : ''}`,
     `${!isNew ? '<button class="btn danger" id="cDel">Supprimer</button><span class="grow"></span>' : ''}<button class="btn" data-close>Annuler</button><button class="btn pri" id="cOk">Enregistrer</button>`);
-  $('#cNom', sh.el).focus();
+  if (opt.auto && isNew) { sh.el.style.visibility = 'hidden'; if (!$('#cNom', sh.el).value.trim()) $('#cNom', sh.el).value = (proj && (proj.nom || proj.code)) || 'Chantier'; setTimeout(() => $('#cOk', sh.el).click(), 0); } else $('#cNom', sh.el).focus();
   if ($('#cProj', sh.el) && isNew) $('#cProj', sh.el).onchange = e => { const p = projets.find(x => x.id === e.target.value); if (!p) return; fromProj(p); $('#cNom', sh.el).value = c.nom; $('#cCode', sh.el).value = c.code; $('#cAdr', sh.el).value = c.adresse; $('#cMoa', sh.el).value = c.moa; };
   if ($('#cMoaK', sh.el)) $('#cMoaK', sh.el).onclick = async () => { const k = await Carnet.pick({ role: 'MOA', title: "Maître d'ouvrage" }); if (k) { moaPick = k; $('#cMoa', sh.el).value = k.c.nom; } };
   $('#cOk', sh.el).onclick = async () => {
@@ -134,7 +135,7 @@ async function editChantier(c, projetId = '') {
       for (const x of pj.intervenants || []) { if (x.role === 'MOA' || (x.cid && known.has(x.cid))) continue; const k = x.cid && Carnet.byId(x.cid); c.entreprises.push(k ? Carnet.asIntervenant(k, '', { id: DB.uid(), role: x.role || 'AUT', convoque: true }) : { id: DB.uid(), role: x.role || 'AUT', nom: x.nom, contact: x.contact || '', fonction: '', tel: x.tel || '', email: x.email || '', convoque: true }); if (x.cid) known.add(x.cid); }
       if ((pj.lots || []).length) c.lots = pj.lots.map(l => { let eid = ''; if (l.ent && l.ent.nom) { let e = c.entreprises.find(x => (l.ent.cid && x.contactId === l.ent.cid) || norm(x.nom) === norm(l.ent.nom)); if (!e) { const k = l.ent.cid && Carnet.byId(l.ent.cid); e = k ? Carnet.asIntervenant(k, '', { id: DB.uid(), role: 'ENT', convoque: true }) : { id: DB.uid(), role: 'ENT', nom: l.ent.nom, contact: l.ent.contact || '', fonction: '', tel: l.ent.tel || '', email: l.ent.email || '', convoque: true }; c.entreprises.push(e); } eid = e.id; } return { id: DB.uid(), code: String(l.num || ''), nom: l.nom || '', entrepriseId: eid }; });
     }
-    await save('chantiers', c); sh.close(); if (isNew) location.hash = `#/c/${c.id}/plans`; else render();
+    await save('chantiers', c); sh.close(); if (isNew) location.hash = `#/c/${c.id}/${opt.tab || 'plans'}`; else render();
   };
   if ($('#cDel', sh.el)) $('#cDel', sh.el).onclick = async () => { if (!confirm(`Supprimer le chantier « ${c.nom} » et toutes ses données sur cet appareil ?`)) return; c.deleted = true; await save('chantiers', c); sh.close(); location.hash = '#/'; };
 }

@@ -382,7 +382,7 @@ function migrateLots(D) {
 }
 /* index par défaut de chaque lot (modifiable dans Indices et réglages) */
 const LOT_INDEX = Object.fromEntries(NOMENCLATURE.map(([c, , i]) => [c, i]));
-const APP_VERSION = '0.24';
+const APP_VERSION = '0.25';
 const LOTS_DEFAULT = NOMENCLATURE.map(([code, nom]) => ({ code, nom, indice: '' }));
 const SETTINGS_DEFAULT = { lots: LOTS_DEFAULT, stat: 'median', partFixe: 0, retenuesOnly: false, defIndex: 'BT01', tva: 20, aleas: 5, locNorm: true };
 
@@ -1737,15 +1737,16 @@ async function openProjetHash() {
   const md = location.hash.match(/[#&]dpgf=([\w-]+)/); if (md) { history.replaceState(null, '', location.pathname); st.tab = 'src'; st.srcSel = null; st.srcProj = md[1]; return true; }
   const me = location.hash.match(/[#&]est=([^&]+)/); if (me && st.data.estimations.has(me[1])) { st.tab = 'est'; st.estSel = me[1]; history.replaceState(null, '', location.pathname); return true; }
   const pid = TSP_OK() ? TSP.fromHash() : ''; if (!pid) return false;
-  history.replaceState(null, '', location.pathname);
+  const want = (location.hash.match(/[#&]phase=([^&]+)/) || [])[1] || '';
+  history.replaceState(null, '', location.pathname + location.search);
   const p = st.projets.find(x => x.id === pid) || (await TSP.get(pid)); if (!p) return false;
   if (!st.projets.some(x => x.id === p.id)) st.projets.push(p);
   st.tab = 'est';
-  const ex = [...st.data.estimations].filter(([, e]) => e.projet === pid).sort((a, b) => (b[1].updated || 0) - (a[1].updated || 0))[0];
-  if (ex) { st.estSel = ex[0]; setStatus('Estimation du projet ' + TSP.label(p), 'ok'); return true; }
-  const ph = ['ESQ', 'APS', 'APD', 'PRO', 'DCE'].includes(p.phase) ? p.phase : 'APD';
-  st.estSel = newEstimation({ title: (p.code ? p.code + ' · ' : '') + 'Estimation ' + ph, operation: p.nom || '', moa: p.moa || '', phase: ph, projet: pid, vue: 'marche', surface: parseNum(p.surface || '') ?? modSdp(modOfP(pid)) });
-  setStatus('Nouvelle estimation créée pour le projet ' + TSP.label(p), 'ok'); return true;
+  /* une estimation par phase (ESQ, AVP, PRO / DCE) ; rien n'est créé sans l'accord de l'utilisateur */
+  const mine = [...st.data.estimations].filter(([, e]) => e.projet === pid).sort((a, b) => (b[1].updated || 0) - (a[1].updated || 0));
+  const ex = want ? mine.find(([, e]) => PH_GRP(e.phase) === want) : mine[0];
+  if (ex) { st.estSel = ex[0]; st.pendEst = null; setStatus('Estimation ' + (want || '') + ' du projet ' + TSP.label(p), 'ok'); return true; }
+  st.pendEst = { pid, grp: want || PH_GRP(p.phase) || 'AVP', prev: mine[0] ? mine[0][0] : null }; st.estSel = null; return true;
 }
 
 /* ================= Lots du marché (allotissement de l'opération) ================= */
@@ -1971,8 +1972,19 @@ function estLots(e) {
   for (const c of used) if (!order.includes(c)) order.push(c);
   return order;
 }
+const PH_GRP = ph => ({ 'Faisabilité': 'ESQ', ESQ: 'ESQ', APS: 'AVP', APD: 'AVP', AVP: 'AVP', PC: 'AVP', PRO: 'PRO', DCE: 'PRO' })[ph] || '';
+const GRP_NOM = { ESQ: "d'esquisse", AVP: "d'avant-projet", PRO: 'de projet (PRO / DCE)' }, GRP_PH = { ESQ: 'ESQ', AVP: 'APD', PRO: 'PRO' };
+function renderPendEst(v) {
+  const P = st.pendEst, p = st.projets.find(x => x.id === P.pid) || {}, prev = P.prev && st.data.estimations.get(P.prev);
+  const mk = base => { const ph = GRP_PH[P.grp] || 'APD', o = { title: (p.code ? p.code + ' · ' : '') + 'Estimation ' + (P.grp === 'PRO' ? 'PRO' : P.grp), operation: p.nom || '', moa: p.moa || '', phase: ph, projet: P.pid, vue: 'marche', surface: parseNum(p.surface || '') ?? modSdp(modOfP(P.pid)) };
+    st.estSel = newEstimation(base ? { ...JSON.parse(JSON.stringify(base)), ...o, surface: base.surface ?? o.surface, created: Date.now() } : o); st.pendEst = null; renderAll(); setStatus(base ? 'Estimation ' + P.grp + ' créée à partir de « ' + base.title + ' »' : 'Estimation ' + P.grp + ' créée', 'ok'); };
+  v.innerHTML = `<div class="empty"><h2>Pas encore d'estimation ${esc(GRP_NOM[P.grp] || P.grp)}</h2><p>${prev ? `Partez de l'estimation précédente du projet (« ${esc(prev.title)} ») : ses lignes et ses quantités sont copiées, elle-même reste inchangée. Ou commencez une estimation vide.` : 'Une estimation reprend les prestations de la bibliothèque avec vos quantités ; les prix sont revalorisés au mois choisi.'}</p>
+    <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap">${prev ? `<button class="btn pri" id="pendCopy">Partir de « ${esc(prev.title)} »</button><button class="btn" id="pendNew">Estimation vide</button>` : `<button class="btn pri" id="pendNew">Créer l'estimation</button>`}</div></div>`;
+  $('#pendNew').onclick = () => mk(null); const c = $('#pendCopy'); if (c) c.onclick = () => mk(prev);
+}
 function renderEst() {
   const v = $('#view');
+  if (st.pendEst && !st.estSel) return renderPendEst(v);
   const list = Array.from(st.data.estimations.entries()).sort((a, b) => (b[1].updated || 0) - (a[1].updated || 0));
   if (!st.estSel || !st.data.estimations.get(st.estSel)) { let last = null; try { last = localStorage.getItem('te-est'); } catch (e) {} st.estSel = list.find(x => x[0] === last) ? last : list[0] ? list[0][0] : null; }
   if (!st.estSel) {
@@ -2026,7 +2038,7 @@ function renderEst() {
   const usedLots = new Set(C.lots.map(g => g.lot));
   const addLot = `<select id="estAddLot"><option value="">+ Ajouter un lot…</option>${lots().filter(l => !usedLots.has(l.code)).map(l => `<option value="${esc(l.code)}">${esc(l.code + ' ' + l.nom)}</option>`).join('')}</select>`;
   v.innerHTML = tb + `<div class="work"><div class="scroller"><table class="t"><thead><tr><th>N°</th><th>Désignation</th><th>U</th><th class="num">Quantité</th><th class="num">PU € HT</th><th class="num">Montant € HT</th><th></th></tr></thead>
-    <tbody>${rows.join('') || `<tr class="est-empty"><td colspan="12">${C.allot ? 'Aucune ligne : ajoutez un lot du marché dans la carte de droite, puis ses prestations.' : 'Aucune ligne : choisissez un lot ci-dessous, puis ses prestations.'}</td></tr>`}</tbody></table><div style="padding:12px 8px 40px">${C.allot ? '' : addLot}</div></div>
+    <tbody>${rows.join('') || `<tr class="est-empty"><td colspan="12">${C.allot ? 'Aucune ligne : ajoutez un lot du marché dans la carte « Projet et lots du marché », puis ses prestations.' : 'Aucune ligne : choisissez un lot ci-dessous, puis ses prestations.'}</td></tr>`}</tbody></table><div style="padding:12px 8px 40px">${C.allot ? '' : addLot}</div></div>
     <aside class="side" id="estSide">${estSide(e, C)}</aside></div>`;
   bindEst(id, e);
 }

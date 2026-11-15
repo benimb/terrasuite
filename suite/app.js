@@ -3,7 +3,7 @@
    plus le planning et la fiche, transversaux. Les modules existants (TerraGeo, TerraEstim, TerraPlanning, TerraChantier,
    TerraDocs, TerraContacts, TerraModel) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
    Les bibliothèques communes à tous les projets (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont à part. */
-const TS_VERSION = '0.7.1';
+const TS_VERSION = '0.8.0';
 const TSApp = (() => {
   const SVG = {
     back: '<path d="M15 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
@@ -20,19 +20,19 @@ const TSApp = (() => {
   const LS = { get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
 
   /* ---------- onglets du projet : phases de la mission ---------- */
-  const T_GEO = p => `TerraGeo/TerraGeo.html#projet=${p.id}`, T_EST = p => `TerraEstim/TerraEstim.html#projet=${p.id}`, T_CH = p => `TerraChantier/index.html#/projet/${p.id}`, T_MOD = p => `TerraModel/TerraModel.html#projet=${p.id}`;
+  const T_GEO = p => `TerraGeo/TerraGeo.html#projet=${p.id}`, T_EST = ph => p => `TerraEstim/TerraEstim.html#projet=${p.id}&phase=${ph}`, T_CH = t => p => `TerraChantier/index.html#/projet/${p.id}/${t}`, T_MOD = p => `TerraModel/TerraModel.html#projet=${p.id}`;
   const TABS = [
     { id: 'apercu', nom: "Vue d'ensemble", c: '#b5532f', subs: [['apercu', "Vue d'ensemble", 'native']] },
-    { id: 'esq', nom: 'ESQ', c: '#8a5a12', subs: [['site', 'Site', 'frame', T_GEO], ['m3d', 'Maquette 3D', 'frame', T_MOD], ['esq', 'Estimation sommaire', 'soon']] },
-    { id: 'avp', nom: 'AVP', c: '#a16207', subs: [['plans', 'Plans et notice', 'native'], ['estimA', 'Estimation', 'frame', T_EST], ['auto', 'PC, DP, modificatifs', 'native']] },
-    { id: 'pro', nom: 'PRO / DCE', c: '#2f8f5b', subs: [['estim', 'Estimation', 'frame', T_EST], ['desc', 'Descriptif (CCTP)', 'frame', T_EST, '[data-tab=cctp]'], ['produits', 'Produits', 'frame', p => `TerraDocs/TerraDocs.html#projet=${p.id}`], ['dce', 'Dossier DCE', 'native']] },
+    { id: 'esq', nom: 'ESQ', c: '#8a5a12', subs: [['site', 'Site', 'frame', T_GEO], ['m3d', 'Maquette 3D', 'frame', T_MOD], ['esq', 'Estimation', 'frame', T_EST('ESQ'), '[data-tab=est]']] },
+    { id: 'avp', nom: 'AVP', c: '#a16207', subs: [['plans', 'Plans et notice', 'native'], ['estimA', 'Estimation', 'frame', T_EST('AVP'), '[data-tab=est]'], ['auto', 'PC, DP, modificatifs', 'native']] },
+    { id: 'pro', nom: 'PRO / DCE', c: '#2f8f5b', subs: [['estim', 'Estimation', 'frame', T_EST('PRO'), '[data-tab=est]'], ['desc', 'Descriptif (CCTP)', 'frame', T_EST('PRO'), '[data-tab=cctp]'], ['produits', 'Produits', 'frame', p => `TerraDocs/TerraDocs.html#projet=${p.id}`], ['dce', 'Dossier DCE', 'native']] },
     { id: 'act', nom: 'Analyse des offres', c: '#0f766e', subs: [['offres', "Devis d'entreprises", 'frame', p => `TerraEstim/TerraEstim.html#dpgf=${p.id}`], ['rapport', "Rapport d'analyse", 'soon'], ['marches', 'Marchés', 'soon']] },
-    { id: 'chantier', nom: 'Chantier', c: '#7a4fb0', subs: [['chantier', 'Visites et CR', 'frame', T_CH], ['os', 'Ordres de service', 'native'], ['situations', 'Situations', 'native']] },
-    { id: 'opr', nom: 'OPR', c: '#c2410c', subs: [['opr', 'Réserves', 'frame', T_CH], ['pvopr', "PV d'OPR", 'native']] },
+    { id: 'chantier', nom: 'Chantier', c: '#7a4fb0', subs: [['chantier', 'Visites et CR', 'frame', T_CH('visites')], ['os', 'Ordres de service', 'native'], ['situations', 'Situations', 'native']] },
+    { id: 'opr', nom: 'OPR', c: '#c2410c', subs: [['opr', 'Réserves', 'frame', T_CH('reserves')], ['pvopr', "PV d'OPR", 'native']] },
     { id: 'recep', nom: 'Réception', c: '#b45309', subs: [['pv', 'PV de réception, levée des réserves', 'native'], ['doe', 'DOE, DIUO', 'native']] },
     { id: 'gpa', nom: 'GPA', c: '#6b7280', subs: [['gpa', 'Désordres signalés', 'native'], ['fingpa', 'Fin de GPA', 'native']] },
     { id: 'planning', nom: 'Planning', c: '#2f6fb5', tr: true, subs: [['planning', 'Planning', 'frame', p => `TerraPlanning/TerraPlanning.html#projet=${p.id}`]] },
-    { id: 'projet', nom: 'Fiche et intervenants', c: '#9a3b6b', tr: true, subs: [['fiche', 'Fiche', 'native'], ['inter', 'Intervenants, lots du marché', 'frame', p => `TerraChantier/contacts.html#/projets/${p.id}`]] }
+    { id: 'projet', nom: 'Fiche et intervenants', c: '#9a3b6b', tr: true, subs: [['fiche', 'Fiche, intervenants, lots du marché', 'frame', p => `TerraChantier/contacts.html#/projets/${p.id}`]] }
   ];
   const SOON = {
     m3d: ['Maquette 3D', "Modeleur de volumes posé sur la parcelle du site : niveaux, toitures, ouvertures. Ses surfaces alimenteront l'estimation sommaire et ses niveaux les plans du chantier."],
@@ -61,7 +61,7 @@ const TSApp = (() => {
     { id: 'prix', nom: 'Base de prix', c: '#2f8f5b', url: 'TerraEstim/TerraEstim.html', click: '[data-tab=lib]' },
     { id: 'cctp', nom: 'Articles de CCTP types', c: '#0f766e', url: 'TerraEstim/TerraEstim.html', click: '[data-tab=cctp]' },
     { id: 'contacts', nom: 'Contacts', c: '#9a3b6b', url: 'TerraChantier/contacts.html' },
-    { id: 'ao', nom: "Veille appels d'offres", c: '#0f766e', url: 'TerraSourcing/TerraSourcing.html' }
+    { id: 'ao', nom: "Veille appels d'offres", c: '#b45309', url: 'TerraSourcing/TerraSourcing.html' }
   ];
 
   /* ---------- état ---------- */
@@ -158,8 +158,9 @@ const TSApp = (() => {
   function paintSync() {
     const el = document.getElementById('syncSt'); if (!el || typeof Sync === 'undefined') return; Sync.paint();
     const s = Sync.state ? Sync.state() : { msg: '' }, tx = document.getElementById('syncTx');
-    if (tx) tx.textContent = s.state === 'ok' ? 'Synchronisé' : s.state === 'run' ? 'Synchronisation…' : s.state === 'wait' ? 'Hors réseau' : s.state === 'err' && !/connect|agence/i.test(s.msg || '') ? 'Synchronisation à vérifier' : 'Non connecté';
-    el.title = s.msg || '';
+    const off = !(s.state === 'ok' || s.state === 'run' || s.state === 'wait' || (s.state === 'err' && !/connect|agence/i.test(s.msg || '')));
+    if (tx) tx.textContent = s.state === 'ok' ? 'Synchronisé' : s.state === 'run' ? 'Synchronisation…' : s.state === 'wait' ? 'Hors réseau, enregistré ici' : !off ? 'Synchronisation à vérifier' : 'Enregistré sur cet appareil';
+    el.title = off ? 'Non connecté : les données sont enregistrées dans ce navigateur. Connectez-vous pour les retrouver sur vos autres appareils.' : (s.msg || '');
   }
 
   /* ---------- accueil : travailler sur un projet ou créer un projet ---------- */
@@ -174,10 +175,10 @@ const TSApp = (() => {
     $m().innerHTML = `<div class="body home"><div class="wrap" style="max-width:980px">
       <div class="suite-id"><img src="suite/logo.svg" alt="" width="64" height="64"><div><div class="wm">Terra<span>Suite</span></div><div class="tag">Le projet d'architecture, de l'esquisse à la garantie de parfait achèvement</div></div></div>
       <div class="hhead"><span id="agLogoH" class="hlogo"></span><div>${ag && ag.nom ? `<div class="k">${E(ag.nom)}</div>` : ''}<h1>${E(hello)}</h1></div></div>
-      ${!et.pret ? `<div class="card note"><div><b>Connectez-vous à votre compte TerraSuite</b><div class="muted">Pour retrouver vos projets et leur contenu sur le PC, la tablette et le téléphone.</div></div><a class="btn pri" href="#/compte">Se connecter</a></div>` : ''}
-      ${!ag && !LS.get('ts-agence-plus-tard', false) ? `<div class="card note"><div><b>Première connexion : renseignez le profil de votre agence</b><div class="muted">Nom, adresse, logo, architectes : en tête des comptes-rendus, des PV et des documents. Une fois pour toute l'agence.</div></div><div class="row"><button class="btn" id="agLater">Plus tard</button><a class="btn pri" href="#/agence">Renseigner</a></div></div>` : ''}
+      ${(() => { const S = [!et.pret ? ['Se connecter', 'Sans compte, les projets restent sur cet appareil. Connecté, ils suivent sur le PC, la tablette et le téléphone.', '#/compte', 'Se connecter'] : null, !ag && !LS.get('ts-agence-plus-tard', false) ? ["Renseigner le profil de l'agence", 'Nom, adresse, logo, architectes : en tête des CR, des PV et des documents.', '#/agence', 'Renseigner'] : null].filter(Boolean);
+        return S.length ? `<div class="card note start"><div style="flex:1;min-width:240px"><b>Pour commencer</b><ol class="steps">${S.map(s => `<li><a href="${s[2]}">${E(s[0])}</a><span class="muted"> · ${E(s[1])}</span></li>`).join('')}</ol></div>${!ag && !LS.get('ts-agence-plus-tard', false) ? '<button class="btn sm" id="agLater">Masquer</button>' : ''}</div>` : ''; })()}
       <div class="choices">
-        <a class="choice" href="#/projets"><span class="ci">${HOUSE(false)}</span><span class="ct">Travailler sur un projet</span><span class="cd">${act.length ? act.length + ' projet(s) en cours' : 'Aucun projet en cours'}</span></a>
+        ${act.length ? `<a class="choice" href="#/projets"><span class="ci">${HOUSE(false)}</span><span class="ct">Travailler sur un projet</span><span class="cd">${act.length} projet${act.length > 1 ? 's' : ''} en cours</span></a>` : `<div class="choice off" aria-disabled="true"><span class="ci">${HOUSE(false)}</span><span class="ct">Travailler sur un projet</span><span class="cd">Aucun projet pour l'instant : créez le premier à côté.</span></div>`}
         <button class="choice" id="newP3"><span class="ci">${HOUSE(true)}</span><span class="ct">Créer un projet</span><span class="cd">Code, nom, phase : le reste se complète au fil des phases</span></button>
       </div>
       ${quick.length ? `<div class="cap" style="margin:22px 0 8px">${rec.length ? 'Ouverts récemment' : 'Projets en cours'}</div><div class="grid">${quick.map(p => `<a class="card pcard" href="#/p/${p.id}" style="min-height:0"><span class="h"><span class="dot" style="background:${(tabOf(PH2TAB[p.phase]) || TABS[0]).c}"></span>${E(p.code || '—')}<span class="hint" style="margin-left:auto">${E(p.phase || '')}</span></span><span class="d" style="color:var(--ink);font-size:14px">${E(p.nom || '')}</span></a>`).join('')}</div>` : ''}
@@ -236,7 +237,7 @@ const TSApp = (() => {
     const ov = tab.id === 'apercu';
     const crumb = ov ? '' : `<span class="crumb"><span class="sep">›</span>${E(tab.nom)}${tab.subs.length > 1 ? `<span class="sep">›</span>${E(sub[1])}` : ''}</span>`;
     $m().innerHTML = `<div class="phead${ov ? '' : ' slim'}" style="--c:${tab.c}"><div class="t"><a class="btn icon back" href="#/projets" aria-label="Projets">${ico('back')}</a><div class="ttl">${ov ? `<div class="k">Projet${statut ? ' · ' + E(statut) : ''}${p.phase ? ' · phase ' + E(p.phase) : ''}</div>` : ''}<h1><span class="pn">${E(p.code || '—')} · ${E(p.nom || 'Projet sans nom')}</span>${crumb}</h1>${ov ? `<div class="w">${E([p.adresse, [p.cp, p.ville].filter(Boolean).join(' ')].filter(Boolean).join(', ') || 'Adresse à renseigner dans la fiche')}</div>` : ''}</div>
-        <div class="acts">${url ? `<a class="btn icon wide" href="${E(url)}" target="_blank" rel="noopener" title="Ouvrir en plein écran, dans un nouvel onglet" aria-label="Plein écran">${ico('ext')}</a><button class="btn icon wide" id="reF" title="Recharger" aria-label="Recharger">${ico('reload')}</button>` : ''}<a class="btn visit" href="#/p/${p.id}/chantier/chantier" title="Visite de chantier">${ico('cam')}<span class="wide">Visite de chantier</span></a></div></div>
+        <div class="acts">${url ? `<a class="btn icon wide" href="${E(url)}" target="_blank" rel="noopener" title="Ouvrir en plein écran, dans un nouvel onglet" aria-label="Plein écran">${ico('ext')}</a><button class="btn icon wide" id="reF" title="Recharger" aria-label="Recharger">${ico('reload')}</button>` : ''}${PHASE_ORDER.indexOf(curTab) >= PHASE_ORDER.indexOf('chantier') ? `<a class="btn visit" href="#/p/${p.id}/chantier/chantier" title="Visite de chantier">${ico('cam')}<span class="wide">Visite de chantier</span></a>` : ''}</div></div>
       <div class="mnav"><label class="phsel" style="--c:${tab.c}"><span class="dot" style="background:${tab.c}"></span><select id="phSel" aria-label="Rubrique du projet">${og}</select></label>${pills ? `<nav class="subs" aria-label="Sous-onglets">${pills}</nav>` : ''}</div></div><div class="body" id="pbody"></div>`;
     document.getElementById('phSel').onchange = e => go(`#/p/${p.id}/${e.target.value}`);
     const sel = document.querySelector('.mnav .sub.on'); if (sel) sel.scrollIntoView({ block: 'nearest', inline: 'nearest' });
@@ -262,19 +263,22 @@ const TSApp = (() => {
     const d = e.data; if (!d || typeof d !== 'object') return;
     if (d.ts === 'edit' && st.imm && SMALL.matches) setImm(true);
     else if (d.ts === 'menus') setImm(false);
+    else if (d.ts === 'projetSupprime') { loadProjets().then(() => go('#/projets')); }
   });
   addEventListener('hashchange', () => setImm(false));
   /* adresse du module marquée de la version de la suite : après une mise à jour, le module est rechargé et non repris d'un cache */
   const withV = u => u.replace(/^([^#?]*)(\?[^#]*)?/, (m, a, q) => a + (q ? q + '&' : '?') + 'v=' + TS_VERSION);
   /* modules ouverts dans un cadre ; les derniers ouverts restent chargés (retour instantané) */
+  /* deux sous-rubriques peuvent ouvrir le même module (estimation et CCTP, base de prix et articles) : l'onglet voulu est cliqué à chaque ouverture */
+  function clickIn(f, sel) { let n = 0; const t = setInterval(() => { try { const b = f.contentDocument && f.contentDocument.querySelector(sel); if (b) { if (b.getAttribute('aria-selected') !== 'true') b.click(); clearInterval(t); } } catch (e) { clearInterval(t); } if (++n > 40) clearInterval(t); }, 250); }
   function mountFrame(body, url, click, fresh) {
     let f = st.frames.get(url);
     if (!f || fresh) {
       f = document.createElement('iframe'); f.src = withV(url); f.title = 'Module TerraSuite'; f.setAttribute('allow', 'camera; microphone; geolocation; clipboard-write; fullscreen');
-      if (click) f.addEventListener('load', () => { let n = 0; const t = setInterval(() => { try { const b = f.contentDocument && f.contentDocument.querySelector(click); if (b) { b.click(); clearInterval(t); } } catch (e) { clearInterval(t); } if (++n > 40) clearInterval(t); }, 250); }, { once: true });
+      if (click) f.addEventListener('load', () => clickIn(f, click), { once: true });
       st.frames.set(url, f);
       while (st.frames.size > 4) { const k = st.frames.keys().next().value; st.frames.get(k).remove(); st.frames.delete(k); }
-    } else { st.frames.delete(url); st.frames.set(url, f); }
+    } else { st.frames.delete(url); st.frames.set(url, f); if (click) clickIn(f, click); }
     body.appendChild(f);
   }
 
@@ -399,7 +403,7 @@ const TSApp = (() => {
   /* ---------- nouveau projet ---------- */
   function newProject() {
     const sh = sheet('Nouveau projet', `<div class="grid2"><label class="f">Code<input id="npC" placeholder="ex. CTN" autocomplete="off"></label><label class="f">Nom du projet<input id="npN" autocomplete="off"></label>
-      <label class="f">Phase<select id="npP">${TSP.PHASES.map(x => `<option${x === 'ESQ' ? ' selected' : ''}>${E(x)}</option>`).join('')}</select></label><label class="f">Commune<input id="npV" autocomplete="off"></label></div>`,
+      <label class="f">Phase en cours<select id="npP">${TSP.phaseOptions('ESQ')}</select></label><label class="f">Commune<input id="npV" autocomplete="off"></label></div>`,
       `<button class="btn" data-close>Annuler</button><button class="btn pri" id="npOk">Créer</button>`);
     setTimeout(() => sh.el.querySelector('#npC').focus(), 50);
     sh.el.querySelector('#npOk').onclick = async () => {

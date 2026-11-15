@@ -216,7 +216,7 @@ textarea{width:100%;resize:vertical}
 <div id="app">
   <header class="top">
     <a class="btn" href="../terrasuite.html" style="text-decoration:none;color:inherit" id="homeLink">← TerraSuite</a>
-    <div class="brand">TerraPlanning <span class="ver" title="Version bêta">v0.15.2 bêta</span><small>Plannings de projet</small></div>
+    <div class="brand">TerraPlanning <span class="ver" title="Version bêta">v0.15.3 bêta</span><small>Plannings de projet</small></div>
     <button class="btn icon" id="btnMenu" aria-label="Menu">☰</button>
     <div class="projsel"><label for="projSel" class="lbl">Planning</label><select id="projSel"></select></div>
     <div class="topacts" style="display:flex;gap:6px;flex-wrap:wrap">
@@ -2732,7 +2732,7 @@ function renderNew() {
     <div class="row2"><div class="fld"><label for="nOp">Opération</label><input type="text" id="nOp" placeholder="Ex. : Réhabilitation de la mairie annexe" value="${esc((st.projets.find(p => p.id === st.newProjet) || {}).nom || '')}"></div>
     <div class="fld"><label for="nStart">Date de début</label><input type="date" id="nStart" value="${Time.iso(D)}"></div></div>
     <div class="fld"><span class="lbl">Modèle</span><div class="tpls">
-      ${Object.entries(TEMPLATES).map(([k, t], i) => `<label class="tpl"><input type="radio" name="tpl" value="${k}"${k === 'chantier' ? ' checked' : ''}><div><b>${t.name}</b><span>${t.desc}</span><span style="display:block;margin-top:6px">${t.rows.filter(r => r[3] !== '').length} tâches et jalons</span></div></label>`).join('')}
+      ${(() => { const ph = (st.projets.find(p => p.id === st.newProjet) || {}).phase || '', def = ['VISA', 'DET', 'AOR', 'GPA'].includes(ph) || !ph ? 'chantier' : 'etudes'; return Object.entries(TEMPLATES).map(([k, t], i) => `<label class="tpl"><input type="radio" name="tpl" value="${k}"${k === def ? ' checked' : ''}><div><b>${t.name}</b><span>${t.desc}</span><span style="display:block;margin-top:6px">${t.rows.filter(r => r[3] !== '').length} tâches et jalons</span></div></label>`).join(''); })()}
       <label class="tpl"><input type="radio" name="tpl" value="agence"><div><b>Planning d'agence</b><span>Regroupe vos plannings de projet (une barre, les phases ou le détail) et des lignes propres à l'agence. Se met à jour quand un projet change.</span><span style="display:block;margin-top:6px">${st.list.filter(d => d.project.kind !== 'agence').length} plannings disponibles</span></div></label>
       <label class="tpl"><input type="radio" name="tpl" value="frise"><div><b>Frise chronologique</b><span>Périodes larges définies par une date de début et une date de fin, à l'année, au mois ou au jour, sans liens entre tâches. Échelles en années, décennies, siècles.</span><span style="display:block;margin-top:6px">Exemple : histoire d'un bâtiment et projet</span></div></label>
     </div></div>

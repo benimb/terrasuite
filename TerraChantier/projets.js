@@ -28,11 +28,12 @@ const Projets = (() => {
     const save = async () => { await TSP.put(p); if (typeof Sync !== 'undefined') Sync.soon(); };
     const fld = (k, t, ph = '', type = 'text') => `<label class="f">${t}<input type="${type}" data-p="${k}" value="${esc(p[k] || '')}" placeholder="${esc(ph)}"></label>`;
     const dt = (k, t) => `<label class="f">${t}<input type="date" data-d="${k}" value="${esc((p.dates || {})[k] || '')}"></label>`;
-    m.innerHTML = `<div class="bar"><a class="btn sm" href="#/projets">← Projets</a><h2 class="grow" style="font-size:20px">${esc(TSP.label(p))}</h2><button class="btn danger" id="pDel">Supprimer</button></div>
+    const inTS = window.self !== window.top;
+    m.innerHTML = `<div class="bar">${inTS ? '<span class="grow"></span>' : `<a class="btn sm" href="#/projets">← Projets</a><h2 class="grow" style="font-size:20px">${esc(TSP.label(p))}</h2>`}<button class="btn danger" id="pDel">Supprimer le projet</button></div>
       <div class="card" style="display:flex;flex-direction:column;gap:10px"><b>Projet</b>
-        <div class="grid2">${fld('code', 'Code court', 'CTN')}${fld('nom', "Nom de l'opération", 'Réhabilitation de…')}
-          <label class="f">Phase<select data-p="phase"><option value=""></option>${TSP.PHASES.map(x => `<option${p.phase === x ? ' selected' : ''}>${x}</option>`).join('')}</select></label>
-          <label class="f">État<select data-p="statut">${TSP.STATUTS.map(([k, t]) => `<option value="${k}"${p.statut === k ? ' selected' : ''}>${t}</option>`).join('')}</select></label></div>
+        <div class="grid2">${fld('code', 'Code', 'CTN')}${fld('nom', 'Nom du projet', 'Réhabilitation de…')}
+          <label class="f">Phase en cours<select data-p="phase">${TSP.phaseOptions(p.phase, true)}</select></label>
+          <label class="f">Statut<select data-p="statut">${TSP.STATUTS.map(([k, t]) => `<option value="${k}"${p.statut === k ? ' selected' : ''}>${t}</option>`).join('')}</select></label></div>
         <div class="grid2"><label class="f">Type d'ouvrage<select data-p="typeOuvrage"><option value=""></option>${TSP.TYPES.map(x => `<option${p.typeOuvrage === x ? ' selected' : ''}>${x}</option>`).join('')}</select></label>
           <label class="f">Nature des travaux<select data-p="nature"><option value=""></option>${TSP.NATURES.map(x => `<option${p.nature === x ? ' selected' : ''}>${x}</option>`).join('')}</select></label></div>
         <div class="grid2"><label class="f adr">Adresse du site<input type="text" id="pAdr" value="${esc(p.adresse || '')}" placeholder="Tapez l'adresse puis choisissez-la dans la liste" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="pAdrS"><div class="adrs" id="pAdrS" role="listbox" hidden></div></label>${fld('cp', 'Code postal')}${fld('ville', 'Commune')}${fld('parcelles', 'Parcelles cadastrales', 'AB 123, AB 124')}</div>
@@ -102,7 +103,7 @@ const Projets = (() => {
     $$('[data-entx]', m).forEach(b => b.onclick = () => { delete p.lots[+b.dataset.entx].ent; re(); });
     $('#pLot', m).onclick = () => { p.lots.push({ id: TSP.uid(), num: String(p.lots.length + 1), nom: '', comp: [] }); re(); };
     if ($('#pLotsN', m)) $('#pLotsN', m).onclick = () => { p.lots = DEFAULT_LOTS.filter(([c]) => c !== '00').map(([c, n], k) => ({ id: TSP.uid(), num: String(k + 1), nom: n, comp: ['L:' + c] })); re(); };
-    $('#pDel', m).onclick = async () => { if (!confirm(`Supprimer le projet « ${TSP.label(p)} » ? Les estimations, plannings et chantiers rattachés sont conservés.`)) return; await TSP.del(p.id); if (typeof Sync !== 'undefined') Sync.soon(); location.hash = '#/projets'; };
+    $('#pDel', m).onclick = async () => { if (!confirm(`Supprimer le projet « ${TSP.label(p)} » ? Les estimations, plannings et chantiers rattachés sont conservés.`)) return; await TSP.del(p.id); if (typeof Sync !== 'undefined') Sync.soon(); if (window.self !== window.top) { try { parent.postMessage({ ts: 'projetSupprime', id: p.id }, '*'); } catch (e) {} } location.hash = '#/projets'; };
     docs($('#pDocs', m), p);
   }
 
