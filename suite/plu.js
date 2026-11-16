@@ -72,7 +72,7 @@ const TSPLU = (() => {
     const P = []; for (let i = best.i; i <= best.end; i++) P.push(i); return { base, pages: P, found: true };
   }
   /* articles : « Article UC 10 », « Article 4 », « UC 4 - », « 2.3 Hauteur… », « Section », « Chapitre » */
-  const artHead = (t, base) => t.length < 160 && !isToc(t) && (new RegExp('^(article|art\\.)\\s*(' + esc(base) + '\\s*[-.]?\\s*)?\\d', 'i').test(t) || new RegExp('^' + esc(base) + '\\s*[-.]?\\s*\\d{1,2}\\b\\s*[-–:.]', '').test(t) || /^(section|chapitre|paragraphe|sous-section)\s+[ivx\d]/i.test(t) || /^\d{1,2}(\.\d{1,2}){0,2}\s*[-–.)]?\s+[A-ZÉÈÀÂ][a-zéèàâêîôûç]/.test(t) && t.length < 110);
+  const artHead = (t, base) => t.length < 160 && !isToc(t) && (new RegExp('^(article|art\\.)\\s*(' + esc(base) + '\\s*[-.]?\\s*)?\\d', 'i').test(t) || new RegExp('^' + esc(base) + '\\s*[-.]?\\s*\\d{1,2}\\b\\s*[-–:.]', '').test(t) || /^(section|chapitre|paragraphe|sous-section)\s+[ivx\d]/i.test(t) || /^\d{1,2}(\.\d{1,2}){1,3}\.?\s*[-–.)]?\s+[A-ZÉÈÀÂ][a-zéèàâêîôûç’' ]/.test(t) && t.length < 110);
   function articles(pages, blk) {
     const A = []; let cur = null;
     for (const i of blk.pages) for (const l of pages[i]) {
@@ -81,7 +81,13 @@ const TSPLU = (() => {
       else if (cur) cur.lignes.push(l.t);
       else { cur = { regle: 'Préambule de la zone', page: i + 1, lignes: [l.t] }; A.push(cur); }
     }
-    return A.filter(a => a.lignes.join(' ').length > 30).map(a => ({ theme: themeOf(a.regle), regle: a.regle, extrait: a.lignes.join('\n'), page: a.page }));
+    /* thème : celui du titre, sinon celui du titre parent (2.1.1 « Règle générale » sous 2.1 « Implantation… »), sinon celui de l'article précédent */
+    const byNum = {}; let prev = 'Autres dispositions';
+    for (const a of A) { const n = (a.regle.match(/^(\d{1,2}(?:\.\d{1,2})*)/) || [])[1]; let th = themeOf(a.regle);
+      if (th === 'Autres dispositions' && n) { const parts = n.split('.'); while (parts.length > 1 && th === 'Autres dispositions') { parts.pop(); th = byNum[parts.join('.')] || th; } }
+      if (th === 'Autres dispositions' && /^(r[èe]gles? (g[ée]n[ée]rales?|alternatives?|graphiques?|particuli[èe]res?)|cas g[ée]n[ée]ral|dispositions? (g[ée]n[ée]rales?|particuli[èe]res?)|exceptions?)/i.test(a.regle.replace(/^[\d.\s–-]+/, ''))) th = prev;
+      if (n) byNum[n] = th; a.theme = th; if (th !== 'Autres dispositions') prev = th; }
+    return A.filter(a => a.lignes.join(' ').length > 30).map(a => ({ theme: a.theme, regle: a.regle, extrait: a.lignes.join('\n'), page: a.page }));
   }
 
   /* chaîne complète pour un projet ou un point */
