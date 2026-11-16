@@ -338,3 +338,18 @@ tfoot td{border-top:2px solid var(--line)}
 .plur blockquote{margin:6px 0;padding:6px 12px;border-left:3px solid var(--accent);background:var(--sunk);font-size:13.5px;color:var(--ink)}
 .pluc{margin-top:8px}
 .pluc{grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+
+/* bandeau du site (vue d'ensemble) */
+#siteBand{margin-bottom:14px}
+.site{position:relative;display:grid;grid-template-columns:1fr;height:240px;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#3b3f3a}
+.site.two{grid-template-columns:minmax(0,1fr) minmax(0,1.5fr)}
+.site .air,.site .ph{position:relative;display:block;min-width:0;overflow:hidden}
+.site img,.site svg{position:absolute;inset:0;width:100%;height:100%}
+.site img{object-fit:cover}
+.site .air.err img{display:none}
+.site .air.err::before{content:"Photo aérienne indisponible (hors ligne ?)";position:absolute;left:12px;top:12px;color:#d9dcd6;font-size:12.5px}
+.site .cap{text-transform:none;letter-spacing:0;position:absolute;left:10px;bottom:10px;background:rgba(20,22,20,.72);color:#fff;font-size:12.5px;padding:4px 9px;border-radius:6px}
+.site .tools{position:absolute;right:10px;top:10px;display:flex;gap:6px}
+.site .tools .btn{background:rgba(255,255,255,.92)}
+.site.none{display:flex;align-items:center;justify-content:center;height:auto;padding:16px;background:var(--surface);border-style:dashed;color:var(--muted);text-decoration:none;text-align:center}
+@media (max-width:600px){.site{height:170px}.site.two{grid-template-columns:1fr 1fr}}

@@ -3,7 +3,7 @@
    plus le planning et la fiche, transversaux. Les modules existants (TerraGeo, TerraEstim, TerraPlanning, TerraChantier,
    TerraDocs, TerraContacts, TerraModel) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
    Les bibliothèques communes à tous les projets (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont à part. */
-const TS_VERSION = '0.9.1';
+const TS_VERSION = '0.9.2';
 const TSApp = (() => {
   const SVG = {
     back: '<path d="M15 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
@@ -296,6 +296,47 @@ const TSApp = (() => {
     const N = Array.isArray(s.niveaux) ? s.niveaux.filter(x => x && +x.surface > 0) : [], sdp = N.reduce((a, x) => a + +x.surface, 0);
     return 'Maquette 3D : ' + [sdp ? NFm.format(sdp) + ' m² de plancher (' + N.length + ' niveau' + (N.length > 1 ? 'x' : '') + ')' : '', s.horizontales ? NFm.format(s.horizontales) + ' m² horizontaux' : '', s.verticales ? NFm.format(s.verticales) + ' m² de façades' : '', s.volume ? NFm.format(s.volume) + ' m³' : ''].filter(Boolean).join(', ');
   }
+  /* ---------- bandeau du site : photo aérienne IGN centrée sur l'étude de site (TerraGeo) ou sur l'adresse, contour des parcelles, photo du site choisie par l'utilisateur ---------- */
+  const MR = 6378137, merc = ([lo, la]) => [MR * lo * Math.PI / 180, MR * Math.log(Math.tan(Math.PI / 4 + la * Math.PI / 360))];
+  async function siteLoc(p, D) {
+    const fs = [...D.geo.values()].filter(f => f && Array.isArray(f.center) && f.center.length === 2).sort((a, b) => (+b.updated || 0) - (+a.updated || 0));
+    if (fs[0]) return { c: fs[0].center, parc: (fs[0].parcelles || []).filter(x => x && x.geometry), fiche: fs[0] };
+    const q = [p.adresse, p.cp, p.ville].filter(Boolean).join(' ').trim(); if (q.length < 4) return null;
+    const cache = LS.get('ts-geocode', {}) || {}; if (cache[q]) return { c: cache[q], parc: [] };
+    try { const r = await fetch('https://data.geopf.fr/geocodage/search?limit=1&q=' + encodeURIComponent(q)); const j = await r.json(); const c = j.features && j.features[0] && j.features[0].geometry.coordinates;
+      if (c) { cache[q] = c; LS.set('ts-geocode', cache); return { c, parc: [] }; } } catch (e) {}
+    return null;
+  }
+  function siteSvg(loc, W, H) {
+    /* emprise : parcelles + marge, au moins 90 m de haut */
+    const rings = []; for (const x of loc.parc) { const g = x.geometry; const P = g.type === 'Polygon' ? [g.coordinates] : g.type === 'MultiPolygon' ? g.coordinates : []; for (const poly of P) rings.push(poly[0].map(merc)); }
+    const [cx0, cy0] = merc(loc.c); let x0 = cx0, x1 = cx0, y0 = cy0, y1 = cy0;
+    for (const r of rings) for (const [x, y] of r) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+    const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, k = 1 / Math.cos(loc.c[1] * Math.PI / 180);
+    let h = Math.max((y1 - y0) * 2.4, 90 * k), w = h * W / H; if ((x1 - x0) * 1.8 > w) { w = (x1 - x0) * 1.8; h = w * H / W; }
+    const bb = [cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2];
+    const url = `https://data.geopf.fr/wms-r/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=ORTHOIMAGERY.ORTHOPHOTOS&STYLES=&CRS=EPSG:3857&BBOX=${bb.map(v => v.toFixed(1)).join(',')}&WIDTH=${W}&HEIGHT=${H}&FORMAT=image/jpeg`;
+    const px = ([x, y]) => ((x - bb[0]) / w * W).toFixed(1) + ',' + ((bb[3] - y) / h * H).toFixed(1);
+    const path = rings.map(r => 'M' + r.map(px).join('L') + 'Z').join('');
+    const pin = rings.length ? '' : (() => { const [X, Y] = px([cx0, cy0]).split(',').map(Number); return `<circle cx="${X}" cy="${Y}" r="9" fill="none" stroke="#fff" stroke-width="3"/><circle cx="${X}" cy="${Y}" r="4" fill="#fff"/>`; })();
+    return { url, svg: `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${path ? `<path d="${path}" fill="rgba(255,255,255,.12)" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>` : ''}${pin}</svg>` };
+  }
+  async function drawSite(p, D, el) {
+    const loc = await siteLoc(p, D); const photo = p.photoSite || '';
+    const surf = loc && loc.parc.reduce((a, x) => a + (+x.contenance || 0), 0);
+    const lab = loc && loc.parc.length ? loc.parc.map(x => (x.section || '') + ' ' + (+x.numero || x.numero || '')).join(', ') + (surf ? ' · ' + NFm.format(surf) + ' m²' : '') : '';
+    if (!loc && !photo) { el.innerHTML = `<a class="site none" href="#/p/${p.id}/esq/site"><span>Situer le projet : renseignez l'adresse dans la fiche ou choisissez la parcelle dans l'étude de site</span></a>`; return; }
+    const W = 900, H = photo ? 600 : 260, A = loc ? siteSvg(loc, W, H) : null;
+    el.innerHTML = `<div class="site${photo ? ' two' : ''}">
+      ${A ? `<a class="air" href="#/p/${p.id}/esq/site" title="Ouvrir l'étude de site"><img src="${A.url}" alt="Photo aérienne du site" loading="lazy" onerror="this.closest('.air').classList.add('err')">${A.svg}<span class="cap">${E(lab || 'Photo aérienne IGN')}</span></a>` : ''}
+      ${photo ? `<div class="ph"><img src="${photo}" alt="Photo du site"></div>` : ''}
+      <div class="tools"><label class="btn sm">${photo ? 'Changer la photo' : 'Photo du site…'}<input type="file" accept="image/*" hidden id="sitePh"></label>${photo ? '<button class="btn sm" id="sitePhDel">Retirer</button>' : ''}</div></div>`;
+    const put = async v => { const cur = await TSP.get(p.id) || p; cur.photoSite = v; await TSP.put(cur); Object.assign(p, cur); drawSite(p, D, el); };
+    el.querySelector('#sitePh').onchange = e => { const f = e.target.files[0]; if (!f) return; const im = new Image(), u = URL.createObjectURL(f);
+      im.onload = () => { const s = Math.min(1, 1600 / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.round(im.width * s); c.height = Math.round(im.height * s); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); URL.revokeObjectURL(u); put(c.toDataURL('image/jpeg', 0.8)); };
+      im.onerror = () => alert('Image illisible'); im.src = u; };
+    const d = el.querySelector('#sitePhDel'); if (d) d.onclick = () => { if (confirm('Retirer la photo du site ?')) put(''); };
+  }
   /* ---------- vue d'ensemble ---------- */
   async function drawOverview(p, body, curTab) {
     body.innerHTML = '<div class="hint">Lecture des données du projet…</div>';
@@ -319,7 +360,7 @@ const TSApp = (() => {
     const LBL = { 'geo|fiches': 'Étude de site', 'planning|plannings': 'Planning', 'estim|estimations': 'Estimation', 'estim|sources': 'Offre (DPGF)', 'estim|articles': 'Article de CCTP', 'docs|produits': 'Produit', 'terramodel|maquettes': 'Maquette 3D' };
     const act = [...D.recent.map(d => ({ t: d.updatedAt, s: (LBL[d.app + '|' + d.coll] || 'Donnée') + ' : ' + (d.data && (d.data.title || d.data.nom || (d.data.project && d.data.project.name) || d.data.titre) || ''), c: (tabOf(d.app === 'geo' || d.app === 'terramodel' ? 'esq' : d.app === 'planning' ? 'planning' : d.coll === 'sources' ? 'act' : 'pro') || TABS[0]).c })),
       ...D.vis.slice(0, 5).map(v => ({ t: v.date || v.updatedAt, s: `Visite de chantier${v.num ? ' n° ' + v.num : ''}`, c: '#7a4fb0' }))].sort((a, b) => String(b.t).localeCompare(String(a.t))).slice(0, 8);
-    body.innerHTML = `<div class="wrap">
+    body.innerHTML = `<div class="wrap"><div id="siteBand"></div>
       <div class="grid">${TABS.filter(t => t.id !== 'apercu').map(t => { const c = C[t.id]; const i = PHASE_ORDER.indexOf(t.id), ci = PHASE_ORDER.indexOf(curTab);
         const etat = i < 0 ? '' : ci < 0 ? '' : i < ci ? 'fait' : i === ci ? 'en cours' : '';
         return `<a class="card pcard${etat === 'en cours' ? ' cur' : etat === 'fait' ? ' done' : ''}" style="--c:${t.c}" href="#/p/${p.id}/${t.id}/${c[2]}"><span class="h"><span class="dot" style="background:${t.c}"></span>${E(t.nom)}${etat ? `<span class="badge${etat === 'en cours' ? ' cur' : ''}" style="margin-left:auto">${etat}</span>` : ''}</span><span class="v">${E(c[0])}</span><span class="d">${E(c[1])}</span></a>`; }).join('')}</div>
@@ -333,6 +374,7 @@ const TSApp = (() => {
         </div><div class="row" style="margin-top:10px;gap:8px;flex-wrap:wrap"><a class="btn sm" href="#/p/${p.id}/projet/fiche">Compléter la fiche</a><button class="btn sm" id="shareP" title="Page autonome (lots, marchés, autorisations, réunions, réserves ouvertes) à envoyer au maître d'ouvrage ou aux entreprises">Partager l'état du projet</button></div></div>
       </div></div>`;
     const sh = document.getElementById('shareP'); if (sh) sh.onclick = () => TSX.share(p);
+    drawSite(p, D, document.getElementById('siteBand'));
   }
 
   /* ---------- fiche du projet ---------- */
