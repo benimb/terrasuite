@@ -261,7 +261,7 @@ html.ts-embed .brand small{display:none}
       </div>
       <aside class="vpanel" id="vpanel" hidden aria-label="Vues et caméras">
         <div class="vhead"><b>Vues et caméras</b><button class="btn sm" id="vClose">Fermer ×</button></div>
-        <div class="r"><button class="btn sm" id="vAddView" title="Enregistrer le point de vue de l'écran">+ Vue actuelle</button><button class="btn sm" id="vAddCam" title="Poser une caméra à l'endroit de la vue actuelle, visée horizontale">+ Caméra</button></div>
+        <div class="r"><button class="btn sm" id="vAddView" title="Enregistrer le point de vue de l'écran">+ Vue actuelle</button><button class="btn sm" id="vAddCam" title="Poser une caméra à l'endroit de la vue actuelle, visée horizontale">+ Caméra</button><button class="btn sm" id="vGeo" hidden title="Ajoute les caméras posées dans l'étude de site (TerraGeo), ramenées dans le repère de la maquette par le point d'insertion et la rotation du projet">Caméras du site</button></div><div class="hint0" id="vGeoH" hidden></div>
         <canvas id="vplan" aria-label="Plan des caméras"></canvas>
         <div class="vsel r" id="vsel"></div>
         <div id="vlist"></div>
@@ -797,7 +797,7 @@ function arcPts(A, B, h, n, nseg) {
 
 </script>
 <script>
-const APP_VERSION = '0.8';
+const APP_VERSION = '0.9';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const NF2 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 /* unités : la maquette est en mètres ; les longueurs s'affichent et se saisissent dans l'unité choisie (m, cm, mm) ; surfaces en m², volumes en m³ */
@@ -1197,7 +1197,25 @@ function renderPanel() {
   if (bar) bar.innerHTML = sel ? `<span>${SVG_CAM}<b>${escH(sel.nom)}</b> sélectionnée</span><span class="grow"></span><button class="btn sm" data-a="go">Voir</button><button class="btn sm danger" data-a="del">Supprimer</button>` : '<span class="hint0">Touchez une caméra pour la sélectionner ; glissez depuis un endroit vide pour en poser une.</span>';
   drawPlan();
 }
-function openPanel(on) { const p = $('#vpanel'); p.hidden = on === undefined ? !p.hidden : !on; if (!p.hidden) { PL.fit = null; PL.sel = PL.sel || ST.scene; } renderScenes(); }
+/* caméras de l'étude de site (TerraGeo) : même format ; Lambert-93 → repère de la maquette par le point d'insertion et la rotation choisis dans TerraGeo (« Projet ») ;
+   hauteur au-dessus du niveau 0 de la maquette (hm) quand TerraGeo l'a calculée, sinon hauteur au-dessus du terrain */
+async function geoFiche() {
+  if (PR.rid === LIBRE) return null; const all = [];
+  try { for (const f of JSON.parse(localStorage.getItem('tg-fiches') || '[]')) all.push(f); } catch (e) {}
+  if (HAS_LINK && TSLink.read) { try { for (const f of (await TSLink.read('geo', 'fiches')).values()) all.push(f); } catch (e) {} }
+  return all.filter(f => f && f.projet === PR.rid && f.site && f.site.mq && Array.isArray(f.cams) && f.cams.length).sort((a, b) => (+b.updated || 0) - (+a.updated || 0))[0] || null;
+}
+async function geoCamsUI() { const b = $('#vGeo'), h = $('#vGeoH'); if (!b) return; const f = await geoFiche(); b.hidden = h.hidden = !f;
+  if (f) h.textContent = `${f.cams.length} caméra${f.cams.length > 1 ? 's' : ''} dans l'étude de site « ${f.nom || ''} ». Les caméras posées ici se retrouvent dans TerraGeo (Caméras › « Caméras de la maquette »).`; }
+async function camsFromGeo() {
+  const f = await geoFiche(); if (!f) return; const q = f.site.mq, r = (q.rot || 0) * Math.PI / 180, c = Math.cos(r), s = Math.sin(r), rr = v => Math.round(v * 100) / 100;
+  const loc = (X, Y) => { const dx = X - q.x, dy = Y - q.y; return [rr(dx * c + dy * s), rr(-dx * s + dy * c)]; };
+  ST.scenes = ST.scenes.filter(sc => !sc.geo);
+  const L = f.cams.filter(k => !k.mid); // sans les caméras qui viennent déjà de la maquette
+  for (const k of L) { const [x, y] = loc(k.x, k.y), [tx, ty] = loc(k.tx, k.ty); ST.scenes.push({ id: newId(), type: 'camera', nom: k.nom || 'Caméra du site', x, y, tx, ty, f: +k.f || 24, h: rr(k.hm != null && isFinite(k.hm) ? k.hm : (+k.h || 1.6)), t: 0, geo: f.id }); }
+  renderScenes(); renderPanel(); save(); setStatus(`${L.length} caméra${L.length > 1 ? 's' : ''} du site ajoutée${L.length > 1 ? 's' : ''} (les précédentes reprises du site sont remplacées)`, 'ok');
+}
+function openPanel(on) { const p = $('#vpanel'); p.hidden = on === undefined ? !p.hidden : !on; if (!p.hidden) { PL.fit = null; PL.sel = PL.sel || ST.scene; geoCamsUI(); } renderScenes(); }
 /* vue modifiée depuis l'onglet actif : l'onglet propose « Mettre à jour » */
 function markDirty() { if (camBusy || !ST.scene || ST.dirty) return; ST.dirty = true; renderScenes(); }
 /* vignette de la vue actuelle (JPEG 160 × 100) */
@@ -2456,7 +2474,7 @@ async function showHome(on) {
   $('#vSel').onchange = e => { setView(e.target.value); cv.focus(); };
   $('#unit').onchange = e => { setUnit(e.target.value); cv.focus(); };
   { const vl = $('#vlist'), pc = $('#vplan');
-    $('#vClose').onclick = () => openPanel(false); $('#vAddView').onclick = sceneAdd; $('#vAddCam').onclick = () => { const sc = cameraAdd(); PL.sel = sc.id; PL.fit = null; sceneGo(sc.id, true); };
+    $('#vClose').onclick = () => openPanel(false); $('#vGeo').onclick = camsFromGeo; $('#vAddView').onclick = sceneAdd; $('#vAddCam').onclick = () => { const sc = cameraAdd(); PL.sel = sc.id; PL.fit = null; sceneGo(sc.id, true); };
     vl.addEventListener('click', e => { const card = e.target.closest('.vcard'); if (!card) return; const id = card.dataset.id, b = e.target.closest('button');
       if (b) { if (b.dataset.a === 'go') { PL.sel = id; sceneGo(id); } else sceneAct(id, b.dataset.a); return; }
       if (!e.target.closest('input,select')) { PL.sel = id; sceneGo(id); } });
