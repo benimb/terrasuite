@@ -215,7 +215,7 @@ body.wide3d .work{grid-template-columns:1fr} body.wide3d .side{display:none}
 <style>.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn{display:none!important}</style>
 <script src="../TerraChantier/terrasuite-compte.js" onerror="this.remove()"></script>
 <script>
-const APP_VERSION = '0.24';
+const APP_VERSION = '0.25';
 /* ================= Outils ================= */
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -1741,11 +1741,11 @@ function svInfo(html, err) { const el = $('#ginfo'); el.hidden = false; el.inner
 function svMsg() { if (!SV.on || !SV.pano) return; const d = SV.data, z = SV.pano.getZoom(), pov = SV.pano.getPov();
   svInfo(`${SV.high ? `<b>Caméra à ${String(SV.high).replace('.', ',')} m de hauteur : les photos de rue sont prises au sol, vue depuis le trottoir sous la caméra.</b> ` : ''}Vue de rue Google Street View${d && d.imageDate ? ', photo de ' + esc(d.imageDate.split('-').reverse().join('/')) : ''}${SV.dist != null ? `, à ${Math.round(SV.dist)} m du point demandé` : ''} · cap ${Math.round((pov.heading + 360) % 360)}° · focale ≈ ${svFocal(z)} mm (24×36) · <a href="#" id="svCam">Créer une caméra ici</a> · Images © Google.`);
   const a = $('#svCam'); if (a) a.onclick = e => { e.preventDefault(); svToCam(); }; }
-async function svOpen() {
+async function svOpen(cForce) {
   if (!v3.data) { setStatus('Attendez la fin du chargement de la maquette 3D', 'err'); return; }
   if (!G3.key) { $('#gkey').hidden = false; $('#gkeyIn').focus(); return; }
   if (G3.on) gClose(false);
-  const D = v3.data, cv = $('#c3d'), asp = cv.clientWidth / Math.max(1, cv.clientHeight), c = camState.sel >= 0 ? cams()[camState.sel] : null;
+  const D = v3.data, cv = $('#c3d'), asp = cv.clientWidth / Math.max(1, cv.clientHeight), c = cForce || (camState.sel >= 0 ? cams()[camState.sel] : null);
   let P, T, hf;
   if (c) { P = [c.x, c.y]; T = [c.tx, c.ty]; hf = hfov(c.f) * 180 / Math.PI; }
   else { const p = v3.camera.position, t = v3.controls.target, gz = groundAt(D, p.x + D.o[0], p.y + D.o[1]) - D.zb;
@@ -1753,10 +1753,10 @@ async function svOpen() {
     if (Math.hypot(T[0] - P[0], T[1] - P[1]) < .5) { const d = new THREE.Vector3(); v3.camera.getWorldDirection(d); T = [P[0] + d.x * 10, P[1] + d.y * 10]; }
     hf = 2 * Math.atan(Math.tan(v3.camera.fov * Math.PI / 360) * asp) * 180 / Math.PI; }
   SV.on = true; modes3(); SV.high = c && +c.h > 3 ? +c.h : 0; svInfo('Recherche de la photo de rue la plus proche…');
-  try { await gLoad(); if (!SV.lib) SV.lib = await google.maps.importLibrary('streetView'); } catch (e) { SV.on = false; modes3(); svInfo('Vue de rue indisponible : ' + esc(e.message || String(e)), true); return; }
+  try { await gLoad(); if (!SV.lib) SV.lib = await google.maps.importLibrary('streetView'); } catch (e) { SV.on = false; modes3(); svInfo('Vue de rue indisponible : ' + esc(e.message || String(e)), true); return false; }
   const want = llOf(P[0], P[1]), heading = Math.hypot(T[0] - P[0], T[1] - P[1]) > .5 ? bearingLL(want, llOf(T[0], T[1])) : 0;
   let res; try { res = await new SV.lib.StreetViewService().getPanorama({ location: want, radius: 80, source: google.maps.StreetViewSource.OUTDOOR, preference: google.maps.StreetViewPreference.NEAREST }); }
-  catch (e) { SV.on = false; modes3(); svInfo('Aucune photo Street View à moins de 80 m de ce point.', true); return; }
+  catch (e) { SV.on = false; modes3(); svInfo('Aucune photo Street View à moins de 80 m de ce point.', true); return false; }
   if (!SV.on) return;
   SV.data = res.data; const ll = res.data.location.latLng; { const [qx, qy] = L93.fwd(ll.lng(), ll.lat()); SV.dist = Math.hypot(qx - P[0], qy - P[1]); }
   $('#gsv').hidden = false; $('#c3d').style.visibility = 'hidden'; $('#v3d').classList.add('svmode');
@@ -1764,7 +1764,7 @@ async function svOpen() {
   const opt = { pano: res.data.location.pano, pov: { heading, pitch: 0 }, zoom, addressControl: true, fullscreenControl: false, motionTracking: false, motionTrackingControl: false, showRoadLabels: true };
   if (!SV.pano) { SV.pano = new SV.lib.StreetViewPanorama($('#gsv'), opt); ['pov_changed', 'zoom_changed', 'pano_changed'].forEach(ev => SV.pano.addListener(ev, () => { if (ev === 'pano_changed') { SV.dist = null; SV.data = null; } svMsg(); })); }
   else { SV.pano.setOptions(opt); }
-  SV.pano.setVisible(true); svMsg();
+  SV.pano.setVisible(true); svMsg(); return true;
 }
 /* retour à la maquette : même point de vue, à hauteur d'œil */
 function svClose(keep = true) {
@@ -1875,7 +1875,7 @@ function renderCams() {
   const L0 = cams();
   box.innerHTML = L0.map((c, i) => `<div class="cam${i === camState.sel ? ' on' : ''}" data-ci="${i}"><div class="r"><b>${i + 1}</b><input type="text" data-cn="${i}" value="${esc(c.nom)}" aria-label="Nom de la vue"></div>
     <div class="r"><label class="hint">Focale <select data-cf="${i}">${FOCALES.map(f => `<option value="${f}"${+c.f === f ? ' selected' : ''}>${f} mm</option>`).join('')}</select></label><label class="hint">Hauteur <input type="number" step="0.1" min="0" data-ch="${i}" value="${c.h}"> m</label></div>
-    <div class="r"><label class="hint">Planche <select data-cs="${i}"><option value="ign"${(c.src || 'ign') === 'ign' ? ' selected' : ''}>Maquette IGN</option><option value="google"${c.src === 'google' ? ' selected' : ''}>Google 3D</option><option value="both"${c.src === 'both' ? ' selected' : ''}>Les deux</option></select></label></div>
+    <div class="r"><label class="hint">Planche <select data-cs="${i}"><option value="ign"${(c.src || 'ign') === 'ign' ? ' selected' : ''}>Maquette IGN</option><option value="google"${c.src === 'google' ? ' selected' : ''}>Google 3D</option><option value="both"${c.src === 'both' ? ' selected' : ''}>Maquette IGN + Google 3D</option><option value="sv"${c.src === 'sv' ? ' selected' : ''}>Photo de rue</option><option value="ignsv"${c.src === 'ignsv' ? ' selected' : ''}>Maquette IGN + photo de rue</option></select></label></div>
     <div class="r"><button class="btn sm" data-cv="${i}">Voir</button><button class="btn sm" data-cp="${i}">Planche</button><button class="btn sm danger" data-cd="${i}" aria-label="Supprimer la caméra">Supprimer</button></div></div>`).join('') || '<span class="hint">Aucune caméra.</span>';
   const save1 = () => { save(); drawPlan($('#plan3'), v3.data, cams(), camState.sel); };
   box.querySelectorAll('.cam').forEach(el => el.onclick = e => { if (e.target.closest('input,select,button')) return; camState.sel = +el.dataset.ci; viewCam(camState.sel); renderCams(); });
@@ -1907,8 +1907,14 @@ function planImage(i) { const cv = document.createElement('canvas'); cv.width = 
 function printSheets(list, imgs, win, aa) {
   const f = F(), L0 = cams(); if (!v3.data || !L0.length) return;
   const idx = list || L0.map((_, i) => i);
-  const perCam = i => { const g = imgs && imgs[i], s = L0[i].src || (g ? 'google' : 'ign'); return s === 'both' && g ? [[i, null, ' · maquette IGN', false], [i, g, ' · Google 3D', true]] : s !== 'ign' && g ? [[i, g, '', true]] : [[i, null, '', false]]; };
-  const pages = idx.flatMap(i => aa ? [[i, aa[i][0], ' · existant', false], [i, aa[i][1], ' · projet', false]] : perCam(i)).map(([i, im, tag, isG]) => { const c = L0[i]; return `<section class="pg"><img class="v" src="${im || renderCamImage(c, 2400, 1500)}"><div class="cart"><div><b>${esc(f.nom)}</b> · Vue ${i + 1} : ${esc(c.nom)}${tag}</div><div>Focale ${c.f} mm · hauteur ${String(c.h).replace('.', ',')} m · ${esc(f.adresse || f.commune || '')}</div><div class="s">TerraGeo ${APP_VERSION} · ${isG ? 'vue 3D photoréaliste Google, images © Google' : `maquette de l'existant (BD TOPO, RGE ALTI${v3.data.mns ? ', ' + esc(v3.data.mns.src) : ''}, IGN)`} · ${today()}</div></div><img class="pl" src="${planImage(i)}"></section>`; }).join('');
+  const perCam = i => { const I = (imgs && imgs[i]) || {}, s = L0[i].src || 'ign', o = [];
+    if (s === 'ign' || s === 'both' || s === 'ignsv') o.push([i, null, ' · maquette IGN', false]);
+    if ((s === 'google' || s === 'both') && I.g) o.push([i, I.g, ' · Google 3D', true]);
+    if ((s === 'sv' || s === 'ignsv') && I.sv) o.push([i, I.sv, ' · photo de rue', I.svm || {}]);
+    if (!o.length) o.push([i, null, ' · maquette IGN', false]);
+    if (o.length === 1) o[0][2] = ''; return o; };
+  const srcTxt = isG => isG && typeof isG === 'object' ? `photo Google Street View${isG.date ? ' de ' + esc(isG.date.split('-').reverse().join('/')) : ''}${isG.dist > 3 ? `, prise à ${Math.round(isG.dist)} m du point de la caméra, à hauteur d'œil` : ''}, images © Google` : isG ? 'vue 3D photoréaliste Google, images © Google' : `maquette de l'existant (BD TOPO, RGE ALTI${v3.data.mns ? ', ' + esc(v3.data.mns.src) : ''}, IGN)`;
+  const pages = idx.flatMap(i => aa ? [[i, aa[i][0], ' · existant', false], [i, aa[i][1], ' · projet', false]] : perCam(i)).map(([i, im, tag, isG]) => { const c = L0[i]; return `<section class="pg"><img class="v" src="${im || renderCamImage(c, 2400, 1500)}"><div class="cart"><div><b>${esc(f.nom)}</b> · Vue ${i + 1} : ${esc(c.nom)}${tag}</div><div>Focale ${c.f} mm · hauteur ${String(c.h).replace('.', ',')} m · ${esc(f.adresse || f.commune || '')}</div><div class="s">TerraGeo ${APP_VERSION} · ${srcTxt(isG)} · ${today()}</div></div><img class="pl" src="${planImage(i)}"></section>`; }).join('');
   const w = win || window.open('', '_blank'); if (!w) return setStatus('Autorisez les fenêtres surgissantes pour imprimer les planches', 'err'); w.document.open();
   w.document.write(`<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Planches - ${esc(f.nom)}</title><style>@page{size:A4 landscape;margin:8mm}body{margin:0;font:11px "IBM Plex Sans",Arial,sans-serif;color:#222}.pg{position:relative;width:281mm;height:194mm;page-break-after:always;overflow:hidden}.pg:last-child{page-break-after:auto}.v{position:absolute;inset:0 0 16mm 0;width:100%;height:calc(100% - 16mm);object-fit:cover}.pl{position:absolute;right:4mm;bottom:20mm;width:62mm;height:62mm;background:#fff;border:1px solid #888;box-shadow:0 1px 4px rgba(0,0,0,.25)}.cart{position:absolute;left:0;right:0;bottom:0;height:14mm;border-top:1px solid #222;display:flex;flex-direction:column;justify-content:center;gap:1px;padding:0 2mm}.cart .s{color:#777;font-size:9px}@media screen{body{background:#888}.pg{margin:10px auto;background:#fff}}</style></head><body>${pages}<script>setTimeout(()=>print(),400)<\/script></body></html>`);
   w.document.close();
@@ -1917,36 +1923,52 @@ function printSheets(list, imgs, win, aa) {
 function gSteady(ms = 12000) { return new Promise(res => { let done = false; const end = () => { if (done) return; done = true; G3.el.removeEventListener('gmp-steadychange', h); res(); }; const h = e => { if (e.isSteady) setTimeout(end, 600); }; G3.el.addEventListener('gmp-steadychange', h); setTimeout(end, ms); }); }
 /* planches : chaque caméra selon son rendu (maquette IGN, Google 3D ou les deux) ; la vue Google est ouverte au besoin */
 async function sheets(list) {
-  const L0 = cams(); if (!v3.data || !L0.length) return; const idx = list || L0.map((_, i) => i), needG = idx.filter(i => (L0[i].src || 'ign') !== 'ign');
-  if (!needG.length) return printSheets(idx);
+  const L0 = cams(); if (!v3.data || !L0.length) return; const idx = list || L0.map((_, i) => i);
+  const needG = idx.filter(i => ['google', 'both'].includes(L0[i].src)), needS = idx.filter(i => ['sv', 'ignsv'].includes(L0[i].src));
+  if (!needG.length && !needS.length) return printSheets(idx);
   const w = window.open('', '_blank'); if (!w) return setStatus('Autorisez les fenêtres surgissantes pour imprimer les planches', 'err');
-  if (SV.on) svClose(false); if (PED.on) pedOff(); if (!G3.on) await gOpen();
-  if (!G3.on) { setStatus('Vue Google indisponible : planches tirées de la maquette IGN', 'err'); return printSheets(idx, null, w); }
-  return gSheets(needG, w, idx);
+  if (PED.on) pedOff();
+  if (!G3.key) { setStatus('Clé Google Maps absente : planches tirées de la maquette IGN', 'err'); return printSheets(idx, null, w); }
+  return gSheets(needG, w, idx, needS);
 }
-async function gSheets(list, w0, all) {
+/* capture d'une zone de l'onglet : la vue (Google 3D ou photo de rue) est cadrée au format de la planche (1,6), interface masquée */
+async function gSheets(list, w0, all, svList = []) {
   const L0 = cams(); if (!v3.data || !L0.length) return; const idx = list || L0.map((_, i) => i), pIdx = all || idx;
   const w = w0 || window.open('', '_blank'); if (!w) return setStatus('Autorisez les fenêtres surgissantes pour imprimer les planches', 'err');
-  w.document.write('<p style="font:14px sans-serif;padding:20px">Capture des vues Google 3D en cours dans TerraGeo… Acceptez le partage de l\'onglet TerraGeo.</p>');
+  w.document.write('<p style="font:14px sans-serif;padding:20px">Capture des vues Google en cours dans TerraGeo… Acceptez le partage de l\'onglet TerraGeo.</p>');
   if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) { setStatus('Capture d\'écran indisponible dans ce navigateur : planches tirées de la maquette IGN', 'err'); return printSheets(pIdx, null, w); }
   let stream; try { stream = await navigator.mediaDevices.getDisplayMedia({ video: { displaySurface: 'browser', frameRate: 10 }, audio: false, preferCurrentTab: true, selfBrowserSurface: 'include' }); }
   catch (e) { setStatus('Capture refusée : planches tirées de la maquette IGN', 'err'); return printSheets(pIdx, null, w); }
   window.focus();
   const vid = document.createElement('video'); vid.muted = true; vid.playsInline = true; vid.srcObject = stream; await vid.play();
-  const box = $('#g3d'), hid = ['#v3d .bar3', '#cams3', '#ginfo', '#exp3', '#gkey'].map(q => { const e = document.querySelector(q); const v = e ? e.style.visibility : ''; if (e) e.style.visibility = 'hidden'; return [e, v]; });
-  const W0 = box.clientWidth, H0 = box.clientHeight; let gw = W0, gh = Math.round(W0 / 1.6); if (gh > H0) { gh = H0; gw = Math.round(H0 * 1.6); }
-  G3.el.style.cssText = `width:${gw}px;height:${gh}px;margin:${Math.round((H0 - gh) / 2)}px auto 0`; G3.el.defaultUIHidden = true;
-  const imgs = {}, cam = new THREE.PerspectiveCamera(50, 1.6, .3, 20000), dir = new THREE.Vector3();
+  const hid = ['#v3d .bar3', '#cams3', '#ginfo', '#exp3', '#gkey', '#ped'].map(q => { const e = document.querySelector(q); const v = e ? e.style.visibility : ''; if (e) e.style.visibility = 'hidden'; return [e, v]; });
+  const fit = el => { const box = $('#v3d'), W0 = box.clientWidth, H0 = box.clientHeight; let gw = W0, gh = Math.round(W0 / 1.6); if (gh > H0) { gh = H0; gw = Math.round(H0 * 1.6); } el.style.cssText = `position:absolute;left:${Math.round((W0 - gw) / 2)}px;top:${Math.round((H0 - gh) / 2)}px;width:${gw}px;height:${gh}px;right:auto;bottom:auto`; };
+  const grab = el => { const rc = el.getBoundingClientRect(), sx = vid.videoWidth / window.innerWidth, sy = vid.videoHeight / window.innerHeight, cv = document.createElement('canvas');
+    cv.width = Math.round(rc.width * sx); cv.height = Math.round(rc.height * sy); cv.getContext('2d').drawImage(vid, rc.left * sx, rc.top * sy, rc.width * sx, rc.height * sy, 0, 0, cv.width, cv.height); return cv.toDataURL('image/jpeg', .92); };
+  const imgs = {}, put = (i, k, v) => { (imgs[i] = imgs[i] || {})[k] = v; };
   try {
-    for (const i of idx) {
-      const c = L0[i]; setCamera(cam, c, 1.6); cam.getWorldDirection(dir);
-      setStatus(`Vue ${i + 1} sur ${idx.length} : chargement de la 3D Google…`);
-      const st0 = gSteady(); gCamApply(c); await st0; await new Promise(r => setTimeout(r, 500));
-      const rc = G3.el.getBoundingClientRect(), sx = vid.videoWidth / window.innerWidth, sy = vid.videoHeight / window.innerHeight, cv = document.createElement('canvas');
-      cv.width = Math.round(rc.width * sx); cv.height = Math.round(rc.height * sy); cv.getContext('2d').drawImage(vid, rc.left * sx, rc.top * sy, rc.width * sx, rc.height * sy, 0, 0, cv.width, cv.height);
-      imgs[i] = cv.toDataURL('image/jpeg', .92);
+    if (idx.length) {
+      if (SV.on) svClose(false); if (!G3.on) await gOpen();
+      if (!G3.on) setStatus('Vue Google 3D indisponible : ces planches seront tirées de la maquette IGN', 'err');
+      else { fit(G3.el); G3.el.defaultUIHidden = true;
+        for (const i of idx) { setStatus(`Google 3D, vue ${i + 1} : chargement…`); const st0 = gSteady(); gCamApply(L0[i]); await st0; await new Promise(r => setTimeout(r, 500)); put(i, 'g', grab(G3.el)); }
+        G3.el.style.cssText = ''; G3.el.defaultUIHidden = false; }
     }
-  } finally { stream.getTracks().forEach(t => t.stop()); G3.el.style.cssText = ''; G3.el.defaultUIHidden = false; hid.forEach(([e, v]) => { if (e) e.style.visibility = v; }); setStatus(''); }
+    if (svList.length) {
+      if (G3.on) gClose(false); const gsv = $('#gsv');
+      for (const i of svList) {
+        setStatus(`Photo de rue, vue ${i + 1} : recherche…`);
+        const ok = await svOpen(L0[i]); if (!ok) continue;
+        fit(gsv); try { google.maps.event.trigger(SV.pano, 'resize'); } catch (e) {} SV.pano.setOptions({ disableDefaultUI: true, addressControl: false, showRoadLabels: false, clickToGo: false, linksControl: false, panControl: false, zoomControl: false });
+        await new Promise(r => setTimeout(r, 3500));
+        put(i, 'sv', grab(gsv)); put(i, 'svm', { date: SV.data && SV.data.imageDate || '', dist: SV.dist });
+        gsv.style.cssText = '';
+      }
+      if (SV.pano) SV.pano.setOptions({ disableDefaultUI: false, addressControl: true, showRoadLabels: true, clickToGo: true, linksControl: true, panControl: true, zoomControl: true });
+      if (SV.on) svClose(false);
+    }
+  } finally { stream.getTracks().forEach(t => t.stop()); if (G3.el) { G3.el.style.cssText = ''; G3.el.defaultUIHidden = false; } $('#gsv').style.cssText = ''; hid.forEach(([e, v]) => { if (e) e.style.visibility = v; }); setStatus(''); }
+  const miss = svList.filter(i => !(imgs[i] && imgs[i].sv)); if (miss.length) setStatus(`Pas de photo de rue à moins de 80 m pour la vue ${miss.map(i => i + 1).join(', ')} : planche tirée de la maquette IGN`, 'err');
   printSheets(pIdx, imgs, w);
 }
 function bindCams() {
