@@ -216,7 +216,7 @@ body.wide3d .work{grid-template-columns:1fr} body.wide3d .side{display:none}
 <style>.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn{display:none!important}</style>
 <script src="../TerraChantier/terrasuite-compte.js" onerror="this.remove()"></script>
 <script>
-const APP_VERSION = '0.27';
+const APP_VERSION = '0.28';
 /* ================= Outils ================= */
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -426,17 +426,37 @@ async function pickRef(insee, sec, num, abs) {
     await setParcels([fs[0]], false, lon, lat);
   } catch (e) { setStatus('Recherche de parcelle impossible : ' + e.message, 'err'); }
 }
+/* repérage automatique de la parcelle d'une adresse : le point de la BAN est souvent sur la voie, devant l'entrée ;
+   on prend alors la parcelle la plus proche (distance au contour, 30 m au plus) parmi celles d'un carré de 60 m autour du point */
+function distToGeom(g, lon, lat) {
+  const k = Math.cos(lat * Math.PI / 180) * 111320, K = 111320, P = [lon * k, lat * K]; let best = Infinity, inside = false;
+  for (const poly of ringsOf(g)) for (const ring of poly) { const R = ring.map(c => [c[0] * k, c[1] * K]);
+    for (let i = 0, j = R.length - 1; i < R.length; j = i++) { const [x1, y1] = R[j], [x2, y2] = R[i];
+      if ((y2 > P[1]) !== (y1 > P[1]) && P[0] < (x1 - x2) * (P[1] - y2) / (y1 - y2) + x2) inside = !inside;
+      const dx = x2 - x1, dy = y2 - y1, t = Math.max(0, Math.min(1, ((P[0] - x1) * dx + (P[1] - y1) * dy) / (dx * dx + dy * dy || 1)));
+      best = Math.min(best, Math.hypot(P[0] - (x1 + t * dx), P[1] - (y1 + t * dy))); } }
+  return inside ? 0 : best;
+}
+async function parcelNear(lon, lat, max = 30) {
+  const d = 0.0004, box = { type: 'Polygon', coordinates: [[[lon - d, lat - d * .66], [lon + d, lat - d * .66], [lon + d, lat + d * .66], [lon - d, lat + d * .66], [lon - d, lat - d * .66]]] };
+  const r = await getJSON(`https://apicarto.ign.fr/api/cadastre/parcelle?geom=${gj(box)}`);
+  const L = (r.features || []).map(f => ({ f, d: distToGeom(f.geometry, lon, lat) })).filter(x => x.d <= max).sort((a, b) => a.d - b.d);
+  return L;
+}
 async function pickPoint(lon, lat, add, addrProps) {
   if (st.busy) return; st.busy = true;
   setStatus('Recherche de la parcelle…');
   try {
     const r = await getJSON(API.parcPt(lon, lat));
-    const fs = r.features || [];
+    let fs = r.features || [], near = '';
+    /* adresse dont le point tombe sur la voie : parcelle la plus proche */
+    if (!fs.length && addrProps && !(addrProps.pays && addrProps.pays !== 'FR')) { try { const L = await parcelNear(lon, lat); if (L.length) { fs = [L[0].f]; const p0 = L[0].f.properties, v = L[1]; near = `Parcelle ${p0.section} ${+p0.numero} retenue (point de l'adresse à ${Math.round(L[0].d)} m, sur la voie)` + (v && v.d - L[0].d < 4 ? ` ; parcelle voisine ${v.f.properties.section} ${+v.f.properties.numero} à ${Math.round(v.d)} m : Maj + clic pour l'ajouter` : ''); } } catch (e) {} }
     if (!fs.length) {
       const a = addrProps && addrProps.pays ? addrProps : await paysAt(lon, lat);
       if (a && a.pays && a.pays !== 'FR') { if (add) { setStatus('Hors de France : pas de cadastre ; dessinez la parcelle', 'err'); return; } let f = F(); if (!f || (f.parcelles.length && !confirmReplace(f))) f = newFiche(); f.center = [lon, lat]; f.parcelles = []; f.pays = a.pays; f.adresse = a.label; f.insee = ''; if (f.nom === 'Nouvelle fiche') f.nom = a.label.split(',').slice(0, 2).join(','); drawFiche(); fitFiche(); await enrichAbroad(f, a); return; }
       setStatus('Aucune parcelle cadastrale à cet endroit (domaine public ?) : « Dessiner la parcelle » pour un terrain non cadastré', 'err'); if (!add) { const f = F() || newFiche(); f.center = [lon, lat]; f.parcelles = []; f.pays = 'FR'; drawFiche(); fitFiche(); await enrich(f, addrProps); } return; }
     await setParcels(fs.slice(0, 1), add, lon, lat, addrProps);
+    if (near) setStatus(near, 'ok');
   } catch (e) { setStatus('Cadastre injoignable : ' + e.message, 'err'); }
   finally { st.busy = false; }
 }

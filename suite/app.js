@@ -3,7 +3,7 @@
    plus le planning et la fiche, transversaux. Les modules existants (TerraGeo, TerraEstim, TerraPlanning, TerraChantier,
    TerraDocs, TerraContacts, TerraModel) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
    Les bibliothèques communes à tous les projets (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont à part. */
-const TS_VERSION = '0.9.9';
+const TS_VERSION = '0.9.10';
 const TSApp = (() => {
   const SVG = {
     back: '<path d="M15 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
@@ -302,9 +302,10 @@ const TSApp = (() => {
     const fs = [...D.geo.values()].filter(f => f && Array.isArray(f.center) && f.center.length === 2).sort((a, b) => (+b.updated || 0) - (+a.updated || 0));
     if (fs[0]) return { c: fs[0].center, parc: (fs[0].parcelles || []).filter(x => x && x.geometry), fiche: fs[0], monde: !!(fs[0].pays && fs[0].pays !== 'FR') };
     const q = [p.adresse, p.cp, p.ville].filter(Boolean).join(' ').trim(); if (q.length < 4) return null;
-    const cache = LS.get('ts-geocode', {}) || {}; if (cache[q]) return { c: cache[q], parc: [] };
+    const cache = LS.get('ts-geocode2', {}) || {}; if (cache[q]) return cache[q];
     try { const r = await fetch('https://data.geopf.fr/geocodage/search?limit=1&q=' + encodeURIComponent(q)); const j = await r.json(); const c = j.features && j.features[0] && j.features[0].geometry.coordinates;
-      if (c) { cache[q] = c; LS.set('ts-geocode', cache); return { c, parc: [] }; } } catch (e) {}
+      if (c) { let parc = []; try { parc = (await TSPLU.parcelNear(c[0], c[1])).slice(0, 1).map(x => ({ section: x.section, numero: x.numero, contenance: x.contenance, geometry: x.geometry })); } catch (e) {}
+        const o = { c, parc }; cache[q] = o; LS.set('ts-geocode2', cache); return o; } } catch (e) {}
     return null;
   }
   function siteSvg(loc, W, H) {

@@ -25,13 +25,32 @@ const TSPLU = (() => {
   const themeOf = t => (THEMES.find(([, re]) => re.test(t)) || ['Autres dispositions'])[0];
   const j = async u => { const r = await fetch(u); if (!r.ok) throw new Error('HTTP ' + r.status + ' sur ' + new URL(u).hostname); return r.json(); };
 
-  /* point du projet : étude de site TerraGeo, sinon adresse de la fiche */
+  /* parcelle d'une adresse : celle qui contient le point, sinon la plus proche (le point de la BAN est souvent sur la voie, devant l'entrée), 30 m au plus */
+  const rings = g => !g ? [] : g.type === 'Polygon' ? [g.coordinates] : g.type === 'MultiPolygon' ? g.coordinates : [];
+  function dist(g, lon, lat) { const k = Math.cos(lat * Math.PI / 180) * 111320, K = 111320, P = [lon * k, lat * K]; let best = Infinity, inside = false;
+    for (const poly of rings(g)) for (const ring of poly) { const R = ring.map(c => [c[0] * k, c[1] * K]);
+      for (let i = 0, j = R.length - 1; i < R.length; j = i++) { const [x1, y1] = R[j], [x2, y2] = R[i];
+        if ((y2 > P[1]) !== (y1 > P[1]) && P[0] < (x1 - x2) * (P[1] - y2) / (y1 - y2) + x2) inside = !inside;
+        const dx = x2 - x1, dy = y2 - y1, t = Math.max(0, Math.min(1, ((P[0] - x1) * dx + (P[1] - y1) * dy) / (dx * dx + dy * dy || 1)));
+        best = Math.min(best, Math.hypot(P[0] - (x1 + t * dx), P[1] - (y1 + t * dy))); } }
+    return inside ? 0 : best; }
+  async function parcelNear(lon, lat, max = 30) {
+    const d = 0.0004, box = { type: 'Polygon', coordinates: [[[lon - d, lat - d * .66], [lon + d, lat - d * .66], [lon + d, lat + d * .66], [lon - d, lat + d * .66], [lon - d, lat - d * .66]]] };
+    const r = await j('https://apicarto.ign.fr/api/cadastre/parcelle?geom=' + encodeURIComponent(JSON.stringify(box)));
+    return (r.features || []).map(f => ({ f, d: dist(f.geometry, lon, lat) })).filter(x => x.d <= max).sort((a, b) => a.d - b.d).map(x => ({ idu: x.f.properties.idu, section: x.f.properties.section, numero: x.f.properties.numero, contenance: x.f.properties.contenance, commune: x.f.properties.nom_com, geometry: x.f.geometry, d: Math.round(x.d) }));
+  }
+  /* point intérieur d'une parcelle (pour interroger le zonage sur la parcelle et non sur la voie) */
+  function inner(g) { const P = rings(g)[0]; if (!P) return null; const R = P[0]; let a = 0, cx = 0, cy = 0; for (let i = 0, k = R.length - 1; i < R.length; k = i++) { const f = R[k][0] * R[i][1] - R[i][0] * R[k][1]; a += f; cx += (R[k][0] + R[i][0]) * f; cy += (R[k][1] + R[i][1]) * f; } return a ? [cx / (3 * a), cy / (3 * a)] : R[0]; }
+
+  /* point du projet : étude de site TerraGeo, sinon adresse de la fiche (parcelle repérée automatiquement) */
   async function locate(p, geoFiches) {
     const f = (geoFiches || []).filter(x => x && Array.isArray(x.center)).sort((a, b) => (+b.updated || 0) - (+a.updated || 0))[0];
     if (f) return { lon: f.center[0], lat: f.center[1], src: 'étude de site « ' + (f.nom || '') + ' »' };
     const q = [p.adresse, p.cp, p.ville].filter(Boolean).join(' ').trim(); if (q.length < 4) return null;
-    const g = await j(GEOCODE(q)); const c = g.features && g.features[0] && g.features[0].geometry.coordinates;
-    return c ? { lon: c[0], lat: c[1], src: 'adresse ' + q } : null;
+    const g = await j(GEOCODE(q)); const c = g.features && g.features[0] && g.features[0].geometry.coordinates; if (!c) return null;
+    let parc = []; try { parc = await parcelNear(c[0], c[1]); } catch (e) {}
+    const ip = parc[0] && inner(parc[0].geometry);
+    return { lon: ip ? ip[0] : c[0], lat: ip ? ip[1] : c[1], src: 'adresse ' + q, parc: parc.slice(0, 1) };
   }
   async function zoneAt(lon, lat) {
     const z = await j(ZONE(lon, lat)); const L = (z.features || []).map(f => f.properties).filter(x => x && x.nomfic);
@@ -98,7 +117,7 @@ const TSPLU = (() => {
     const blk = zoneBlock(pages, z.libelle), A = articles(pages, blk);
     return { z, url, pages, blk, A };
   }
-  const record = (R, pt) => ({ format: 'terrasuite-plu', auto: true, zone: R.z.libelle, zoneNom: R.z.libelong || '', typezone: R.z.typezone || '', document: R.z.idurba || '', version: R.z.datvalid ? R.z.datvalid.replace(/(\d{4})(\d\d)(\d\d)/, '$3/$2/$1') : '', url: R.url, point: [pt.lon, pt.lat], pages: R.blk.pages.length ? [R.blk.pages[0] + 1, R.blk.pages[R.blk.pages.length - 1] + 1] : [], chapitreTrouve: R.blk.found, regles: R.A, date: new Date().toISOString().slice(0, 10) });
+  const record = (R, pt) => ({ format: 'terrasuite-plu', auto: true, parcelles: (pt.parc || []).map(x => `${x.section} ${+x.numero || x.numero}`).join(', '), zone: R.z.libelle, zoneNom: R.z.libelong || '', typezone: R.z.typezone || '', document: R.z.idurba || '', version: R.z.datvalid ? R.z.datvalid.replace(/(\d{4})(\d\d)(\d\d)/, '$3/$2/$1') : '', url: R.url, point: [pt.lon, pt.lat], pages: R.blk.pages.length ? [R.blk.pages[0] + 1, R.blk.pages[R.blk.pages.length - 1] + 1] : [], chapitreTrouve: R.blk.found, regles: R.A, date: new Date().toISOString().slice(0, 10) });
 
   /* page de lecture brute (#/plu/<lon>/<lat>[/<page de départ>]) : texte intégral du chapitre de la zone, page par page, pour l'analyse par Claude */
   async function reader(el, lon, lat, from) {
@@ -110,5 +129,5 @@ const TSPLU = (() => {
       document.getElementById('pluOut').innerHTML = `<p><a href="${E(R.url)}" target="_blank" rel="noopener">Règlement (PDF)</a></p>` + P.map(i => `<h3>Page ${i + 1}</h3><pre style="white-space:pre-wrap;font:13px/1.45 inherit">${E(R.pages[i].map(l => l.t).join('\n'))}</pre>`).join('') + (R.blk.pages.filter(i => i + 1 >= (+from || 0)).length > 25 ? `<p class="hint">Suite : #/plu/${lon}/${lat}/${P[P.length - 1] + 2}</p>` : '');
     } catch (e) { st('Impossible : ' + (e.message || e)); }
   }
-  return { locate, fetchFor, record, reader, themeOf };
+  return { locate, fetchFor, record, reader, themeOf, parcelNear };
 })();
