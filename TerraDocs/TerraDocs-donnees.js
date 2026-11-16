@@ -1,8 +1,8 @@
 window.TD_DONNEES = {
  "app": "TerraDocs",
  "format": 1,
- "stamp": "base-publique-2026-11-16",
- "label": "base publique : gammes de fabricants de tous corps d'état, carrelage (VitrA Tiles, Mosa, Villeroy & Boch), verre émaillé et laqué (Saint-Gobain, AGC), mosaïques (Bisazza, Émaux de Briare), mobilier LAGO, ArcelorMittal (cassettes, bardages, bacs), Sto, nora, Geggus, Koramic, panneaux décoratifs et acoustiques (Arpa Industriale FENIX, Resopal, Hubler, Marotte), Dekton sur ITE (Cosentino DKS), chauffage et fumisterie (Poujoulat, Atlantic, Viessmann, Finimetal), Hudevad, Estrada, Acova, Stûv, Godin, Campa, Rothelec, Chappée, elm.leblanc, Sofath, Butagaz, Acome, Roth",
+ "stamp": "base-publique-2026-11-16b",
+ "label": "base publique : gammes de fabricants de tous corps d'état, carrelage (VitrA Tiles, Mosa, Villeroy & Boch), verre émaillé et laqué (Saint-Gobain, AGC), mosaïques (Bisazza, Émaux de Briare), mobilier LAGO, ArcelorMittal (cassettes, bardages, bacs), Sto, nora, Geggus, Koramic, panneaux décoratifs et acoustiques (Arpa Industriale FENIX, Resopal, Hubler, Marotte), Dekton sur ITE (Cosentino DKS), chauffage et fumisterie (Poujoulat, Atlantic, Viessmann, Finimetal), Hudevad, Estrada, Acova, Stûv, Godin, Campa, Rothelec, Chappée, elm.leblanc, Sofath, Butagaz, Acome, Roth, CVC (Airwell, Daikin, Technibel), désenfumage et éclairage zénithal (Madicob, Domeca, Alcaud, Hexadome HEXAONDE), protection passive incendie (Promat)",
  "lots": [
   {
    "id": "L00",
@@ -54,7 +54,9 @@ window.TD_DONNEES = {
    "code": "05",
    "nom": "Étanchéité",
    "sous": [
-    "Fenêtres de toit plat, lanterneaux"
+    "Fenêtres de toit plat, lanterneaux",
+    "Désenfumage naturel (exutoires DENFC)",
+    "Éclairage zénithal continu (voûtes filantes)"
    ]
   },
   {
@@ -76,7 +78,8 @@ window.TD_DONNEES = {
    "nom": "Menuiseries extérieures, occultations",
    "sous": [
     "Aluminium",
-    "Occultations"
+    "Occultations",
+    "Ouvrants de façade de désenfumage et d'aération"
    ]
   },
   {
@@ -97,7 +100,8 @@ window.TD_DONNEES = {
     "Plafonds",
     "Plaques de plâtre",
     "Panneaux et baffles acoustiques",
-    "Isolants"
+    "Isolants",
+    "Protection passive incendie (plaques, enduits, calfeutrements)"
    ]
   },
   {
@@ -186,7 +190,8 @@ window.TD_DONNEES = {
     "Appareillage",
     "Tableaux et distribution",
     "Câbles",
-    "Éclairage de sécurité"
+    "Éclairage de sécurité",
+    "Commandes de désenfumage (DAC, DCS, armoires, centrales)"
    ]
   },
   {
@@ -9062,7 +9067,7 @@ window.TD_DONNEES = {
      "titre": "Familles de produits"
     }
    ],
-   "sous": "Pompes à chaleur, climatisation",
+   "sous": "Pompes à chaleur et climatisation",
    "perf": "",
    "projets": "",
    "notes": "",
@@ -9095,7 +9100,7 @@ window.TD_DONNEES = {
      "titre": "Pompes à chaleur hybrides"
     }
    ],
-   "sous": "Pompes à chaleur, climatisation",
+   "sous": "Pompes à chaleur et climatisation",
    "perf": "",
    "projets": "",
    "notes": "",
@@ -26687,6 +26692,1958 @@ window.TD_DONNEES = {
    "verifie": "2026-11-16",
    "cree": "2026-11-16",
    "maj": "2026-11-16"
+  },
+  {
+   "id": "airwell-wellea-m-ht",
+   "lot": "L15",
+   "nom": "Pompe à chaleur air/eau monobloc haute température au R290 Airwell WELLEA M HT",
+   "fabricant": "Airwell",
+   "reference": "WELLEA M HT",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "pompe à chaleur",
+    "air/eau",
+    "monobloc",
+    "R290",
+    "haute température"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.airwell.com/wp-content/uploads/2025/11/25-AW-FICHE-PRODUIT-WELLEA-M-HT-FR-1025_V2.pdf",
+     "titre": "Fiche produit WELLEA M HT (10/2025)"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.airwell.com/wp-content/uploads/2024/10/FIche-B2C_Wellea-Mono-HT_0724_V1.pdf",
+     "titre": "Brochure Wellea Monobloc HT"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.airwell.com/wp-content/uploads/2024/03/Catalogue-Airwell-France-2024.pdf",
+     "titre": "Catalogue Airwell France 2024/2025"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "Chaud 4,5 à 15 kW, froid 4,5 à 14,9 kW ; A+++ ; fluide R290",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "airwell-wellea-m-df-ht",
+   "lot": "L15",
+   "nom": "Pompe à chaleur air/eau monobloc grande puissance au R290 Airwell WELLEA M DF HT",
+   "fabricant": "Airwell",
+   "reference": "WELLEA M DF HT",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "pompe à chaleur",
+    "air/eau",
+    "monobloc",
+    "R290",
+    "collectif",
+    "tertiaire"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.airwell.com/wp-content/uploads/2026/01/25-AW-FICHE-PRODUIT-WELLEA-M-DF-HT-FR-1025_V1.pdf",
+     "titre": "Fiche produit WELLEA M DF HT (10/2025)"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.airwell.com/wp-content/uploads/2024/03/Catalogue-Airwell-France-2024.pdf",
+     "titre": "Catalogue Airwell France 2024/2025"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "",
+   "projets": "",
+   "notes": "Version R32 (WELLEA M DF MT, 18 à 31 kW) au catalogue 2024/2025.",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "airwell-wellea-wt-mt",
+   "lot": "L15",
+   "nom": "Pompe à chaleur air/eau split triple service avec ballon ECS Airwell WELLEA WT MT",
+   "fabricant": "Airwell",
+   "reference": "WELLEA WT MT",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "pompe à chaleur",
+    "air/eau",
+    "split",
+    "ECS",
+    "R32"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.airwell.com/wp-content/uploads/2025/11/25-AW-FICHE-PRODUIT-WELLEA-WT-MT-FR-1025_V2.pdf",
+     "titre": "Fiche produit WELLEA WT MT (10/2025)"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.airwell.com/wp-content/uploads/2024/04/FIche-B2C_Wellea-S-WT-MT_0324_V5.pdf",
+     "titre": "Brochure Wellea Split et WT"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.airwell.com/wp-content/uploads/2024/03/Catalogue-Airwell-France-2024.pdf",
+     "titre": "Catalogue Airwell France 2024/2025"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "Chaud 4,25 à 16 kW ; ballon inox 190 ou 240 l ; R32",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "airwell-wellea-s-mt",
+   "lot": "L15",
+   "nom": "Pompe à chaleur air/eau split Airwell WELLEA S MT",
+   "fabricant": "Airwell",
+   "reference": "WELLEA S MT",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "pompe à chaleur",
+    "air/eau",
+    "split",
+    "R32"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://www.airwell.com/wp-content/uploads/2024/04/FIche-B2C_Wellea-S-WT-MT_0324_V5.pdf",
+     "titre": "Brochure Wellea Split"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/pompe-a-chaleur-split-reversible-wellea-split-p384465730.html",
+     "titre": "Fiche Batiproduits"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.airwell.com/wp-content/uploads/2024/03/Catalogue-Airwell-France-2024.pdf",
+     "titre": "Catalogue Airwell France 2024/2025"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "airwell-wellea-m-mt",
+   "lot": "L15",
+   "nom": "Pompe à chaleur air/eau monobloc au R32 Airwell WELLEA M MT",
+   "fabricant": "Airwell",
+   "reference": "WELLEA M MT",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "pompe à chaleur",
+    "air/eau",
+    "monobloc",
+    "R32"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.airwell.com/wp-content/uploads/2025/11/25-AW-FICHE-PRODUIT-WELLEA-M-MT-FR-1025_V2.pdf",
+     "titre": "Fiche produit WELLEA M MT (10/2025)"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.airwell.com/wp-content/uploads/2024/04/FIche-B2C_Wellea-Mono_0324_V2_0.pdf",
+     "titre": "Brochure Wellea Monobloc"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/pompe-a-chaleur-monobloc-reversible-compatible-a-p384315410.html",
+     "titre": "Fiche Batiproduits"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.airwell.com/wp-content/uploads/2024/03/Catalogue-Airwell-France-2024.pdf",
+     "titre": "Catalogue Airwell France 2024/2025"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "airwell-ddmx",
+   "lot": "L15",
+   "nom": "Climatiseur gainable moyenne pression mono et multisplit Airwell DDMX",
+   "fabricant": "Airwell",
+   "reference": "DDMX",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "climatisation",
+    "gainable",
+    "split",
+    "R32"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.airwell.com/wp-content/uploads/2024/04/24-AW-FICHE-PRODUIT-DDMX-FR-0224_V1.pdf",
+     "titre": "Fiche produit DDMX (02/2024)"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.airwell.com/wp-content/uploads/2024/03/Catalogue-Airwell-France-2024.pdf",
+     "titre": "Catalogue Airwell France 2024/2025"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "Froid 2,05 à 15,24 kW, chaud 2,34 à 18,17 kW ; R32",
+   "projets": "",
+   "notes": "Régulation zone par zone WELLZONE (jusqu’à 6 zones) au catalogue.",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "airwell-hdmb-harmonia",
+   "lot": "L15",
+   "nom": "Climatiseur mural mono et multisplit Airwell HDMB Harmonia",
+   "fabricant": "Airwell",
+   "reference": "HDMB",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "climatisation",
+    "mural",
+    "split",
+    "R32"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://airwell.com/wp-content/uploads/2025/03/24-AW-FICHE-PRODUIT-HDMB-PLATINIUM97-FR-0924_V4.pdf",
+     "titre": "Fiche produit HDMB (09/2024)"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.airwell.com/wp-content/uploads/2024/03/Catalogue-Airwell-France-2024.pdf",
+     "titre": "Catalogue Airwell France 2024/2025"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "",
+   "projets": "",
+   "notes": "Autres muraux : HDHC Artica, HDLE Aura ; multisplits ZDAA, ZDAE (catalogue).",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "airwell-cdmx-fdmx",
+   "lot": "L15",
+   "nom": "Cassette 360°, allège-plafonnier et colonne mono et multisplit Airwell CDMX, FDMX, SDMX",
+   "fabricant": "Airwell",
+   "reference": "CDMX, FDMX, SDMX",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "climatisation",
+    "cassette",
+    "plafonnier",
+    "tertiaire",
+    "R32"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://www.airwell.com/wp-content/uploads/2024/03/Catalogue-Airwell-France-2024.pdf",
+     "titre": "Catalogue Airwell France 2024/2025"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "CDMX froid 2,05 à 14,07 kW ; FDMX froid 5,28 à 15,83 kW ; SDMX 14 kW",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "airwell-drv",
+   "lot": "L15",
+   "nom": "Systèmes à débit de réfrigérant variable (DRV) Airwell VVFA, VVTA, VVEA",
+   "fabricant": "Airwell",
+   "reference": "VVFA, VVTA, VVEA",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "climatisation",
+    "DRV",
+    "VRF",
+    "tertiaire",
+    "récupération d’énergie"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://www.airwell.com/wp-content/uploads/2024/03/Catalogue-Airwell-France-2024.pdf",
+     "titre": "Catalogue Airwell France 2024/2025"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/gainable-haute-pression-avec-puissance-jusqu-a-p385219700.html",
+     "titre": "Unités intérieures DRV, gainable DCV (Batiproduits)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/cassette-600-x-600-telecommande-rwv05-incluse-p385093080.html",
+     "titre": "Cassette 600 x 600 CBV (Batiproduits)"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "VVFA 2 tubes 12 à 31,5 kW ; VVTA 2 tubes chauffage continu 25 à 294 kW ; VVEA 3 tubes récupération d’énergie ; R410A",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "airwell-dfmo-xdow",
+   "lot": "L15",
+   "nom": "Pompe à chaleur sur boucle d’eau et console à eau Airwell DFMO, XDOW",
+   "fabricant": "Airwell",
+   "reference": "DFMO, XDOW",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "boucle d’eau",
+    "pompe à chaleur",
+    "tertiaire",
+    "R410A"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://www.airwell.com/wp-content/uploads/2024/03/Catalogue-Airwell-France-2024.pdf",
+     "titre": "Catalogue Airwell France 2024/2025"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "DFMO froid 2,26 à 25 kW, chaud 2,76 à 33,2 kW",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "airwell-jdaa-airflow",
+   "lot": "L15",
+   "nom": "VMC double flux thermodynamique Airwell JDAA Airflow",
+   "fabricant": "Airwell",
+   "reference": "JDAA Airflow",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ventilation",
+    "double flux",
+    "thermodynamique",
+    "R32"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://www.airwell.com/wp-content/uploads/2024/03/Catalogue-Airwell-France-2024.pdf",
+     "titre": "Catalogue Airwell France 2024/2025"
+    }
+   ],
+   "sous": "Ventilation",
+   "perf": "Débit 125 à 320 m³/h",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "airwell-eleo",
+   "lot": "L14",
+   "nom": "Chauffe-eau thermodynamiques Airwell ELEO S, ELEO M, ELEO MS",
+   "fabricant": "Airwell",
+   "reference": "ELEO S, M, MS",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ECS",
+    "chauffe-eau thermodynamique",
+    "R134A"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://www.airwell.com/wp-content/uploads/2024/03/Catalogue-Airwell-France-2024.pdf",
+     "titre": "Catalogue Airwell France 2024/2025"
+    }
+   ],
+   "sous": "Production d'eau chaude sanitaire",
+   "perf": "Split 200 et 260 l ; monobloc 120 à 260 l ; solaire 190 et 300 l",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "daikin-altherma-3-r",
+   "lot": "L15",
+   "nom": "Pompe à chaleur air/eau bibloc à liaison frigorifique Daikin Altherma 3 R",
+   "fabricant": "Daikin",
+   "reference": "Daikin Altherma 3 R (W, F, MT)",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "pompe à chaleur",
+    "air/eau",
+    "bibloc",
+    "R32"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://www.daikin.fr/content/dam/DAF/document-library/Brochures%20commerciales/chauffage/250.AL3R11-16.25.pdf",
+     "titre": "Brochure Altherma 3 R tailles 11 à 16"
+    },
+    {
+     "type": "cat",
+     "url": "https://rexel-catalogues-interactifs.rexel.fr/catalogs/Catalogue_Daikin_chauffage/pdf/complete.pdf",
+     "titre": "Catalogue chauffage Daikin (copie distributeur)"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "daikin-altherma-3-h-ht",
+   "lot": "L15",
+   "nom": "Pompe à chaleur air/eau haute température à liaison hydraulique Daikin Altherma 3 H HT",
+   "fabricant": "Daikin",
+   "reference": "Daikin Altherma 3 H HT",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "pompe à chaleur",
+    "air/eau",
+    "haute température",
+    "rénovation",
+    "R32"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/pac-air-eau-haute-temperature-au-r32-a-liaison-h-p286721637.html",
+     "titre": "Fiche Batiproduits"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "Eau jusqu’à 70 °C",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "daikin-altherma-3-m",
+   "lot": "L15",
+   "nom": "Pompe à chaleur air/eau monobloc réversible Daikin Altherma 3 M",
+   "fabricant": "Daikin",
+   "reference": "Daikin Altherma 3 M",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "pompe à chaleur",
+    "air/eau",
+    "monobloc",
+    "RE2020"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/amp/fiche/produits/pac-air-eau-monobloc-reversible-basse-temperatur-p390447070.html",
+     "titre": "Fiche Batiproduits"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "daikin-altherma-3-ws",
+   "lot": "L15",
+   "nom": "Pompe à chaleur sur boucle d’eau tempérée pour le logement collectif Daikin Altherma 3 WS",
+   "fabricant": "Daikin",
+   "reference": "Daikin Altherma 3 WS",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "pompe à chaleur",
+    "eau/eau",
+    "boucle tempérée",
+    "logement collectif"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/pompe-a-chaleur-sur-boucle-temperee-pour-le-col-p456472763.html",
+     "titre": "Fiche Batiproduits"
+    },
+    {
+     "type": "autre",
+     "url": "https://fpa.fr/wp-content/uploads/2023/06/CPDaikin_Altherma-3-WS_Juin2023.pdf",
+     "titre": "Communiqué de presse (06/2023)"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "daikin-sky-air",
+   "lot": "L15",
+   "nom": "Climatisation petit tertiaire Daikin Sky Air (unités intérieures, groupes Alpha, Advance, Active)",
+   "fabricant": "Daikin",
+   "reference": "Sky Air",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "climatisation",
+    "tertiaire",
+    "cassette",
+    "gainable",
+    "R32"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://res.cloudinary.com/sonepar-fr/raw/upload/s--kCWvq9AZ--/v1/documents/121/Sky_Air_Product_catalogue_for-professional-network_ECPFR-FR21-100_French.pdf",
+     "titre": "Catalogue Sky Air professionnels 2021 (copie distributeur)"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "",
+   "projets": "",
+   "notes": "Rideaux d’air Biddle raccordés en détente directe au même catalogue.",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "daikin-ventilation-vam-modular",
+   "lot": "L15",
+   "nom": "Ventilation double flux tertiaire Daikin VAM, Modular L, Modular T, centrales D-AHU",
+   "fabricant": "Daikin",
+   "reference": "VAM-FC9/J8, Modular L, Modular T, D-AHU",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ventilation",
+    "double flux",
+    "récupération de chaleur",
+    "tertiaire"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://catalogues.daikin.eu/flipbooks/EN/Ventilation/ECPEN25-567",
+     "titre": "Catalogue ventilation Daikin 2025 (anglais)"
+    }
+   ],
+   "sous": "Ventilation",
+   "perf": "Modular L 150 à 3 400 m³/h ; D-AHU Modular 500 à 25 000 m³/h",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "technibel-aquaset-phiam",
+   "lot": "L15",
+   "nom": "Pompe à chaleur air/eau monobloc inverter Technibel AQUASET-PHIAM",
+   "fabricant": "Technibel",
+   "reference": "PHIAM08, PHIAM11, PHIAM14",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "pompe à chaleur",
+    "air/eau",
+    "monobloc",
+    "relève de chaudière"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.technibel.com/download/18.620dbb231758f9bf7feae9/1590392026491/PAC%20Air%20-%20Eau%20r%C3%A9sidentielle%20-%20AQUASET%20PHIAM.pdf",
+     "titre": "Fiche gamme AQUASET-PHIAM"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.technibel.com/download/18.620dbb231758f9bf7fec39/1590408252761/Catalogue%20Technibel%202019.pdf",
+     "titre": "Catalogue Technibel 2019"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "Départ d’eau jusqu’à 58 °C ; fonctionnement jusqu’à -20 °C",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "technibel-aquaset-s",
+   "lot": "L15",
+   "nom": "Pompe à chaleur air/eau split inverter Technibel Aquaset-S",
+   "fabricant": "Technibel",
+   "reference": "Aquaset-S",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "pompe à chaleur",
+    "air/eau",
+    "split"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/pompe-a-chaleur-reversible-split-inverter-en-15-p68903908.html",
+     "titre": "Fiche Batiproduits"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.technibel.com/download/18.620dbb231758f9bf7fec39/1590408252761/Catalogue%20Technibel%202019.pdf",
+     "titre": "Catalogue Technibel 2019"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "technibel-chg-phr-tertiaire",
+   "lot": "L15",
+   "nom": "Groupes d’eau glacée et pompes à chaleur tertiaires Technibel CHG, PHR (90 à 240 kW)",
+   "fabricant": "Technibel",
+   "reference": "CHG, PHR",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "eau glacée",
+    "pompe à chaleur",
+    "tertiaire"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://www.technibel.com/download/18.620dbb231758f9bf7fec39/1590408252761/Catalogue%20Technibel%202019.pdf",
+     "titre": "Catalogue Technibel 2019"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "technibel-climatisation",
+   "lot": "L15",
+   "nom": "Climatiseurs Technibel monosplit, multisplit, consoles monoblocs et mobiles",
+   "fabricant": "Technibel",
+   "reference": "",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "climatisation",
+    "split",
+    "multisplit",
+    "mobile",
+    "console"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://www.technibel.com/download/18.620dbb231758f9bf7fec39/1590408252761/Catalogue%20Technibel%202019.pdf",
+     "titre": "Catalogue Technibel 2019"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/fabricant/technibel-45353/",
+     "titre": "Produits Technibel (Batiproduits)"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "promat-promatect-xs",
+   "lot": "L09",
+   "nom": "Plaque de protection incendie des structures acier Promat PROMATECT-XS",
+   "fabricant": "Promat",
+   "reference": "PROMATECT-XS",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "protection incendie",
+    "structure acier",
+    "plaque",
+    "R 240"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.promat.com/fr-fr/construction/produits-et-systemes/produits/plaques/promatect-xs",
+     "titre": "PROMATECT-XS"
+    },
+    {
+     "type": "ft",
+     "url": "https://media.promat.com/pi118614/original/840132430/promatect-xs-france.pdf",
+     "titre": "Fiche technique PROMATECT-XS"
+    },
+    {
+     "type": "cat",
+     "url": "https://media.promat.com/pi118450/original/-116401720/promatect-xs-protection-des-structures-metalliques.pdf",
+     "titre": "Brochure protection des structures métalliques"
+    },
+    {
+     "type": "cat",
+     "url": "https://media.promat.com/pi718700/original/814618774/memento-promat-2024.pdf",
+     "titre": "Mémento Promat 2024"
+    }
+   ],
+   "sous": "Protection passive incendie (plaques, enduits, calfeutrements)",
+   "perf": "Jusqu’à R 240 ; A1 ; λ 0,21 W/mK",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "promat-promatect-l500",
+   "lot": "L09",
+   "nom": "Plaque silico-calcaire Promat PROMATECT-L500 (conduits de ventilation et de désenfumage, structures)",
+   "fabricant": "Promat",
+   "reference": "PROMATECT-L500",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "protection incendie",
+    "conduit",
+    "désenfumage",
+    "plaque"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.promat.com/fr-fr/construction/produits-et-systemes/produits/plaques/",
+     "titre": "Plaques Promat"
+    },
+    {
+     "type": "cat",
+     "url": "https://cdn.chausson.fr/catalog-document/207a427a-d0bf-4c06-9bfe-22ec0e90081e/plaquette.pdf",
+     "titre": "Plaquette PROMATECT-L500 conduits (copie distributeur)"
+    },
+    {
+     "type": "cat",
+     "url": "https://media.promat.com/pi718700/original/814618774/memento-promat-2024.pdf",
+     "titre": "Mémento Promat 2024"
+    }
+   ],
+   "sous": "Protection passive incendie (plaques, enduits, calfeutrements)",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "promat-promatect-100",
+   "lot": "L09",
+   "nom": "Plaque silico-calcaire Promat PROMATECT-100 (plafonds sous plancher bois, cloisons)",
+   "fabricant": "Promat",
+   "reference": "PROMATECT-100",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "protection incendie",
+    "plancher bois",
+    "plafond",
+    "plaque"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.promat.com/fr-fr/construction/produits-et-systemes/produits/plaques/",
+     "titre": "Plaques Promat"
+    },
+    {
+     "type": "cat",
+     "url": "https://media.promat.com/pi351044/original/-1784916/brochure--la-solution-optimisee-pour-fixation-directe-sous-plancher-bois--promatect-100.pdf",
+     "titre": "Brochure fixation directe sous plancher bois"
+    },
+    {
+     "type": "cat",
+     "url": "https://media.promat.com/pi544990/original/-217039833/solutions-promat-pour-plaquistes.pdf",
+     "titre": "Solutions Promat pour plaquistes"
+    }
+   ],
+   "sous": "Protection passive incendie (plaques, enduits, calfeutrements)",
+   "perf": "",
+   "projets": "",
+   "notes": "ETA 06/0219.",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "promat-promatect-h",
+   "lot": "L09",
+   "nom": "Plaque silico-calcaire Promat PROMATECT-H (structures, planchers bois feu par le dessus)",
+   "fabricant": "Promat",
+   "reference": "PROMATECT-H",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "protection incendie",
+    "plaque",
+    "structure"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.promat.com/fr-fr/construction/produits-et-systemes/produits/plaques/",
+     "titre": "Plaques Promat"
+    },
+    {
+     "type": "ft",
+     "url": "https://media.promat.com/pi118551/original/-61374233/feuillet-nouveaute---promatect-h---protection-des-planchers-bois-risque-feu-par-le-dessus.pdf",
+     "titre": "Feuillet planchers bois feu par le dessus"
+    }
+   ],
+   "sous": "Protection passive incendie (plaques, enduits, calfeutrements)",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "promat-promaduct",
+   "lot": "L15",
+   "nom": "Conduits de ventilation et de désenfumage résistants au feu Promat PROMADUCT, Combi-PROMADUCT",
+   "fabricant": "Promat",
+   "reference": "PROMADUCT",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "désenfumage",
+    "conduit",
+    "résistance au feu",
+    "ventilation"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.promat.com/fr-fr/construction/applications/conduits/",
+     "titre": "PROMADUCT"
+    },
+    {
+     "type": "site",
+     "url": "https://www.promat.com/fr-fr/construction/produits-et-systemes/systemes/conduits-de-desenfumage-et-ventilation/",
+     "titre": "Systèmes conduits de désenfumage et de ventilation"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.promat.com/fr-fr/construction/combi-promaduct/",
+     "titre": "Combi-PROMADUCT"
+    }
+   ],
+   "sous": "Ventilation",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "promat-encoffrements-cables",
+   "lot": "L16",
+   "nom": "Encoffrements et protection de chemins de câbles résistants au feu Promat",
+   "fabricant": "Promat",
+   "reference": "",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "protection incendie",
+    "chemin de câbles",
+    "encoffrement"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.promat.com/fr-fr/construction/produits-et-systemes/systemes/encoffrements-et-protection-de-chemin-de-cables/",
+     "titre": "Encoffrements et chemins de câbles"
+    },
+    {
+     "type": "cat",
+     "url": "https://media.promat.com/pi663298/original/123355130/guide-simplifie-des-solutions-promat.pdf",
+     "titre": "Guide simplifié des solutions Promat"
+    }
+   ],
+   "sous": "Câbles",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "promat-plafonds-cloisons",
+   "lot": "L09",
+   "nom": "Plafonds, écrans horizontaux, cloisons et doublages résistants au feu Promat",
+   "fabricant": "Promat",
+   "reference": "",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "protection incendie",
+    "plafond",
+    "cloison",
+    "doublage"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.promat.com/fr-fr/construction/produits-et-systemes/systemes/plafonds-ecrans-planchers/",
+     "titre": "Plafonds, écrans, planchers"
+    },
+    {
+     "type": "site",
+     "url": "https://www.promat.com/fr-fr/construction/produits-et-systemes/systemes/cloisons-doublages/",
+     "titre": "Cloisons et doublages"
+    }
+   ],
+   "sous": "Protection passive incendie (plaques, enduits, calfeutrements)",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "promat-revetements-projetes",
+   "lot": "L09",
+   "nom": "Revêtements projetés pâteux de protection incendie des structures Promat",
+   "fabricant": "Promat",
+   "reference": "",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "protection incendie",
+    "flocage",
+    "projeté",
+    "structure"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.promat.com/fr-fr/construction/produits-et-systemes/produits/revetemens-projetes-pateux/",
+     "titre": "Revêtements projetés pâteux"
+    },
+    {
+     "type": "site",
+     "url": "https://www.promat.com/fr-fr/construction/applications/protection-de-structure/",
+     "titre": "Protection de structure"
+    }
+   ],
+   "sous": "Protection passive incendie (plaques, enduits, calfeutrements)",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "promat-peintures-intumescentes",
+   "lot": "L13",
+   "nom": "Peintures et vernis intumescents Promat (structures acier, béton, bois)",
+   "fabricant": "Promat",
+   "reference": "",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "protection incendie",
+    "peinture intumescente",
+    "structure acier"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.promat.com/fr-fr/construction/produits-et-systemes/produits/peintures-intumescentes/",
+     "titre": "Peintures intumescentes"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "promat-calfeutrement",
+   "lot": "L09",
+   "nom": "Calfeutrements coupe-feu des traversées Promat (mastics et bandes intumescents)",
+   "fabricant": "Promat",
+   "reference": "",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "protection incendie",
+    "calfeutrement",
+    "traversée",
+    "intumescent"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.promat.com/fr-fr/construction/produits-et-systemes/produits/calfeutrement/",
+     "titre": "Calfeutrement"
+    },
+    {
+     "type": "site",
+     "url": "https://www.promat.com/fr-fr/construction/applications/fire-stopping/",
+     "titre": "Pénétrations résistantes au feu"
+    },
+    {
+     "type": "site",
+     "url": "https://www.promat.com/fr-fr/construction/produits-et-systemes/produits/colles-enduits-finition/",
+     "titre": "Colles et enduits de finition"
+    }
+   ],
+   "sous": "Protection passive incendie (plaques, enduits, calfeutrements)",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "promat-vitrages-blocs-portes",
+   "lot": "L10",
+   "nom": "Cloisons vitrées et blocs-portes résistants au feu Promat",
+   "fabricant": "Promat",
+   "reference": "",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "résistance au feu",
+    "cloison vitrée",
+    "bloc-porte"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.promat.com/fr-fr/construction/produits-et-systemes/produits/vitrages-blocs-portes/",
+     "titre": "Vitrages et blocs-portes"
+    },
+    {
+     "type": "site",
+     "url": "https://www.promat.com/fr-fr/construction/produits-et-systemes/systemes/cloisons-vitrees-blocs-portes/",
+     "titre": "Systèmes cloisons vitrées et blocs-portes"
+    }
+   ],
+   "sous": "Portes intérieures",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "madicob-lanterneau-horizon",
+   "lot": "L05",
+   "nom": "Lanterneau Madicob HORIZON",
+   "fabricant": "Madicob",
+   "reference": "HORIZON",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "lanterneau",
+    "éclairage zénithal",
+    "toiture étanchée"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.madicob.fr/nos-solutions/lanterneau-horizon/",
+     "titre": "Lanterneau HORIZON"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.madicob.fr/wp-content/uploads/2023/05/catalogue_v7-230510-web.pdf",
+     "titre": "Catalogue général Madicob"
+    }
+   ],
+   "sous": "Fenêtres de toit plat, lanterneaux",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "madicob-voute-zenith",
+   "lot": "L05",
+   "nom": "Voûte filante d’éclairage zénithal avec désenfumage intégré Madicob ZENITH",
+   "fabricant": "Madicob",
+   "reference": "ZENITH",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "voûte filante",
+    "éclairage zénithal",
+    "DENFC",
+    "EN 12101-2"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.madicob.fr/nos-solutions/voute-filante-zenith/",
+     "titre": "Voûte ZENITH"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/voute-filante-pour-l-eclairage-zenithal-et-le-p452839712.html",
+     "titre": "Fiche Batiproduits"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.madicob.fr/wp-content/uploads/2023/05/catalogue_v7-230510-web.pdf",
+     "titre": "Catalogue général Madicob"
+    }
+   ],
+   "sous": "Éclairage zénithal continu (voûtes filantes)",
+   "perf": "Ouvrants DENFC pneumatiques ou électriques 24 V, 800 x 800 à 2 000 x 2 500 mm",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "madicob-arcalam",
+   "lot": "L05",
+   "nom": "Exutoire de désenfumage à lames Madicob ARCALAM (CE)",
+   "fabricant": "Madicob",
+   "reference": "ARCALAM",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "exutoire",
+    "DENFC",
+    "lames",
+    "désenfumage"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.madicob.fr/nos-solutions/arcalam-ce-exutoire-a-lames/",
+     "titre": "ARCALAM"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.madicob.fr/wp-content/uploads/2023/05/catalogue_v7-230510-web.pdf",
+     "titre": "Catalogue général Madicob"
+    }
+   ],
+   "sous": "Désenfumage naturel (exutoires DENFC)",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "madicob-cdv",
+   "lot": "L05",
+   "nom": "Châssis de désenfumage pour verrière Madicob CDV (DENFC)",
+   "fabricant": "Madicob",
+   "reference": "CDV",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "DENFC",
+    "verrière",
+    "désenfumage",
+    "rupture de pont thermique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/chassis-de-desenfumage-pour-verriere-denfc-p69073178.html",
+     "titre": "Fiche Batiproduits"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.madicob.fr/wp-content/uploads/2023/05/catalogue_v7-230510-web.pdf",
+     "titre": "Catalogue général Madicob"
+    }
+   ],
+   "sous": "Désenfumage naturel (exutoires DENFC)",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "madicob-cdc",
+   "lot": "L07",
+   "nom": "Ouvrant de façade de désenfumage et d’aération Madicob CDC gamme 65",
+   "fabricant": "Madicob",
+   "reference": "CDC",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ouvrant de façade",
+    "DENFC",
+    "désenfumage",
+    "aération"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/amp/fiche/produits/chassis-de-desenfumage-denfc-p69073098.html",
+     "titre": "Fiche Batiproduits"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiweb.com/produit-btp/cdc-gamme-65-ouvrant-de-facade-347260",
+     "titre": "CDC gamme 65 (Batiweb)"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.madicob.fr/wp-content/uploads/2023/05/catalogue_v7-230510-web.pdf",
+     "titre": "Catalogue général Madicob"
+    }
+   ],
+   "sous": "Ouvrants de façade de désenfumage et d'aération",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "madicob-arcafacade",
+   "lot": "L07",
+   "nom": "Ouvrant de façade à lames Madicob ARCAFACADE (CE)",
+   "fabricant": "Madicob",
+   "reference": "ARCAFACADE",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ouvrant de façade",
+    "lames",
+    "désenfumage"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.madicob.fr/nos-solutions/arcafacade-ce-ouvrant-de-facade-a-lames/",
+     "titre": "ARCAFACADE"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.madicob.fr/wp-content/uploads/2023/05/catalogue_v7-230510-web.pdf",
+     "titre": "Catalogue général Madicob"
+    }
+   ],
+   "sous": "Ouvrants de façade de désenfumage et d'aération",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "madicob-air-ls",
+   "lot": "L07",
+   "nom": "Ouvrant de façade à lamelles pour amenée d’air Madicob AIR-LS",
+   "fabricant": "Madicob",
+   "reference": "AIR-LS",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "amenée d’air",
+    "lamelles",
+    "façade"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.madicob.fr/nos-solutions/air-ls-ouvrant-de-facade-a-lamelles/",
+     "titre": "AIR-LS"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.madicob.fr/wp-content/uploads/2023/05/catalogue_v7-230510-web.pdf",
+     "titre": "Catalogue général Madicob"
+    }
+   ],
+   "sous": "Ouvrants de façade de désenfumage et d'aération",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "madicob-aeration-naturelle",
+   "lot": "L07",
+   "nom": "Équipements d’aération naturelle Madicob (ferme-impostes, boîtiers à chaîne, vérins électriques, centrales pluie-vent)",
+   "fabricant": "Madicob",
+   "reference": "",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "aération naturelle",
+    "ferme-imposte",
+    "vérin",
+    "motorisation"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.madicob.fr/nos-solutions/aeration-naturelle/",
+     "titre": "Aération naturelle"
+    },
+    {
+     "type": "site",
+     "url": "https://www.madicob.fr/nos-solutions/categorie-produit/aeration/",
+     "titre": "Catégorie aération"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.madicob.fr/wp-content/uploads/2023/05/catalogue_v7-230510-web.pdf",
+     "titre": "Catalogue général Madicob"
+    }
+   ],
+   "sous": "Ouvrants de façade de désenfumage et d'aération",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "madicob-armoires-co2",
+   "lot": "L16",
+   "nom": "Armoires CO2 de commande de désenfumage Madicob ASK, CPS, CPS S500, CPS-V",
+   "fabricant": "Madicob",
+   "reference": "ASK, CPS, CPS-V",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "désenfumage",
+    "commande pneumatique",
+    "CO2",
+    "DAC"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.madicob.fr/nos-solutions/armoires-co%c2%b2-ask-cps-cps-s500/",
+     "titre": "Armoires CO2 ASK, CPS, CPS S500"
+    },
+    {
+     "type": "site",
+     "url": "https://www.madicob.fr/nos-solutions/armoires-co%c2%b2-avec-aeration-cps-v/",
+     "titre": "Armoires CO2 avec aération CPS-V"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.madicob.fr/wp-content/uploads/2023/05/catalogue_v7-230510-web.pdf",
+     "titre": "Catalogue général Madicob"
+    }
+   ],
+   "sous": "Commandes de désenfumage (DAC, DCS, armoires, centrales)",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "madicob-armoires-dae24-dce24",
+   "lot": "L16",
+   "nom": "Armoires électriques de désenfumage Madicob DAE24 (DAC) et DCE24 (DCS)",
+   "fabricant": "Madicob",
+   "reference": "DAE24, DCE24",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "désenfumage",
+    "commande électrique",
+    "DAC",
+    "DCS",
+    "24 V"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.madicob.fr/nos-solutions/armoire-dae24-d-a-c/",
+     "titre": "Armoire DAE24"
+    },
+    {
+     "type": "site",
+     "url": "https://www.madicob.fr/nos-solutions/armoire-dce24-d-c-s/",
+     "titre": "Armoire DCE24"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.madicob.fr/wp-content/uploads/2023/05/catalogue_v7-230510-web.pdf",
+     "titre": "Catalogue général Madicob"
+    }
+   ],
+   "sous": "Commandes de désenfumage (DAC, DCS, armoires, centrales)",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "madicob-centrale-compact-reflex",
+   "lot": "L16",
+   "nom": "Centrales de désenfumage Madicob COMPACT et REFLEX",
+   "fabricant": "Madicob",
+   "reference": "COMPACT, REFLEX",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "désenfumage",
+    "centrale",
+    "commande électrique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.madicob.fr/nos-solutions/centrale-de-desenfumage-compact-et-reflex/",
+     "titre": "Centrales COMPACT et REFLEX"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.madicob.fr/wp-content/uploads/2023/05/catalogue_v7-230510-web.pdf",
+     "titre": "Catalogue général Madicob"
+    }
+   ],
+   "sous": "Commandes de désenfumage (DAC, DCS, armoires, centrales)",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "madicob-porte-coupe-feu",
+   "lot": "L08",
+   "nom": "Porte coupe-feu métallique Madicob",
+   "fabricant": "Madicob",
+   "reference": "",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "porte coupe-feu",
+    "acier",
+    "bloc-porte"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.madicob.fr/nos-solutions/porte-coupe-feu-madicob-division/",
+     "titre": "Porte coupe-feu métallique"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.madicob.fr/wp-content/uploads/2023/05/catalogue_v7-230510-web.pdf",
+     "titre": "Catalogue général Madicob"
+    }
+   ],
+   "sous": "Portes et cloisons acier",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "domeca-domanef-3150",
+   "lot": "L05",
+   "nom": "Voûte filante d’éclairage zénithal Domeca Domanef 3150",
+   "fabricant": "Domeca",
+   "reference": "Domanef 3150",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "voûte filante",
+    "éclairage zénithal",
+    "industrie"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/lanternaux-pour-eclairage-zenithal-p69074828.html",
+     "titre": "Fiche Batiproduits"
+    }
+   ],
+   "sous": "Éclairage zénithal continu (voûtes filantes)",
+   "perf": "Transmission lumineuse 55 à 87 % selon teinte",
+   "projets": "",
+   "notes": "Avis technique CSTB 5/99-1415 cité par Batiproduits, validité à vérifier. Voûte Domalux également citée. Aucun site du fabricant trouvé.",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "domeca-cintramax-r17",
+   "lot": "L05",
+   "nom": "Exutoire de voûte à ouverture verticale Domeca Cintramax R17",
+   "fabricant": "Domeca",
+   "reference": "Cintramax R17",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "exutoire",
+    "voûte",
+    "DENFC",
+    "DAS"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/dispositif-pour-ouverture-verticale-de-voute-p69074818.html",
+     "titre": "Fiche Batiproduits"
+    }
+   ],
+   "sous": "Désenfumage naturel (exutoires DENFC)",
+   "perf": "",
+   "projets": "",
+   "notes": "Pour voûtes Domanef ou Domalux, toitures ondulées de pente 6 à 30 %. Aucun site du fabricant trouvé.",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "alcaud-euromaxidome-ws",
+   "lot": "L05",
+   "nom": "Exutoire DENFC mono-ouvrant pneumatique Alcaud Euromaxidome WS",
+   "fabricant": "Alcaud",
+   "reference": "Euromaxidome WS",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "exutoire",
+    "DENFC",
+    "pneumatique",
+    "toiture étanchée"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/exutoire-denfc-mono-ouvrant-pneumatique-p69084533.html",
+     "titre": "Fiche Batiproduits"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiweb.com/produit-btp/euromaxidome-ws-denfc-mono-ouvrant-pneumatique-systeme-de-desenfumage-et-d-aeration-340098",
+     "titre": "Fiche Batiweb"
+    }
+   ],
+   "sous": "Désenfumage naturel (exutoires DENFC)",
+   "perf": "",
+   "projets": "",
+   "notes": "Lanterneau fixe Euromaxidome Fixe et exutoire acoustique Duo Therma au même fabricant.",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "alcaud-euromaxidome-ws-rt",
+   "lot": "L05",
+   "nom": "Exutoire DENFC à isolation thermique renforcée Alcaud Euromaxidome WS RT",
+   "fabricant": "Alcaud",
+   "reference": "Euromaxidome WS RT",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "exutoire",
+    "DENFC",
+    "isolation thermique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/exutoire-de-desenfumage-a-isolation-thermique-re-p69084518.html",
+     "titre": "Fiche Batiproduits"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiweb.com/produit-btp/euromaxidome-ws-rt-denfc-mono-ouvrant-pneumatique-exutoire-de-desenfumage-a-isolation-thermique-renf-340099",
+     "titre": "Fiche Batiweb"
+    }
+   ],
+   "sous": "Désenfumage naturel (exutoires DENFC)",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "alcaud-europyrotech-ce",
+   "lot": "L05",
+   "nom": "Exutoire de voûte à soulèvement vertical Alcaud Europyrotech CE",
+   "fabricant": "Alcaud",
+   "reference": "Europyrotech CE",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "exutoire",
+    "voûte",
+    "DENFC",
+    "polycarbonate"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/exutoire-de-voute-a-soulevement-vertical-p69084508.html",
+     "titre": "Fiche Batiproduits"
+    }
+   ],
+   "sous": "Désenfumage naturel (exutoires DENFC)",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "alcaud-europyrotech-ws",
+   "lot": "L05",
+   "nom": "Voûtes filantes Alcaud Monaco CTS et Cintrazur 300 avec exutoire Europyrotech WS",
+   "fabricant": "Alcaud",
+   "reference": "Monaco CTS, Cintrazur 300, Europyrotech WS",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "voûte filante",
+    "éclairage zénithal",
+    "DENFC"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/exutoire-denfc-sur-voute-filante-p69084523.html",
+     "titre": "Fiche Batiproduits"
+    }
+   ],
+   "sous": "Éclairage zénithal continu (voûtes filantes)",
+   "perf": "",
+   "projets": "",
+   "notes": "Monaco CTS en polycarbonate, Cintrazur 300 en polyester.",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "alcaud-eura-f",
+   "lot": "L05",
+   "nom": "Exutoire aérateur à lames pivotantes Alcaud Eura.F",
+   "fabricant": "Alcaud",
+   "reference": "Eura.F",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "exutoire",
+    "lames",
+    "aération",
+    "désenfumage"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/exutoire-aerateur-journalier-a-lames-p69084513.html",
+     "titre": "Fiche Batiproduits"
+    }
+   ],
+   "sous": "Désenfumage naturel (exutoires DENFC)",
+   "perf": "Pente de toiture 0 à 90°",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "alcaud-eura-hb-lb",
+   "lot": "L05",
+   "nom": "Exutoire à lames coiffantes Alcaud Eura HB, Eura LB",
+   "fabricant": "Alcaud",
+   "reference": "Eura HB, Eura LB",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "exutoire",
+    "lames",
+    "ventilation",
+    "désenfumage"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/exutoires-a-lames-coiffantes-p69084528.html",
+     "titre": "Fiche Batiproduits"
+    }
+   ],
+   "sous": "Désenfumage naturel (exutoires DENFC)",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "hexadome-hexaonde-fix",
+   "lot": "L04",
+   "nom": "Lanterneau d’éclairement zénithal pour toitures sèches (bac acier) Hexadome HEXAONDE Fix",
+   "fabricant": "Hexadome",
+   "reference": "HEXAONDE Fix (actuel Bluebac Fix)",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "lanterneau",
+    "éclairage zénithal",
+    "bac acier",
+    "toiture sèche"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batirama.com/produit/8995-lanterneaux/32272-hexaonde-air-manuel-page-1.html",
+     "titre": "Gamme HEXAONDE (Batirama)"
+    },
+    {
+     "type": "cat",
+     "url": "https://lotus.soprema.fr/www/boreftechadexsi.nsf/($AllByUNID)/73189162260B40B2C1257FE200571E41/$File/Documentation%20commerciale%20Bluebac%20Fix.pdf",
+     "titre": "Documentation Bluebac Fix (Bluetek)"
+    },
+    {
+     "type": "cat",
+     "url": "http://ludor.hu/data/info2010/ADEXSI_plaquette_V9.pdf",
+     "titre": "Plaquette Adexsi (ancienne)"
+    }
+   ],
+   "sous": "Accès toiture, désenfumage",
+   "perf": "",
+   "projets": "",
+   "notes": "Depuis 2016, les produits Hexadome sont commercialisés par Bluetek (groupe Adexsi, Soprema) : la gamme toiture sèche porte le nom Bluebac.",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "hexadome-hexaonde-air",
+   "lot": "L04",
+   "nom": "Lanterneau d’aération naturelle quotidienne Hexadome HEXAONDE Air (manuel ou électrique)",
+   "fabricant": "Hexadome",
+   "reference": "HEXAONDE Air",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "lanterneau",
+    "aération",
+    "vérin électrique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batirama.com/produit/8995-lanterneaux/3114-hexaonde-air-electrique-page-1.html",
+     "titre": "HEXAONDE Air électrique (Batirama)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batirama.com/produit/8995-lanterneaux/32272-hexaonde-air-manuel-page-1.html",
+     "titre": "HEXAONDE Air manuel (Batirama)"
+    },
+    {
+     "type": "site",
+     "url": "https://adexsiuk.sugarcs.com/product/hexaonde-air-daily-ventilation",
+     "titre": "HEXAONDE Air (Adexsi UK)"
+    },
+    {
+     "type": "cat",
+     "url": "http://ludor.hu/data/info2010/ADEXSI_plaquette_V9.pdf",
+     "titre": "Plaquette Adexsi (ancienne)"
+    }
+   ],
+   "sous": "Accès toiture, désenfumage",
+   "perf": "Vérin électrique 230 V, course 300 mm",
+   "projets": "",
+   "notes": "Gamme commercialisée par Bluetek (bluetek.fr).",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "hexadome-hexaonde-pass",
+   "lot": "L04",
+   "nom": "Lanterneau d’accès toiture pour bac acier et panneaux sandwich Hexadome HEXAONDE Pass",
+   "fabricant": "Hexadome",
+   "reference": "HEXAONDE Pass",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "lanterneau",
+    "accès toiture",
+    "bac acier",
+    "panneau sandwich"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://adexsiuk.sugarcs.com/product/hexaonde-pass-skylight",
+     "titre": "HEXAONDE Pass (Adexsi UK)"
+    },
+    {
+     "type": "cat",
+     "url": "http://ludor.hu/data/info2010/ADEXSI_plaquette_V9.pdf",
+     "titre": "Plaquette Adexsi (ancienne)"
+    }
+   ],
+   "sous": "Accès toiture, désenfumage",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "hexadome-hexaonde-desenfumage",
+   "lot": "L04",
+   "nom": "Exutoires de désenfumage pour toitures sèches Hexadome HEXAONDE MOP, MOE, FEU MO, Treuil",
+   "fabricant": "Hexadome",
+   "reference": "HEXAONDE MOP, MOE, FEU MO, Treuil",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "exutoire",
+    "DENFC",
+    "bac acier",
+    "désenfumage"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "http://ludor.hu/data/info2010/ADEXSI_plaquette_V9.pdf",
+     "titre": "Plaquette Adexsi (ancienne)"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.batiactu.com/edito/hexadome-propose-desenfumage-naturel-et-confort-avec-635.php",
+     "titre": "Exutoire MVPop (Batiactu)"
+    }
+   ],
+   "sous": "Accès toiture, désenfumage",
+   "perf": "",
+   "projets": "",
+   "notes": "Documents anciens ; gamme reprise par Bluetek (Bluecoif, Bluebac). Équivalent toiture étanchée : HEXASTEEL.",
+   "verifie": "",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
   }
  ],
  "societes": {
@@ -26822,7 +28779,8 @@ window.TD_DONNEES = {
    "site": "aldes.fr"
   },
   "daikin": {
-   "site": "daikin.fr"
+   "site": "daikin.fr",
+   "docs": "https://www.daikin.fr/fr_fr/famille-produits.html"
   },
   "atlantic": {
    "site": "atlantic.fr",
@@ -27083,6 +29041,38 @@ window.TD_DONNEES = {
     "mail": "etudes@roth-france.fr"
    },
    "notes": "Roth France SAS, 78 rue Ampère, ZI, CS 20090, 77465 Lagny-sur-Marne Cedex."
+  },
+  "airwell": {
+   "site": "airwell.com",
+   "docs": "https://lh.airwell-res.com/",
+   "notes": "Groupe Airwell, Montigny-le-Bretonneux. Support projets : presales@airwell.com, 01 76 21 82 82."
+  },
+  "technibel": {
+   "site": "technibel.com",
+   "notes": "Marque de NIBE Energy Systems France (Reyrieux). Documentation en ligne datée de 2019-2020."
+  },
+  "promat": {
+   "site": "promat.com/fr-fr",
+   "docs": "https://www.promat.com/fr-fr/construction/documentation/",
+   "notes": "Etex France Building Performance (avec Siniat). Mémento protection feu : https://www.promat.com/fr-fr/construction/france/memento-2026/"
+  },
+  "madicob": {
+   "site": "madicob.fr",
+   "docs": "https://www.madicob.fr/wp-content/uploads/2023/05/catalogue_v7-230510-web.pdf",
+   "notes": "Groupe AGP (Polet, SPEM, Madicob). Commercial : commercial@madicob.fr, 01 78 47 85 85."
+  },
+  "domeca": {
+   "docs": "https://www.batiproduits.com/fiche/fabricant/domeca-50508/",
+   "notes": "Colombes (92). Couvertures autoportantes, désenfumage, éclairage zénithal. Aucun site du fabricant trouvé."
+  },
+  "alcaud": {
+   "docs": "https://www.batiproduits.com/fiche/fabricant/alcaud-51308/",
+   "notes": "Alcaud SAS, 4 rue d’Alsace, 95100 Argenteuil. Aucun site du fabricant trouvé."
+  },
+  "hexadome": {
+   "site": "bluetek.fr",
+   "docs": "https://www.batiproduits.com/fiche/fabricant/hexadome-48698/",
+   "notes": "Luynes (37). Produits commercialisés par Bluetek depuis 2016 (groupe Adexsi, Soprema)."
   }
  },
  "liensRemplaces": {
