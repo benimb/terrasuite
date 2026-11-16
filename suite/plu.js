@@ -59,7 +59,7 @@ const TSPLU = (() => {
   /* chapitre de la zone : titres « Zone UC », « Dispositions applicables à la zone UC », « UC - … » ; on écarte le sommaire (points de conduite, numéros de page en fin de ligne) */
   const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const isToc = t => /\.{4,}|…{2,}|\s\d{1,3}$/.test(t) && t.length < 140;
-  const zoneHead = t => { if (t.length > 120 || isToc(t)) return null; const m = t.match(/^(?:titre\s+[ivx\d]+\s*[-–:]?\s*)?(?:chapitre\s+[ivx\d]+\s*[-–:]?\s*)?(?:dispositions? (?:applicables?|propres?|particuli[èe]res?) (?:à|aux?) (?:la |les )?)?zones?\s+([0-9]*[A-Z]{1,4}[a-z0-9]*)\b/i); return m ? m[1] : null; };
+  const zoneHead = t => { if (t.length > 120 || isToc(t)) return null; const m = t.match(/^(?:\d{1,2}(?:\.\d{1,2})*\.?\s*[-–]?\s*)?(?:titre\s+[ivx\d]+\s*[-–:]?\s*)?(?:chapitre\s+[ivx\d]+\s*[-–:]?\s*)?(?:dispositions? (?:applicables?|propres?|particuli[èe]res?) (?:à|aux?) (?:la |les )?)?zones?\s+([0-9]*[A-Z]{1,4}[a-z0-9]*)\b/i); return m ? m[1] : null; };
   function zoneBlock(pages, libelle) {
     const base = (libelle.match(/^\d*[A-Z]+/) || [libelle])[0], full = libelle;
     const heads = []; pages.forEach((L, i) => L.forEach(l => { const z = zoneHead(l.t); if (z) heads.push({ i, z, t: l.t }); }));
@@ -67,8 +67,8 @@ const TSPLU = (() => {
     let start = heads.find(h => match(h.z) && h.i > 0) || heads.find(h => match(h.z));
     if (!start) { const re = new RegExp('\\b' + esc(base) + '\\b'); const P = pages.map((L, i) => [i, L.filter(l => re.test(l.t)).length]).filter(x => x[1] >= 3).map(x => x[0]); return { base, pages: P, found: false }; }
     /* plusieurs titres pour la zone (sommaire, puis chapitre) : on garde le dernier début de bloc dont la suite est longue */
-    const cands = heads.filter(h => match(h.z)); let best = null;
-    for (const c of cands) { const nx = heads.find(h => h.i > c.i && !match(h.z)); const end = nx ? nx.i - 1 : pages.length - 1; if (!best || end - c.i > best.end - best.i) best = { i: c.i, end }; }
+    const exact = heads.filter(h => h.z === full), cands = exact.length ? exact : heads.filter(h => match(h.z)); let best = null;
+    for (const c of cands) { const nx = heads.find(h => h.i > c.i && (exact.length ? h.z !== full : !match(h.z))); const end = nx ? nx.i - 1 : pages.length - 1; if (!best || end - c.i > best.end - best.i) best = { i: c.i, end }; }
     const P = []; for (let i = best.i; i <= best.end; i++) P.push(i); return { base, pages: P, found: true };
   }
   /* articles : « Article UC 10 », « Article 4 », « UC 4 - », « 2.3 Hauteur… », « Section », « Chapitre » */
