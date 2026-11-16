@@ -353,3 +353,5 @@ tfoot td{border-top:2px solid var(--line)}
 .site .tools .btn{background:rgba(255,255,255,.92)}
 .site.none{display:flex;align-items:center;justify-content:center;height:auto;padding:16px;background:var(--surface);border-style:dashed;color:var(--muted);text-decoration:none;text-align:center}
 @media (max-width:600px){.site{height:170px}.site.two{grid-template-columns:1fr 1fr}}
+
+.t tr.prtot td{background:var(--sunk);border-top:1px solid var(--line)}
