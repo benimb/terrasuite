@@ -1,7 +1,7 @@
 window.TD_DONNEES = {
  "app": "TerraDocs",
  "format": 1,
- "stamp": "base-publique-2026-11-13c",
+ "stamp": "base-publique-2026-11-16",
  "label": "base publique : gammes de fabricants de tous corps d'état, carrelage (VitrA Tiles, Mosa, Villeroy & Boch), verre émaillé et laqué (Saint-Gobain, AGC), mosaïques (Bisazza, Émaux de Briare), mobilier LAGO, ArcelorMittal (cassettes, bardages, bacs), Sto, nora, Geggus, Koramic, panneaux décoratifs et acoustiques (Arpa Industriale FENIX, Resopal, Hubler, Marotte), Dekton sur ITE (Cosentino DKS), chauffage et fumisterie (Poujoulat, Atlantic, Viessmann, Finimetal), Hudevad, Estrada, Acova, Stûv, Godin, Campa, Rothelec, Chappée, elm.leblanc, Sofath, Butagaz, Acome, Roth",
  "lots": [
   {
@@ -195,7 +195,9 @@ window.TD_DONNEES = {
    "nom": "Ascenseurs, appareils élévateurs",
    "sous": [
     "Ascenseurs",
-    "Plateformes élévatrices"
+    "Plateformes élévatrices",
+    "Monte-charges",
+    "Escaliers mécaniques et trottoirs roulants"
    ]
   },
   {
@@ -7776,30 +7778,15 @@ window.TD_DONNEES = {
      "type": "site",
      "url": "https://www.otis.com/fr/fr/products-services/industry/residential",
      "titre": "Ascenseurs résidentiels"
-    },
-    {
-     "type": "site",
-     "url": "https://www.otis.com/documents/256045/35422495/Brochure_Gen2_Life_FR_CH.pdf",
-     "titre": "Gen2 Life"
-    },
-    {
-     "type": "site",
-     "url": "https://www.otis.com/documents/256045/32972881/Brochure+Gen2+Stream+2019.pdf/5aefeb68-7932-5039-f458-df7025a6b8d0?t=1606327370952",
-     "titre": "Gen2 Stream"
-    },
-    {
-     "type": "site",
-     "url": "https://www.otis.com/documents/256045/32972881/Gen2home_FR_2020_FINAL.pdf",
-     "titre": "Gen2 Home"
     }
    ],
    "sous": "Ascenseurs",
    "perf": "",
    "projets": "",
-   "notes": "",
-   "verifie": "",
+   "notes": "Gamme Gen2 remplacée par Gen3 : documentations Gen2 retirées du site Otis (voir les fiches Gen3).",
+   "verifie": "2026-11-16",
    "cree": "2026-11-04",
-   "maj": "2026-11-04"
+   "maj": "2026-11-16"
   },
   {
    "id": "schindler-ascenseurs",
@@ -7817,27 +7804,47 @@ window.TD_DONNEES = {
    "liens": [
     {
      "type": "site",
-     "url": "https://www.schindler.com/fr/internet/fr/solutions-de-mobilite/produits/ascenseurs/schindler-1000.html",
+     "url": "https://www.schindler.fr/fr/ascenseurs/personnes/schindler-1000.html",
      "titre": "Schindler 1000"
     },
     {
-     "type": "site",
-     "url": "https://schindler.com/ch/internet/fr/produits-et-solutions/produits/ascenseurs/schindler-3000.html",
-     "titre": "Schindler 3000"
+     "type": "cat",
+     "url": "https://www.schindler.fr/content/dam/website/fr/docs/schindler-1000-ascenseur.pdf",
+     "titre": "Documentation Schindler 1000"
     },
     {
      "type": "site",
-     "url": "https://schindler.com/fr/internet/fr/solutions-de-mobilite/besoins/batiment-public.html",
-     "titre": "Bâtiments publics"
+     "url": "https://www.schindler.fr/fr/ascenseurs/personnes/schindler-3000.html",
+     "titre": "Schindler 3000"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.schindler.fr/content/dam/website/fr/docs/schindler-3000-ascenseur.pdf",
+     "titre": "Documentation Schindler 3000"
+    },
+    {
+     "type": "fdes",
+     "url": "https://www.schindler.fr/content/dam/website/fr/docs/pep-ascenseurs-schindler-1000-et-schindler-3000-630kg.pdf",
+     "titre": "PEP Schindler 1000 et 3000, 630 kg"
+    },
+    {
+     "type": "fdes",
+     "url": "https://www.schindler.fr/content/dam/website/fr/docs/pep-ascenseurs-schindler-1000-et-schindler-3000-1000kg.pdf",
+     "titre": "PEP Schindler 1000 et 3000, 1000 kg"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.schindler.fr/content/dam/website/fr/docs/schindler-ascenseur-design.pdf",
+     "titre": "Lignes de décoration des cabines"
     }
    ],
    "sous": "Ascenseurs",
    "perf": "",
    "projets": "",
    "notes": "",
-   "verifie": "",
+   "verifie": "2026-11-16",
    "cree": "2026-11-04",
-   "maj": "2026-11-04"
+   "maj": "2026-11-16"
   },
   {
    "id": "kone-monospace",
@@ -26124,6 +26131,562 @@ window.TD_DONNEES = {
    "verifie": "",
    "cree": "2026-11-13",
    "maj": "2026-11-13"
+  },
+  {
+   "id": "otis-gen3-core",
+   "lot": "L17",
+   "nom": "Ascenseur Otis Gen3 Core (résidentiel et petit tertiaire, sans local machine)",
+   "fabricant": "Otis",
+   "reference": "Gen3 Core",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ascenseur",
+    "sans local machine",
+    "résidentiel",
+    "petite hauteur"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.otis.com/fr/fr/products/gen3-core-elevator",
+     "titre": "Gen3 Core"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.otis.com/documents/d/otis-2/gen3-core_brochure-emea_fr",
+     "titre": "Brochure Gen3 Core"
+    }
+   ],
+   "sous": "Ascenseurs",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-16",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "otis-gen3-edge",
+   "lot": "L17",
+   "nom": "Ascenseur Otis Gen3 Edge (moyenne hauteur, sans local machine)",
+   "fabricant": "Otis",
+   "reference": "Gen3 Edge",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ascenseur",
+    "sans local machine",
+    "résidentiel",
+    "tertiaire",
+    "moyenne hauteur"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.otis.com/fr/fr/products/gen3-edge-elevator",
+     "titre": "Gen3 Edge"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.otis.com/documents/d/otis-2/gen3-edge_brochure-emea_fr",
+     "titre": "Brochure Gen3 Edge"
+    }
+   ],
+   "sous": "Ascenseurs",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-16",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "otis-gen3-peak",
+   "lot": "L17",
+   "nom": "Ascenseur Otis Gen3 Peak (tertiaire, fort trafic)",
+   "fabricant": "Otis",
+   "reference": "Gen3 Peak",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ascenseur",
+    "tertiaire",
+    "fort trafic",
+    "moyenne hauteur"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.otis.com/fr/fr/products/gen3-peak-elevator",
+     "titre": "Gen3 Peak"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.otis.com/documents/d/otis-2/gen3-peak_brochure-emea_fr",
+     "titre": "Brochure Gen3 Peak"
+    }
+   ],
+   "sous": "Ascenseurs",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-16",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "otis-gen3-flex",
+   "lot": "L17",
+   "nom": "Ascenseur Otis Gen3 Flex (sur mesure, gaines existantes)",
+   "fabricant": "Otis",
+   "reference": "Gen3 Flex",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ascenseur",
+    "sur mesure",
+    "réhabilitation",
+    "gaine existante"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.otis.com/fr/fr/products/gen3-flex-elevator",
+     "titre": "Gen3 Flex"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.otis.com/documents/d/otis-2/gen3-flex_brochure-emea_fr",
+     "titre": "Brochure Gen3 Flex"
+    }
+   ],
+   "sous": "Ascenseurs",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-16",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "otis-gen3-switch",
+   "lot": "L17",
+   "nom": "Ascenseur Otis Gen3 Switch (alimentation monophasée, batterie, solaire)",
+   "fabricant": "Otis",
+   "reference": "Gen3 Switch",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ascenseur",
+    "faible puissance",
+    "batterie",
+    "petite hauteur"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.otis.com/fr/fr/products/gen3-switch-lift",
+     "titre": "Gen3 Switch"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.otis.com/documents/d/otis-2/gen3-switch_brochure-emea_fr",
+     "titre": "Brochure Gen3 Switch"
+    }
+   ],
+   "sous": "Ascenseurs",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-16",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "otis-gen3-home",
+   "lot": "L17",
+   "nom": "Ascenseur privatif Otis Gen3 Home (maison individuelle)",
+   "fabricant": "Otis",
+   "reference": "Gen3 Home",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ascenseur",
+    "maison individuelle",
+    "privatif"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.otis.com/fr/fr/products/gen3-home-elevator",
+     "titre": "Gen3 Home"
+    }
+   ],
+   "sous": "Ascenseurs",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-16",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "otis-gen3-bedlift",
+   "lot": "L17",
+   "nom": "Ascenseur monte-malade Otis Gen3 Bedlift (santé)",
+   "fabricant": "Otis",
+   "reference": "Gen3 Bedlift",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ascenseur",
+    "monte-malade",
+    "santé",
+    "hôpital"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.otis.com/fr/fr/products/gen3-bedlift-elevator",
+     "titre": "Gen3 Bedlift"
+    }
+   ],
+   "sous": "Ascenseurs",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-16",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "otis-gen3-robusta",
+   "lot": "L17",
+   "nom": "Ascenseur de charge Otis Gen3 Robusta (usage intensif)",
+   "fabricant": "Otis",
+   "reference": "Gen3 Robusta",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "monte-charge",
+    "ascenseur de charge",
+    "usage intensif"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://www.otis.com/documents/d/otis-2/gen3-robusta_brochure-emea_fr",
+     "titre": "Brochure Gen3 Robusta"
+    },
+    {
+     "type": "site",
+     "url": "https://www.otis.com/fr/fr/products/otis-robust",
+     "titre": "Otis Robust (industriel, usage intensif)"
+    }
+   ],
+   "sous": "Monte-charges",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-16",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "otis-gen3-gamme",
+   "lot": "L17",
+   "nom": "Gamme Otis Gen3 et Gen360 (présentation générale)",
+   "fabricant": "Otis",
+   "reference": "Gen3 / Gen360",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ascenseur",
+    "gamme",
+    "connecté"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.otis.com/fr/fr/products/gen3-gen360-platform",
+     "titre": "Ascenseurs Gen3"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.otis.com/documents/d/otis-2/gen3-range_brochure-emea_fr",
+     "titre": "Brochure de la gamme Gen3 et Gen360"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.otis.com/documents/d/otis-2/les-plateformes-gen3-et-gen360-francais",
+     "titre": "Les plateformes Gen3 et Gen360"
+    },
+    {
+     "type": "site",
+     "url": "https://www.otis.com/fr/fr/products-services/products/gen360",
+     "titre": "Gen360"
+    }
+   ],
+   "sous": "Ascenseurs",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-16",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "otis-escaliers",
+   "lot": "L17",
+   "nom": "Escaliers mécaniques et trottoirs roulants Otis",
+   "fabricant": "Otis",
+   "reference": "",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "escalier mécanique",
+    "trottoir roulant",
+    "ERP",
+    "transport public"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.otis.com/fr/fr/products-services/products/escalators-and-moving-walks",
+     "titre": "Escaliers mécaniques et trottoirs roulants"
+    },
+    {
+     "type": "site",
+     "url": "https://www.otis.com/fr/fr/products-services/products/escalators-and-moving-walks/public-escalator",
+     "titre": "Escaliers mécaniques pour transport public"
+    }
+   ],
+   "sous": "Escaliers mécaniques et trottoirs roulants",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-16",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "schindler-5000",
+   "lot": "L17",
+   "nom": "Ascenseur Schindler 5000 (résidentiel et tertiaire haut de gamme)",
+   "fabricant": "Schindler",
+   "reference": "Schindler 5000",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ascenseur",
+    "tertiaire",
+    "résidentiel",
+    "moyenne hauteur"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.schindler.fr/fr/ascenseurs/personnes/schindler-5000.html",
+     "titre": "Schindler 5000"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.schindler.fr/content/dam/website/fr/docs/schindler-5000-ascenseur.pdf",
+     "titre": "Documentation Schindler 5000"
+    },
+    {
+     "type": "fdes",
+     "url": "https://www.schindler.fr/content/dam/website/fr/docs/pep-ascenseurs-schindler-5000-1000kg.pdf",
+     "titre": "PEP Schindler 5000 1000 kg"
+    },
+    {
+     "type": "fdes",
+     "url": "https://www.schindler.fr/content/dam/website/fr/docs/pep-ascenseurs-schindler-5000-1275kg.pdf",
+     "titre": "PEP Schindler 5000 1275 kg"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.schindler.fr/content/dam/website/fr/docs/schindler-ascenseur-design.pdf",
+     "titre": "Lignes de décoration des cabines"
+    }
+   ],
+   "sous": "Ascenseurs",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-16",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "schindler-6000",
+   "lot": "L17",
+   "nom": "Ascenseur Schindler 6000 (tertiaire, grande hauteur)",
+   "fabricant": "Schindler",
+   "reference": "Schindler 6000",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ascenseur",
+    "tertiaire",
+    "grande hauteur"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.schindler.fr/fr/ascenseurs/personnes/schindler-6000.html",
+     "titre": "Schindler 6000"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.schindler.fr/content/dam/website/fr/docs/schindler-6000-ascenseur.pdf",
+     "titre": "Documentation Schindler 6000"
+    },
+    {
+     "type": "fdes",
+     "url": "https://www.schindler.fr/content/dam/website/fr/docs/pep-ascenseurs-schindler-6000-1600kg.pdf",
+     "titre": "PEP Schindler 6000 1600 kg"
+    }
+   ],
+   "sous": "Ascenseurs",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-16",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "schindler-2600",
+   "lot": "L17",
+   "nom": "Monte-charge Schindler 2600 (jusqu’à 4000 kg)",
+   "fabricant": "Schindler",
+   "reference": "Schindler 2600",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "monte-charge",
+    "ascenseur de charge",
+    "industriel",
+    "santé"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.schindler.fr/fr/ascenseurs/monte-charges-et-autres/schindler-2600.html",
+     "titre": "Schindler 2600"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.schindler.fr/content/dam/website/fr/docs/schindler-2600-ascenseur.pdf",
+     "titre": "Documentation Schindler 2600"
+    }
+   ],
+   "sous": "Monte-charges",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-16",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "schindler-escaliers",
+   "lot": "L17",
+   "nom": "Escaliers mécaniques Schindler 9300 et 9700, trottoirs roulants 9500",
+   "fabricant": "Schindler",
+   "reference": "9300 / 9700 / 9500",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "escalier mécanique",
+    "trottoir roulant",
+    "ERP",
+    "transport public"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.schindler.fr/fr/escaliers-mecaniques-et-trottoirs-roulants/escalators/schindler-9300-commercial.html",
+     "titre": "Schindler 9300 (commerces)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.schindler.fr/fr/escaliers-mecaniques-et-trottoirs-roulants/escalators/schindler-9300-transport-public.html",
+     "titre": "Schindler 9300 (transport public)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.schindler.fr/fr/escaliers-mecaniques-et-trottoirs-roulants/escalators/schindler-9700-transport-de-masse.html",
+     "titre": "Schindler 9700 (transport de masse)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.schindler.fr/fr/escaliers-mecaniques-et-trottoirs-roulants/trottoirs-roulants/schindler-9500-horizontal.html",
+     "titre": "Trottoir roulant Schindler 9500 horizontal"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.schindler.fr/content/dam/website/fr/docs/schindler-9500-trottoirs-rolantes-horizontal.pdf",
+     "titre": "Documentation Schindler 9500 horizontal"
+    },
+    {
+     "type": "site",
+     "url": "https://www.schindler.fr/fr/escaliers-mecaniques-et-trottoirs-roulants/trottoirs-roulants/schindler-9500-incline.html",
+     "titre": "Trottoir roulant Schindler 9500 incliné"
+    }
+   ],
+   "sous": "Escaliers mécaniques et trottoirs roulants",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-16",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
+  },
+  {
+   "id": "schindler-modernisation",
+   "lot": "L17",
+   "nom": "Modernisation et remplacement d’ascenseurs Schindler (ReStore, ReNew, remplacement complet)",
+   "fabricant": "Schindler",
+   "reference": "",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ascenseur",
+    "modernisation",
+    "réhabilitation"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.schindler.fr/fr/ascenseurs/modernisation.html",
+     "titre": "Modernisation"
+    },
+    {
+     "type": "site",
+     "url": "https://www.schindler.fr/fr/ascenseurs/modernisation/restore.html",
+     "titre": "Schindler ReStore"
+    },
+    {
+     "type": "site",
+     "url": "https://www.schindler.fr/fr/ascenseurs/modernisation/renew.html",
+     "titre": "Schindler ReNew"
+    },
+    {
+     "type": "site",
+     "url": "https://www.schindler.fr/fr/ascenseurs/modernisation/replace.html",
+     "titre": "Remplacement complet"
+    }
+   ],
+   "sous": "Ascenseurs",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-16",
+   "cree": "2026-11-16",
+   "maj": "2026-11-16"
   }
  ],
  "societes": {
@@ -26208,7 +26771,7 @@ window.TD_DONNEES = {
    "site": "otis.com"
   },
   "schindler": {
-   "site": "schindler.com"
+   "site": "schindler.fr"
   },
   "kone": {
    "site": "kone.fr"
@@ -26544,6 +27107,9 @@ window.TD_DONNEES = {
   "https://www.dornbracht.com/fr/salle-de-bains/robinets-de-salle-de-bains-de-luxe/meta": "https://www.dornbracht.com/fr-fr/series-de-design/series-salles-de-bains/meta",
   "https://www.dornbracht.com/fr/salle-de-bains/robinets-de-salle-de-bains-de-luxe/cyo": "https://www.dornbracht.com/fr-fr/series-de-design/series-salles-de-bains/cyo",
   "https://hewi.com/en-us/products/system-900/": "https://www.hewi.com/fr/sanitaire/systeme-900",
-  "https://www.duravit.com/products/all_series/starck_3.com-en.html": "https://www.duravit.com/en-en/products/all-series/starck-3/"
+  "https://www.duravit.com/products/all_series/starck_3.com-en.html": "https://www.duravit.com/en-en/products/all-series/starck-3/",
+  "https://www.otis.com/documents/256045/35422495/Brochure_Gen2_Life_FR_CH.pdf": null,
+  "https://www.otis.com/documents/256045/32972881/Brochure+Gen2+Stream+2019.pdf/5aefeb68-7932-5039-f458-df7025a6b8d0?t=1606327370952": null,
+  "https://www.otis.com/documents/256045/32972881/Gen2home_FR_2020_FINAL.pdf": null
  }
 };
