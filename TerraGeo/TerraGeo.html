@@ -182,6 +182,7 @@ body.wide3d .work{grid-template-columns:1fr} body.wide3d .side{display:none}
         <button class="btn sm on" data-base="plan">Plan IGN</button>
         <button class="btn sm" data-base="ortho">Photo aérienne</button>
         <button class="btn sm" data-base="osm" title="Fond OpenStreetMap (cliquer à nouveau pour revenir au Plan IGN)">OSM</button>
+        <button class="btn sm" data-base="monde" title="Photo aérienne du monde entier (Esri), pour les sites hors de France">Photo monde</button>
         <button class="btn sm on" id="tCad">Cadastre</button>
         <button class="btn sm on" id="tPlu">Zonage PLU</button>
         <button class="btn sm" id="tOsm" title="Équipements et services OpenStreetMap dans un rayon de 500 m">Équipements OSM</button>
@@ -215,7 +216,7 @@ body.wide3d .work{grid-template-columns:1fr} body.wide3d .side{display:none}
 <style>.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn{display:none!important}</style>
 <script src="../TerraChantier/terrasuite-compte.js" onerror="this.remove()"></script>
 <script>
-const APP_VERSION = '0.26';
+const APP_VERSION = '0.27';
 /* ================= Outils ================= */
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -244,6 +245,9 @@ function centroid(g) { const pts = []; const walk = c => typeof c[0] === 'number
 
 /* ================= Sources de données ================= */
 const API = {
+  /* hors de France : géocodage Photon (OpenStreetMap, monde entier, sans clé) */
+  photon: q => `https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=6&lang=fr`,
+  photonRev: (lon, lat) => `https://photon.komoot.io/reverse?lon=${lon}&lat=${lat}&lang=fr`,
   ban: q => `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(q)}&limit=6`,
   banRev: (lon, lat) => `https://api-adresse.data.gouv.fr/reverse/?lon=${lon}&lat=${lat}&limit=1`,
   parcPt: (lon, lat) => `https://apicarto.ign.fr/api/cadastre/parcelle?geom=${gj({ type: 'Point', coordinates: [lon, lat] })}`,
@@ -328,14 +332,17 @@ function initMap() {
   map = L.map('map', { zoomControl: true }).setView([46.6, 2.4], 6);
   baseLayers = { plan: wmts('GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2', 'image/png'), ortho: wmts('ORTHOIMAGERY.ORTHOPHOTOS', 'image/jpeg', { max: 20 }),
     /* fond OpenStreetMap : tuiles vectorielles VersaTiles (libres, sans clé), chargées à la demande ; les serveurs d'OSM refusent les pages ouvertes depuis le disque */
-    osm: null };
+    osm: null,
+    /* photo aérienne mondiale (Esri World Imagery), pour les sites hors de France */
+    monde: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 21, maxNativeZoom: 19, attribution: 'Images © Esri, Maxar, Earthstar Geographics' }) };
   baseLayers.plan.addTo(map);
   cadLayer = wmts('CADASTRALPARCELS.PARCELLAIRE_EXPRESS', 'image/png', { minZoom: 14, opacity: .85 }).addTo(map);
   pluLayer = L.geoJSON(null, { style: f => ({ color: zoneColor(f.properties && f.properties.typezone), weight: 1.5, fillOpacity: .18, dashArray: '4 3' }), onEachFeature: (f, l) => l.bindTooltip(esc((f.properties.libelle || '') + ' ' + (f.properties.libelong ? '· ' + f.properties.libelong : '')), { sticky: true }) }).addTo(map);
   selLayer = L.geoJSON(null, { style: { color: '#C2410C', weight: 3, fillOpacity: .12 } }).addTo(map);
   pinLayer = L.layerGroup().addTo(map);
   osmLayer = L.layerGroup();
-  map.on('click', e => pickPoint(e.latlng.lng, e.latlng.lat, st.addMode || e.originalEvent.shiftKey));
+  map.on('click', e => { if (DRAW.on) return drawClick(e.latlng.lng, e.latlng.lat); pickPoint(e.latlng.lng, e.latlng.lat, st.addMode || e.originalEvent.shiftKey); });
+  map.on('dblclick', e => { if (DRAW.on) { L.DomEvent.stop(e); drawEnd(); } });
 }
 function zoneColor(t) { t = String(t || '').toUpperCase(); return t.startsWith('AU') ? '#C27C0E' : t === 'U' ? '#B3261E' : t === 'A' ? '#C9A227' : t === 'N' ? '#2E7D32' : '#555'; }
 function drawFiche() {
@@ -350,6 +357,42 @@ function drawFiche() {
 }
 function fitFiche() { const f = F(); if (!map || !f) return; const b = selLayer.getBounds(); if (b.isValid()) map.fitBounds(b, { maxZoom: 19, padding: [30, 30] }); else if (f.center) map.setView([f.center[1], f.center[0]], 18); }
 
+/* ================= Hors de France ================= */
+/* adresse Photon ramenée au format des adresses BAN (label, context, city, citycode) ; pays en code ISO */
+function photonProps(ft) { const p = ft.properties || {}; const rue = [p.housenumber, p.street].filter(Boolean).join(' '), ville = p.city || p.town || p.village || p.county || '';
+  const label = [p.name && p.name !== p.street ? p.name : '', rue, [p.postcode, ville].filter(Boolean).join(' '), p.country].filter(Boolean).join(', ');
+  return { label: label || p.name || '', context: [p.state, p.country].filter(Boolean).join(', '), type: p.osm_value || p.type || '', city: ville, citycode: '', postcode: p.postcode || '', pays: String(p.countrycode || '').toUpperCase() }; }
+const horsFrance = f => !!(f && f.pays && f.pays !== 'FR');
+async function paysAt(lon, lat) { try { const r = await getJSON(API.photonRev(lon, lat)); const ft = (r.features || [])[0]; return ft ? photonProps(ft) : null; } catch (e) { return null; } }
+/* parcelle dessinée à la main (hors de France, ou terrain non cadastré) : polygone, surface calculée */
+function ringArea(ring) { const R = 6378137, k = Math.PI / 180; let a = 0; for (let i = 0; i < ring.length - 1; i++) { const [x1, y1] = ring[i], [x2, y2] = ring[i + 1]; a += (x2 - x1) * k * (2 + Math.sin(y1 * k) + Math.sin(y2 * k)); } return Math.abs(a * R * R / 2); }
+const DRAW = { on: false, pts: [], line: null };
+function drawStart() { if (!map) return; DRAW.on = true; DRAW.pts = []; if (DRAW.line) map.removeLayer(DRAW.line); DRAW.line = L.polyline([], { color: '#C2410C', weight: 2, dashArray: '5 4' }).addTo(map); map.doubleClickZoom.disable(); $('#map').style.cursor = 'crosshair';
+  setStatus('Dessin de la parcelle : cliquez ses angles un à un, puis cliquez le premier point (ou double-cliquez) pour fermer ; Échap pour annuler'); }
+function drawStop() { DRAW.on = false; if (DRAW.line) { map.removeLayer(DRAW.line); DRAW.line = null; } map.doubleClickZoom.enable(); $('#map').style.cursor = ''; }
+function drawClick(lon, lat) {
+  const P = DRAW.pts; if (P.length >= 3) { const a = map.latLngToContainerPoint([P[0][1], P[0][0]]), b = map.latLngToContainerPoint([lat, lon]); if (a.distanceTo(b) < 12) return drawEnd(); }
+  P.push([lon, lat]); DRAW.line.setLatLngs([...P.map(q => [q[1], q[0]])]);
+}
+async function drawEnd() {
+  const P = DRAW.pts.slice(); drawStop(); if (P.length < 3) { setStatus('Parcelle non créée : il faut au moins trois angles', 'err'); return; }
+  const ring = [...P, P[0]], geom = { type: 'Polygon', coordinates: [ring.map(c => [+c[0].toFixed(7), +c[1].toFixed(7)])] };
+  let f = F(); if (!f) f = newFiche(); const n = f.parcelles.filter(x => x.manuel).length + 1;
+  f.parcelles.push({ idu: 'dessin-' + Date.now().toString(36), manuel: true, insee: '', commune: f.commune || '', section: 'Dessin', numero: String(n), prefixe: '', contenance: Math.round(ringArea(ring)), geometry: geom });
+  f.center = centroid(mergeGeoms(f.parcelles.map(x => x.geometry))); if (f.nom === 'Nouvelle fiche') f.nom = (f.adresse || f.commune || 'Terrain') + ' (parcelle dessinée)';
+  save(); renderAll(); drawFiche(); setStatus(`Parcelle dessinée : ${NF.format(f.parcelles[f.parcelles.length - 1].contenance)} m² (surface calculée, indicative)`, 'ok');
+}
+document.addEventListener('keydown', e => { if (DRAW.on && e.key === 'Escape') { drawStop(); setStatus('Dessin annulé'); } });
+/* fiche hors de France : point, adresse, photos de rue et OpenStreetMap ; cadastre, PLU, servitudes et risques (services français) ne sont pas interrogés */
+async function enrichAbroad(f, addr) {
+  const [lon, lat] = f.center.map(x => +x.toFixed(6)); lon0 = lon; lat0 = lat;
+  if (addr) { f.adresse = f.adresse || addr.label; f.commune = addr.city || f.commune || ''; f.pays = addr.pays || f.pays; }
+  f.res = { adresse: { ok: true, data: addr ? [addr] : [], at: Date.now() } }; f.updated = Date.now(); f.collecte = new Date().toISOString();
+  st.cur = f.id; save(); renderAll(); drawFiche();
+  osmFor(f, lon, lat); panoFor(f, lon, lat);
+  if (st.base === 'plan' || st.base === 'ortho' || !st.base) { const b = $('[data-base="monde"]'); if (b) b.click(); }
+  setStatus(`Hors de France (${f.pays}) : pas de cadastre, de PLU ni de risques ; dessinez la parcelle (« Dessiner la parcelle »). Vues Google 3D et Street View disponibles.`, 'ok');
+}
 /* ================= Recherche ================= */
 const REF_RX = /^\s*(\d{5}|2[ab]\d{3})\s*(\d{3})?\s*([a-z0-9]{1,2})\s*0*(\d{1,4})\s*$/i;
 async function doSearch(q) {
@@ -358,8 +401,10 @@ async function doSearch(q) {
   if (m) return pickRef(m[1].toUpperCase(), m[3].toUpperCase().padStart(2, '0'), m[4].padStart(4, '0'), m[2]);
   setStatus('Recherche de l\'adresse…');
   try {
-    const r = await getJSON(API.ban(q));
-    const fs = r.features || [];
+    const [r, w] = await Promise.all([getJSON(API.ban(q)).catch(() => ({ features: [] })), getJSON(API.photon(q)).catch(() => ({ features: [] }))]);
+    const fr = (r.features || []).filter(f => (f.properties.score || 1) > .45);
+    const mo = (w.features || []).map(ft => ({ geometry: ft.geometry, properties: photonProps(ft) })).filter(ft => ft.properties.pays && ft.properties.pays !== 'FR');
+    const fs = [...fr, ...mo].slice(0, 8);
     if (!fs.length) return setStatus('Adresse introuvable', 'err');
     showSugg(fs);
     setStatus('');
@@ -367,7 +412,7 @@ async function doSearch(q) {
 }
 function showSugg(fs) {
   const box = $('#sugg');
-  box.innerHTML = fs.map((f, i) => `<button data-i="${i}" role="option">${esc(f.properties.label)}<br><small>${esc(f.properties.context || '')} · ${esc(f.properties.type || '')}</small></button>`).join('');
+  box.innerHTML = fs.map((f, i) => `<button data-i="${i}" role="option">${esc(f.properties.label)}<br><small>${f.properties.pays ? '<b>' + esc(f.properties.pays) + '</b> · ' : ''}${esc(f.properties.context || '')} · ${esc(f.properties.type || '')}</small></button>`).join('');
   box.hidden = false;
   box.querySelectorAll('button').forEach(b => b.onclick = () => { box.hidden = true; const f = fs[+b.dataset.i]; const [lon, lat] = f.geometry.coordinates; pickPoint(lon, lat, false, f.properties); });
 }
@@ -387,7 +432,10 @@ async function pickPoint(lon, lat, add, addrProps) {
   try {
     const r = await getJSON(API.parcPt(lon, lat));
     const fs = r.features || [];
-    if (!fs.length) { setStatus('Aucune parcelle cadastrale à cet endroit (domaine public ?)', 'err'); if (!add) { const f = F() || newFiche(); f.center = [lon, lat]; f.parcelles = []; drawFiche(); fitFiche(); await enrich(f, addrProps); } return; }
+    if (!fs.length) {
+      const a = addrProps && addrProps.pays ? addrProps : await paysAt(lon, lat);
+      if (a && a.pays && a.pays !== 'FR') { if (add) { setStatus('Hors de France : pas de cadastre ; dessinez la parcelle', 'err'); return; } let f = F(); if (!f || (f.parcelles.length && !confirmReplace(f))) f = newFiche(); f.center = [lon, lat]; f.parcelles = []; f.pays = a.pays; f.adresse = a.label; f.insee = ''; if (f.nom === 'Nouvelle fiche') f.nom = a.label.split(',').slice(0, 2).join(','); drawFiche(); fitFiche(); await enrichAbroad(f, a); return; }
+      setStatus('Aucune parcelle cadastrale à cet endroit (domaine public ?) : « Dessiner la parcelle » pour un terrain non cadastré', 'err'); if (!add) { const f = F() || newFiche(); f.center = [lon, lat]; f.parcelles = []; f.pays = 'FR'; drawFiche(); fitFiche(); await enrich(f, addrProps); } return; }
     await setParcels(fs.slice(0, 1), add, lon, lat, addrProps);
   } catch (e) { setStatus('Cadastre injoignable : ' + e.message, 'err'); }
   finally { st.busy = false; }
@@ -397,14 +445,14 @@ function parcelOf(ft) {
   return { idu: p.idu || `${p.code_insee || ''}${p.com_abs || '000'}${p.section || ''}${p.numero || ''}`, insee: p.code_insee || ((p.code_dep || '') + (p.code_com || '')), commune: p.nom_com || '', section: p.section || '', numero: p.numero || '', prefixe: p.com_abs || '', contenance: +p.contenance || null, geometry: ft.geometry };
 }
 async function setParcels(fts, add, lon, lat, addrProps) {
-  let f = F();
+  let f = F(); if (f && horsFrance(f) && !add) f = null;
   if (!f || (!add && f.parcelles.length && !confirmReplace(f))) f = newFiche();
   const ps = fts.map(parcelOf);
   if (add) { for (const p of ps) { const i = f.parcelles.findIndex(x => x.idu === p.idu); if (i >= 0) f.parcelles.splice(i, 1); else f.parcelles.push(p); } }
   else f.parcelles = ps;
   if (!f.parcelles.length) { f.res = {}; f.center = null; save(); renderAll(); drawFiche(); return; }
   const g = mergeGeoms(f.parcelles.map(p => p.geometry));
-  f.center = g.coordinates.length ? centroid(g) : [lon, lat];
+  f.center = g.coordinates.length ? centroid(g) : [lon, lat]; f.pays = 'FR';
   if (f.nom === 'Nouvelle fiche') f.nom = `${f.parcelles[0].commune || ''} ${f.parcelles.map(p => p.section + ' ' + (+p.numero)).join(', ')}`.trim();
   st.cur = f.id; drawFiche(); fitFiche(); // la carte se recentre tout de suite, sans attendre la collecte
   await enrich(f, addrProps);
@@ -414,6 +462,7 @@ function confirmReplace(f) { return !(f.notes && Object.values(f.notes).some(v =
 
 /* ================= Collecte ================= */
 async function enrich(f, addrProps) {
+  if (horsFrance(f)) return enrichAbroad(f, addrProps || (f.res && f.res.adresse && f.res.adresse.data && f.res.adresse.data[0]) || null);
   const [lon, lat] = f.center.map(x => +x.toFixed(6));
   const g = f.parcelles.length ? roundGeom(mergeGeoms(f.parcelles.map(p => p.geometry))) : { type: 'Point', coordinates: [lon, lat] };
   f.insee = (f.parcelles[0] && f.parcelles[0].insee) || (addrProps && addrProps.citycode) || f.insee || '';
@@ -669,8 +718,9 @@ function renderAll() {
     <div class="fhead"><input class="title" id="fNom" value="${esc(f.nom)}" aria-label="Nom de la fiche">
       ${typeof TSP !== 'undefined' ? `<span class="hint noprint" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">Projet <select id="fProj" style="max-width:260px">${TSP.options(f.projet || '', st.projets || [], { create: false })}</select>${projG(f) ? `<a href="${esc(TSP.hub(f.projet))}" target="terrachantier">Fiche du projet ↗</a><button class="btn sm" id="fToProj" title="Adresse, commune et parcelles de cette fiche reportées dans le projet">Reporter dans le projet</button>` : ''}</span>` : ''}
       <span class="hint">Informations collectées le ${f.collecte ? new Date(f.collecte).toLocaleString('fr-FR') : '—'} · <button class="btn sm noprint" id="bRefresh">Actualiser</button> <button class="btn sm noprint" id="bFit">Recentrer</button></span></div>
-    ${card('Localisation', R.adresse, `<dl class="kv"><dt>Adresse</dt><dd>${esc(f.adresse || pick(R.adresse && R.adresse.ok && R.adresse.data[0], 'label') || '—')}</dd><dt>Commune</dt><dd>${esc(f.commune || '—')} <span class="mono">${esc(f.insee || '')}</span></dd><dt>Coordonnées</dt><dd class="mono">${f.center ? f.center[1].toFixed(6) + ', ' + f.center[0].toFixed(6) : '—'}</dd><dt>Altitude</dt><dd>${R.alti && R.alti.ok && R.alti.data !== null && R.alti.data > -1000 ? NF1.format(R.alti.data) + ' m NGF' : (R.alti ? (R.alti.ok ? '—' : '<span style="color:var(--err)">indisponible</span>') : '…')}</dd></dl>`)}
-    ${card('Parcelles', undefined, f.parcelles.length ? `<table class="t"><thead><tr><th>Réf.</th><th>Commune</th><th>Identifiant</th><th class="num">Contenance</th><th class="noprint"></th></tr></thead><tbody>${parcRows}</tbody>${f.parcelles.length > 1 ? `<tfoot><tr><td colspan="3"><b>Total</b></td><td class="num"><b>${NF.format(surf)} m²</b></td><td></td></tr></tfoot>` : ''}</table><p class="hint">Contenance cadastrale, indicative : seul un bornage par géomètre fait foi.</p>` : '<p class="hint">Aucune parcelle sélectionnée.</p>')}
+    ${card('Localisation', R.adresse, `<dl class="kv"><dt>Adresse</dt><dd>${esc(f.adresse || pick(R.adresse && R.adresse.ok && R.adresse.data[0], 'label') || '—')}</dd><dt>Commune</dt><dd>${esc(f.commune || '—')} <span class="mono">${esc(f.insee || '')}</span></dd><dt>Coordonnées</dt><dd class="mono">${f.center ? f.center[1].toFixed(6) + ', ' + f.center[0].toFixed(6) : '—'}</dd><dt>Altitude</dt><dd>${R.alti && R.alti.ok && R.alti.data !== null && R.alti.data > -1000 ? NF1.format(R.alti.data) + ' m NGF' : (R.alti ? (R.alti.ok ? '—' : '<span style="color:var(--err)">indisponible</span>') : horsFrance(f) ? '—' : '…')}</dd></dl>`)}
+    ${horsFrance(f) ? `<section class="card"><div class="b"><b>Site hors de France (${esc(f.pays)}).</b> <span class="hint">Cadastre, PLU, servitudes, risques et maquette IGN ne couvrent que la France. Disponibles : adresse, parcelle dessinée, OpenStreetMap, photos de rue, Google 3D, Street View et caméras.</span></div></section>` : ''}
+    ${card('Parcelles', undefined, '<p class="noprint" style="margin:0 0 6px"><button class="btn sm" id="bDraw" title="Dessiner le contour du terrain sur la carte (hors de France ou terrain non cadastré)">Dessiner la parcelle</button></p>' + (f.parcelles.length ? `<table class="t"><thead><tr><th>Réf.</th><th>Commune</th><th>Identifiant</th><th class="num">Contenance</th><th class="noprint"></th></tr></thead><tbody>${parcRows}</tbody>${f.parcelles.length > 1 ? `<tfoot><tr><td colspan="3"><b>Total</b></td><td class="num"><b>${NF.format(surf)} m²</b></td><td></td></tr></tfoot>` : ''}</table><p class="hint">${f.parcelles.some(x => x.manuel) ? 'Surface des parcelles dessinées calculée sur la carte' : 'Contenance cadastrale'}, indicative : seul un bornage par géomètre fait foi.</p>` : '<p class="hint">Aucune parcelle sélectionnée.</p>'))}
     ${card('Document d\'urbanisme', R.doc, docTxt + secTxt)}
     ${card('Zonage', R.zones, zoneTxt)}
     ${card('Prescriptions', R.psc, list(R.psc, ['libelle', 'txt']))}
@@ -703,6 +753,8 @@ function bindFiche() {
     const surf = f.parcelles.reduce((a, x) => a + (x.contenance || 0), 0); if (surf) p.notes = [String(p.notes || '').replace(/\n?Terrain : .*$/m, ''), `Terrain : ${NF.format(surf)} m² (cadastre)`].filter(Boolean).join('\n');
     await TSP.put(p); setStatus('Adresse et parcelles reportées dans le projet ' + TSP.label(p), 'ok'); };
   $$('#side [data-note]').forEach(el => el.oninput = () => { f.notes = f.notes || {}; f.notes[el.dataset.note] = el.value; f.updated = Date.now(); save(); });
+  if ($('#bDraw')) $('#bDraw').onclick = () => { if (DRAW.on) drawEnd(); else drawStart(); };
+  if (horsFrance(f)) $$('#side section.card').forEach(c => { const h = c.querySelector('h3'); if (h && /^(Document d'urbanisme|Zonage|Prescriptions|Informations|Servitudes|Risques|Règles relevées)/.test(h.textContent)) c.remove(); });
   $$('#side [data-rmp]').forEach(b => b.onclick = async () => { const i = f.parcelles.findIndex(p => p.idu === b.dataset.rmp); if (i < 0) return; f.parcelles.splice(i, 1); if (f.parcelles.length) { f.center = centroid(mergeGeoms(f.parcelles.map(p => p.geometry))); await enrich(f); } else { f.res = {}; save(); renderAll(); drawFiche(); } });
   $('#bRefresh').onclick = () => { if (f.center) enrich(f); };
   $('#bFit').onclick = fitFiche;
@@ -1470,11 +1522,22 @@ function bindFacPick() {
 }
 function infoFac(D) { const el = $('#info3'); if (!el) return; let s = el.querySelector('.fac'); if (!s) { s = document.createElement('div'); s.className = 'fac'; el.appendChild(s); } s.textContent = 'Façades : ' + D.facInfo + '.';
   const hid = (D.facs || []).filter(e => facCal(e.p.id).hide); if (hid.length) { const a = document.createElement('a'); a.href = '#'; a.textContent = ' Réafficher'; a.onclick = ev => { ev.preventDefault(); for (const e of hid) { const c = facCal(e.p.id); c.hide = false; facCalSet(e.p.id, c); buildFac(D, v3.scene, e); } facSummary(D); }; s.appendChild(a); } }
+/* hors de France : bâtiments OpenStreetMap (hauteur, ou nombre de niveaux × 3 m + 1 m) au format des bâtiments BD TOPO, en Lambert-93 ; parcelles dessinées */
+async function osmBuildings(bb) {
+  const c = [L93.inv(bb[0], bb[1]), L93.inv(bb[2], bb[3])], S = Math.min(c[0][1], c[1][1]), N = Math.max(c[0][1], c[1][1]), W = Math.min(c[0][0], c[1][0]), Ea = Math.max(c[0][0], c[1][0]);
+  const q = 'data=' + encodeURIComponent(`[out:json][timeout:40];way["building"](${S},${W},${N},${Ea});out geom;`); let last = null;
+  for (const u of API.overpass) { try { const r = await fetch(u, { method: 'POST', body: q, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }); if (!r.ok) throw new Error('HTTP ' + r.status); const j = await r.json();
+    return { features: (j.elements || []).filter(e => e.geometry && e.geometry.length > 3).map(e => { const t = e.tags || {}, h = parseFloat(String(t.height || '').replace(',', '.')), lv = parseInt(t['building:levels'], 10);
+      return { id: 'osm' + e.id, type: 'Feature', properties: { cleabs: 'osm' + e.id, hauteur: h > 0 ? h : null, nombre_d_etages: lv > 0 ? lv : null, usage_1: t.building !== 'yes' ? t.building : '' }, geometry: { type: 'Polygon', coordinates: [e.geometry.map(g => L93.fwd(g.lon, g.lat))] } }; }) };
+  } catch (e) { last = e; } }
+  throw last || new Error('OpenStreetMap injoignable');
+}
+const drawnParcels = f => ({ features: f.parcelles.filter(p => p.geometry).map(p => ({ type: 'Feature', properties: { idu: p.idu }, geometry: { type: 'Polygon', coordinates: ringsOf(p.geometry)[0].map(r => r.map(c => L93.fwd(c[0], c[1]))) } })) });
 async function load3d() { if ($('#fac3')) $('#fac3').hidden = true;
   const f = F(); if (!f || !f.center) { $('#info3').textContent = 'Ouvrez d\'abord une fiche (adresse ou parcelle).'; return; }
   const R = +$('#r3d').value, o = L93.fwd(f.center[0], f.center[1]);
   const bb = [o[0] - R, o[1] - R, o[0] + R, o[1] + R];
-  $('#info3').textContent = 'Chargement des bâtiments (BD TOPO) et du relief…';
+  const abroad = horsFrance(f); $('#info3').textContent = abroad ? 'Hors de France : chargement des bâtiments OpenStreetMap (sans relief)…' : 'Chargement des bâtiments (BD TOPO) et du relief…';
   const n = R <= 100 ? 21 : R <= 200 ? 25 : 31;
   const res = R <= 200 ? .5 : 1;
   const mnsJob = !v3.roofs ? Promise.resolve(null) : (async () => {
@@ -1485,7 +1548,7 @@ async function load3d() { if ($('#fac3')) $('#fac3').hidden = true;
   })();
   const orthoJob = v3.ortho && window.THREE ? loadOrtho(bb, R) : Promise.resolve(null);
   const panoJob = v3.facades ? panoSearch(f.center[0], f.center[1], Math.min(R, 150)) : Promise.resolve(null);
-  const [bat, par, alt, mns, ortho, pano] = await Promise.allSettled([getJSON(wfsUrl('BDTOPO_V3:batiment', bb), { timeout: 40000 }), getJSON(wfsUrl('CADASTRALPARCELS.PARCELLAIRE_EXPRESS:parcelle', bb), { timeout: 40000 }), v3.terrain ? altiGrid(o, R, n) : Promise.resolve(null), mnsJob, orthoJob, panoJob]);
+  const [bat, par, alt, mns, ortho, pano] = await Promise.allSettled([abroad ? osmBuildings(bb) : getJSON(wfsUrl('BDTOPO_V3:batiment', bb), { timeout: 40000 }), abroad ? Promise.resolve(drawnParcels(f)) : getJSON(wfsUrl('CADASTRALPARCELS.PARCELLAIRE_EXPRESS:parcelle', bb), { timeout: 40000 }), v3.terrain && !abroad ? altiGrid(o, R, n) : Promise.resolve(null), mnsJob, orthoJob, panoJob]);
   v3.data = { forId: f.id, forC: String(f.center), R, o, n, bat: bat.status === 'fulfilled' ? bat.value.features || [] : [], par: par.status === 'fulfilled' ? par.value.features || [] : [], alt: alt.status === 'fulfilled' ? alt.value : null, mns: mns.status === 'fulfilled' ? mns.value : null, mnsErr: mns.status === 'rejected' ? mns.reason.message : '', errs: [bat, par, alt].filter(x => x.status === 'rejected').map(x => x.reason.message), sel: f.parcelles.map(p => p.idu) };
   v3.data.pano = pano.status === 'fulfilled' && pano.value ? pano.value.map(p => ({ ...p, x: L93.fwd(p.lon, p.lat)[0] - o[0], y: L93.fwd(p.lon, p.lat)[1] - o[1] })) : null; v3.data.panoErr = pano.status === 'rejected' ? pano.reason.message : '';
   v3.data.ortho = ortho.status === 'fulfilled' ? ortho.value : null; v3.data.orthoErr = ortho.status === 'rejected' ? ortho.reason.message : '';

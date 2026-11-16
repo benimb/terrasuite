@@ -3,7 +3,7 @@
    plus le planning et la fiche, transversaux. Les modules existants (TerraGeo, TerraEstim, TerraPlanning, TerraChantier,
    TerraDocs, TerraContacts, TerraModel) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
    Les bibliothèques communes à tous les projets (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont à part. */
-const TS_VERSION = '0.9.6';
+const TS_VERSION = '0.9.7';
 const TSApp = (() => {
   const SVG = {
     back: '<path d="M15 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
@@ -300,7 +300,7 @@ const TSApp = (() => {
   const MR = 6378137, merc = ([lo, la]) => [MR * lo * Math.PI / 180, MR * Math.log(Math.tan(Math.PI / 4 + la * Math.PI / 360))];
   async function siteLoc(p, D) {
     const fs = [...D.geo.values()].filter(f => f && Array.isArray(f.center) && f.center.length === 2).sort((a, b) => (+b.updated || 0) - (+a.updated || 0));
-    if (fs[0]) return { c: fs[0].center, parc: (fs[0].parcelles || []).filter(x => x && x.geometry), fiche: fs[0] };
+    if (fs[0]) return { c: fs[0].center, parc: (fs[0].parcelles || []).filter(x => x && x.geometry), fiche: fs[0], monde: !!(fs[0].pays && fs[0].pays !== 'FR') };
     const q = [p.adresse, p.cp, p.ville].filter(Boolean).join(' ').trim(); if (q.length < 4) return null;
     const cache = LS.get('ts-geocode', {}) || {}; if (cache[q]) return { c: cache[q], parc: [] };
     try { const r = await fetch('https://data.geopf.fr/geocodage/search?limit=1&q=' + encodeURIComponent(q)); const j = await r.json(); const c = j.features && j.features[0] && j.features[0].geometry.coordinates;
@@ -315,7 +315,8 @@ const TSApp = (() => {
     const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, k = 1 / Math.cos(loc.c[1] * Math.PI / 180);
     let h = Math.max((y1 - y0) * 2.4, 90 * k), w = h * W / H; if ((x1 - x0) * 1.8 > w) { w = (x1 - x0) * 1.8; h = w * H / W; }
     const bb = [cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2];
-    const url = `https://data.geopf.fr/wms-r/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=ORTHOIMAGERY.ORTHOPHOTOS&STYLES=&CRS=EPSG:3857&BBOX=${bb.map(v => v.toFixed(1)).join(',')}&WIDTH=${W}&HEIGHT=${H}&FORMAT=image/jpeg`;
+    /* France : orthophoto IGN ; ailleurs : photo mondiale Esri */
+    const url = loc.monde ? `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=${bb.map(v => v.toFixed(1)).join(',')}&bboxSR=3857&imageSR=3857&size=${W},${H}&format=jpg&f=image` : `https://data.geopf.fr/wms-r/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=ORTHOIMAGERY.ORTHOPHOTOS&STYLES=&CRS=EPSG:3857&BBOX=${bb.map(v => v.toFixed(1)).join(',')}&WIDTH=${W}&HEIGHT=${H}&FORMAT=image/jpeg`;
     const px = ([x, y]) => ((x - bb[0]) / w * W).toFixed(1) + ',' + ((bb[3] - y) / h * H).toFixed(1);
     const path = rings.map(r => 'M' + r.map(px).join('L') + 'Z').join('');
     const pin = rings.length ? '' : (() => { const [X, Y] = px([cx0, cy0]).split(',').map(Number); return `<circle cx="${X}" cy="${Y}" r="9" fill="none" stroke="#fff" stroke-width="3"/><circle cx="${X}" cy="${Y}" r="4" fill="#fff"/>`; })();
@@ -328,7 +329,7 @@ const TSApp = (() => {
     if (!loc && !photo) { el.innerHTML = `<a class="site none" href="#/p/${p.id}/esq/site"><span>Situer le projet : renseignez l'adresse dans la fiche ou choisissez la parcelle dans l'étude de site</span></a>`; return; }
     const W = 900, H = photo ? 600 : 260, A = loc ? siteSvg(loc, W, H) : null;
     el.innerHTML = `<div class="site${photo ? ' two' : ''}">
-      ${A ? `<a class="air" href="#/p/${p.id}/esq/site" title="Ouvrir l'étude de site"><img src="${A.url}" alt="Photo aérienne du site" loading="lazy" onerror="this.closest('.air').classList.add('err')">${A.svg}<span class="cap">${E(lab || 'Photo aérienne IGN')}</span></a>` : ''}
+      ${A ? `<a class="air" href="#/p/${p.id}/esq/site" title="Ouvrir l'étude de site"><img src="${A.url}" alt="Photo aérienne du site" loading="lazy" onerror="this.closest('.air').classList.add('err')">${A.svg}<span class="cap">${E(lab || (loc.monde ? 'Photo aérienne Esri' : 'Photo aérienne IGN'))}</span></a>` : ''}
       ${photo ? `<div class="ph"><img src="${photo}" alt="Photo du site"></div>` : ''}
       <div class="tools"><label class="btn sm">${photo ? 'Changer la photo' : 'Photo du site…'}<input type="file" accept="image/*" hidden id="sitePh"></label>${photo ? '<button class="btn sm" id="sitePhDel">Retirer</button>' : ''}</div></div>`;
     const put = async v => { const cur = await TSP.get(p.id) || p; cur.photoSite = v; await TSP.put(cur); Object.assign(p, cur); drawSite(p, D, el); };
