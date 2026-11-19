@@ -13,16 +13,16 @@ const TSSecu = (() => {
 
   /* seuils du 1er groupe (au-delà : 4e catégorie ou plus) : [sous-sol, étages, ensemble des niveaux] ; null = sans seuil propre */
   const TYPES = {
-    J: ['Structures d\'accueil pour personnes âgées ou handicapées', null, null, 100, 'Seuil propre : 25 résidents (personnes âgées) ou 20 (personnes handicapées), ou 100 personnes au total.'],
-    L: ['Salles d\'audition, de conférences, de réunions, de spectacles, à usage multiple', 100, null, 200, 'Salles de spectacles ou à usage multiple : 20 en sous-sol, 50 au total.'],
+    J: ['Structures d\'accueil pour personnes âgées ou handicapées', null, null, 100, 'Assujetti au règlement à partir de 7 résidents.'],
+    L: ['Salles d\'audition, de conférences, de réunions, de spectacles, à usage multiple', 100, null, 200],
     M: ['Magasins de vente, centres commerciaux', 100, 100, 200],
     N: ['Restaurants et débits de boissons', 100, 200, 200],
     O: ['Hôtels et pensions de famille', null, null, 100],
     P: ['Salles de danse et salles de jeux', 20, 100, 120],
-    R: ['Établissements d\'enseignement, colonies de vacances', 100, 100, 200, 'Écoles maternelles, crèches, haltes-garderies : interdites en sous-sol, tout accueil en étage classe au moins en 4e catégorie (20 si un seul niveau en étage), 100 au total ; locaux à sommeil : 30.'],
+    R: ['Établissements d\'enseignement, colonies de vacances', 100, 100, 200],
     S: ['Bibliothèques, centres de documentation', 100, 100, 200],
     T: ['Salles d\'exposition à vocation commerciale', 100, 100, 200],
-    U: ['Établissements de soins', null, null, 100, 'Avec hébergement : 20 lits.'],
+    U: ['Établissements de soins', null, null, 100],
     V: ['Établissements de culte', 100, 200, 300],
     W: ['Administrations, banques, bureaux', 100, 100, 200],
     X: ['Établissements sportifs couverts', 100, 100, 200],
@@ -33,14 +33,41 @@ const TSSecu = (() => {
     OA: ['Hôtels-restaurants d\'altitude', null, null, 20],
     EF: ['Établissements flottants', 0, 0, 0, 'Pas de 5e catégorie.']
   };
+  /* variantes du tableau PE 2 § 1 : [libellé, sous-sol, étages, ensemble, note, seuil des résidents] */
+  const VAR = {
+    J: { pa: ['Personnes âgées', null, null, 100, '', 25], ph: ['Personnes handicapées', null, null, 100, '', 20] },
+    L: { reu: ['Auditions, conférences, réunions, salles polyvalentes', 100, null, 200], spe: ['Spectacles, projections, cabarets', 20, null, 50] },
+    R: { aut: ['Enseignement, formation, accueil sans sommeil', 100, 100, 200], mat: ['Écoles maternelles, crèches, haltes-garderies, jardins d\'enfants', 0, 1, 100, 'Interdit en sous-sol ; en étage, 1er groupe dès 1 enfant (20 si un seul niveau en étage).'], som: ['Avec locaux réservés au sommeil', 100, 100, 30] },
+    U: { sans: ['Sans hébergement', null, null, 100], avec: ['Avec hébergement', null, null, 20] }
+  };
+  /* effectif d'après la surface accessible au public (personnes par m²) : sous-sol, RDC, 1er, 2e, étages supérieurs */
+  const DENS = {
+    M: { lab: 'magasins : 1 pers. / 3 m² en sous-sol, RDC et 1er étage, 1 / 6 m² au 2e, 1 / 15 m² au-delà (article M 2)', d: [1 / 3, 1 / 3, 1 / 3, 1 / 6, 1 / 15] },
+    Mf: { lab: 'magasins à faible densité de public : 1 pers. / 9 m² (article M 2)', d: [1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9] },
+    N: { lab: 'restaurants, places assises sans déclaration : 1 pers. / m² (article N 2 ; debout : 2 / m²)', d: [1, 1, 1, 1, 1] },
+    P: { lab: 'salles de danse : 4 pers. / 3 m² (article P 2)', d: [4 / 3, 4 / 3, 4 / 3, 4 / 3, 4 / 3] },
+    T: { lab: 'salles d\'exposition : 1 pers. / m² (article T 2)', d: [1, 1, 1, 1, 1] },
+    W: { lab: 'bureaux : 1 pers. / 10 m² des locaux accessibles au public, à défaut de déclaration (article W 2)', d: [0.1, 0.1, 0.1, 0.1, 0.1] },
+    Y: { lab: 'musées : 1 pers. / 5 m² (article Y 2)', d: [0.2, 0.2, 0.2, 0.2, 0.2] }
+  };
+  const densOf = r => r.erpType === 'M' && r.faibleDens ? DENS.Mf : DENS[r.erpType] || null;
+  function effSurf(r) {
+    const D0 = densOf(r); if (!D0) return null; const S = ['surfSS', 'surfRdc', 'surfE1', 'surfE2', 'surfE3'].map(k => num(r[k]) || 0); if (!S.some(Boolean)) return null;
+    const e = S.map((a, i) => Math.ceil(a * D0.d[i] - 1e-9)); return { ss: e[0], rdc: e[1], et: e[2] + e[3] + e[4], lab: D0.lab };
+  }
+  const seuils = r => { const v = VAR[r.erpType]; if (!v) return TYPES[r.erpType] || TYPES.N; const k = r.erpSous && v[r.erpSous] ? r.erpSous : Object.keys(v)[0], x = v[k]; return [TYPES[r.erpType][0] + ' · ' + x[0], x[1], x[2], x[3], x[4] || '', x[5]]; };
   const D = { usage: 'hab_coll', travaux: 'neuf', depot: '', indiv: 'isolee', bandeIndep: false, etages: '', hauteur: '', sousSols: '0', distEsc: '', voieEchelles: true, logements: '', ascenseur: false,
-    erp: false, erpType: 'N', effSS: '', effRdc: '', effEt: '', personnel: '', travail: false };
+    erp: false, erpType: 'N', erpSous: '', residents: '', unNiveauEtage: false, faibleDens: false, surfSS: '', surfRdc: '', surfE1: '', surfE2: '', surfE3: '', effSS: '', effRdc: '', effEt: '', personnel: '', travail: false };
 
   /* maquette 3D du projet (TerraModel) : niveaux, cote du plancher le plus haut, étages au-dessus du sol */
   function maquette(p) {
     try { const m = (JSON.parse(localStorage.getItem('terramodel-maquettes') || '{}') || {})[p.id]; const N = m && m.surf && Array.isArray(m.surf.niveaux) ? m.surf.niveaux.filter(x => x && isFinite(+x.z)) : [];
-      if (!N.length) return null; const zs = N.map(x => +x.z).sort((a, b) => a - b), up = zs.filter(z => z > 0.5), under = zs.filter(z => z < -0.5);
-      return { niveaux: N.length, hauteur: Math.max(0, zs[zs.length - 1]), etages: up.length, sousSols: under.length, nom: m.nom || '' };
+      if (!N.length) return null;
+      /* niveau de toiture (nom, ou aucune surface de plancher au-dessus du sol) : pas un niveau occupé, exclu de la hauteur et des étages */
+      const ROOF = /toit|couverture|acrot[eè]re|fa[iî]tage|[ée]gout|terrasse inaccessible|comble perdu/i;
+      const occ = N.filter(x => !ROOF.test(x.nom || '') && (+x.z <= 0.5 || x.surface === undefined || num(x.surface) > 0)), ex = N.filter(x => !occ.includes(x) && +x.z > 0.5);
+      const zs = (occ.length ? occ : N).map(x => +x.z).sort((a, b) => a - b), up = zs.filter(z => z > 0.5), under = zs.filter(z => z < -0.5);
+      return { niveaux: N.length, hauteur: Math.max(0, zs[zs.length - 1]), etages: up.length, sousSols: under.length, nom: m.nom || '', exclus: ex.map(x => (x.nom || 'niveau') + ' (' + NF1.format(+x.z) + ' m)') };
     } catch (e) { return null; }
   }
 
@@ -64,14 +91,15 @@ const TSSecu = (() => {
       out.push({ k: 'hab', titre: 'Habitation', val: fam, why, ref: 'Arrêté du 31 janvier 1986 modifié, article 3' });
     }
     if (r.erp || r.usage === 'erp') {
-      const T = TYPES[r.erpType] || TYPES.N, ss = num(r.effSS) || 0, rdc = num(r.effRdc) || 0, etg = num(r.effEt) || 0, pub = ss + rdc + etg, pers = num(r.personnel) || 0;
-      const over = [T[1] !== null && T[1] !== undefined && ss >= T[1] && (T[1] > 0 || ss > 0), T[2] !== null && T[2] !== undefined && etg >= T[2] && (T[2] > 0 || etg > 0), T[3] !== null && T[3] !== undefined && pub >= T[3]];
+      const T = seuils(r), ss = num(r.effSS) || 0, rdc = num(r.effRdc) || 0, etg = num(r.effEt) || 0, pub = ss + rdc + etg, pers = num(r.personnel) || 0, res = num(r.residents) || 0;
+      if (r.erpType === 'R' && r.erpSous === 'mat' && r.unNiveauEtage) T[2] = 20;
+      const over = [T[1] !== null && T[1] !== undefined && ss >= T[1] && (T[1] > 0 || ss > 0), T[2] !== null && T[2] !== undefined && etg >= T[2] && (T[2] > 0 || etg > 0), T[3] !== null && T[3] !== undefined && pub >= T[3], !!T[5] && res >= T[5]];
       const g1 = r.erpType === 'EF' || over.some(Boolean), tot = pub + pers;
       const cat = !g1 ? 5 : tot > 1500 ? 1 : tot > 700 ? 2 : tot > 300 ? 3 : 4;
-      const seuil = [T[1] !== null ? 'sous-sol ' + T[1] : '', T[2] !== null ? 'étages ' + T[2] : '', T[3] !== null ? 'ensemble ' + T[3] : ''].filter(Boolean).join(', ');
-      out.push({ k: 'erp', titre: 'Établissement recevant du public', val: `type ${r.erpType}, ${cat === 1 ? '1re' : cat + 'e'} catégorie`, cat,
-        why: pub ? (g1 ? `public ${pub} (sous-sol ${ss}, rez-de-chaussée ${rdc}, étages ${etg}) au-delà du seuil de la 5e catégorie (${seuil}) ; catégorie sur public + personnel = ${tot}` : `public ${pub} sous les seuils de la 5e catégorie (${seuil}) ; le personnel n'est pas compté`) : 'effectif du public à saisir',
-        ref: cat === 5 ? 'CCH R143-19 ; arrêté du 25 juin 1980, livre III (petits établissements, PE)' : 'CCH R143-19 ; arrêté du 25 juin 1980 (dispositions générales et particulières du type ' + r.erpType + ')', note: T[4] || '' });
+      const seuil = [T[1] !== null ? 'sous-sol ' + (T[1] === 0 ? 'interdit' : T[1]) : '', T[2] !== null ? 'étages ' + T[2] : '', T[3] !== null ? 'ensemble ' + T[3] : '', T[5] ? 'résidents ' + T[5] : ''].filter(Boolean).join(', ');
+      out.push({ k: 'erp', titre: 'Établissement recevant du public' + (VAR[r.erpType] ? ' · ' + T[0].split(' · ')[1] : ''), val: `type ${r.erpType}, ${cat === 1 ? '1re' : cat + 'e'} catégorie`, cat,
+        why: pub ? (g1 ? `public ${pub} (sous-sol ${ss}, rez-de-chaussée ${rdc}, étages ${etg})${T[5] ? ', ' + res + ' résidents' : ''} au-delà du seuil de la 5e catégorie (${seuil}) ; catégorie sur public + personnel = ${tot}` : `public ${pub} sous les seuils de la 5e catégorie (${seuil}) ; le personnel n'est pas compté`) : 'effectif du public à saisir',
+        ref: cat === 5 ? 'CCH R143-19 ; arrêté du 25 juin 1980, article PE 2 § 1 (seuils) et livre III (petits établissements)' : 'CCH R143-19 ; arrêté du 25 juin 1980, article PE 2 § 1 (seuils), dispositions générales et particulières du type ' + r.erpType, note: T[4] || '' });
       if (h !== null && h > 28) out.push({ k: 'igh', titre: 'Immeuble de grande hauteur', val: 'IGH', why: 'plancher bas du dernier niveau à plus de 28 m', ref: 'CCH R146-3 et R146-4 ; règlement de sécurité IGH' });
     }
     if (r.travail || r.usage === 'travail') {
@@ -103,6 +131,7 @@ const TSSecu = (() => {
   function controles(r, cl, mq) {
     const C = [], h = num(r.hauteur), et = num(r.etages), ss = num(r.sousSols) || 0, add = (s, t, d) => C.push({ s, t, d });
     if (h === null) add('?', 'Hauteur du dernier plancher', 'à saisir, ou à reprendre de la maquette 3D');
+    if (mq && mq.exclus && mq.exclus.length) add('?', 'Niveaux de toiture', 'exclus de la hauteur et des étages repris de la maquette : ' + mq.exclus.join(', ') + '. Vérifiez qu\'ils ne sont pas occupés.');
     else if (mq && Math.abs(mq.hauteur - h) > 0.05) add('?', 'Hauteur du dernier plancher', `saisie ${NF1.format(h)} m, maquette ${NF1.format(mq.hauteur)} m`);
     if (r.usage === 'hab_coll') {
       const al = r.depot && r.depot < '2019-10-01' ? 3 : 2; /* plus de trois étages avant le décret 2019-305, plus de deux depuis */
@@ -113,7 +142,10 @@ const TSSecu = (() => {
       const n = num(r.logements); if (n && r.travaux === 'neuf') add('!', 'Logements accessibles', `${Math.ceil(n * 0.2)} logement(s) accessible(s) au moins sur ${n} (20 %), les autres évolutifs`);
     }
     if (r.erp || r.usage === 'erp') {
-      if (r.erpType === 'R' && ss > 0) add('!', 'Sous-sol', 'accueil des enfants de maternelle et de crèche interdit en sous-sol');
+      if (r.erpType === 'R' && r.erpSous === 'mat' && (num(r.effSS) || 0) > 0) add('ko', 'Sous-sol', 'accueil des enfants de maternelle et de crèche interdit en sous-sol (PE 2 § 1)');
+      else if (r.erpType === 'R' && ss > 0 && r.erpSous !== 'aut') add('!', 'Sous-sol', 'accueil des enfants de maternelle et de crèche interdit en sous-sol');
+      if (VAR[r.erpType] && VAR[r.erpType][Object.keys(VAR[r.erpType])[0]][5] && !num(r.residents)) add('?', 'Résidents', 'nombre de résidents à saisir : seuil propre du 1er groupe');
+      const es = effSurf(r); if (es && (es.ss !== (num(r.effSS) || 0) || es.rdc !== (num(r.effRdc) || 0) || es.et !== (num(r.effEt) || 0))) add('?', 'Effectif et surfaces', `les surfaces donnent ${es.ss} / ${es.rdc} / ${es.et} (sous-sol / RDC / étages), saisi ${num(r.effSS) || 0} / ${num(r.effRdc) || 0} / ${num(r.effEt) || 0}`);
       const e = cl.find(x => x.k === 'erp'); if (e && !(num(r.effSS) || num(r.effRdc) || num(r.effEt))) add('?', 'Effectif du public', 'à saisir par niveau pour classer l\'établissement');
       if (e && e.cat <= 4) add('!', 'Commission de sécurité', `ERP du 1er groupe (${e.cat === 1 ? '1re' : e.cat + 'e'} catégorie) : avis de la commission sur le permis, visite avant ouverture`);
       if (ss > 0 && (num(r.effSS) || 0) > 0) add('!', 'Public en sous-sol', `${num(r.effSS)} personnes en sous-sol : dégagements et désenfumage propres`);
@@ -126,7 +158,7 @@ const TSSecu = (() => {
   /* demande à coller dans une conversation avec Claude */
   function demande(p, r, cl) {
     return `Relève les exigences de sécurité incendie et d'accessibilité applicables au projet ${[p.code, p.nom].filter(Boolean).join(' · ')}${p.adresse ? ', ' + [p.adresse, p.cp, p.ville].filter(Boolean).join(' ') : ''}.
-Données : usage ${({ hab_coll: 'habitation collective', hab_ind: 'maison individuelle', erp: 'ERP', travail: 'bureaux / lieu de travail' })[r.usage]}${r.erp && r.usage !== 'erp' ? ' + ERP' : ''}${r.travail && r.usage !== 'travail' ? ' + bureaux' : ''}, ${r.travaux === 'neuf' ? 'construction neuve' : 'travaux sur existant'}${r.depot ? ', dépôt du permis ' + r.depot : ''}, R+${r.etages || '?'}, ${r.sousSols || 0} sous-sol(s), dernier plancher à ${r.hauteur || '?'} m${r.logements ? ', ' + r.logements + ' logements' : ''}${r.erp || r.usage === 'erp' ? `, ERP type ${r.erpType}, public ${[r.effSS || 0, r.effRdc || 0, r.effEt || 0].join(' / ')} (sous-sol / RDC / étages), personnel ${r.personnel || 0}` : ''}.
+Données : usage ${({ hab_coll: 'habitation collective', hab_ind: 'maison individuelle', erp: 'ERP', travail: 'bureaux / lieu de travail' })[r.usage]}${r.erp && r.usage !== 'erp' ? ' + ERP' : ''}${r.travail && r.usage !== 'travail' ? ' + bureaux' : ''}, ${r.travaux === 'neuf' ? 'construction neuve' : 'travaux sur existant'}${r.depot ? ', dépôt du permis ' + r.depot : ''}, R+${r.etages || '?'}, ${r.sousSols || 0} sous-sol(s), dernier plancher à ${r.hauteur || '?'} m${r.logements ? ', ' + r.logements + ' logements' : ''}${r.erp || r.usage === 'erp' ? `, ERP type ${r.erpType}${VAR[r.erpType] ? ' (' + seuils(r)[0].split(' · ')[1] + ')' : ''}${num(r.residents) ? ', ' + r.residents + ' résidents' : ''}, public ${[r.effSS || 0, r.effRdc || 0, r.effEt || 0].join(' / ')} (sous-sol / RDC / étages), personnel ${r.personnel || 0}` : ''}.
 Classement calculé par TerraSuite : ${cl.map(x => x.titre + ' : ' + x.val).join(' ; ') || 'à déterminer'}.
 Vérifie ce classement, puis donne pour chaque thème (dégagements et escaliers, isolement et résistance au feu, réaction au feu, désenfumage, accès des secours, moyens de secours, cheminements, stationnement, circulations, sanitaires, logements adaptés) les exigences chiffrées avec le texte et l'article, en vérifiant chaque référence sur Légifrance.
 Rends un fichier JSON : {"format":"terrasuite-secu","date":"AAAA-MM-JJ","synthese":"…","classement":"…","exigences":[{"domaine":"incendie|accessibilité","theme":"…","exigence":"…","valeur":"…","texte":"…","article":"…","url":"…"}],"points":["à vérifier…"]}`;
@@ -154,11 +186,14 @@ Rends un fichier JSON : {"format":"terrasuite-secu","date":"AAAA-MM-JJ","synthes
         ${sel('travaux', 'Nature des travaux', [['neuf', 'Construction neuve'], ['existant', 'Travaux sur existant']])}
         <label class="sf"><span>Dépôt du permis</span><input type="date" data-k="depot" value="${E(r.depot || '')}"></label>
         ${fld('etages', 'Étages sur RDC', 60, 'R+n')}${fld('sousSols', 'Sous-sols', 50)}${fld('hauteur', 'Dernier plancher (m)', 70, 'plancher bas du niveau le plus haut, depuis le sol accessible aux secours')}
-        ${mq ? `<button class="btn sm" id="scMq" style="margin:18px 14px 10px 0">Reprendre la maquette (R+${mq.etages}, ${NF1.format(mq.hauteur)} m)</button>` : ''}
+        ${mq ? `<button class="btn sm" id="scMq" style="margin:18px 14px 10px 0">Reprendre la maquette (R+${mq.etages}, ${NF1.format(mq.hauteur)} m${mq.exclus && mq.exclus.length ? ', hors toiture' : ''})</button>` : ''}
       </div>
       ${hab ? `<div>${r.usage === 'hab_ind' ? sel('indiv', 'Maisons', [['isolee', 'Isolée ou jumelée'], ['bande', 'Groupées en bande']]) + (r.indiv === 'bande' ? chk('bandeIndep', 'Structures indépendantes') : '') : fld('distEsc', 'Porte palière → escalier (m)', 70, 'logement le plus éloigné') + chk('voieEchelles', 'Logements accessibles par voie échelles') + fld('logements', 'Logements', 60) + chk('ascenseur', 'Ascenseur prévu')}</div>` : ''}
       <div>${r.usage !== 'erp' ? chk('erp', 'Comprend un ERP (commerce, crèche…)') : ''}${r.usage !== 'travail' ? chk('travail', 'Comprend des bureaux sans public') : ''}</div>
-      ${erpOn ? `<div>${sel('erpType', "Type d'ERP", Object.entries(TYPES).map(([k, v]) => [k, k + ' · ' + v[0]]))}${fld('effSS', 'Public sous-sol', 60)}${fld('effRdc', 'Public RDC', 60)}${fld('effEt', 'Public étages', 60)}${fld('personnel', 'Personnel', 60)}</div>` : ''}
+      ${erpOn ? (() => { const V = VAR[r.erpType], es = effSurf(r), d0 = densOf(r);
+        return `<div>${sel('erpType', "Type d'ERP", Object.entries(TYPES).map(([k, v]) => [k, k + ' · ' + v[0]]))}${V ? sel('erpSous', 'Activité', Object.entries(V).map(([k, v]) => [k, v[0]])) : ''}${V && Object.values(V)[0][5] ? fld('residents', 'Résidents', 60) : ''}${r.erpType === 'R' && r.erpSous === 'mat' ? chk('unNiveauEtage', 'Un seul niveau en étage') : ''}${r.erpType === 'M' ? chk('faibleDens', 'Faible densité de public (meubles, matériaux…)') : ''}</div>
+        ${d0 ? `<div><span class="hint" style="display:block;margin-bottom:4px">Surface accessible au public (m²), pour calculer l'effectif : ${E(d0.lab)}</span>${fld('surfSS', 'Sous-sol', 60)}${fld('surfRdc', 'RDC', 60)}${fld('surfE1', '1er étage', 60)}${fld('surfE2', '2e étage', 60)}${fld('surfE3', 'Étages au-delà', 60)}${es ? `<button class="btn sm" id="scEff" style="margin:18px 14px 10px 0">Reporter l'effectif (${es.ss} / ${es.rdc} / ${es.et})</button>` : ''}</div>` : `<p class="hint" style="margin:0 0 8px">Type ${E(r.erpType)} : effectif d'après le nombre de places, de lits ou la déclaration de l'exploitant (voir l'article ${E(r.erpType)} 2 ou ${E(r.erpType)} 1).</p>`}
+        <div>${fld('effSS', 'Public sous-sol', 60)}${fld('effRdc', 'Public RDC', 60)}${fld('effEt', 'Public étages', 60)}${fld('personnel', 'Personnel', 60)}</div>`; })() : ''}
 
       <h3>Classement incendie</h3>
       ${cl.length ? `<div class="secl">${cl.map(x => `<div class="card"><div class="hint">${E(x.titre)}</div><div class="v">${E(x.val)}</div><div style="font-size:13px">${E(x.why)}</div>${x.note ? `<div class="hint" style="margin-top:4px">${E(x.note)}</div>` : ''}<div class="hint" style="margin-top:6px">${E(x.ref)}</div></div>`).join('')}</div>` : '<p class="muted">Choisissez l\'usage.</p>'}
@@ -174,6 +209,7 @@ Rends un fichier JSON : {"format":"terrasuite-secu","date":"AAAA-MM-JJ","synthes
     const redraw = () => view(p, body, X);
     body.querySelectorAll('[data-k]').forEach(el => el.addEventListener('change', async () => { r[el.dataset.k] = el.value; await save(); redraw(); }));
     body.querySelectorAll('[data-c]').forEach(el => el.addEventListener('change', async () => { r[el.dataset.c] = el.checked; await save(); redraw(); }));
+    const be = body.querySelector('#scEff'); if (be) be.onclick = async () => { const es = effSurf(r); r.effSS = String(es.ss); r.effRdc = String(es.rdc); r.effEt = String(es.et); await save(); redraw(); };
     const bm = body.querySelector('#scMq'); if (bm) bm.onclick = async () => { r.hauteur = String(mq.hauteur); r.etages = String(mq.etages); r.sousSols = String(mq.sousSols); await save(); redraw(); };
     body.querySelector('#scAsk').onclick = async e => { const t = demande(p, r, cl); try { await navigator.clipboard.writeText(t); e.target.textContent = 'Demande copiée'; } catch (x) { prompt('Copiez la demande :', t); } };
     body.querySelector('#scImp').onclick = () => { const i = document.createElement('input'); i.type = 'file'; i.accept = '.json,application/json'; i.onchange = async () => { try { const J = JSON.parse(await i.files[0].text()); if (J.format !== 'terrasuite-secu') throw new Error('format terrasuite-secu attendu'); if (!Array.isArray(J.exigences)) throw new Error('liste « exigences » absente'); r.analyse = J; await save(); redraw(); } catch (x) { alert('Import impossible : ' + (x.message || x)); } }; i.click(); };
@@ -184,5 +220,5 @@ Rends un fichier JSON : {"format":"terrasuite-secu","date":"AAAA-MM-JJ","synthes
       ${A ? `<h2>Exigences relevées</h2><table class="pt"><thead><tr><th>Thème</th><th>Exigence</th><th>Valeur</th><th>Référence</th></tr></thead><tbody>${(A.exigences || []).map(x => `<tr><td>${E(x.theme)}</td><td>${E(x.exigence)}</td><td>${E(x.valeur)}</td><td>${E([x.texte, x.article].filter(Boolean).join(', '))}</td></tr>`).join('')}</tbody></table>` : ''}
       <p style="font-size:10px;color:#666">Classement indicatif établi par TerraSuite à partir des données du projet ; le texte en vigueur fait foi.</p>`);
   }
-  return { view, classer, access, controles, TYPES };
+  return { view, classer, access, controles, TYPES, VAR, effSurf, maquette };
 })();

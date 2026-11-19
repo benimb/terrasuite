@@ -1,8 +1,8 @@
 window.TD_DONNEES = {
  "app": "TerraDocs",
  "format": 1,
- "stamp": "base-publique-2026-11-16b",
- "label": "base publique : gammes de fabricants de tous corps d'état, carrelage (VitrA Tiles, Mosa, Villeroy & Boch), verre émaillé et laqué (Saint-Gobain, AGC), mosaïques (Bisazza, Émaux de Briare), mobilier LAGO, ArcelorMittal (cassettes, bardages, bacs), Sto, nora, Geggus, Koramic, panneaux décoratifs et acoustiques (Arpa Industriale FENIX, Resopal, Hubler, Marotte), Dekton sur ITE (Cosentino DKS), chauffage et fumisterie (Poujoulat, Atlantic, Viessmann, Finimetal), Hudevad, Estrada, Acova, Stûv, Godin, Campa, Rothelec, Chappée, elm.leblanc, Sofath, Butagaz, Acome, Roth, CVC (Airwell, Daikin, Technibel), désenfumage et éclairage zénithal (Madicob, Domeca, Alcaud, Hexadome HEXAONDE), protection passive incendie (Promat)",
+ "stamp": "base-publique-2026-11-19",
+ "label": "base publique : gammes de fabricants de tous corps d'état, carrelage (VitrA Tiles, Mosa, Villeroy & Boch), verre émaillé et laqué (Saint-Gobain, AGC), mosaïques (Bisazza, Émaux de Briare), mobilier LAGO, ArcelorMittal (cassettes, bardages, bacs), Sto, nora, Geggus, Koramic, panneaux décoratifs et acoustiques (Arpa Industriale FENIX, Resopal, Hubler, Marotte), Dekton sur ITE (Cosentino DKS), chauffage et fumisterie (Poujoulat, Atlantic, Viessmann, Finimetal), Hudevad, Estrada, Acova, Stûv, Godin, Campa, Rothelec, Chappée, elm.leblanc, Sofath, Butagaz, Acome, Roth, CVC (Airwell, Daikin, Technibel), désenfumage et éclairage zénithal (Madicob, Domeca, Alcaud, Hexadome HEXAONDE), protection passive incendie (Promat), verriers et menuiseries (La Rochère, Saverbat, Lamberts, Pilkington, Saint-Gobain Glass, AGC, 3form, Kawneer, 3M)",
  "lots": [
   {
    "id": "L00",
@@ -22,7 +22,8 @@ window.TD_DONNEES = {
     "Mortiers techniques, réparation des bétons",
     "Blocs béton",
     "Planchers préfabriqués",
-    "Mastics et joints"
+    "Mastics et joints",
+    "Briques et pavés de verre"
    ]
   },
   {
@@ -46,7 +47,8 @@ window.TD_DONNEES = {
     "Fenêtres de toit",
     "Raccords, accessoires de pose, motorisation",
     "Tuiles terre cuite",
-    "Bacs acier, supports d'étanchéité"
+    "Bacs acier, supports d'étanchéité",
+    "Tuiles de verre"
    ]
   },
   {
@@ -69,7 +71,8 @@ window.TD_DONNEES = {
     "Enduits, ravalement",
     "Isolation thermique par l'extérieur",
     "Façades à ossature bois préfabriquées",
-    "Verre de façade (allèges émaillées, bardage verre)"
+    "Verre de façade (allèges émaillées, bardage verre)",
+    "Verre profilé en U"
    ]
   },
   {
@@ -79,7 +82,11 @@ window.TD_DONNEES = {
    "sous": [
     "Aluminium",
     "Occultations",
-    "Ouvrants de façade de désenfumage et d'aération"
+    "Ouvrants de façade de désenfumage et d'aération",
+    "Murs-rideaux et verrières",
+    "Vitrages isolants, contrôle solaire et isolation",
+    "Verres feuilletés de sécurité et acoustiques",
+    "Portes et coulissants aluminium"
    ]
   },
   {
@@ -114,7 +121,10 @@ window.TD_DONNEES = {
     "Portes intérieures",
     "Quincaillerie",
     "Verre décoratif d'agencement (imprimé, miroir)",
-    "Panneaux décoratifs (stratifiés HPL, compacts, placages, métal)"
+    "Panneaux décoratifs (stratifiés HPL, compacts, placages, métal)",
+    "Verres résistants au feu (EW, EI)",
+    "Verre à opacité commandée",
+    "Panneaux de résine translucides"
    ]
   },
   {
@@ -151,7 +161,9 @@ window.TD_DONNEES = {
    "nom": "Peinture, revêtements muraux",
    "sous": [
     "Revêtements muraux acoustiques",
-    "Revêtements muraux en verre laqué"
+    "Revêtements muraux en verre laqué",
+    "Films pour vitrages (solaires, sécurité, décoratifs)",
+    "Revêtements adhésifs architecturaux"
    ]
   },
   {
@@ -28644,6 +28656,1107 @@ window.TD_DONNEES = {
    "verifie": "",
    "cree": "2026-11-16",
    "maj": "2026-11-16"
+  },
+  {
+   "id": "larochere-briques-verre",
+   "lot": "L02",
+   "nom": "Briques de verre pour cloisons et façades, montage traditionnel ou système Cubiver",
+   "fabricant": "La Rochère",
+   "reference": "Briques de verre",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "brique de verre",
+    "cloison",
+    "façade",
+    "lumière"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.larochere.com/architectural-glass/?lang=en",
+     "titre": "Verre d'architecture La Rochère"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/fabricant/la-rochere-49033/",
+     "titre": "La Rochère (Batiproduits)"
+    },
+    {
+     "type": "pose",
+     "url": "https://pdf.archiexpo.com/pdf/la-rochere/principle-implementation-glassblocks-floor-glass-pavers/8019-460826.html",
+     "titre": "Principes de mise en œuvre des briques et pavés (2019)"
+    },
+    {
+     "type": "pose",
+     "url": "https://www.chausson.fr/media/article-document/239949",
+     "titre": "Système de montage Cubiver"
+    }
+   ],
+   "sous": "Briques et pavés de verre",
+   "perf": "Seul fabricant français de briques et tuiles de verre ; briques conformes à la NF EN 1051-1 et -2 ; Cubiver : ceinture PVC collée, joint de 6 mm, environ 1 h 30/m² ; pose agréée Ets Boulleaux",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "larochere-paves-verre",
+   "lot": "L02",
+   "nom": "Pavés de verre simple ou double paroi pour dalles, planchers et puits de lumière",
+   "fabricant": "La Rochère",
+   "reference": "Pavés de verre",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "pavé de verre",
+    "dalle",
+    "plancher",
+    "puits de lumière"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/paves-de-verre-paroi-simple-motif-strie-15-x-15-p69056973.html",
+     "titre": "Pavé strié 15 x 15 x 8 cm, réf. 60080"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/pave-de-verre-rond-12-x-6-cm-60061-p69056998.html",
+     "titre": "Pavé rond 12 x 6 cm, réf. 60061"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.batiproduits.com/amp/fiche/produits/pave-de-verre-specifique-vegetal-architectes-p350002275.html",
+     "titre": "Pavé spécifique Végétal (SEURA architectes)"
+    }
+   ],
+   "sous": "Briques et pavés de verre",
+   "perf": "Verre pressé ; usage horizontal (sols, plafonds) ; à la pièce ou en panneaux ; modèles spécifiques sur demande",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "larochere-tuiles-verre",
+   "lot": "L04",
+   "nom": "Tuiles de verre canal, galbées et plates grand moule",
+   "fabricant": "La Rochère",
+   "reference": "Tuiles de verre",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "tuile de verre",
+    "couverture",
+    "éclairement"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/fabricant/la-rochere-49033/offre-ct17098.html",
+     "titre": "Gammes La Rochère (Batiproduits)"
+    }
+   ],
+   "sous": "Tuiles de verre",
+   "perf": "Modèles canal, galbé grand moule et plat grand moule, à associer aux tuiles terre cuite du même modèle",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "larochere-carreaux-verre",
+   "lot": "L11",
+   "nom": "Carreaux de verre pressé (métro, pyramide) pour murs",
+   "fabricant": "La Rochère",
+   "reference": "Carreaux de verre",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "carreau de verre",
+    "mur",
+    "crédence",
+    "métro"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://pdf.archiexpo.com/pdf/la-rochere/specific-glass-products/8019-460822.html",
+     "titre": "Produits verriers spécifiques (catalogue)"
+    }
+   ],
+   "sous": "Carrelage et mosaïque de verre, émaux",
+   "perf": "",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "saverbat-briques-paves",
+   "lot": "L02",
+   "nom": "Briques, pavés et panneaux préfabriqués en verre, dont briques coupe-feu 60 et 90 min",
+   "fabricant": "Saverbat",
+   "reference": "Briques et pavés de verre",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "brique de verre",
+    "pavé de verre",
+    "panneau préfabriqué",
+    "coupe-feu"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.saverbat.com/produits/",
+     "titre": "Gammes de produits"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.saverbat.com/produits/paves-de-verre/bg-1910-clair/",
+     "titre": "Brique BG 1910 clair"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.saverbat.com/produits/paves-de-verre/pave-creux-1260/",
+     "titre": "Pavé creux 1260 rond"
+    }
+   ],
+   "sous": "Briques et pavés de verre",
+   "perf": "Atelier à Grandvilliers (60) ; BG 1910 clair 19 x 19 x 10 cm, 3,5 kg, TL 75 %, 44 dB ; BG 1960 et BG 1990 coupe-feu 60 et 90 min (19 x 19 x 16 cm) ; panneaux sur mesure",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "saverbat-monuments",
+   "lot": "L02",
+   "nom": "Reproduction de pavés, dalles et barrettes de verre anciens pour monuments historiques",
+   "fabricant": "Saverbat",
+   "reference": "Verre monuments historiques",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "patrimoine",
+    "monument historique",
+    "pavé de verre",
+    "restauration"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.saverbat.com/produits/verre-monuments/",
+     "titre": "Produits verriers monuments historiques"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.saverbat.com/domaines/grands-ouvrages/",
+     "titre": "Grands ouvrages"
+    }
+   ],
+   "sous": "Briques et pavés de verre",
+   "perf": "Reproduction à l'identique d'après modèles d'époque",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "lamberts-linit",
+   "lot": "L06",
+   "nom": "Verre profilé en U LINIT pour façades et cloisons translucides",
+   "fabricant": "Lamberts",
+   "reference": "LINIT U-Glass",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "verre profilé",
+    "U-glass",
+    "façade",
+    "translucide",
+    "cloison"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://lamberts.info/",
+     "titre": "Glasfabrik Lamberts"
+    },
+    {
+     "type": "cat",
+     "url": "https://lamberts.info/fileadmin/user_upload/produkte/linit/downloads/prospekte/linit_projekte/Schulen_Universitaeten/Glasfabrik_Lamberts_fr_ecoles_universites.pdf",
+     "titre": "Brochure écoles et universités (FR)"
+    },
+    {
+     "type": "cat",
+     "url": "https://lamberts.info/fileadmin/user_upload/produkte/linit/downloads/prospekte/linit_projekte/Interior/Glasfabrik_Lamberts_fr_Interior_imprimable.pdf",
+     "titre": "Brochure aménagement intérieur (FR)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/verre-profile-en-u-linit-u-glass-p440529812.html",
+     "titre": "LINIT U-Glass (Batiproduits, distribué par Glass Partners Solutions)"
+    }
+   ],
+   "sous": "Verre profilé en U",
+   "perf": "Autoportant, longueurs jusqu'à 7 m ; variantes EcoGlass extra-clair, sablé, émaillé, trempé TSH/TCH, isolant translucide (TIM) ; fabriqué à Wunsiedel (Allemagne)",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "lamberts-ornemental",
+   "lot": "L10",
+   "nom": "Verre ornemental coulé, verre armé et verre armé ornemental",
+   "fabricant": "Lamberts",
+   "reference": "Verre ornemental",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "verre imprimé",
+    "verre armé",
+    "cloison"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://lamberts.info/fileadmin/user_upload/produkte/linit/downloads/prospekte/linit_projekte/Interior/Glasfabrik_Lamberts_fr_Interior_imprimable.pdf",
+     "titre": "Brochure aménagement intérieur (FR)"
+    }
+   ],
+   "sous": "Verre décoratif d'agencement (imprimé, miroir)",
+   "perf": "Aussi verre solaire sans antimoine EcoSolar",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "pilkington-pyrostop",
+   "lot": "L10",
+   "nom": "Verre multi-feuilleté coupe-feu EI 60 à EI 180 Pyrostop, et Pyrostop Line bord à bord",
+   "fabricant": "Pilkington",
+   "reference": "Pyrostop",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "coupe-feu",
+    "EI",
+    "cloison vitrée",
+    "résistance au feu"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.pilkington.com/fr-fr/fr/produits/categories-de-produits/resistance-au-feu/pilkington-pyrostop",
+     "titre": "Pilkington Pyrostop"
+    },
+    {
+     "type": "site",
+     "url": "https://www.pilkington.com/fr-fr/fr/produits/categories-de-produits/resistance-au-feu/pilkington-pyrostop-line",
+     "titre": "Pilkington Pyrostop Line"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.pilkington.com/fr-fr/fr/produits/liste-produits",
+     "titre": "Liste des produits (Pyrodur EW, Pyroclear E)"
+    }
+   ],
+   "sous": "Verres résistants au feu (EW, EI)",
+   "perf": "Intercalaires intumescents, verre extra-clair Optiwhite dès EI 60 ; Line : joint vertical de 3 à 5 mm, jusqu'à 120 min, intérieur, menuiserie bois ou métal ; pare-flammes EW : Pyrodur",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "pilkington-suncool",
+   "lot": "L07",
+   "nom": "Verres à couche de contrôle solaire faiblement émissifs Suncool (dont Pro T à tremper, Q, OW)",
+   "fabricant": "Pilkington",
+   "reference": "Suncool",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "contrôle solaire",
+    "faible émissivité",
+    "vitrage isolant",
+    "façade"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.pilkington.com/fr-fr/france/architectural-and-technical-glass/product-categories/solar-control/pilkington-suncool",
+     "titre": "Pilkington Suncool"
+    },
+    {
+     "type": "site",
+     "url": "https://www.pilkington.com/fr-fr/fr/produits/categories-de-produits/controle-solaire/pilkington-suncool-la-gamme/pilkington-suncool-pro-t",
+     "titre": "Pilkington Suncool Pro T"
+    }
+   ],
+   "sous": "Vitrages isolants, contrôle solaire et isolation",
+   "perf": "Couche off-line ; Pro T à tremper avant assemblage ; versions autonettoyante (Activ Suncool) et feuilletée (Suncool Optilam)",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "pilkington-optiwhite",
+   "lot": "L07",
+   "nom": "Verre float extra-clair à faible teneur en fer Optiwhite",
+   "fabricant": "Pilkington",
+   "reference": "Optiwhite",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "verre extra-clair",
+    "faible teneur en fer",
+    "vitrine",
+    "garde-corps"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.pilkington.com/fr-fr/france/architectural-and-technical-glass/product-categories/enhanced-visibility/pilkington-optiwhite",
+     "titre": "Pilkington Optiwhite"
+    }
+   ],
+   "sous": "Vitrages isolants, contrôle solaire et isolation",
+   "perf": "Épaisseurs de 2 à 19 mm ; tranche quasi incolore ; antireflet : OptiView",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "pilkington-profilit",
+   "lot": "L06",
+   "nom": "Verre profilé en U Profilit avec son système de pose",
+   "fabricant": "Pilkington",
+   "reference": "Profilit",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "verre profilé",
+    "U-glass",
+    "façade",
+    "translucide"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.pilkington.com/fr-fr/france/architectural-and-technical-glass/brand-names",
+     "titre": "Noms de produits Pilkington"
+    },
+    {
+     "type": "site",
+     "url": "https://archello.com/fr/product/pilkington-profilit",
+     "titre": "Pilkington Profilit (Archello)"
+    }
+   ],
+   "sous": "Verre profilé en U",
+   "perf": "Fabriqué par Pilkington Bauglasindustrie (Allemagne)",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "sgg-cool-lite",
+   "lot": "L07",
+   "nom": "Verres de contrôle solaire COOL-LITE (XTREME, SKN, ST)",
+   "fabricant": "Saint-Gobain",
+   "reference": "COOL-LITE",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "contrôle solaire",
+    "sélectivité",
+    "vitrage isolant",
+    "façade"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.saint-gobain-glass.fr/fr/produits/cool-lite-xtreme-7033",
+     "titre": "COOL-LITE XTREME 70/33"
+    },
+    {
+     "type": "site",
+     "url": "https://www.saint-gobain-glass.fr/fr/produits/cool-lite/gamme-cool-lite-skn",
+     "titre": "Gamme COOL-LITE SKN"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.saint-gobain-glass.fr/fr/documents/brochure/stgobaint-fiche-cool-lite-skn-155-2026-02.pdf",
+     "titre": "Fiche COOL-LITE SKN 155 (02/2026)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.saint-gobain-glass.fr/fr/produits/cool-lite-st-bright-silver-diamant",
+     "titre": "COOL-LITE ST Bright Silver"
+    }
+   ],
+   "sous": "Vitrages isolants, contrôle solaire et isolation",
+   "perf": "XTREME 70/33 : TL 70 %, 67 % de la chaleur bloquée ; SKN 155 : TL 50 %, sélectivité 1,85 ; substrats PLANICLEAR, DIAMANT (extra-clair) ou ORAÉ (bas carbone)",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "sgg-planitherm-one",
+   "lot": "L07",
+   "nom": "Verre à couche peu émissive PLANITHERM ONE",
+   "fabricant": "Saint-Gobain",
+   "reference": "PLANITHERM ONE",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "faible émissivité",
+    "double vitrage",
+    "isolation thermique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.saint-gobain-glass.fr/fr/produits/planitherm-one",
+     "titre": "PLANITHERM ONE"
+    }
+   ],
+   "sous": "Vitrages isolants, contrôle solaire et isolation",
+   "perf": "Ug 1,0 W/(m².K) en 4-16 argon-4",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "sgg-climaplus-climatop",
+   "lot": "L07",
+   "nom": "Doubles et triples vitrages isolants CLIMAPLUS et CLIMATOP (PROTECT, SILENCE, SCREEN)",
+   "fabricant": "Saint-Gobain",
+   "reference": "CLIMAPLUS, CLIMATOP",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "double vitrage",
+    "triple vitrage",
+    "vitrage isolant",
+    "acoustique"
+   ],
+   "liens": [
+    {
+     "type": "fdes",
+     "url": "https://www.saint-gobain-glass.fr/fr/documents/triples-vitrages-climatop-avec-trois-faces-monolithiques/2021-09-03-fdes-glass-triple-vitrage-climatop-6-16-4-16-4.pdf",
+     "titre": "FDES CLIMATOP 6-16-4-16-4"
+    },
+    {
+     "type": "fdes",
+     "url": "https://www.saint-gobain-glass.fr/fr/documents/fiche-de-declaration-environnementale-et-sanitaire-fdes/2021-06-21-fdes-glass-vitrage-isolants-climaplus-protect-2-faces-feuillet-33.2-16-44.2.pdf",
+     "titre": "FDES CLIMAPLUS PROTECT 33.2-16-44.2"
+    }
+   ],
+   "sous": "Vitrages isolants, contrôle solaire et isolation",
+   "perf": "CLIMATOP 6-16-4-16-4 : Ug 0,511 W/(m².K) minimum ; CLIMAPLUS SCREEN : store intégré ; CLIMAPLUS SILENCE : acoustique",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "sgg-stadip",
+   "lot": "L07",
+   "nom": "Verres feuilletés de sécurité et acoustiques STADIP, STADIP PROTECT, STADIP SILENCE",
+   "fabricant": "Saint-Gobain",
+   "reference": "STADIP",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "verre feuilleté",
+    "sécurité",
+    "acoustique",
+    "garde-corps"
+   ],
+   "liens": [
+    {
+     "type": "fdes",
+     "url": "https://www.saint-gobain-glass.fr/fr/documents/fiche-de-declaration-environnementale-et-sanitaire-fdes/fdes-glass-verre-feuillet-de-scurit-stadip-33.1.pdf",
+     "titre": "FDES STADIP 33.1"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.saint-gobain-glass.fr/fr/activites-saint-gobain-glass",
+     "titre": "Gammes Saint-Gobain Glass"
+    }
+   ],
+   "sous": "Verres feuilletés de sécurité et acoustiques",
+   "perf": "Variantes COLOR et OPALE ; SILENCE : PVB acoustique",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "sgg-bioclean",
+   "lot": "L07",
+   "nom": "Verre autonettoyant BIOCLEAN",
+   "fabricant": "Saint-Gobain",
+   "reference": "BIOCLEAN",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "autonettoyant",
+    "verrière",
+    "façade",
+    "entretien"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.saint-gobain-glass.fr/fr/produits/bioclean",
+     "titre": "BIOCLEAN"
+    }
+   ],
+   "sous": "Vitrages isolants, contrôle solaire et isolation",
+   "perf": "Couche photocatalytique et hydrophile en face extérieure",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "sgg-priva-lite",
+   "lot": "L10",
+   "nom": "Verre à opacité commandée PRIVA-LITE (translucide ou transparent sur commande électrique)",
+   "fabricant": "Saint-Gobain",
+   "reference": "PRIVA-LITE",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "verre commutable",
+    "cloison",
+    "intimité",
+    "salle de réunion"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.saint-gobain-glass.fr/fr/produits/priva-lite",
+     "titre": "PRIVA-LITE"
+    }
+   ],
+   "sous": "Verre à opacité commandée",
+   "perf": "",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "agc-stopray",
+   "lot": "L07",
+   "nom": "Verres de contrôle solaire Stopray (Vision, Ultraselect)",
+   "fabricant": "AGC",
+   "reference": "Stopray",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "contrôle solaire",
+    "vitrage isolant",
+    "façade"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.agc-yourglass.com/fr-FR/marques/stopray",
+     "titre": "Stopray"
+    }
+   ],
+   "sous": "Vitrages isolants, contrôle solaire et isolation",
+   "perf": "Stopray Vision 70/35 : TL 70 %, facteur solaire 35 %, Ug 1,0 ; versions T à traiter thermiquement",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "agc-iplus",
+   "lot": "L07",
+   "nom": "Verres à faible émissivité iplus",
+   "fabricant": "AGC",
+   "reference": "iplus",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "faible émissivité",
+    "double vitrage",
+    "isolation thermique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.agc-yourglass.com/fr-BE/marques/iplus",
+     "titre": "iplus"
+    }
+   ],
+   "sous": "Vitrages isolants, contrôle solaire et isolation",
+   "perf": "iplus 1.0 : TL 77 %, facteur solaire 57 %, Ug 1,0",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "agc-stratobel",
+   "lot": "L07",
+   "nom": "Verres feuilletés de sécurité Stratobel et acoustiques Stratophone",
+   "fabricant": "AGC",
+   "reference": "Stratobel, Stratophone",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "verre feuilleté",
+    "sécurité",
+    "acoustique",
+    "garde-corps"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.agc-yourglass.com/fr-BE/marques/stratobel",
+     "titre": "Stratobel"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.agc-yourglass.com/sites/default/files/2023-01/Pocket_Value_Stratobel_0123_FR.pdf",
+     "titre": "Stratobel et Stratophone : performances (01/2023)"
+    }
+   ],
+   "sous": "Verres feuilletés de sécurité et acoustiques",
+   "perf": "Garantie 10 ans ; Strong 44.2 : 1B1, P2A ; versions Clearvision (extra-clair), à couche, colorées",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "agc-pyrobel",
+   "lot": "L10",
+   "nom": "Verres feuilletés résistants au feu Pyrobel (EI 30 à EI 120) et Pyrobelite (EW)",
+   "fabricant": "AGC",
+   "reference": "Pyrobel, Pyrobelite",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "coupe-feu",
+    "pare-flammes",
+    "EI",
+    "EW"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://www.agc-yourglass.com/sites/default/files/brochures/original/PYROBEL_FR44714PYROBEL_BROCHURE_FR_FIN.pdf",
+     "titre": "Brochure Pyrobel (FR)"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.agc-yourglass.com/fr-FR/bibliotheque-de-documents",
+     "titre": "Bibliothèque de documents AGC (FDES Pyrobel)"
+    }
+   ],
+   "sous": "Verres résistants au feu (EW, EI)",
+   "perf": "Pyrobel Vision Line sans montant intermédiaire, aussi en Clearvision",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "3form-varia",
+   "lot": "L10",
+   "nom": "Panneaux de résine translucides Varia (écorésine à inclusions), Chroma et Struttura",
+   "fabricant": "3form",
+   "reference": "Varia",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "résine",
+    "translucide",
+    "cloison",
+    "rétroéclairage"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/amp/fiche/produits/panneau-de-decoration-en-resine-polyester-p69102993.html",
+     "titre": "Varia (Batiproduits)"
+    },
+    {
+     "type": "autre",
+     "url": "https://3-form.com/finishes",
+     "titre": "Finitions 3form"
+    },
+    {
+     "type": "cat",
+     "url": "https://issuu.com/3-form/docs/9886_3form_emea_catalog_v1_compress",
+     "titre": "Guide de conception des matériaux en résine (EMEA)"
+    }
+   ],
+   "sous": "Panneaux de résine translucides",
+   "perf": "Varia : réaction au feu B-s1, formable à chaud, intercalaires (bois, textile, végétaux…) ; 250 teintes ; panneaux de 1,52 x 3,05 m",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "3form-chroma-koda-xt",
+   "lot": "L06",
+   "nom": "Panneaux de résine pour l'extérieur Chroma XT et Koda XT",
+   "fabricant": "3form",
+   "reference": "Chroma XT, Koda XT",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "résine",
+    "extérieur",
+    "bardage",
+    "auvent",
+    "translucide"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://pdf.archiexpo.com/pdf/3form/xteriors-brochure/4510-270227.html",
+     "titre": "Brochure Xteriors"
+    },
+    {
+     "type": "cert",
+     "url": "https://icc-es.org/wp-content/uploads/report-directory/ESR-3676.pdf",
+     "titre": "Rapport ICC-ES ESR-3676 (États-Unis)"
+    }
+   ],
+   "sous": "Bardages",
+   "perf": "Koda XT : polycarbonate à haute résistance aux chocs ; Chroma XT : acrylique, finition mate renouvelable, stable aux UV",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "kawneer-aa100",
+   "lot": "L07",
+   "nom": "Mur-rideau et verrière AA100 (dont AA100 HI et façade inversée)",
+   "fabricant": "Kawneer",
+   "reference": "AA100",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "mur-rideau",
+    "verrière",
+    "façade",
+    "aluminium"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/mur-rideau-drainant-pour-facades-vitrees-ou-gran-p68926718.html",
+     "titre": "AA100 (Batiproduits)"
+    },
+    {
+     "type": "cert",
+     "url": "https://database.passivehouse.com/fr/components/details/curtain_wall_system/kawneer-uk-limited-aa-100-hi-1024cw03",
+     "titre": "AA 100 HI certifié Passivhaus, Uw 0,80"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.kawneer.fr/projets/",
+     "titre": "Réalisations Kawneer"
+    }
+   ],
+   "sous": "Murs-rideaux et verrières",
+   "perf": "Vue d'aluminium 50 mm ; profilés traditionnels ou auto-drainants ; conforme au DTU 33.1",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "kawneer-1202",
+   "lot": "L07",
+   "nom": "Mur-rideau aspect grille 1202",
+   "fabricant": "Kawneer",
+   "reference": "1202",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "mur-rideau",
+    "façade",
+    "aluminium"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.kawneer.fr/product-comparison/",
+     "titre": "Comparaison des produits Kawneer"
+    }
+   ],
+   "sous": "Murs-rideaux et verrières",
+   "perf": "Vue d'aluminium 50 mm ; prise de vitrage de 4 à 40 mm",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "kawneer-kalory",
+   "lot": "L07",
+   "nom": "Fenêtres et portes-fenêtres aluminium à ouvrant visible KALORY (dont KALORY'R respirante et KALORY E)",
+   "fabricant": "Kawneer",
+   "reference": "KALORY",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "fenêtre",
+    "aluminium",
+    "ouvrant visible"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/fenetres-et-porte-fenetre-en-aluminium-a-ouvran-p68926608.html",
+     "titre": "KALORY (Batiproduits)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.kawneer.fr/tous-les-produits-a-z/",
+     "titre": "Tous les produits Kawneer"
+    }
+   ],
+   "sous": "Aluminium",
+   "perf": "Dormant 52, 62 ou 72 mm ; prise de vitrage jusqu'à 54 mm ; Uw jusqu'à 1,0 ; jusqu'à 40 dB ; version mixte alu/bois",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "kawneer-kassiopee",
+   "lot": "L07",
+   "nom": "Fenêtres aluminium à ouvrant caché KASSIOPEE",
+   "fabricant": "Kawneer",
+   "reference": "KASSIOPEE",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "fenêtre",
+    "aluminium",
+    "ouvrant caché"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://www.usine-online.com/img/cms/FENETRE/ALU/plaquette_FENETRE_kassiopee.pdf",
+     "titre": "Plaquette KASSIOPEE"
+    }
+   ],
+   "sous": "Aluminium",
+   "perf": "",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "kawneer-kasting",
+   "lot": "L07",
+   "nom": "Coulissants et galandages aluminium KASTING 52/62/72 mm",
+   "fabricant": "Kawneer",
+   "reference": "KASTING",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "coulissant",
+    "galandage",
+    "aluminium",
+    "baie"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.kawneer.fr/produits/coulissants/le-coulissant-kasting-la-solution-optimale/",
+     "titre": "Coulissant KASTING 52/62/72 mm"
+    }
+   ],
+   "sous": "Portes et coulissants aluminium",
+   "perf": "Uw jusqu'à 1,3 ; 35 dB ; vitrage jusqu'à 36 mm ; 250 kg par vantail ; jusqu'à 4 x 2,70 m ; AEV A*3 E*7B V*A2 ; coulissant d'angle sans poteau",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "kawneer-portes",
+   "lot": "L07",
+   "nom": "Portes aluminium KANADA (entrée) et K190 (grand trafic)",
+   "fabricant": "Kawneer",
+   "reference": "KANADA, K190",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "porte",
+    "aluminium",
+    "grand trafic",
+    "ERP"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiweb.com/produit-btp/k190-porte-grand-trafic-et-grande-dimension-330328",
+     "titre": "K190 porte grand trafic (Batiweb)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.kawneer.fr/tous-les-produits-a-z/",
+     "titre": "Tous les produits Kawneer"
+    }
+   ],
+   "sous": "Portes et coulissants aluminium",
+   "perf": "",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "3m-films-solaires-securite",
+   "lot": "L13",
+   "nom": "Films pour vitrages de protection solaire Prestige et de sécurité Scotchshield",
+   "fabricant": "3M",
+   "reference": "Prestige, Scotchshield",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "film solaire",
+    "film de sécurité",
+    "vitrage",
+    "rénovation"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.3msuisse.ch/3M/fr_CH/p/c/films/i/design-et-construction/design-et-architecture",
+     "titre": "Films 3M design et architecture"
+    },
+    {
+     "type": "site",
+     "url": "https://www.3mfrance.fr/3M/fr_FR/p/c/films/i/solutions-commerciales/",
+     "titre": "Films 3M (France)"
+    }
+   ],
+   "sous": "Films pour vitrages (solaires, sécurité, décoratifs)",
+   "perf": "Prestige intérieur ou extérieur ; Scotchshield Ultra : sécurité et protection solaire",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "3m-fasara-dichroic",
+   "lot": "L13",
+   "nom": "Films décoratifs pour vitrages FASARA (dépolis, motifs) et dichroïques",
+   "fabricant": "3M",
+   "reference": "FASARA, Dichroic",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "film décoratif",
+    "vitrophanie",
+    "dépoli",
+    "dichroïque"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.3mbelgique.be/3M/fr_BE/architectural-design-fr-be/produits",
+     "titre": "Films architecturaux 3M"
+    }
+   ],
+   "sous": "Films pour vitrages (solaires, sécurité, décoratifs)",
+   "perf": "",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "3m-di-noc",
+   "lot": "L13",
+   "nom": "Revêtements adhésifs architecturaux DI-NOC (intérieur, extérieur, verre)",
+   "fabricant": "3M",
+   "reference": "DI-NOC",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "film adhésif",
+    "rénovation",
+    "habillage",
+    "aspect bois"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.3mbelgique.be/3M/fr_BE/architectural-design-fr-be/produits",
+     "titre": "Films architecturaux 3M"
+    }
+   ],
+   "sous": "Revêtements adhésifs architecturaux",
+   "perf": "Séries Exterior, Abrasion Resistant, Glass, carrelage mural",
+   "projets": "",
+   "notes": "Adresses relevées le 19/11/2026 dans l'index de recherche, non ouvertes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
   }
  ],
  "societes": {
@@ -29073,6 +30186,28 @@ window.TD_DONNEES = {
    "site": "bluetek.fr",
    "docs": "https://www.batiproduits.com/fiche/fabricant/hexadome-48698/",
    "notes": "Luynes (37). Produits commercialisés par Bluetek depuis 2016 (groupe Adexsi, Soprema)."
+  },
+  "la rochere": {
+   "site": "larochere.com"
+  },
+  "saverbat": {
+   "site": "saverbat.com"
+  },
+  "lamberts": {
+   "site": "lamberts.info"
+  },
+  "pilkington": {
+   "site": "pilkington.com",
+   "docs": "https://www.pilkington.com/fr-fr/fr/produits/liste-produits"
+  },
+  "3form": {
+   "site": "3-form.com"
+  },
+  "kawneer": {
+   "site": "kawneer.fr"
+  },
+  "3m": {
+   "site": "3mfrance.fr"
   }
  },
  "liensRemplaces": {
