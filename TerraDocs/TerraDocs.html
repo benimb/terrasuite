@@ -182,15 +182,88 @@ dialog .act{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
   #print .u{font-family:var(--f-mono);font-size:8pt;color:#333;overflow-wrap:anywhere}
   #print .s{color:#555;font-size:9pt}
 }
+
+/* ---------- explorer : choix du lot sur la maison, puis de la sous-catégorie sur un schéma de détail ---------- */
+.ex{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 380px}
+.ex-main{display:flex;flex-direction:column;min-height:0;padding:12px 16px 16px;gap:8px}
+.ex-crumb{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px}
+.ex-crumb button{border:0;background:transparent;color:var(--accent);cursor:pointer;padding:2px 4px;border-radius:4px;font-weight:500}
+.ex-crumb button:hover{background:var(--accent-soft)}
+.ex-crumb .sep{color:var(--muted)}
+.ex-crumb b{font-weight:600}
+.ex-fig{position:relative;flex:1;min-height:260px;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex}
+.ex-fig svg{width:100%;height:100%;display:block}
+.ex-tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--panel);font-size:12px;padding:4px 8px;border-radius:5px;white-space:nowrap;transform:translate(-50%,-130%);z-index:3;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.ex-side{border-left:1px solid var(--line);background:var(--sunk);overflow:auto;padding:12px 14px 30px;display:flex;flex-direction:column;gap:10px}
+.ex-side h3{font-size:15px;display:flex;align-items:baseline;gap:8px}
+.ex-side h3 .c{font-family:var(--f-mono);font-size:12px;color:var(--accent)}
+.ex-list{display:flex;flex-direction:column;gap:1px}
+.ex-list button{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:8px;align-items:center;text-align:left;border:0;background:transparent;padding:6px 8px;border-radius:6px;cursor:pointer;color:inherit}
+.ex-list button:hover,.ex-list button.hl{background:var(--accent-soft)}
+.ex-list button.on{background:var(--accent);color:var(--accent-ink)}
+.ex-list button.on .n,.ex-list button.on .c{color:var(--accent-ink)}
+.ex-list button.z{color:var(--muted)}
+.ex-list .c{font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
+.ex-list .k{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-size:11px;font-weight:600}
+.ex-list button.on .k{background:var(--accent-ink);color:var(--accent)}
+.ex-list .k.no{background:transparent;color:var(--muted);border:1px dashed var(--line)}
+.ex-list .n{font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
+.ex-prods{display:flex;flex-direction:column;gap:6px}
+.ex-prod{display:grid;grid-template-columns:28px minmax(0,1fr);gap:4px 10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;cursor:pointer;text-align:left;color:inherit}
+.ex-prod:hover{border-color:var(--accent)}
+.ex-prod .t{font-weight:500;line-height:1.3}
+.ex-prod .s{grid-column:2;font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+.ex-prod .lg{width:28px;height:28px;border-radius:6px;object-fit:contain;background:#fff;border:1px solid var(--line2);display:grid;place-items:center;font-size:10px;font-weight:600;color:var(--muted)}
+.ex-legend{font-size:12px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+@media (max-width:900px){ .ex{display:block;overflow:auto} .ex-fig{flex:none;height:62vw;min-height:0} .ex-side{border-left:0;border-top:1px solid var(--line);overflow:visible} }
+/* dessin */
+.sch{--sk:#4B4F63;font-family:var(--f-ui)}
+.sch [class^="c-"],.sch [class*=" c-"]{stroke:var(--sk);stroke-width:.8;stroke-linejoin:round}
+.sch .c-none{fill:none} .sch .c-void{fill:var(--panel);stroke:none} .sch .c-void2{fill:#EEF3F7}
+.sch .c-earth{fill:#E9E1D3;stroke:none} .sch .c-earth2{fill:#D8CBB3}
+.sch .c-con{fill:#C9CBD3} .sch .c-con2{fill:#DADCE3} .sch .c-repair{fill:#8E9BB0}
+.sch .c-ins{fill:#F3D46B} .sch .c-ins-t{fill:#F3D46B;fill-opacity:.4}
+.sch .c-wood{fill:#D9A86C} .sch .c-glass{fill:#BFE3F2;fill-opacity:.85} .sch .c-glass2{fill:#8FCBE6;fill-opacity:.9} .sch .c-glass-op{fill:#E9EFF3}
+.sch .c-tile{fill:#C8664A} .sch .c-tile2{fill:#ECE7DE} .sch .c-green{fill:#8DBF7A} .sch .c-pave{fill:#CDBFA8} .sch .c-asph{fill:#5A5D66}
+.sch .c-metal{fill:#A9B0BC} .sch .c-metal2{fill:#C3C8D1} .sch .c-alu{fill:#B8BDC6} .sch .c-frame{fill:#8A8F9C} .sch .c-dark{fill:#3A3D4C}
+.sch .c-water{fill:#6FB3E0} .sch .c-soft{fill:#8C7BD6} .sch .c-rubber{fill:#4A4F5E} .sch .c-rubber2{fill:#6A7080}
+.sch .c-paint{fill:#E8B4A0} .sch .c-paint2{fill:#CFE0D2} .sch .c-plaster{fill:#F4F3EF} .sch .c-render{fill:#EADFC8}
+.sch .c-brick{fill:#B95E3C} .sch .c-red{fill:#D9483B} .sch .c-red2{fill:#E8796E} .sch .c-white{fill:#FBFBFB} .sch .c-light{fill:#FFE27A}
+.sch .c-fabric{fill:#7C8DB5} .sch .c-fabric2{fill:#B9C3DC;fill-opacity:.85} .sch .c-work{fill:#6B6E7A} .sch .c-site{fill:#E7C35A}
+.sch .c-membrane{fill:#4A4D58} .sch .c-membrane2{fill:#6D93B8} .sch .c-joint{fill:#2F3240} .sch .c-spandrel{fill:#5B7FA6}
+.sch .c-acou{fill:#A39582} .sch .c-resin{fill:#F0C45C;fill-opacity:.7} .sch .c-resin2{fill:#E59B3A;fill-opacity:.8} .sch .c-film{fill:#4F7FA8;fill-opacity:.45}
+.sch .c-fire{fill:#E7A0A0;fill-opacity:.6} .sch .c-fire-t{fill:#E7A0A0;fill-opacity:.45} .sch .c-fire2{fill:#F08A3C} .sch .c-ok{fill:#2E8B57} .sch .c-glue{fill:#B7B2A6} .sch .c-hatch{fill:#E7D9B8}
+.sch .ln{stroke:var(--sk);stroke-width:1;fill:none} .sch .ln2{stroke:var(--sk);stroke-width:1.6;fill:none} .sch .ln-l{stroke:var(--sk);stroke-opacity:.45;stroke-width:.8;fill:none} .sch .ln-w{stroke:#fff;stroke-opacity:.8;stroke-width:1;fill:none}
+.sch .beam{stroke:#B5824A;stroke-width:6;fill:none;stroke-linecap:round} .sch .beam2{stroke:#B5824A;stroke-width:3.5;fill:none}
+.sch .stair{stroke:#B5824A;stroke-width:4;fill:none;stroke-linejoin:round} .sch .stair2{stroke:var(--sk);stroke-width:2.5;fill:none}
+.sch .rail{stroke:#3A3D4C;stroke-width:2.6;fill:none;stroke-linecap:round} .sch .rail2{stroke:#3A3D4C;stroke-width:1.6;fill:none}
+.sch .pipe{stroke:#D9483B;stroke-width:3;fill:none} .sch .pipe-c{stroke:#3B82F6;stroke-width:3;fill:none} .sch .pipe-e{stroke:#8A7560;stroke-width:6;fill:none} .sch .pipe2{stroke:#E0A800;stroke-width:2.5;fill:none}
+.sch .pipe-h{stroke:#D9483B;stroke-width:2;fill:none;stroke-dasharray:6 3} .sch .duct{stroke:#A9B0BC;stroke-width:9;fill:none} .sch .cable{stroke:#333;stroke-width:3;fill:none} .sch .cable2{stroke:#2E8B57;stroke-width:3;fill:none}
+.sch .water{stroke:#6FB3E0;stroke-width:1.6;fill:none} .sch .pvb{stroke:#6D93B8;stroke-width:2.5}
+.sch .hit{fill:transparent!important;stroke:transparent!important;stroke-width:14px!important}
+.sch .hz{cursor:pointer;outline:none;transition:opacity .15s}
+.sch.hov .hz:not(.hl),.sch.hov .pin:not(.hl){opacity:.28}
+.sch .hz.hl > :not(.hit),.sch .hz:focus-visible > :not(.hit){filter:drop-shadow(0 0 2.5px var(--accent))}
+.sch .hz.on > :not(.hit){filter:drop-shadow(0 0 3px var(--accent))}
+.sch .off{opacity:.35;pointer-events:none}
+.sch .pin{cursor:pointer}
+.sch .pin circle{fill:var(--accent);stroke:var(--panel);stroke-width:2}
+.sch .pin text{fill:var(--accent-ink);font-size:11px;font-weight:600;text-anchor:middle;dominant-baseline:central;pointer-events:none;font-family:var(--f-mono)}
+.sch .pin.z circle{fill:var(--muted)}
+.sch .pin.on circle{fill:var(--ink)} .sch .pin.on text{fill:var(--panel)}
+.sch.nopins .pin{display:none}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .sch{--sk:#C9CBD8} :root:not([data-theme="light"]) .sch .c-earth{fill:#2B2720} :root:not([data-theme="light"]) .sch .c-void2{fill:#232634} :root:not([data-theme="light"]) .sch .c-plaster,:root:not([data-theme="light"]) .sch .c-white,:root:not([data-theme="light"]) .sch .c-tile2{fill:#D9D9D4} }
+:root[data-theme="dark"] .sch{--sk:#C9CBD8} :root[data-theme="dark"] .sch .c-earth{fill:#2B2720} :root[data-theme="dark"] .sch .c-void2{fill:#232634}
 </style>
 </head>
 <body>
 <div id="app">
   <header class="top">
     <a class="btn sm" id="back" href="../terrasuite.html" title="Page d'accueil TerraSuite">← TerraSuite</a>
-    <div class="brand">TerraDocs <span class="ver">v0.13.2</span><small>Produits et documentation par lot</small></div>
+    <div class="brand">TerraDocs <span class="ver">v0.14</span><small>Produits et documentation par lot</small></div>
     <nav class="tabs" role="tablist">
       <button role="tab" data-tab="accueil" aria-selected="false">Accueil</button>
+      <button role="tab" data-tab="explorer" aria-selected="false">Explorer</button>
       <button role="tab" data-tab="produits" aria-selected="true">Produits</button>
       <button role="tab" data-tab="lots" aria-selected="false">Lots</button>
       <button role="tab" data-tab="ressources" aria-selected="false">Ressources</button>
@@ -219,6 +292,17 @@ dialog .act{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
   </header>
 
   <section class="view" id="v-accueil" hidden style="overflow:auto"></section>
+
+  <section class="view" id="v-explorer" hidden>
+    <div class="ex">
+      <div class="ex-main">
+        <div class="ex-crumb" id="exCrumb"></div>
+        <div class="ex-fig" id="exFig"></div>
+        <div class="ex-legend"><label><input type="checkbox" id="exPins" checked> Numéros sur le schéma</label><span>Survolez une partie pour voir son lot, cliquez pour l'ouvrir. Clavier : Tab puis Entrée, Échap pour revenir.</span></div>
+      </div>
+      <aside class="ex-side" id="exSide"></aside>
+    </div>
+  </section>
 
   <section class="view" id="v-produits">
     <div class="three">
@@ -299,6 +383,7 @@ dialog .act{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
 <style>.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn{display:none!important}</style>
 <script src="../TerraChantier/terrasuite-compte.js" onerror="this.remove()"></script>
 <script src="TerraDocs-donnees.js" onerror="this.remove()"></script>
+<script src="TerraDocs-schemas.js" onerror="this.remove()"></script>
 <script>
 'use strict';
 /* ---------- constantes ---------- */
@@ -509,7 +594,7 @@ function filtered(){
 }
 
 /* ---------- rendu ---------- */
-function renderAll(){ renderFilters(); renderList(); renderDetail(); if(tab==='lots') renderLots(); }
+function renderAll(){ renderFilters(); renderList(); renderDetail(); if(tab==='lots') renderLots(); if(tab==='explorer') renderExplorer(); }
 /* sélecteur de projet et boutons de projet de la fiche (délégation : les zones sont redessinées séparément) */
 document.addEventListener('change', e => { if(e.target.id==='fProj'){ F.projet = e.target.value; renderAll(); } });
 document.addEventListener('click', e => { const b = e.target.closest('[data-pj]'); if(!b) return; const p = D.produits.find(x=>x.id===sel), pr = PROJ.find(x=>x.id===b.dataset.pj); if(!p || !pr) return;
@@ -947,8 +1032,9 @@ const confirmDlg = (t,b,ok,fn) => openDlg(t, b.startsWith('<')?b:`<p>${b}</p>`, 
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
   tab = b.dataset.tab;
   document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected', x===b));
-  ['accueil','produits','lots','ressources'].forEach(v=>$('#v-'+v).hidden = v!==tab);
+  ['accueil','explorer','produits','lots','ressources'].forEach(v=>$('#v-'+v).hidden = v!==tab);
   if(tab==='lots') renderLots();
+  if(tab==='explorer') renderExplorer();
   if(tab==='accueil') renderHomeDocs();
 });
 $('#q').addEventListener('input', e=>{ F.q = e.target.value; if(tab!=='produits') document.querySelector('[data-tab=produits]').click(); renderList(); });
@@ -1154,6 +1240,93 @@ const Ori = (() => {
   return { render, date, svg };
 })();
 
+
+/* ---------- explorer : la maison (choix du lot), puis le schéma de détail du lot (choix de la sous-catégorie) ---------- */
+const EX = { lot:null, sous:undefined };
+const exCount = (lid, s) => D.produits.filter(p=>p.lot===lid && (s===undefined || sousOf(p)===s)).length;
+const exPlural = n => n + ' produit' + (n>1?'s':'');
+/* sous-catégories du lot placées sur son schéma : chaque zone prend la première sous-catégorie libre qui correspond à son motif */
+function exPlace(l){
+  const S = window.TD_SCHEMAS, sch = S && S.lots[l.code]; const place = [], used = new Set();
+  if(sch) sch.zones.forEach(z=>{ if(!z.pin) return; const s = l.sous.find(x=>!used.has(x) && z.k.test(norm(x))); if(s===undefined) return; used.add(s); place.push({ z, s, n: place.length+1 }); });
+  return { sch, place, free: l.sous.filter(x=>!used.has(x)) };
+}
+function exGo(lid, s){ EX.lot = lid; EX.sous = s; renderExplorer(); }
+function exOpen(lid, s, pid){ goProduits(()=>{ F.lot = lid; F.sous = s===undefined ? null : s; if(pid) sel = pid; }); }
+function renderExplorer(){
+  const fig = $('#exFig'), side = $('#exSide'), crumb = $('#exCrumb'), S = window.TD_SCHEMAS;
+  if(EX.lot && !lotById(EX.lot)){ EX.lot = null; EX.sous = undefined; }
+  const l = EX.lot ? lotById(EX.lot) : null;
+  crumb.innerHTML = `<button data-ex="home">Maison</button>${l?`<span class="sep">›</span>${EX.sous===undefined?`<b>${esc(l.code)} ${esc(l.nom)}</b>`:`<button data-ex="lot">${esc(l.code)} ${esc(l.nom)}</button><span class="sep">›</span><b>${esc(EX.sous||'Sans sous-catégorie')}</b>`}`:''}`;
+  let svg = '', items = [];
+  if(!l){
+    /* niveau 1 : la maison, un lot par zone */
+    const M = S && S.maison;
+    if(M){
+      const z = M.ordre.map(c=>{ const lt = lotByCode(c); if(!lt) return `<g class="off">${M.zones[c]}</g>`; const n = exCount(lt.id);
+        return `<g class="hz" data-key="${esc(lt.id)}" tabindex="0" role="button" aria-label="${esc(lt.code+' '+lt.nom+', '+exPlural(n))}" data-tip="${esc(lt.code+' · '+lt.nom+' · '+exPlural(n))}">${M.zones[c]}</g>`; }).join('');
+      const pins = M.ordre.map(c=>{ const lt = lotByCode(c), pp = M.pins[c]; if(!lt || !pp) return ''; return `<g class="pin ${exCount(lt.id)?'':'z'}" data-key="${esc(lt.id)}"><circle cx="${pp[0]}" cy="${pp[1]}" r="11"/><text x="${pp[0]}" y="${pp[1]}">${esc(lt.code)}</text></g>`; }).join('');
+      svg = `<svg class="sch" viewBox="${M.vb}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Maison en coupe : choisissez un lot">${M.base}${z}${pins}</svg>`;
+    }
+    items = sortedLots().map(x=>({ key:x.id, k:x.code, t:x.nom, n:exCount(x.id) }));
+    side.innerHTML = `<h3>Choisir un lot</h3><p class="hint">Cliquez une partie de la maison, ou un lot ci-dessous. Les lots sans élément sur le dessin (à classer, lots ajoutés) restent dans la liste.</p>
+      <div class="ex-list" id="exList">${items.map(i=>`<button data-key="${esc(i.key)}" class="${i.n?'':'z'}"><span class="c">${esc(i.k)}</span><span>${esc(i.t)}</span><span class="n">${i.n||''}</span></button>`).join('')}</div>`;
+  } else {
+    /* niveau 2 : schéma de détail du lot, une zone numérotée par sous-catégorie */
+    const { sch, place, free } = exPlace(l), nAll = exCount(l.id), nNone = D.produits.filter(p=>p.lot===l.id && !sousOf(p)).length;
+    if(sch){
+      const placedZ = new Set(place.map(x=>x.z));
+      const dz = sch.zones.filter(z=>z.pin && !placedZ.has(z)).map(z=>`<g class="off">${z.d}</g>`).join('');
+      const hz = place.map(x=>{ const n = exCount(l.id, x.s); return `<g class="hz ${EX.sous===x.s?'on':''}" data-key="${esc(x.s)}" tabindex="0" role="button" aria-label="${esc(x.n+'. '+x.s+', '+exPlural(n))}" data-tip="${esc(x.n+' · '+x.s+' · '+exPlural(n))}">${x.z.d}</g>`; }).join('');
+      const pins = place.map(x=>`<g class="pin ${exCount(l.id,x.s)?'':'z'} ${EX.sous===x.s?'on':''}" data-key="${esc(x.s)}"><circle cx="${x.z.pin[0]}" cy="${x.z.pin[1]}" r="11"/><text x="${x.z.pin[0]}" y="${x.z.pin[1]}">${x.n}</text></g>`).join('');
+      svg = `<svg class="sch" viewBox="0 0 600 360" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${esc('Lot '+l.code+' : choisissez une sous-catégorie')}">${sch.base}${dz}${hz}${pins}</svg>`;
+    } else svg = `<div class="empty" style="margin:auto"><b>Pas de schéma pour ce lot</b><span>Choisissez la sous-catégorie dans la liste.</span></div>`;
+    items = [...place.map(x=>({ key:x.s, k:x.n, t:x.s, n:exCount(l.id,x.s) })), ...free.map(s=>({ key:s, k:'', t:s, n:exCount(l.id,s) })), ...(nNone?[{ key:'', k:'', t:'Sans sous-catégorie', n:nNone }]:[])];
+    const cur = EX.sous;
+    let prods = '';
+    if(cur!==undefined){
+      const ps = D.produits.filter(p=>p.lot===l.id && sousOf(p)===cur).sort((a,b)=>fabKey(a).localeCompare(fabKey(b),'fr')||String(a.nom).localeCompare(String(b.nom),'fr'));
+      prods = `<h3 style="margin-top:6px">${esc(cur||'Sans sous-catégorie')}<span class="grow"></span><button class="btn sm" data-ex="list">Dans la liste ›</button></h3>
+        ${ps.length?`<div class="ex-prods">${ps.map(p=>{ const src = p.fabricant ? fabLogoSrc(norm(p.fabricant.trim())) : '';
+          return `<button class="ex-prod" data-pid="${esc(p.id)}">${src?`<img class="lg" src="${esc(src)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'lg',textContent:'${esc(initials(p.fabricant))}'}))">`:`<span class="lg">${esc(initials(p.fabricant))}</span>`}<span class="t">${p.fav?'★ ':''}${esc(p.nom||'(sans nom)')}</span><span class="s">${esc(p.fabricant||'Sans société')}${p.reference?' · '+esc(p.reference):''} ${docBadges(p,false)}</span></button>`; }).join('')}</div>`
+          : `<p class="hint">Aucun produit dans cette sous-catégorie. <button class="btn sm" data-ex="new">+ Produit</button></p>`}`;
+    }
+    side.innerHTML = `<h3><span class="c">${esc(l.code)}</span>${esc(l.nom)}</h3>
+      <div class="row" style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn sm" data-ex="home">‹ Maison</button><button class="btn sm pri" data-ex="all">Tout le lot (${nAll})</button></div>
+      <p class="hint">${place.length?'Cliquez une zone numérotée du schéma ou une sous-catégorie ci-dessous.':'Choisissez une sous-catégorie ci-dessous.'}${free.length&&place.length?' Les sous-catégories sans numéro ne figurent pas sur le dessin.':''}</p>
+      <div class="ex-list" id="exList">${items.map(i=>`<button data-key="${esc(i.key)}" class="${i.n?'':'z'} ${cur===i.key?'on':''}"><span>${i.k?`<span class="k">${i.k}</span>`:'<span class="k no">·</span>'}</span><span>${esc(i.t)}</span><span class="n">${i.n||''}</span></button>`).join('')}</div>${prods}`;
+  }
+  fig.innerHTML = svg + '<div class="ex-tip" hidden></div>';
+  const sv = fig.querySelector('svg');
+  if(sv){
+    if(!$('#exPins').checked) sv.classList.add('nopins');
+    /* zones de clic élargies : copie transparente et épaisse de chaque forme */
+    sv.querySelectorAll('.hz').forEach(g=>[...g.children].forEach(el=>{ const c = el.cloneNode(); c.setAttribute('class','hit'); g.appendChild(c); }));
+  }
+  const tip = fig.querySelector('.ex-tip');
+  const hl = key => { fig.querySelectorAll('.hl').forEach(x=>x.classList.remove('hl')); side.querySelectorAll('.ex-list .hl').forEach(x=>x.classList.remove('hl'));
+    if(sv) sv.classList.toggle('hov', key!=null && [...sv.querySelectorAll('.hz')].some(g=>g.dataset.key===key));
+    if(key==null) return; fig.querySelectorAll('.hz,.pin').forEach(g=>{ if(g.dataset.key===key) g.classList.add('hl'); }); side.querySelectorAll('#exList button').forEach(b=>{ if(b.dataset.key===key) b.classList.add('hl'); }); };
+  const pick = key => l ? exGo(l.id, key) : exGo(key, undefined);
+  if(sv){
+    sv.addEventListener('mouseover', e=>{ const g = e.target.closest('.hz,.pin'); hl(g?g.dataset.key:null); });
+    sv.addEventListener('mouseleave', ()=>{ hl(null); tip.hidden = true; });
+    sv.addEventListener('mousemove', e=>{ const g = e.target.closest('.hz,.pin'); const k = g && g.dataset.key; const z = k!=null && [...sv.querySelectorAll('.hz')].find(x=>x.dataset.key===k);
+      if(!z){ tip.hidden = true; return; } const r = fig.getBoundingClientRect(); tip.textContent = z.dataset.tip; tip.style.left = (e.clientX-r.left)+'px'; tip.style.top = (e.clientY-r.top)+'px'; tip.hidden = false; });
+    sv.addEventListener('click', e=>{ const g = e.target.closest('.hz,.pin'); if(g) pick(g.dataset.key); });
+    sv.addEventListener('keydown', e=>{ const g = e.target.closest('.hz'); if(g && (e.key==='Enter'||e.key===' ')){ e.preventDefault(); pick(g.dataset.key); } });
+    sv.addEventListener('focusin', e=>{ const g = e.target.closest('.hz'); hl(g?g.dataset.key:null); });
+    sv.addEventListener('focusout', ()=>hl(null));
+  }
+  side.querySelectorAll('#exList button').forEach(b=>{ b.onmouseenter = ()=>hl(b.dataset.key); b.onmouseleave = ()=>hl(null); b.onclick = ()=>pick(b.dataset.key); });
+  side.querySelectorAll('.ex-prod').forEach(b=>b.onclick = ()=>exOpen(l.id, EX.sous, b.dataset.pid));
+  document.querySelectorAll('#v-explorer [data-ex]').forEach(b=>b.onclick = ()=>{ const a = b.dataset.ex;
+    if(a==='home') exGo(null, undefined); else if(a==='lot') exGo(l.id, undefined); else if(a==='all') exOpen(l.id, undefined); else if(a==='list') exOpen(l.id, EX.sous);
+    else if(a==='new'){ goTabDocs('produits'); newProduct({ lot:l.id, sous:EX.sous||'' }); } });
+}
+$('#exPins').addEventListener('change', e=>{ const sv = $('#exFig svg'); if(sv) sv.classList.toggle('nopins', !e.target.checked); });
+document.addEventListener('keydown', e=>{ if(e.key!=='Escape' || tab!=='explorer' || document.querySelector('dialog[open]')) return; if(EX.sous!==undefined) exGo(EX.lot, undefined); else if(EX.lot) exGo(null, undefined); });
+
 /* ---------- accueil de TerraDocs : que faire en arrivant ---------- */
 const goTabDocs = t => document.querySelector(`[data-tab=${t}]`).click();
 function goProduits(f){ F.lot=null; F.sous=null; F.statuts.clear(); F.tags.clear(); F.fav=false; F.manque=null; F.q=''; F.projet=''; const q=$('#q'); if(q) q.value=''; if(f) f(); goTabDocs('produits'); renderAll(); }
@@ -1168,7 +1341,8 @@ function renderHomeDocs(){
     actions: [
       { ic:'link', pri:true, t:'Ajouter un produit', s:'Collez le lien de la page produit ou de la fiche technique : fabricant et type de document sont devinés.', go: () => { goProduits(); setTimeout(()=>$('#quickUrl').focus(), 0); } },
       { ic:'search', t:'Chercher un produit', s:`${D.produits.length} produits, ${Object.keys(D.societes||{}).length} sociétés : par nom, fabricant, mot-clé ou lot.`, go: () => { goProduits(); setTimeout(()=>$('#q').focus(), 0); } },
-      { ic:'grid', t:'Parcourir par lot', s:'Lots de la nomenclature TerraSuite et sous-catégories, sociétés classées par ordre alphabétique.', go: () => goProduits() },
+      { ic:'grid', t:'Choisir sur la maison', s:'Cliquez une partie de l\'ouvrage pour ouvrir son lot, puis la sous-catégorie sur un schéma de détail.', go: () => { EX.lot = null; EX.sous = undefined; goTabDocs('explorer'); } },
+      { ic:'grid', t:'Parcourir la liste par lot', s:'Lots de la nomenclature TerraSuite et sous-catégories, sociétés classées par ordre alphabétique.', go: () => goProduits() },
       { ic:'doc', t:'Compléter la documentation', s:`${sansFT} produits sans fiche technique : filtre « document manquant ».`, go: () => goProduits(()=>{ F.manque='ft'; }) },
       { ic:'up', t:'Importer vos favoris', s:'Favoris du navigateur (Chrome, Edge, Firefox), CSV ou bibliothèque JSON.', go: () => pickFile('.html,.htm', importBookmarks) },
       { ic:'save', t:'Partager entre vos postes', s: fileHandle ? 'Lié au fichier '+fileHandle.name+'.' : 'Lier un fichier de données dans un dossier synchronisé.', go: () => linkFile() }
