@@ -186,7 +186,7 @@ html.ts-embed .brand small{display:none}
       <div class="menu" id="mFile" hidden>
         <button id="bNew">Nouvelle maquette (vide)</button>
         <button id="bOpen">Ouvrir un fichier…<span class="k">.json</span></button>
-        <button id="bImp">Importer…<span class="k">DXF, OBJ, DAE, glTF</span></button>
+        <button id="bImp">Importer…<span class="k">DWG, DXF, OBJ, DAE, glTF</span></button>
         <button id="bSave">Enregistrer une copie<span class="k">Ctrl+S</span></button>
         <hr>
         <button id="bObj">Exporter en OBJ<span class="k">Blender, SketchUp…</span></button>
@@ -797,7 +797,7 @@ function arcPts(A, B, h, n, nseg) {
 
 </script>
 <script>
-const APP_VERSION = '0.9';
+const APP_VERSION = '0.10';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const NF2 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 /* unités : la maquette est en mètres ; les longueurs s'affichent et se saisissent dans l'unité choisie (m, cm, mm) ; surfaces en m², volumes en m³ */
@@ -1911,21 +1911,50 @@ function selBar() {
   el.querySelectorAll('button').forEach(b => b.onclick = () => { const a = b.dataset.a; if (a === 'hide') { const gs = [...ST.sel.g]; doOp(m => { for (const g of gs) if (m.G[g]) m.G[g].hid = true; }); clearSel(); setStatus('Masqué : « Affichage » pour le réafficher'); } else if (a === 'grp') doGroup(); else if (a === 'ungrp') doUngroup(); else if (a === 'open') enterGroup(one); else if (a === 'del') delSel(); else if (a === 'copy') copySelection(); else if (a === 'comp') { const n = prompt('Nom du composant (ex. Fenêtre type, Lucarne)', M.G[one].nom); if (n && n.trim()) { doOp(m => { makeComponent(m, one, n.trim().slice(0, 60)); }); setStatus('Composant créé : ses copies (M avec Ctrl, ou Ctrl+C) resteront liées', 'ok'); selBar(); info(); } } else if (a === 'uniq') { doOp(m => { makeUnique(m, one); }); selBar(); info(); setStatus('Instance détachée du composant', 'ok'); } else if (a === 'ren') { const n = prompt('Nom du groupe', M.G[one].nom); if (n && n.trim()) doOp(m => { m.G[one].nom = n.trim().slice(0, 60); }); } cv.focus(); });
 }
 
-/* ================= Import : DXF (tracé 2D ou faces 3D, par calques), OBJ, DAE (SketchUp), glTF ================= */
+/* ================= Import : DWG et DXF (tracé 2D ou faces 3D, par calques), OBJ, DAE (SketchUp), glTF ================= */
 const IMP = { data: null };
 function impFile(file) {
   const ext = (file.name.split('.').pop() || '').toLowerCase();
-  if (ext === 'dwg') { impMsg('Format DWG', 'Le DWG (AutoCAD) est un format fermé que le navigateur ne lit pas. Enregistrez le plan en <b>DXF</b> : AutoCAD ou ArchiCAD, Enregistrer sous &gt; DXF, ou le convertisseur gratuit ODA File Converter. Puis importez le DXF.'); return; }
+  if (ext === 'dwg') { impDWG(file); return; }
   if (ext === 'skp') { impMsg('Format SketchUp', 'Le format .skp n\'est pas lisible hors de SketchUp. Dans SketchUp : Fichier &gt; Exporter &gt; Modèle 3D, au format <b>COLLADA (.dae)</b>, <b>OBJ</b> ou <b>glTF</b> pour un modèle ; pour un tracé à redessiner, exportez la vue en plan en <b>DXF</b> (SketchUp Pro, Exporter &gt; Graphique 2D).'); return; }
   const rd = new FileReader();
   rd.onload = async () => { try {
     if (ext === 'dxf') IMP.data = { kind: 'dxf', name: file.name, ...parseDXF(rd.result) };
     else if (ext === 'obj') IMP.data = { kind: 'mesh', name: file.name, unit: 'm', ...parseOBJ(rd.result) };
     else if (ext === 'dae' || ext === 'gltf' || ext === 'glb') IMP.data = { kind: 'mesh', name: file.name, unit: 'auto', ...(await parse3D(ext, rd.result)) };
-    else throw new Error('format non reconnu (DXF, OBJ, DAE, glTF, GLB)');
+    else throw new Error('format non reconnu (DWG, DXF, OBJ, DAE, glTF, GLB)');
     impDialog();
   } catch (e) { setStatus('Import impossible : ' + e.message, 'err'); } };
   if (ext === 'glb') rd.readAsArrayBuffer(file); else rd.readAsText(file);
+}
+/* DWG : converti en DXF dans le navigateur par LibreDWG (WebAssembly, ~8 Mo chargés au premier import DWG puis gardés en cache), puis lu comme un DXF */
+const DWG_LIB = 'https://cdn.jsdelivr.net/npm/@mlightcad/libredwg-web@0.9.0/wasm/';
+let dwgMod = null;
+async function dwgModule() {
+  if (!dwgMod) dwgMod = import(DWG_LIB + 'libredwg-web.js').then(m => (m.default || m.createModule)({ locateFile: f => DWG_LIB + f, print: () => {}, printErr: () => {} })).catch(e => { dwgMod = null; throw e; });
+  return dwgMod;
+}
+function dwgToDXF(mod, buf) {
+  const fi = 'ts-in.dwg', fo = 'ts-out.dxf', FS = mod.FS, rm = f => { try { if (FS.analyzePath(f, false).exists) FS.unlink(f); } catch (e) { } };
+  try {
+    FS.writeFile(fi, new Uint8Array(buf)); const err = mod.dwg_write_dxf(fi, fo);
+    if (!FS.analyzePath(fo, false).exists || err >= 128) throw new Error('DWG illisible (code ' + err + ')');
+    const b = FS.readFile(fo); try { return new TextDecoder('utf-8', { fatal: true }).decode(b); } catch (e) { return new TextDecoder('windows-1252').decode(b); }
+  } finally { rm(fi); rm(fo); }
+}
+function impDWG(file) {
+  const rd = new FileReader();
+  rd.onload = async () => {
+    setStatus('Lecture du DWG… (premier import : chargement du lecteur, quelques secondes)');
+    try {
+      const mod = await dwgModule(), txt = dwgToDXF(mod, rd.result);
+      IMP.data = { kind: 'dxf', name: file.name, ...parseDXF(txt) }; setStatus(''); impDialog();
+    } catch (e) {
+      console.warn(e); setStatus('');
+      impMsg('DWG non lu', `Ce DWG n'a pas pu être lu dans le navigateur (${escH(e.message || String(e))}). Enregistrez-le en <b>DXF</b> (AutoCAD ou ArchiCAD : Enregistrer sous &gt; DXF, ou le convertisseur gratuit ODA File Converter), puis importez le DXF.`);
+    }
+  };
+  rd.readAsArrayBuffer(file);
 }
 function impMsg(t, html) { const el = $('#imp'); el.innerHTML = `<h3>${t}</h3><p>${html}</p><div class="r"><span class="grow"></span><button class="btn" id="impX">Fermer</button></div>`; el.hidden = false; $('#impX').onclick = () => { el.hidden = true; cv.focus(); }; }
 /* DXF : lignes, polylignes (arcs compris), cercles, arcs, ellipses, splines, 3DFACE, SOLID, maillages polyface, blocs insérés */
@@ -2130,7 +2159,7 @@ const HELP = `<h3>Unités</h3><table>
 <tr><td>Composants</td><td>Un groupe devient composant (barre de sélection, « Composant ») : ses copies restent liées, modifier une instance (double-clic) modifie les autres à la fermeture, même tournées ou retournées. « Rendre unique » détache une instance. Panneau « Composants » : sélectionner toutes les instances, en placer une nouvelle, renommer.</td></tr>
 <tr><td>Ctrl+C · X · V</td><td>Copier, couper, coller : l'objet collé suit le curseur (coin bas), clic pour le poser. Ctrl+Maj+V : coller sur place, aux mêmes coordonnées. Le presse-papiers passe d'une maquette à l'autre (autre projet, autre onglet). Boutons « Coller » et « Sur place » en haut.</td></tr>
 <tr><td>Groupes</td><td>Sélection puis « Grouper » (Ctrl+G) : la géométrie du groupe reste à part, elle ne se soude pas au reste. Un clic sélectionne tout le groupe, M le déplace (Ctrl : copie), double-clic l'ouvre pour le modifier (le reste passe en grisé), Échap le referme. « Dégrouper » (Ctrl+Maj+G) remet la géométrie dans la maquette.</td></tr>
-<tr><td>Importer</td><td>DXF : tracé 2D à plat par calques, pour dessiner dessus (les accroches suivent le tracé), ou faces 3D. Modèles OBJ, DAE (SketchUp : Exporter &gt; Modèle 3D), glTF. Chaque import arrive dans un groupe. DWG et SKP : passer par leurs exports DXF, DAE, OBJ.</td></tr>
+<tr><td>Importer</td><td>DWG et DXF : tracé 2D à plat par calques, pour dessiner dessus (les accroches suivent le tracé), ou faces 3D. Modèles OBJ, DAE (SketchUp : Exporter &gt; Modèle 3D), glTF. Chaque import arrive dans un groupe. Le DWG est lu directement (premier import : quelques secondes de chargement) ; s'il échoue, passer par un export DXF. SKP : passer par l'export DAE, OBJ ou glTF de SketchUp.</td></tr>
 <tr><td>Image</td><td>Enregistre la vue actuelle en image PNG, à la taille de l'écran ou en haute définition (Full HD, 4K, 8K), fond transparent au choix.</td></tr>
 <tr><td>Export DXF</td><td>En vue parallèle (plan, élévation, coupe) : dessin 2D en DXF, à l'échelle, dans l'unité choisie. Arêtes vues seulement (lignes cachées retirées), traits de coupe sur un calque COUPE, cotations et textes ; les groupes balisés sur un calque à leur nom. Avec un « Plan » de niveau : plan à 1,20 m.</td></tr>
 <tr><td>Emprise</td><td>Panneau Niveaux : emprise au sol (projection verticale des volumes), surfaces brute et de plancher approchée par niveau (hauteur sous plafond de plus de 1,80 m, murs extérieurs déduits selon leur épaisseur).</td></tr>
