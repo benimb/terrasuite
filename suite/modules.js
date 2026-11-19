@@ -284,6 +284,7 @@ const TSMod = (() => {
     plans: (p, b) => documents(b, p, { coll: 'plans', title: "Plans et notice de l'avant-projet", hint: 'Plans, coupes, façades, notice descriptive, perspectives : avec indice et date ; repris pour le dossier de PC.', accept: '.pdf,image/*,.dwg,.dxf,.docx' }),
     dce: (p, b) => documents(b, p, { coll: 'dce', title: 'Dossier de consultation des entreprises', hint: 'Pièces du DCE : RC, CCAP, CCTP par lot, DPGF vierges, plans, planning. Le CCTP et la DPGF se génèrent dans le sous-onglet Descriptif (TerraEstim).', lot: true }),
     doe: (p, b) => documents(b, p, { coll: 'doe', title: 'DOE, DIUO', hint: "Dossiers des ouvrages exécutés reçus par lot (plans d'exécution, notices, fiches techniques, PV d'essais), DIUO du coordonnateur SPS.", lot: true }),
+    secu: (p, b) => TSSecu.view(p, b, { SD, printDoc, dFr, today }),
     plu, prog: programme, marches, rapport, os: osModule, situations, pvopr: pvOpr, pv: pvReception, gpa, fingpa: finGpa
   };
   return { MODS, SD };
