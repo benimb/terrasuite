@@ -83,6 +83,7 @@ html.ts-embed .brand small{display:none}
 .srow .snm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.srow.root{font-style:italic}.srow .ibtn.sm{width:26px;height:26px;font-size:13px;padding:0}
 .sbadge{background:var(--accent);color:var(--accent-ink);border-radius:3px;padding:0 4px;font-weight:600}.einfo .nivt th{width:34%;font-weight:600}
 .err{color:#C0392B}
+.ounit{display:none!important}@media (max-width:760px){.ounit{display:flex!important}.funit{display:none!important}}
 .pv{font-size:11px;border-radius:4px;padding:1px 5px;white-space:nowrap;display:inline-block;max-width:150px;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}.pv.plu{background:#E6F0E2;color:#2E6B3F}.pv.sa{background:#E7ECF7;color:#2F4F9A}.pv.hy{background:#F6EAD6;color:#8A5A12}
 .nivt.env input{width:58px}.nivt.env td{white-space:nowrap}.nivt.env th{font-weight:500}
 .nivt{width:100%;border-collapse:collapse;font-size:13px} .nivt th,.nivt td{padding:2px 3px;border-bottom:1px solid var(--line);text-align:left} .nivt .num{text-align:right;white-space:nowrap} .nivt td:last-child{white-space:nowrap} .nivt input{width:100%;min-width:0;font:inherit;padding:2px 4px;border:1px solid var(--line);border-radius:4px}
@@ -219,6 +220,7 @@ html.ts-embed .brand small{display:none}
         <button id="bSunM">Ombres du soleil…</button>
         <hr>
         <label><input type="checkbox" id="oKeys"> Raccourcis clavier sur les outils</label>
+        <label class="ounit">Unité des longueurs <select id="unit2" class="btn"><option value="m">m</option><option value="cm">cm</option><option value="mm">mm</option></select></label>
         <div class="mh">Projet</div>
         <select class="btn" id="proj" hidden aria-label="Projet de la maquette" title="Projet de la maquette" style="margin:2px 8px 6px"></select>
       </div>
@@ -302,7 +304,7 @@ html.ts-embed .brand small{display:none}
     <span class="hint" id="hint"></span>
     <label id="segsL" hidden><span id="segsT">Segments</span><input type="number" id="segs" min="3" max="128" step="1"></label>
     <label for="vcb" id="vcbL">Mesures</label><input type="text" id="vcb" autocomplete="off" spellcheck="false" aria-label="Saisie des cotes">
-    <label title="Unité des longueurs affichées et tapées (une cote tapée peut aussi porter son unité : 350cm, 3500mm)">Unité <select id="unit" class="btn"><option value="m">m</option><option value="cm">cm</option><option value="mm">mm</option></select></label>
+    <label class="funit" title="Unité des longueurs affichées et tapées (une cote tapée peut aussi porter son unité : 350cm, 3500mm)">Unité <select id="unit" class="btn"><option value="m">m</option><option value="cm">cm</option><option value="mm">mm</option></select></label>
   </footer>
 </div>
 <input type="file" id="impIn" accept=".dxf,.dwg,.obj,.dae,.gltf,.glb,.skp" hidden>
@@ -995,7 +997,7 @@ function curvedOffset(M, set, d) {
 
 </script>
 <script>
-const APP_VERSION = '0.13.1';
+const APP_VERSION = '0.13.2';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const NF2 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 /* unités : la maquette est en mètres ; les longueurs s'affichent et se saisissent dans l'unité choisie (m, cm, mm) ; surfaces en m², volumes en m³ */
@@ -2310,7 +2312,7 @@ function info() {
 }
 /* unité d'affichage et de saisie des longueurs */
 function setUnit(u, quiet) {
-  if (!UNITS[u]) u = 'm'; UNIT = ST.units = u; const sel = $('#unit'); if (sel) sel.value = u;
+  if (!UNITS[u]) u = 'm'; UNIT = ST.units = u; const sel = $('#unit'); if (sel) sel.value = u; const s2 = $('#unit2'); if (s2) s2.value = u;
   const T = TOOLS[ST.tool]; if (T) { hint(T.hint()); if (!(T.busy && T.busy())) vcbShow(T.label || 'Mesures', ''); }
   info(); if (!quiet) save();
 }
@@ -2746,7 +2748,7 @@ async function showHome(on) {
     $('#bHome').onclick = () => showHome(true); if (HAS_LINK && TSLink.embedded) $('#bHome').remove(); }
   $('#tZoomExt').onclick = () => { frameView(bounds()); save(); };
   $('#vSel').onchange = e => { setView(e.target.value); cv.focus(); };
-  $('#unit').onchange = e => { setUnit(e.target.value); cv.focus(); };
+  $('#unit').onchange = e => { setUnit(e.target.value); cv.focus(); }; $('#unit2').onchange = e => { setUnit(e.target.value); };
   { const vl = $('#vlist'), pc = $('#vplan');
     $('#vClose').onclick = () => openPanel(false); $('#vGeo').onclick = camsFromGeo; $('#vAddView').onclick = sceneAdd; $('#vAddCam').onclick = () => { const sc = cameraAdd(); PL.sel = sc.id; PL.fit = null; sceneGo(sc.id, true); };
     vl.addEventListener('click', e => { const card = e.target.closest('.vcard'); if (!card) return; const id = card.dataset.id, b = e.target.closest('button');

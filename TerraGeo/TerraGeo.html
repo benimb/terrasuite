@@ -158,6 +158,14 @@ body.wide3d .work{grid-template-columns:1fr} body.wide3d .side{display:none}
   .side{border:0;overflow:visible} .card{break-inside:avoid} details{display:none}
   body{font-size:11px}
 }
+/* 0.28.1 : téléphone, en-tête sur une ligne, boutons de la carte sur une ligne qui défile, carte plus haute */
+@media (max-width: 600px){
+  header.top{flex-wrap:nowrap;gap:6px;padding:6px 8px}
+  header.top .brand,header.top #bPrint,header.top #homeLink,header.top .status:empty{display:none}
+  header.top .search{flex:1 1 150px;min-width:0;display:flex;gap:4px} header.top .search input{min-width:0;flex:1;width:auto}
+  .mapbar{flex-wrap:nowrap;overflow-x:auto;left:46px;right:6px;top:6px;padding-bottom:2px;scrollbar-width:none} .mapbar::-webkit-scrollbar{display:none} .mapbar .btn{flex:none}
+  .work{grid-template-rows:58vh auto}
+}
 </style>
 </head>
 <body>
@@ -216,7 +224,7 @@ body.wide3d .work{grid-template-columns:1fr} body.wide3d .side{display:none}
 <style>.ts-embed #homeLink,.ts-embed #back,.ts-embed .suite-btn{display:none!important}</style>
 <script src="../TerraChantier/terrasuite-compte.js" onerror="this.remove()"></script>
 <script>
-const APP_VERSION = '0.28';
+const APP_VERSION = '0.28.1';
 /* ================= Outils ================= */
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));

@@ -3,7 +3,7 @@
    plus le planning et la fiche, transversaux. Les modules existants (TerraGeo, TerraEstim, TerraPlanning, TerraChantier,
    TerraDocs, TerraContacts, TerraModel) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
    Les bibliothèques communes à tous les projets (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont à part. */
-const TS_VERSION = '0.10.1';
+const TS_VERSION = '0.10.2';
 const TSApp = (() => {
   const SVG = {
     back: '<path d="M15 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
@@ -241,17 +241,14 @@ const TSApp = (() => {
     const statut = (TSP.STATUTS.find(s => s[0] === p.statut) || [, ''])[1];
     const url = sub[2] === 'frame' ? sub[3](p) : '';
     /* téléphone et tablette : choix de la rubrique dans une liste, sous-onglets en pastilles */
-    let og = '', g0 = null;
-    TABS.forEach(t => { const g = GRP[t.id] || ''; if (g !== g0) { og += (g0 !== null && g0 ? '</optgroup>' : '') + (g ? `<optgroup label="${E(g)}">` : ''); g0 = g; } og += `<option value="${t.id}"${t.id === tab.id ? ' selected' : ''}>${E(t.nom)}</option>`; });
-    og += g0 ? '</optgroup>' : '';
-    const pills = tab.subs.length > 1 ? tab.subs.map(s => `<a class="sub${s[0] === sub[0] ? ' on' : ''}" href="#/p/${p.id}/${tab.id}/${s[0]}" style="${s[0] === sub[0] ? `background:${tab.c};border-color:${tab.c}` : ''}">${E(s[1])}</a>`).join('') : '';
+    /* une seule liste : chaque rubrique (phase) avec ses sous-rubriques, « ESQ › Site » */
+    const og = TABS.map(t => t.subs.length > 1 ? `<optgroup label="${E(t.nom)}">${t.subs.map(s => `<option value="${t.id}/${s[0]}"${t.id === tab.id && s[0] === sub[0] ? ' selected' : ''}>${E(t.nom)} › ${E(s[1])}</option>`).join('')}</optgroup>` : `<option value="${t.id}/${t.subs[0][0]}"${t.id === tab.id ? ' selected' : ''}>${E(t.nom)}</option>`).join('');
     const ov = tab.id === 'apercu';
     const crumb = ov ? '' : `<span class="crumb"><span class="sep">›</span>${E(tab.nom)}${tab.subs.length > 1 ? `<span class="sep">›</span>${E(sub[1])}` : ''}</span>`;
-    $m().innerHTML = `<div class="phead${ov ? '' : ' slim'}" style="--c:${tab.c}"><div class="t"><a class="btn icon back" href="#/projets" aria-label="Projets">${ico('back')}</a><div class="ttl">${ov ? `<div class="k">Projet${statut ? ' · ' + E(statut) : ''}${p.phase ? ' · phase ' + E(p.phase) : ''}</div>` : ''}<h1><span class="pn">${E(p.code || '—')} · ${E(p.nom || 'Projet sans nom')}</span>${crumb}</h1>${ov ? `<div class="w">${E([p.adresse, [p.cp, p.ville].filter(Boolean).join(' ')].filter(Boolean).join(', ') || 'Adresse à renseigner dans la fiche')}</div>` : ''}</div>
+    $m().innerHTML = `<div class="phead${ov ? '' : ' slim'}" style="--c:${tab.c}"><div class="t"><a class="btn icon back" href="#/projets" aria-label="Projets">${ico('back')}</a><div class="ttl">${ov ? `<div class="k">Projet${statut ? ' · ' + E(statut) : ''}${p.phase ? ' · phase ' + E(p.phase) : ''}</div>` : ''}<h1><span class="pn"><span class="cd">${E(p.code || '—')}</span><span class="nm"> · ${E(p.nom || 'Projet sans nom')}</span></span>${crumb}</h1>${ov ? `<div class="w">${E([p.adresse, [p.cp, p.ville].filter(Boolean).join(' ')].filter(Boolean).join(', ') || 'Adresse à renseigner dans la fiche')}</div>` : ''}</div>
         <div class="acts">${url ? `<a class="btn icon wide" href="${E(url)}" target="_blank" rel="noopener" title="Ouvrir en plein écran, dans un nouvel onglet" aria-label="Plein écran">${ico('ext')}</a><button class="btn icon wide" id="reF" title="Recharger" aria-label="Recharger">${ico('reload')}</button>` : ''}${PHASE_ORDER.indexOf(curTab) >= PHASE_ORDER.indexOf('chantier') ? `<a class="btn visit" href="#/p/${p.id}/chantier/chantier" title="Visite de chantier">${ico('cam')}<span class="wide">Visite de chantier</span></a>` : ''}</div></div>
-      <div class="mnav"><label class="phsel" style="--c:${tab.c}"><span class="dot" style="background:${tab.c}"></span><select id="phSel" aria-label="Rubrique du projet">${og}</select></label>${pills ? `<nav class="subs" aria-label="Sous-onglets">${pills}</nav>` : ''}</div></div><div class="body" id="pbody"></div>`;
+      <div class="mnav"><label class="phsel" style="--c:${tab.c}"><span class="dot" style="background:${tab.c}"></span><select id="phSel" aria-label="Rubrique du projet">${og}</select></label></div></div><div class="body" id="pbody"></div>`;
     document.getElementById('phSel').onchange = e => go(`#/p/${p.id}/${e.target.value}`);
-    const sel = document.querySelector('.mnav .sub.on'); if (sel) sel.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     const body = document.getElementById('pbody');
     st.imm = IMMERSIVE.has(sub[0]); setImm(false);
     if (sub[2] === 'frame') { body.className = 'body frame'; mountFrame(body, url, sub[4]); const rf = document.getElementById('reF'); if (rf) rf.onclick = () => { st.frames.delete(url); mountFrame(body, url, sub[4], true); }; return; }
@@ -493,7 +490,7 @@ const TSApp = (() => {
     const r = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean).map(decodeURIComponent); st.route = r;
     document.title = 'TerraSuite';
     if (r[0] === 'photo') { const last = LS.get('ts-last-projet', null); if (last && st.projets.some(p => p.id === last)) return go(`#/p/${last}/chantier/chantier`); toast('Ouvrez un projet, puis « Visite de chantier »'); return go('#/'); }
-    drawSide(); drawBottom();
+    drawSide(); drawBottom(); document.getElementById('ts').classList.toggle('inapp', r[0] === 'p' || (r[0] === 'a' && !!r[1]) || (r[0] === 'b' && !!r[1]));
     if (r[0] === 'p' && r[1]) return drawProject(r[1], r[2], r[3]);
     if (r[0] === 'b') return drawLib(r[1], r[2]);
     if (r[0] === 'a') return drawApp(r[1]);

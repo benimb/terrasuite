@@ -355,3 +355,22 @@ tfoot td{border-top:2px solid var(--line)}
 @media (max-width:600px){.site{height:170px}.site.two{grid-template-columns:1fr 1fr}}
 
 .t tr.prtot td{background:var(--sunk);border-top:1px solid var(--line)}
+
+/* 0.10.2 : téléphone et tablette, en-tête de projet sur une ligne (retour, code du projet, liste rubrique › sous-rubrique) ; pas de barre du bas dans un projet ou une application */
+@media (max-width:899px){
+  .ts.inapp .ts-bottom{display:none}
+  .ts.inapp .ts-main{padding-bottom:0}
+  .phead.slim{display:flex;align-items:center;gap:8px;padding-bottom:8px}
+  .phead.slim .t{flex:0 1 auto;min-width:0}
+  .phead.slim .ttl{min-width:0}
+  .phead.slim h1{font-size:16px;line-height:40px}
+  .phead.slim .pn .nm,.phead.slim .crumb,.phead.slim .acts{display:none}
+  .phead.slim .mnav{flex:1 1 auto;min-width:0;padding:0}
+  .phead.slim .phsel{flex:1 1 auto;min-width:0;height:40px}
+  .phead.slim .phsel select{font-size:14px;height:38px;min-width:0;width:100%}
+}
+@media (max-width:899px){
+  .phead.slim .t{flex:0 0 auto;max-width:42%}
+  .mnav .phsel{box-sizing:border-box;max-width:100%;min-width:0}
+  .mnav .phsel select{min-width:0;width:100%;text-overflow:ellipsis}
+}
