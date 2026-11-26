@@ -3,7 +3,7 @@
    plus le planning et la fiche, transversaux. Les modules existants (TerraGeo, TerraEstim, TerraPlanning, TerraChantier,
    TerraDocs, TerraContacts, TerraModel) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
    Les bibliothèques communes à tous les projets (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont à part. */
-const TS_VERSION = '0.10';
+const TS_VERSION = '0.10.1';
 const TSApp = (() => {
   const SVG = {
     back: '<path d="M15 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
@@ -180,29 +180,21 @@ const TSApp = (() => {
   async function drawAccueil() {
     const ag = typeof Carnet !== 'undefined' ? Carnet.agence() : null, arch = ag && typeof Carnet !== 'undefined' ? Carnet.architecte() : null, et = TSA.etat();
     const act = st.projets.filter(p => p.statut !== 'archive' && p.statut !== 'termine');
-    const rec = (LS.get('ts-recents', []) || []).map(id => st.projets.find(p => p.id === id)).filter(Boolean).slice(0, 4);
-    const quick = (rec.length ? rec : act.slice(0, 4));
     /* le prénom vient du compte connecté (sinon on ne sait pas qui utilise l'appareil) */
     const who = et.connecte && et.profil ? (et.profil.nom || '').trim().split(/\s+/)[0] || ((arch && et.profil.email && arch.email && arch.email.toLowerCase() === et.profil.email.toLowerCase()) ? arch.prenom : '') : '';
     const hello = who ? 'Bonjour ' + who : 'Bonjour';
     $m().innerHTML = `<div class="body home"><div class="wrap" style="max-width:980px">
       <div class="suite-id"><img src="suite/logo.svg" alt="" width="64" height="64"><div><div class="wm">Terra<span>Suite</span></div><div class="tag">Le projet d'architecture, de l'esquisse à la garantie de parfait achèvement</div></div></div>
       <div class="hhead"><span id="agLogoH" class="hlogo"></span><div>${ag && ag.nom ? `<div class="k">${E(ag.nom)}</div>` : ''}<h1>${E(hello)}</h1></div></div>
-      ${(() => { const S = [!et.pret ? ['Se connecter', 'Sans compte, les projets restent sur cet appareil. Connecté, ils suivent sur le PC, la tablette et le téléphone.', '#/compte', 'Se connecter'] : null, null].filter(Boolean);
-        return S.length ? `<div class="card note start"><div style="flex:1;min-width:240px"><b>Pour commencer</b><ol class="steps">${S.map(s => `<li><a href="${s[2]}">${E(s[0])}</a><span class="muted"> · ${E(s[1])}</span></li>`).join('')}</ol></div></div>` : ''; })()}
-      <div class="hsearch"><input class="inp" id="hq" type="search" placeholder="Chercher dans toute l'agence : projet, contact, produit, article de CCTP, CR…" aria-label="Chercher dans toute l'agence"></div>
-      ${act.length ? '<div id="homeX" class="homex" style="margin:0 0 14px"></div>' : ''}
       <div class="choices">
         ${act.length ? `<a class="choice" href="#/projets"><span class="ci">${HOUSE(false)}</span><span class="ct">Travailler sur un projet</span><span class="cd">${act.length} projet${act.length > 1 ? 's' : ''} en cours</span></a>` : `<div class="choice off" aria-disabled="true"><span class="ci">${HOUSE(false)}</span><span class="ct">Travailler sur un projet</span><span class="cd">Aucun projet pour l'instant : créez le premier à côté.</span></div>`}
         <button class="choice" id="newP3"><span class="ci">${HOUSE(true)}</span><span class="ct">Créer un projet</span><span class="cd">Code, nom, phase : le reste se complète au fil des phases</span></button>
         <a class="choice" href="#/a"><span class="ci">${APPS_ICO}</span><span class="ct">Utiliser une application</span><span class="cd">Sans projet : maquette 3D, étude de parcelle, planning, estimation, visites</span></a>
       </div>
-      ${act.length ? '' : '<div id="homeX" class="homex"></div>'}
-      ${quick.length ? `<div class="cap" style="margin:22px 0 8px">${rec.length ? 'Ouverts récemment' : 'Projets en cours'}</div><div class="grid">${quick.map(p => `<a class="card pcard" href="#/p/${p.id}" style="min-height:0"><span class="h"><span class="dot" style="background:${(tabOf(PH2TAB[p.phase]) || TABS[0]).c}"></span>${E(p.code || '—')}<span class="hint" style="margin-left:auto">${E(p.phase || '')}</span></span><span class="d" style="color:var(--ink);font-size:14px">${E(p.nom || '')}</span></a>`).join('')}</div>` : ''}
-      <div class="hlinks"><a href="#/agence">${ag ? "Compléter ou corriger le profil de l'agence" : "Profil de l'agence"}</a><a href="#/b">Bibliothèques</a><a href="#/compte">Compte et appareils</a></div>
+      ${act.length ? '' : '<div id="homeX" class="homex" style="margin-top:22px"></div>'}
+      <div class="hlinks">${act.length ? '<a href="#/semaine">Cette semaine</a>' : ''}${!et.pret ? '<a href="#/compte" title="Sans compte, les projets restent sur cet appareil">Se connecter</a>' : ''}<a href="#/agence">${ag ? "Profil de l'agence" : "Renseigner le profil de l'agence"}</a><a href="#/b">Bibliothèques</a><a href="#/compte">Compte et appareils</a></div>
     </div></div>`;
     document.getElementById('newP3').onclick = newProject;
-    const hq = document.getElementById('hq'); hq.onkeydown = e => { if (e.key === 'Enter' && hq.value.trim().length >= 2) go('#/cherche/' + encodeURIComponent(hq.value.trim())); };
     TSX.homeBlocks(CTX, document.getElementById('homeX'));
     const later = document.getElementById('agLater'); if (later) later.onclick = () => { LS.set('ts-agence-plus-tard', true); drawAccueil(); };
     if (ag && ag.logoId && typeof BlobURL === 'function') BlobURL(ag.logoId).then(u => { const el = document.getElementById('agLogoH'); if (u && el) el.innerHTML = `<img src="${u}" alt="Logo de l'agence">`; });
