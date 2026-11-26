@@ -3,7 +3,7 @@
    plus le planning et la fiche, transversaux. Les modules existants (TerraGeo, TerraEstim, TerraPlanning, TerraChantier,
    TerraDocs, TerraContacts, TerraModel) s'ouvrent dans l'onglet, sur le projet ; leurs données sont synchronisées par ts-link.js et sync.js.
    Les bibliothèques communes à tous les projets (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont à part. */
-const TS_VERSION = '0.9.18';
+const TS_VERSION = '0.10';
 const TSApp = (() => {
   const SVG = {
     back: '<path d="M15 18l-6-6 6-6"/>', plus: '<path d="M12 5v14M5 12h14"/>', cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
@@ -63,6 +63,16 @@ const TSApp = (() => {
     { id: 'contacts', nom: 'Contacts', c: '#9a3b6b', url: 'TerraChantier/contacts.html' },
     { id: 'ao', nom: "Veille appels d'offres", c: '#b45309', url: 'TerraSourcing/TerraSourcing.html' }
   ];
+
+  /* applications utilisables seules, sans projet (maquette, planning, étude de parcelle, estimation, visites) */
+  const APPS = [
+    { id: 'maquette', nom: 'Maquette 3D', d: 'Volumes, faisabilité, enveloppe du PLU, images (TerraModel)', c: '#7c3aed', url: 'TerraModel/TerraModel.html' },
+    { id: 'site', nom: 'Étude de parcelle', d: 'Cadastre, PLU, risques, vue 3D du site (TerraGeo)', c: '#0e7490', url: 'TerraGeo/TerraGeo.html' },
+    { id: 'planning', nom: 'Planning', d: "Gantt d'études, de chantier ou d'agence (TerraPlanning)", c: '#be123c', url: 'TerraPlanning/TerraPlanning.html' },
+    { id: 'estimation', nom: 'Estimation', d: 'Estimatif, DPGF, CCTP (TerraEstim)', c: '#2f8f5b', url: 'TerraEstim/TerraEstim.html' },
+    { id: 'visites', nom: 'Visites et comptes-rendus', d: 'Photos, CR, réserves (TerraChantier)', c: '#a16207', url: 'TerraChantier/index.html' }
+  ];
+  const APPS_ICO = '<svg class="house" viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="10" width="19" height="19" rx="4" fill="#b5532f"/><rect x="35" y="10" width="19" height="19" rx="4" fill="none" stroke="#b5532f" stroke-width="3"/><rect x="10" y="35" width="19" height="19" rx="4" fill="none" stroke="#b5532f" stroke-width="3"/><rect x="35" y="35" width="19" height="19" rx="4" fill="#b5532f"/></svg>';
 
   /* ---------- état ---------- */
   const st = { projets: [], q: '', route: [], frames: new Map(), installEvt: null, counts: {} };
@@ -145,6 +155,7 @@ const TSApp = (() => {
       <div class="search"><label class="hint" for="pq">Chercher</label><input id="pq" type="search" placeholder="Projet, contact, produit, CR…" value="${E(st.q)}" title="Filtre les projets ; Entrée : chercher dans toute l'agence"></div>
       <div class="side-h"><span class="cap">Projets</span><button class="btn sm pri" id="newP">${ico('plus')}Projet</button></div>
       <nav class="plist" aria-label="Projets">${st.q.trim().length >= 2 ? `<a class="pitem gall" href="#/cherche/${encodeURIComponent(st.q.trim())}">${ico('list')}Chercher « ${E(st.q.trim())} » partout</a>` : ''}${act.map(item).join('') || (st.q ? '' : '<div class="empty" style="padding:8px 12px">Aucun projet</div>')}${old.length ? `<details style="margin-top:6px"><summary class="hint" style="padding:6px 12px;cursor:pointer">Terminés, archivés (${old.length})</summary>${old.map(item).join('')}</details>` : ''}</nav>
+      <div class="libs"><span class="cap">Applications seules</span>${APPS.map(b => `<a class="litem${r[0] === 'a' && r[1] === b.id ? ' on' : ''}" href="#/a/${b.id}"><span class="dot" style="background:${b.c}"></span>${E(b.nom)}</a>`).join('')}</div>
       <div class="libs"><span class="cap">Commun à tous les projets</span>${LIBS.map(b => `<a class="litem${curL === b.id ? ' on' : ''}" href="#/b/${b.id}"><span class="dot" style="background:${b.c}"></span>${E(b.nom)}<span class="n">${E(st.counts[b.id] ?? '')}</span></a>`).join('')}</div>
       <div class="side-f"><a class="sync" id="syncSt" href="#/compte"><span id="syncTx">Synchronisation</span></a><a href="#/compte">Compte</a></div>`;
     const qi = document.getElementById('pq'); qi.oninput = () => { st.q = qi.value; const pos = qi.selectionStart; drawSide(); const n = document.getElementById('pq'); n.focus(); n.setSelectionRange(pos, pos); if (st.route[0] === 'projets') drawHome(); };
@@ -184,6 +195,7 @@ const TSApp = (() => {
       <div class="choices">
         ${act.length ? `<a class="choice" href="#/projets"><span class="ci">${HOUSE(false)}</span><span class="ct">Travailler sur un projet</span><span class="cd">${act.length} projet${act.length > 1 ? 's' : ''} en cours</span></a>` : `<div class="choice off" aria-disabled="true"><span class="ci">${HOUSE(false)}</span><span class="ct">Travailler sur un projet</span><span class="cd">Aucun projet pour l'instant : créez le premier à côté.</span></div>`}
         <button class="choice" id="newP3"><span class="ci">${HOUSE(true)}</span><span class="ct">Créer un projet</span><span class="cd">Code, nom, phase : le reste se complète au fil des phases</span></button>
+        <a class="choice" href="#/a"><span class="ci">${APPS_ICO}</span><span class="ct">Utiliser une application</span><span class="cd">Sans projet : maquette 3D, étude de parcelle, planning, estimation, visites</span></a>
       </div>
       ${act.length ? '' : '<div id="homeX" class="homex"></div>'}
       ${quick.length ? `<div class="cap" style="margin:22px 0 8px">${rec.length ? 'Ouverts récemment' : 'Projets en cours'}</div><div class="grid">${quick.map(p => `<a class="card pcard" href="#/p/${p.id}" style="min-height:0"><span class="h"><span class="dot" style="background:${(tabOf(PH2TAB[p.phase]) || TABS[0]).c}"></span>${E(p.code || '—')}<span class="hint" style="margin-left:auto">${E(p.phase || '')}</span></span><span class="d" style="color:var(--ink);font-size:14px">${E(p.nom || '')}</span></a>`).join('')}</div>` : ''}
@@ -435,6 +447,16 @@ const TSApp = (() => {
     mountFrame(document.getElementById('lbody'), b.url + (extra ? '#' + extra : ''), extra ? null : b.click);
   }
 
+  /* ---------- applications seules : la liste, puis l'application dans la suite, sans projet ---------- */
+  function drawApp(id) {
+    const b = APPS.find(x => x.id === id);
+    if (!b) { $m().innerHTML = `<div class="phead"><div class="t"><a class="btn icon back" href="#/" aria-label="Accueil">${ico('back')}</a><div><div class="k">Sans projet</div><h1>Utiliser une application</h1><div class="w">Pour un essai, une étude rapide ou un travail hors projet. Ce qui est fait ici reste dans l'application ; on peut le rattacher plus tard à un projet depuis l'application.</div></div></div><div style="height:14px"></div></div>
+      <div class="body"><div class="wrap" style="max-width:980px"><div class="grid">${APPS.map(a => `<a class="card pcard" href="#/a/${a.id}" style="min-height:0"><span class="h"><span class="dot" style="background:${a.c}"></span>${E(a.nom)}</span><span class="d" style="color:var(--muted);font-size:14px">${E(a.d)}</span></a>`).join('')}</div>
+      <p class="hint" style="margin-top:16px">Les bibliothèques communes (catalogue des produits, base de prix, articles de CCTP, contacts, veille AO) sont dans <a href="#/b">Bibliothèques</a>.</p></div></div>`; return; }
+    $m().innerHTML = `<div class="phead"><div class="t"><a class="btn icon back" href="#/a" aria-label="Applications">${ico('back')}</a><div style="flex:1"><div class="k">Application seule · sans projet</div><h1>${E(b.nom)}</h1></div><div class="acts"><a class="btn sm wide" href="${E(b.url)}" target="_blank" rel="noopener">${ico('ext')}Plein écran</a></div></div><div style="height:12px"></div></div><div class="body frame" id="abody"></div>`;
+    mountFrame(document.getElementById('abody'), b.url, null);
+  }
+
   /* ---------- compte, synchronisation, installation ---------- */
   function drawCompte() {
     $m().innerHTML = `<div class="phead"><div class="t"><div><div class="k">TerraSuite ${TS_VERSION} bêta</div><h1>Compte et appareils</h1></div></div><div style="height:14px"></div></div>
@@ -482,6 +504,7 @@ const TSApp = (() => {
     drawSide(); drawBottom();
     if (r[0] === 'p' && r[1]) return drawProject(r[1], r[2], r[3]);
     if (r[0] === 'b') return drawLib(r[1], r[2]);
+    if (r[0] === 'a') return drawApp(r[1]);
     if (r[0] === 'cherche') return TSX.search(CTX, r[1] || '');
     if (r[0] === 'semaine') return TSX.week(CTX);
     if (r[0] === 'plu' && r[1] && r[2]) return TSPLU.reader($m(), r[1], r[2], r[3]);
