@@ -277,7 +277,7 @@ dialog .act{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
 <div id="app">
   <header class="top">
     <a class="btn sm" id="back" href="../terrasuite.html" title="Page d'accueil TerraSuite">← TerraSuite</a>
-    <div class="brand">TerraDocs <span class="ver">v0.15</span><small>Produits et documentation par lot</small></div>
+    <div class="brand">TerraDocs <span class="ver">v0.15.1</span><small>Produits et documentation par lot</small></div>
     <nav class="tabs" role="tablist">
       <button role="tab" data-tab="accueil" aria-selected="false">Accueil</button>
       <button role="tab" data-tab="explorer" aria-selected="false">Explorer</button>
@@ -993,6 +993,12 @@ function mergeData(data){
   let m=0; data.produits.forEach(p=>{ if(ids.has(p.id)){ const q = D.produits.find(x=>x.id===p.id); if(q && !q.sous && p.sous && q.lot===(lotMap[p.lot]||p.lot)){ q.sous = p.sous; m++; } if(q && Array.isArray(p.liens)){ const have = new Set(q.liens.map(l=>l.url)); const add = p.liens.filter(l=>l.url && !have.has(l.url)); if(add.length){ q.liens.push(...add.map(l=>({type:l.type||'autre',url:l.url,titre:l.titre||''}))); q.maj = today(); m++; } } return; } D.produits.push({...p, lot: lotMap[p.lot]||p.lot}); n++; });
   /* liens remplacés ou retirés (pages déplacées ou supprimées chez le fabricant) : appliqués à toute la bibliothèque */
   if(data.liensRemplaces && typeof data.liensRemplaces==='object') D.produits.forEach(q=>{ let ch=false; q.liens = (q.liens||[]).flatMap(l=>{ if(!(l.url in data.liensRemplaces)) return [l]; ch=true; const nu = data.liensRemplaces[l.url]; return nu && !q.liens.some(x=>x.url===nu) ? [{...l, url:nu}] : []; }); if(ch){ q.maj = today(); m++; } });
+  /* compléments à des produits déjà présents (notes, mots-clés, projets) : ajoutés sans rien écraser de la saisie */
+  if(Array.isArray(data.complements)) data.complements.forEach(c=>{ const q = c && D.produits.find(x=>x.id===c.id); if(!q) return; let ch=false;
+    if(c.notes && !String(q.notes||'').includes(c.notes)){ q.notes = (q.notes ? q.notes+'\n' : '') + c.notes; ch=true; }
+    if(Array.isArray(c.tags)){ q.tags = Array.isArray(q.tags) ? q.tags : []; c.tags.forEach(t=>{ if(t && !q.tags.includes(t)){ q.tags.push(t); ch=true; } }); }
+    if(c.projets){ const have = String(q.projets||'').split(/[\s,;]+/).filter(Boolean); String(c.projets).split(/[\s,;]+/).filter(Boolean).forEach(k=>{ if(!have.includes(k)){ have.push(k); ch=true; } }); q.projets = have.join(' '); }
+    if(ch){ q.maj = today(); m++; } });
   if(data.societes && typeof data.societes==='object') { D.societes = D.societes||{}; Object.entries(data.societes).forEach(([k,s])=>{ if(!s || typeof s!=='object') return; const o = D.societes[k] = {...(D.societes[k]||{})}; Object.entries(s).forEach(([f,v])=>{ if(o[f]===undefined || o[f]==='') o[f]=v; }); }); }
   return [n, m];
 }

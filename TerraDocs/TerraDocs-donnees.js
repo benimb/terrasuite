@@ -2,7 +2,7 @@ window.TD_DONNEES = {
  "app": "TerraDocs",
  "format": 1,
  "stamp": "base-publique-2026-11-26",
- "label": "base publique : ajout Egger, Grosjean Solutions Bois, compléments Sika",
+ "label": "base publique : Egger, Grosjean Solutions Bois, compléments Sika (membranes, cuvelage), mise à niveau des gammes du 18-19/11",
  "lots": [
   {
    "id": "L00",
@@ -14,6 +14,12 @@ window.TD_DONNEES = {
    ]
   },
   {
+   "id": "L01",
+   "code": "01",
+   "nom": "Démolition, désamiantage, curage",
+   "sous": []
+  },
+  {
    "id": "L02",
    "code": "02",
    "nom": "Gros œuvre, maçonnerie",
@@ -23,6 +29,7 @@ window.TD_DONNEES = {
     "Blocs béton",
     "Planchers préfabriqués",
     "Mastics et joints",
+    "Ciments, bétons",
     "Briques et pavés de verre",
     "Coffrages"
    ]
@@ -61,6 +68,7 @@ window.TD_DONNEES = {
     "Fenêtres de toit plat, lanterneaux",
     "Désenfumage naturel (exutoires DENFC)",
     "Éclairage zénithal continu (voûtes filantes)",
+    "Systèmes d'étanchéité liquide (SEL)",
     "Membranes synthétiques et étanchéité liquide"
    ]
   },
@@ -156,6 +164,8 @@ window.TD_DONNEES = {
     "Sols PVC",
     "Sols caoutchouc",
     "Tapis d'entrée encastrés",
+    "Sols coulés (résine, caoutchouc)",
+    "Préparation des supports (primaires, ragréages, chapes)",
     "Sols coulés résine",
     "Chapes et ragréages",
     "Sols stratifiés et design"
@@ -168,6 +178,10 @@ window.TD_DONNEES = {
    "sous": [
     "Revêtements muraux acoustiques",
     "Revêtements muraux en verre laqué",
+    "Peintures intérieures",
+    "Enduits de préparation (rebouchage, garnissage, lissage)",
+    "Lasures, laques, peintures bois et métal",
+    "Peintures de sols",
     "Films pour vitrages (solaires, sécurité, décoratifs)",
     "Revêtements adhésifs architecturaux"
    ]
@@ -260,6 +274,6334 @@ window.TD_DONNEES = {
   }
  ],
  "produits": [
+  {
+   "id": "ctn-durus-durus",
+   "lot": "L01",
+   "nom": "Protection anti-intrusion de baies en tôle",
+   "fabricant": "Durus",
+   "reference": "Durus",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "protection",
+    "baies",
+    "chantier"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiweb.com/fabricant/durus-securite-5821168",
+     "titre": "Durus Sécurité (Batiweb)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 01.6.2.3 Protection des baies. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-rector-rs",
+   "lot": "L02",
+   "nom": "Poutrelles précontraintes RS",
+   "fabricant": "Rector",
+   "reference": "RS",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "plancher",
+    "poutrelles",
+    "hourdis"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.rector.fr/wp-inside/uploads/2022/02/ft-poutrelle-rs-114-1.pdf",
+     "titre": "Poutrelle RS 114, fiche technique"
+    },
+    {
+     "type": "at",
+     "url": "https://www.rector.fr/wp-inside/uploads/2022/12/atec-poutrelle-3-1-21-1049_v2.pdf",
+     "titre": "Avis technique poutrelles"
+    }
+   ],
+   "sous": "",
+   "perf": "Marquage CE, certification NF, FDES",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 01.6.3.5 Plancher poutrelle hourdis. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-rector-rectolight",
+   "lot": "L02",
+   "nom": "Entrevous légers Rectolight",
+   "fabricant": "Rector",
+   "reference": "Rectolight",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "plancher",
+    "entrevous"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://www.rector.fr/wp-inside/uploads/2023/02/brochure-entrevous-rectolight.pdf",
+     "titre": "Plancher Rectolight"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.rector.fr/wp-inside/uploads/2024/03/brochure-renovation-rectolight.pdf",
+     "titre": "Rectolight en rénovation"
+    }
+   ],
+   "sous": "",
+   "perf": "Certifiés NF, FDES",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 01.6.3.5 Plancher poutrelle hourdis. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-weber-weber-vegetal-stop",
+   "lot": "L06",
+   "nom": "Weber végétal stop",
+   "fabricant": "Weber",
+   "reference": "weber végétal stop",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "nettoyage",
+    "façade",
+    "mousses"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.fr.weber/renovation-de-facade/le-nettoyage-et-la-protection-des-facades/weber-vegetal-stop",
+     "titre": "weber végétal stop"
+    }
+   ],
+   "sous": "Enduits, ravalement",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 01.6.4.2 Nettoyage et traitement de la façade en enduit. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-weber-weber-pral-f",
+   "lot": "L06",
+   "nom": "Enduit monocouche weber.pral F",
+   "fabricant": "Weber",
+   "reference": "weber.pral F",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "enduit",
+    "monocouche",
+    "façade"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.fr.weber/facades-neuves/les-enduits-monocouches-projetes/weberpral-f",
+     "titre": "weberpral F"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.fr.weber/nuanciers/facades-neuves",
+     "titre": "Nuancier façades"
+    }
+   ],
+   "sous": "Enduits, ravalement",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 01.6.4.3 Reprises d’enduit. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-weber-weber-derko",
+   "lot": "L06",
+   "nom": "Peinture de façade weber.derko",
+   "fabricant": "Weber",
+   "reference": "weber.derko",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "peinture",
+    "façade",
+    "enduit"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.fr.weber/facades-neuves/la-peinture/weberdeko-peinture",
+     "titre": "weberdeko peinture"
+    },
+    {
+     "type": "site",
+     "url": "https://www.fr.weber/search-content/content_type/product/activities/les-peintures-pour-facade-24",
+     "titre": "Peintures pour façade Weber"
+    }
+   ],
+   "sous": "Enduits, ravalement",
+   "perf": "Deux couches de finition",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 01.6.4.4 Peinture sur enduit. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-parexgroup-586-lankophonic-plak",
+   "lot": "L11",
+   "nom": "Sous-couche acoustique Lankophonic Plak+ 586",
+   "fabricant": "ParexGroup",
+   "reference": "586 Lankophonic Plak+",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "acoustique",
+    "carrelage",
+    "sous-couche"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.parexlanko.com/produits/niveau-3/isolation_phonique_sous_carrelage",
+     "titre": "Isolation phonique sous carrelage"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/systeme-d-isolation-acoustique-en-plaques-sous-ca-p172224060.html",
+     "titre": "Isolation acoustique en plaques (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "Avis technique CSTB 13/17-1378_V3",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 01.6.5.1 Sous-couche acoustique. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-desvres-cermicryl",
+   "lot": "L11",
+   "nom": "Système de protection à l'eau Cermicryl (SPEC)",
+   "fabricant": "Desvres",
+   "reference": "Cermicryl",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "SPEC",
+    "étanchéité",
+    "carrelage"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/enduits-d-etancheite-liquide-et-de-protection-p478526455.html",
+     "titre": "Cermicryl (Batiproduits)"
+    },
+    {
+     "type": "ft",
+     "url": "https://tots.fr/client/document/11544-ft-cermicryl.pdf",
+     "titre": "Cermicryl, fiche technique"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 01.6.5.2 SPEC. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-cermix-cermiproof-st",
+   "lot": "L11",
+   "nom": "Système d'étanchéité liquide Cermiproof ST (SEL)",
+   "fabricant": "Cermix",
+   "reference": "Cermiproof ST",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "SEL",
+    "étanchéité",
+    "carrelage"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/systeme-d-etancheite-liquide-sous-carrelage-fi-p478526461.html",
+     "titre": "Cermiproof ST Kit (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "2 couches de 1,5 kg/m²",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 01.6.5.3 SEL. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-mosa-core-collection-terra",
+   "lot": "L11",
+   "nom": "Carrelage grès cérame Core Collection Terra 90x90",
+   "fabricant": "Mosa",
+   "reference": "Core Collection Terra",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "carrelage",
+    "grès cérame",
+    "grand format"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.mosa.com/fr-fr/produits/carreaux/206V8442",
+     "titre": "Core Collection Terra (exemple de référence)"
+    },
+    {
+     "type": "dop",
+     "url": "https://www.mosa.com/fr-fr/services/centre-de-telechargement/marquages-ce-et-declarations-de-performance",
+     "titre": "Mosa, DoP et marquages CE"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.mosa.com/fr-fr/services/centre-de-telechargement/fiches-de-documentation-et-conseils",
+     "titre": "Mosa, fiches techniques, FDS, conseils de pose et nettoyage"
+    },
+    {
+     "type": "cert",
+     "url": "https://www.mosa.com/fr-fr/services/centre-de-telechargement/QB-UPEC",
+     "titre": "Mosa, certificats QB UPEC"
+    }
+   ],
+   "sous": "Carrelage, grès cérame, pierre",
+   "perf": "U4 P3 E2 C2, PC35 (R10), 897 x 897 mm",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 01.6.5.4 Revêtements de sol en carrelage grès cérame grand format (format 90x90 cm) – type 1. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-09"
+  },
+  {
+   "id": "ctn-decoceram-techno-r11",
+   "lot": "L11",
+   "nom": "Carrelage grès cérame antidérapant Techno R11 15x15",
+   "fabricant": "Decoceram",
+   "reference": "Techno R11",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "carrelage",
+    "antidérapant"
+   ],
+   "liens": [
+    {
+     "type": "cert",
+     "url": "https://environmental-data.ec.europa.eu/ecolabel/products/product_76230.html",
+     "titre": "Techno 15x15, Ecolabel européen"
+    }
+   ],
+   "sous": "",
+   "perf": "R11, 15 x 15 cm",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 01.6.5.5 Revêtements de sol en carrelage grès cérame antidérapant (format 15x15 cm) - type 2. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-mosa-global-collection",
+   "lot": "L11",
+   "nom": "Carrelage grès cérame Global Collection 15x15",
+   "fabricant": "Mosa",
+   "reference": "Global Collection",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "carrelage",
+    "grès cérame"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.mosa.com/fr-fr/produits/carreaux/carreau/75080V1515",
+     "titre": "Global Collection 15x15 (exemple de référence)"
+    },
+    {
+     "type": "dop",
+     "url": "https://www.mosa.com/fr-fr/services/centre-de-telechargement/marquages-ce-et-declarations-de-performance",
+     "titre": "Mosa, DoP et marquages CE"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.mosa.com/fr-fr/services/centre-de-telechargement/fiches-de-documentation-et-conseils",
+     "titre": "Mosa, fiches techniques, FDS, conseils de pose et nettoyage"
+    },
+    {
+     "type": "cert",
+     "url": "https://www.mosa.com/fr-fr/services/centre-de-telechargement/QB-UPEC",
+     "titre": "Mosa, certificats QB UPEC"
+    },
+    {
+     "type": "site",
+     "url": "https://www.mosa.com/fr-fr/produits/collection/global-collection",
+     "titre": "Mosa Global Collection"
+    }
+   ],
+   "sous": "Carrelage, grès cérame, pierre",
+   "perf": "15 x 15 cm",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 01.6.5.6 Revêtements de sol en carrelage grès cérame (format 15x15 cm) - type 3; 01.6.5.7 Revêtements de sol en carrelage grès cérame (format 15x15 cm) - type 4; 01.6.5.10 Carrelage mural (format 15 x 15 cm). Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-09"
+  },
+  {
+   "id": "ctn-forbo-nuway-tuftiguard",
+   "lot": "L11",
+   "nom": "Tapis de sol encastré Nuway Tuftiguard",
+   "fabricant": "Forbo",
+   "reference": "Nuway Tuftiguard",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "tapis",
+    "entrée",
+    "encastré"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.forbo.com/flooring/fr-fr/documentation-technique/tapis-de-proprete/pbe3s5",
+     "titre": "Tapis de propreté, documentation technique"
+    }
+   ],
+   "sous": "",
+   "perf": "Profils raidisseurs aluminium",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 01.6.5.11 Tapis de sol encastré. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-schluter-systems-schiene-e",
+   "lot": "L11",
+   "nom": "Profilé de jonction Schiene-E",
+   "fabricant": "Schlüter-Systems",
+   "reference": "Schiene-E",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "profilé",
+    "jonction",
+    "carrelage"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://eu.schluter.com/fr-FR/profiles-de-finition-273/e/16241/schiene",
+     "titre": "Schlüter-SCHIENE"
+    }
+   ],
+   "sous": "Profilés de transition et joints",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 01.6.5.14 Profils pour jonction des sols de nature différente. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-02"
+  },
+  {
+   "id": "ctn-schluter-systems-rondec",
+   "lot": "L11",
+   "nom": "Profilé d'angle Rondec",
+   "fabricant": "Schlüter-Systems",
+   "reference": "Rondec",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "profilé",
+    "angle",
+    "carrelage"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://eu.schluter.com/fr-FR/profiles-de-finition-273.html",
+     "titre": "Profilés de finition"
+    }
+   ],
+   "sous": "Profilés de finition",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 01.6.5.15 Profils d’angles. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-02"
+  },
+  {
+   "id": "ctn-gutta-terna-silygutt-super-sanitaire",
+   "lot": "L11",
+   "nom": "Mastic Silygutt Super Sanitaire",
+   "fabricant": "Gutta Terna",
+   "reference": "Silygutt Super Sanitaire",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "joint",
+    "mastic",
+    "sanitaire"
+   ],
+   "liens": [
+    {
+     "type": "dop",
+     "url": "https://fra.sika.com/dms/getdocument.get/38e03ad2-55f4-498f-8927-869565fafa20/fr-cedp-silygutt-super-sanitaire.pdf",
+     "titre": "Silygutt Super Sanitaire, DoP"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 01.6.5.16 Joints souples étanches. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-petersen-tegl-petersen-tegl",
+   "lot": "L06",
+   "nom": "Brique de parement à joint vif",
+   "fabricant": "Petersen Tegl",
+   "reference": "Petersen Tegl",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "brique",
+    "parement",
+    "muret"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://fr.petersen-tegl.dk/kolumba/produits/",
+     "titre": "Kolumba"
+    },
+    {
+     "type": "site",
+     "url": "https://en.petersen-tegl.dk/downloads/",
+     "titre": "Téléchargements"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 01.6.5.20 Briques sur muret. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-efisol-efigreen-duo",
+   "lot": "L05",
+   "nom": "Isolant polyuréthane Efigreen Duo+",
+   "fabricant": "Efisol",
+   "reference": "Efigreen Duo+",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "isolant",
+    "polyuréthane",
+    "toiture"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "http://www.efisol.fr/toits/toitures-terrasses-etancheite-3211/efigreen-duo-6248",
+     "titre": "Efigreen Duo+"
+    }
+   ],
+   "sous": "",
+   "perf": "Avis technique 5/13-2326*V1, NF EN 13165",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 02.4.4 Mise en œuvre d’un isolant; 02.5.4.3 Isolation thermique; 02.5.5.2 Isolation thermique. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-ssab-greencoat-plx",
+   "lot": "L04",
+   "nom": "Acier prélaqué GreenCoat PLX (couverture à joints debout)",
+   "fabricant": "SSAB",
+   "reference": "GreenCoat PLX",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "couverture",
+    "joint debout",
+    "acier"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.ssab.com/fr-fr/marques-et-produits/greencoat/produits/plx",
+     "titre": "GreenCoat PLX"
+    },
+    {
+     "type": "at",
+     "url": "https://www.ssab.com/-/media/files/fr/greencoat/greencoat-plx-dta-n-5-1.pdf?m=20210518125704",
+     "titre": "DTA GreenCoat PLX"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 02.4.5.5 Couverture à joints debout. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-vmzinc-stop-feuilles",
+   "lot": "L04",
+   "nom": "Grille pare-feuilles Stop Feuilles",
+   "fabricant": "VMZinc",
+   "reference": "Stop Feuilles",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "chéneau",
+    "protection",
+    "feuilles"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.vmzinc.com/en-us/rainwater-systems",
+     "titre": "Systèmes d'évacuation des eaux pluviales VMZinc"
+    }
+   ],
+   "sous": "",
+   "perf": "Ex-Vieille Montagne",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 02.4.6.1 Cheneaux isolés encaissés. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-siplast-siplast-primer",
+   "lot": "L05",
+   "nom": "Enduit d'imprégnation à froid Siplast Primer",
+   "fabricant": "Siplast",
+   "reference": "Siplast Primer",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "EIF",
+    "primaire",
+    "étanchéité"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.siplast.fr/documents/gamme-paradiene-notice-produit",
+     "titre": "Fiches produits Siplast"
+    },
+    {
+     "type": "site",
+     "url": "https://siplast.fr/profil/maitres-ouvrage-maitres-oeuvre/telechargement-express/produit",
+     "titre": "Téléchargement express Siplast"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 02.5.4.2 Ecran pare vapeur; 02.5.5.1 Ecran pare-vapeur. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-siplast-irex-profil",
+   "lot": "L05",
+   "nom": "Pare-vapeur bitume SBS Irex Profil 32 VV90",
+   "fabricant": "Siplast",
+   "reference": "Irex Profil",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "pare-vapeur",
+    "bitume SBS"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.siplast.fr/documents/gamme-paradiene-notice-produit",
+     "titre": "Fiches produits Siplast"
+    },
+    {
+     "type": "site",
+     "url": "https://siplast.fr/profil/maitres-ouvrage-maitres-oeuvre/telechargement-express/produit",
+     "titre": "Téléchargement express Siplast"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 02.5.4.2 Ecran pare vapeur; 02.5.5.1 Ecran pare-vapeur. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-siplast-adepar",
+   "lot": "L05",
+   "nom": "Système d'étanchéité Adepar",
+   "fabricant": "Siplast",
+   "reference": "Adepar",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "étanchéité",
+    "bicouche",
+    "autoprotégé"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.siplast.fr/documents/gamme-paradiene-notice-produit",
+     "titre": "Fiches produits Siplast"
+    },
+    {
+     "type": "site",
+     "url": "https://siplast.fr/profil/maitres-ouvrage-maitres-oeuvre/telechargement-express/produit",
+     "titre": "Téléchargement express Siplast"
+    }
+   ],
+   "sous": "",
+   "perf": "Selon avis technique",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 02.5.5.3 Etanchéité des parties courantes. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-siplast-verecran-100",
+   "lot": "L05",
+   "nom": "Écran d'indépendance Verecran 100",
+   "fabricant": "Siplast",
+   "reference": "Verecran 100",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "écran",
+    "voile de verre"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.siplast.fr/documents/gamme-paradiene-notice-produit",
+     "titre": "Fiches produits Siplast"
+    },
+    {
+     "type": "site",
+     "url": "https://siplast.fr/profil/maitres-ouvrage-maitres-oeuvre/telechargement-express/produit",
+     "titre": "Téléchargement express Siplast"
+    }
+   ],
+   "sous": "",
+   "perf": "100 g/m²",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 02.5.4.4 Etanchéité des parties courantes. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-dorken-delta-terraxx",
+   "lot": "L05",
+   "nom": "Protection provisoire Delta Terraxx",
+   "fabricant": "Dörken",
+   "reference": "Delta Terraxx",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "protection",
+    "étanchéité"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.doerken.com/be-fr/produits/cave/delta-terraxx.php",
+     "titre": "DELTA-TERRAXX"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.doerken.com/fr/fr/content/preview/21030/file/Brochure%20gamme%20DELTA-TERRAXX.pdf",
+     "titre": "Gamme DELTA-TERRAXX"
+    },
+    {
+     "type": "at",
+     "url": "https://www.doerken.com/fr/fr/content/preview/21025/file/DTA-5_2_20-2693_V1_DELTA_DOERKEN.pdf",
+     "titre": "DTA"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 02.5.4.5.1 Protection provisoire. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-soprema-plots-soprema",
+   "lot": "L05",
+   "nom": "Plots réglables pour dalles sur plots",
+   "fabricant": "Soprema",
+   "reference": "Plots Soprema",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "plots",
+    "terrasse",
+    "dalles"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.soprema.fr/fr/gamme/etancheite/bitumineuse/accessoires/plots-et-dalles?product_page=1/",
+     "titre": "Plots et dalles"
+    },
+    {
+     "type": "site",
+     "url": "https://www.soprema.fr/blog/post/dalles-et-plots-une-gamme-complete-pour-des-terrasses-elegantes",
+     "titre": "Dalles et plots"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 02.5.4.5.2 Protection par dalle bois sur plots. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-soprema-daldecor",
+   "lot": "L05",
+   "nom": "Dalles bois pin maritime Daldécor",
+   "fabricant": "Soprema",
+   "reference": "Daldécor",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "dalles bois",
+    "terrasse"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.soprema.fr/produits-et-systemes/dalle-daldecor",
+     "titre": "Dalle Daldécor"
+    },
+    {
+     "type": "site",
+     "url": "https://www.soprema.fr/produits-et-systemes/daldecor",
+     "titre": "Lames Daldécor"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 02.5.4.5.2 Protection par dalle bois sur plots. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-soprema-xps-protect-artic-c",
+   "lot": "L05",
+   "nom": "Isolant de relevé XPS Protect Artic C",
+   "fabricant": "Soprema",
+   "reference": "XPS Protect Artic C",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "relevé",
+    "polystyrène extrudé",
+    "isolant"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.soprema.fr/produits-et-systemes/etancheite-sous-dalles-sur-plots-accessible-aux-vehicules-maconnerie-bicouche-xps2",
+     "titre": "Système avec isolant XPS"
+    }
+   ],
+   "sous": "",
+   "perf": "Parement à base de ciment",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 02.5.4.6.1 Relevés isolés. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-dani-alu-solinet-depart-d-isolant",
+   "lot": "L05",
+   "nom": "Bande solin Solinet départ d'isolant",
+   "fabricant": "Dani Alu",
+   "reference": "Solinet départ d'isolant",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "solin",
+    "relevé",
+    "aluminium"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://pdf.archiexpo.com/pdf/dani-alu/solinet-aluminium-flashing-systems/429-234267.html",
+     "titre": "Solinet, catalogue (ArchiExpo)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.danialu.fr/fr/documentation/type",
+     "titre": "Documentation Dani Alu"
+    }
+   ],
+   "sous": "",
+   "perf": "DTU 20.12",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 02.5.4.6.3 Protection des têtes de relevés étanches. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-skydome-skydome",
+   "lot": "L05",
+   "nom": "Exutoire de fumée à commande pneumatique",
+   "fabricant": "Skydome",
+   "reference": "Skydome",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "exutoire",
+    "désenfumage",
+    "lanterneau"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://a.storyblok.com/f/289716020291043/x/5574dac1ae/skydome-presentation-all-in-fr-fr.pdf",
+     "titre": "Skydome, présentation"
+    },
+    {
+     "type": "bim",
+     "url": "https://bimandco.com/en/privatecloud/633/bimobjects/417823-skydome-rooflam-evolution-pneumatique",
+     "titre": "Rooflam Evolution pneumatique (BIM)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 02.5.6.1 Exutoire de fumée avec dispositif a commande pneumatique. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-saint-gobain-sp-510",
+   "lot": "L07",
+   "nom": "Verre feuilleté anti-effraction Stadip Protect SP 510",
+   "fabricant": "Saint-Gobain",
+   "reference": "SP 510",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "vitrage",
+    "feuilleté",
+    "effraction"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.saint-gobain-glass.fr/fr/produits/stadip-protect",
+     "titre": "Stadip Protect"
+    },
+    {
+     "type": "site",
+     "url": "https://www.saint-gobain-glass.fr/fr/article/des-vitrages-pour-plus-de-securite",
+     "titre": "Vitrages de sécurité"
+    }
+   ],
+   "sous": "Aluminium",
+   "perf": "Châssis du RDC, 2,40 m de hauteur",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 03A.3.2.1 Généralités. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-saint-gobain-cool-lite",
+   "lot": "L07",
+   "nom": "Vitrage Cool-Lite",
+   "fabricant": "Saint-Gobain",
+   "reference": "Cool-Lite",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "vitrage",
+    "contrôle solaire"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.saint-gobain-glass.fr/fr/produits/gamme-cool-lite-skn",
+     "titre": "Gamme Cool-Lite SKN"
+    },
+    {
+     "type": "site",
+     "url": "https://www.saint-gobain-glass.fr/fr/produits/cool-lite-xtreme-7033",
+     "titre": "Cool-Lite Xtreme 70/33"
+    }
+   ],
+   "sous": "Aluminium",
+   "perf": "Uw = 1,30 W/m².K",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 03A.3.2.1 Généralités. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-swisspacer-swisspacer-a",
+   "lot": "L07",
+   "nom": "Intercalaire Swisspacer Advance",
+   "fabricant": "Swisspacer",
+   "reference": "Swisspacer A",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "intercalaire",
+    "warm edge",
+    "vitrage"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.swisspacer.com/fr/produits/advance",
+     "titre": "Swisspacer Advance"
+    },
+    {
+     "type": "fdes",
+     "url": "https://www.swisspacer.com/en/documents/certificate/adv-2025-epd-swisspacer-advance.pdf",
+     "titre": "EPD Swisspacer Advance"
+    }
+   ],
+   "sous": "Aluminium",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 03A.3.1 Prescriptions communes; 03A.3.2.1 Généralités. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-mermet-satine-5500",
+   "lot": "L07",
+   "nom": "Toile screen Satiné 5500",
+   "fabricant": "Mermet",
+   "reference": "Satiné 5500",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "store",
+    "toile",
+    "screen"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.sunscreen-mermet.com/range/satine-5500.html",
+     "titre": "Satiné 5500"
+    }
+   ],
+   "sous": "Occultations",
+   "perf": "Fibres de verre",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 03A.3.4 Occultations. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-dormakaba-pextra-plus",
+   "lot": "L08",
+   "nom": "Cylindre européen pExtra plus (fonction SUZ 3 vies)",
+   "fabricant": "Dormakaba",
+   "reference": "pExtra plus",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "cylindre",
+    "haute sûreté",
+    "organigramme"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://dormakaba-res.cloudinary.com/image/upload/v1777331128/dormakaba-prod/1557732744-fp-cylindre-pextra-plus-mks-dormakaba-2018.pdf",
+     "titre": "pExtra plus, fiche produit"
+    },
+    {
+     "type": "cat",
+     "url": "https://dormakaba-res.cloudinary.com/image/upload/v1745456167/dormakaba-prod/1519129513-pextra-brochure-1219-be-fr.pdf",
+     "titre": "pExtra, brochure"
+    }
+   ],
+   "sous": "",
+   "perf": "Livré avec 3 clés",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 03A.2.7.7.1 Cylindres phase chantier et définitif; 03B.2.16.2 Cylindres définitifs; 04B.2.14.1 Cylindres provisoires (phase chantier) et définitif. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-protime-protime",
+   "lot": "L08",
+   "nom": "Thermolaquage des métaux ferreux",
+   "fabricant": "Protime",
+   "reference": "Protime",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "thermolaquage",
+    "finition"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 03B.2.11 Finitions des métaux ferreux par thermolaquage. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-10-26"
+  },
+  {
+   "id": "ctn-vachette-v5",
+   "lot": "L08",
+   "nom": "Cylindre provisoire de chantier V5",
+   "fabricant": "Vachette",
+   "reference": "V5",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "cylindre",
+    "chantier"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.vachette.fr/professionnel/fr/products/cylindre-et-cadenas/cylindre-mecanique/cylindre-v5",
+     "titre": "Cylindre V5"
+    }
+   ],
+   "sous": "",
+   "perf": "Canon européen, 3 clés",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 03B.2.16.1 Cylindres provisoires (phase chantier). Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-vachette-radial",
+   "lot": "L08",
+   "nom": "Cylindre de sûreté Radial",
+   "fabricant": "Vachette",
+   "reference": "Radial",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "cylindre",
+    "sûreté"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.vachette.fr/professionnel/fr/products/cylindre-et-cadenas",
+     "titre": "Cylindres Vachette"
+    }
+   ],
+   "sous": "Portes et cloisons acier",
+   "perf": "Profil européen",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 03B.4.1.1 Blocs portes. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-vachette-radial-nt",
+   "lot": "L08",
+   "nom": "Contacteur à clé Radial NT",
+   "fabricant": "Vachette",
+   "reference": "Radial NT",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "contacteur",
+    "rideau métallique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.vachette.fr/professionnel/fr/products/cylindre-et-cadenas",
+     "titre": "Cylindres Vachette"
+    }
+   ],
+   "sous": "Grilles, clôtures, portails",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 03B.4.1.9 Rideau métallique. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-panol-panolef-alu",
+   "lot": "L08",
+   "nom": "Grille à lames Panolef Alu",
+   "fabricant": "Panol",
+   "reference": "Panolef Alu",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "grille",
+    "ventilation",
+    "lames"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/fabricant/panol-44153/",
+     "titre": "Panol (Batiproduits)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.archiexpo.com/prod/panol/product-90736-1825902.html",
+     "titre": "Panol (ArchiExpo)"
+    }
+   ],
+   "sous": "Grilles, clôtures, portails",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 03B.4.1.7 Grilles de ventilation. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-ifd-perle-97",
+   "lot": "L08",
+   "nom": "Rideau métallique lames Perle 97",
+   "fabricant": "IFD",
+   "reference": "Perle 97",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "rideau métallique",
+    "lames"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/rideaux-a-lames-agrafees-p68884193.html",
+     "titre": "Rideaux à lames agrafées IFD (Batiproduits)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/fabricant/ifd-44118/",
+     "titre": "IFD (Batiproduits)"
+    }
+   ],
+   "sous": "Grilles, clôtures, portails",
+   "perf": "Pas de 97 mm, ép. 10/10",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 03B.4.1.9 Rideau métallique. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-nbk-terracotta",
+   "lot": "L06",
+   "nom": "Bardeaux en terre cuite Terracotta",
+   "fabricant": "NBK",
+   "reference": "Terracotta",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "bardage",
+    "terre cuite",
+    "bardeaux"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://archello.com/product/terrartr-nbk-terracotta",
+     "titre": "Terrart (Archello)"
+    },
+    {
+     "type": "cat",
+     "url": "https://pdf.archiexpo.com/pdf/nbk-keramik/terrart-brochure-technical-details/51311-124393.html",
+     "titre": "Terrart, brochure technique (ArchiExpo)"
+    }
+   ],
+   "sous": "Bardages",
+   "perf": "NF P 13-304, NF P 31-301",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 03B.5.1.1.2 Bardeaux briques. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-placo-placostil",
+   "lot": "L09",
+   "nom": "Ossature métallique Placostil (montants M70, rails R90)",
+   "fabricant": "Placo",
+   "reference": "Placostil",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "ossature",
+    "cloison",
+    "plaque de plâtre"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.placo.fr/en/node/2461",
+     "titre": "Guide de choix Placostil"
+    },
+    {
+     "type": "site",
+     "url": "https://www.placo.fr/solutions-placo-cloisons",
+     "titre": "Solutions cloisons"
+    }
+   ],
+   "sous": "Cloisons et doublages",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04A.3.1.2.1 Type SAA 140 mm; 04A.3.3.5 Jouées; 04A.3.3.6 Soffites. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-placo-msp",
+   "lot": "L09",
+   "nom": "Ossature acoustique MSP",
+   "fabricant": "Placo",
+   "reference": "MSP",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "ossature",
+    "acoustique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.placo.fr/solutions-placo-cloisons",
+     "titre": "Solutions cloisons"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.placo.fr/documents/loffre-placo/offre-placo-2026-web.pdf",
+     "titre": "Offre Placo 2026"
+    }
+   ],
+   "sous": "Cloisons et doublages",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04A.3.1.2.1 Type SAA 140 mm. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-placo-hydrostil",
+   "lot": "L09",
+   "nom": "Ossature Hydrostil (locaux humides)",
+   "fabricant": "Placo",
+   "reference": "Hydrostil",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "ossature",
+    "locaux humides",
+    "EB+"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.placo.fr/Professionnels/Systemes/sy00009548/doublage-pour-locaux-tres-humides-sur-fourrures-hydrostilr-f-530-500h-mur-parpaing-1x-glasrocr-h",
+     "titre": "Doublage Hydrostil+ F 530"
+    }
+   ],
+   "sous": "Cloisons et doublages",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04A.3.1.2.1 Type SAA 140 mm; 04A.3.1.2.2 Type 98/48mm DUO TECH; 04A.3.1.2.3 Type 98/48mm; 04A.3.1.2.4 Type 72/48 mm; 04A.3.1.2.5 Type demi-stil. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-placo-glasroc-h-ocean",
+   "lot": "L09",
+   "nom": "Plaque Glasroc H Ocean",
+   "fabricant": "Placo",
+   "reference": "Glasroc H Ocean",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "plaque",
+    "hydrofuge",
+    "EB+"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.placo.fr/Produits/plaques/glasroc-h-ocean-13",
+     "titre": "Glasroc H Ocean 13"
+    },
+    {
+     "type": "at",
+     "url": "https://www.placo.fr/documents/dta-eta-etn/dta-9-161032-v4-cloison-distri-cc-glasroc-h-ocean-13-18s.pdf",
+     "titre": "DTA cloison Glasroc H Ocean"
+    }
+   ],
+   "sous": "Plaques de plâtre",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04A.3.1.2.1 Type SAA 140 mm; 04A.3.2.3 Isolation thermo-acoustique par complexe en laine de verre; 04A.3.3.5 Jouées; 04A.3.3.6 Soffites. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-placo-ba13",
+   "lot": "L09",
+   "nom": "Plaque de plâtre BA13",
+   "fabricant": "Placo",
+   "reference": "BA13",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "plaque de plâtre"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.placo.fr/plaques-de-platre",
+     "titre": "Plaques de plâtre"
+    },
+    {
+     "type": "site",
+     "url": "https://www.placo.fr/comment-choisir-sa-plaque-de-platre",
+     "titre": "Choisir sa plaque"
+    }
+   ],
+   "sous": "Plaques de plâtre",
+   "perf": "13 mm",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04A.3.2.1 Thermique en plaque de plâtre pose sur ossature. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-placo-placoflam",
+   "lot": "L09",
+   "nom": "Plaque Placoflam",
+   "fabricant": "Placo",
+   "reference": "Placoflam",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "plaque",
+    "résistance au feu"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://placo.fr/placolog/Produit/PR00021475/Placoflam-R-BA-13",
+     "titre": "Placoflam BA 13"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.placo.fr/documents/fiche-technique/placoflam-ba-13.pdf",
+     "titre": "Placoflam BA 13, fiche technique"
+    }
+   ],
+   "sous": "Plaques de plâtre",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04A.3.3.4 Plafonds en plaques de plâtre. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-isover-panolene",
+   "lot": "L09",
+   "nom": "Laine de verre Panolène (Telstar)",
+   "fabricant": "Isover",
+   "reference": "Panolène",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "laine de verre",
+    "cloison",
+    "acoustique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.isover.fr/produits-et-systemes/la-gamme-isover",
+     "titre": "Gamme Isover"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.isover.fr/documents/catalogues/251609-isover-offre-maj-02-25-web-pap-260225-v2.pdf",
+     "titre": "Offre Isover résidentiel 2026"
+    }
+   ],
+   "sous": "Isolants",
+   "perf": "45 à 85 mm, PV acoustique",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04A.3.1.2.1 Type SAA 140 mm; 04A.3.1.2.2 Type 98/48mm DUO TECH; 04A.3.1.2.3 Type 98/48mm; 04A.3.1.2.4 Type 72/48 mm. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-isover-optima",
+   "lot": "L09",
+   "nom": "Système de doublage Optima",
+   "fabricant": "Isover",
+   "reference": "Optima",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "doublage",
+    "ossature"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://www.isover.fr/sites/mac3.isover.fr/files/2023-11/Doublage_thermique_phonique_mur_interieur_Optima.pdf",
+     "titre": "Système Optima"
+    },
+    {
+     "type": "pv",
+     "url": "https://www.isover.fr/documents/brochure-systeme/optima-murs-et-sa-rsistance-au-feu.pdf",
+     "titre": "Optima Murs, résistance au feu"
+    }
+   ],
+   "sous": "Cloisons et doublages",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04A.3.2.1 Thermique en plaque de plâtre pose sur ossature. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-isover-flex-40",
+   "lot": "L09",
+   "nom": "Isolant fibre de bois Flex 40",
+   "fabricant": "Isover",
+   "reference": "Flex 40",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "fibre de bois",
+    "biosourcé",
+    "isolant"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.isover.fr/produits/biosources/isonat-flex-40",
+     "titre": "Isonat Flex 40"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.isover.fr/documents/fiche-technique/fichetechnique-isonat-flex-40.pdf",
+     "titre": "Isonat Flex 40, fiche technique"
+    },
+    {
+     "type": "at",
+     "url": "https://www.isover.fr/documents/fiche-technique/dta-flex-mur-v4.pdf",
+     "titre": "DTA Flex mur"
+    }
+   ],
+   "sous": "Isolants",
+   "perf": "180 mm",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04A.3.2.1 Thermique en plaque de plâtre pose sur ossature. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-isover-calibel",
+   "lot": "L09",
+   "nom": "Complexe de doublage Calibel",
+   "fabricant": "Isover",
+   "reference": "Calibel",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "doublage",
+    "laine de verre",
+    "complexe"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.isover.fr/guides/isolation-des-parois/murs-par-linterieur-iti/calibel-le-doublage-colle-pour-lisolation-des-murs-par-linterieur",
+     "titre": "Calibel"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.isover.fr/documents/fiche-technique/fichetechnique-calibel-spv-10.pdf",
+     "titre": "Calibel SPV 10, fiche technique"
+    },
+    {
+     "type": "dop",
+     "url": "https://www.isover.fr/documents/dop/dop-n0006-01-04-01-01-03-complexe-calibel.pdf",
+     "titre": "DoP Calibel"
+    }
+   ],
+   "sous": "Cloisons et doublages",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04A.3.2.3 Isolation thermo-acoustique par complexe en laine de verre. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-isover-isolair",
+   "lot": "L09",
+   "nom": "Bande de calfeutrement Isolair",
+   "fabricant": "Isover",
+   "reference": "Isolair",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "calfeutrement",
+    "doublage"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.isover.fr/produits-et-systemes/la-gamme-isover",
+     "titre": "Gamme Isover"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.isover.fr/documents/catalogues/251609-isover-offre-maj-02-25-web-pap-260225-v2.pdf",
+     "titre": "Offre Isover résidentiel 2026"
+    }
+   ],
+   "sous": "Cloisons et doublages",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04A.3.2.3 Isolation thermo-acoustique par complexe en laine de verre. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-ecophon-hygiene",
+   "lot": "L09",
+   "nom": "Plafond Hygiene (dalles 600x600)",
+   "fabricant": "Ecophon",
+   "reference": "Hygiene",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "faux plafond",
+    "hygiène",
+    "dalles"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.ecophon.com/fr/products/modular-ceilings/hygiene/",
+     "titre": "Ecophon Hygiene"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.ecophon.com/globalassets/new-site/fr/brochures/hygiene/brochure-hygiene2024-bd.pdf/",
+     "titre": "Brochure Hygiene"
+    }
+   ],
+   "sous": "Plafonds",
+   "perf": "600 x 600 x 20 mm, nettoyable",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04A.3.3.2 Dalle minérales 600x600 qualité « hygiène » - type 3. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-knauf-organic-twin",
+   "lot": "L09",
+   "nom": "Plafond en fibres de bois Organic Twin",
+   "fabricant": "Knauf",
+   "reference": "Organic Twin",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "faux plafond",
+    "fibre de bois",
+    "acoustique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://knauf.com/fr-FR/p/produit/heradesign-twin-23175_4091",
+     "titre": "Organic Twin Pure"
+    },
+    {
+     "type": "site",
+     "url": "https://knauf.com/fr-FR/p/produit/organic-twin-colors-23173_4091",
+     "titre": "Organic Twin Colors"
+    },
+    {
+     "type": "ft",
+     "url": "https://knauf.com/api/download-center/v1/assets/53d3f6e6-6f58-4ffc-97bf-4b5b8c4d4ac1?download=true",
+     "titre": "Organic Twin, documentation"
+    }
+   ],
+   "sous": "Plafonds",
+   "perf": "Types 1 et 2",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04A.3.3.3 Dalle minérales en fibre de bois - types 1 et 2. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-malerba-malerba",
+   "lot": "L10",
+   "nom": "Huisseries bois",
+   "fabricant": "Malerba",
+   "reference": "Malerba",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "huisserie",
+    "bois"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/fabricant/malerba-50348/",
+     "titre": "Malerba (Batiproduits)"
+    },
+    {
+     "type": "fdes",
+     "url": "https://malerba-flk.francelink.fr/wp-content/uploads/2022/12/MALERBA-FDES-n%C2%B01-BP-communication-HB-1.pdf",
+     "titre": "FDES blocs-portes"
+    }
+   ],
+   "sous": "Portes intérieures",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04B.3.1.1.3 Huisseries bois. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-isogil-p-37",
+   "lot": "L10",
+   "nom": "Panneau de fibres Isogil P.37 (vantaux prépeints)",
+   "fabricant": "Isogil",
+   "reference": "P.37",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "vantail",
+    "panneau de fibres"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/panneaux-prepeints-pour-fabrication-de-portes-p69093388.html",
+     "titre": "Panneaux prépeints (Batiproduits)"
+    }
+   ],
+   "sous": "Portes intérieures",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04B.3.1.1.4.4 Finition prépeinte. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-abloy-secudoor-evo-s",
+   "lot": "L10",
+   "nom": "Bloc-porte de sécurité Secudoor Evo S (EI 30)",
+   "fabricant": "Abloy",
+   "reference": "Secudoor Evo S",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "bloc-porte",
+    "sécurité",
+    "coupe-feu"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.abloy.com/global/fr-fr/our-products/products/blocs-portes-haute-securite/secudoor-evo",
+     "titre": "Secudoor Evo"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/bloc-porte-anti-effraction-a-serrure-motorisee-p69098598.html",
+     "titre": "Secudoor S (Batiproduits)"
+    }
+   ],
+   "sous": "Portes intérieures",
+   "perf": "EI 30, serrure 4 points",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04B.3.1.1.4.7 Porte accès salle d’armement. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-abloy-kel564",
+   "lot": "L10",
+   "nom": "Serrure électrique à contrôle de béquille KEL564",
+   "fabricant": "Abloy",
+   "reference": "KEL564",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "serrure électrique",
+    "contrôle d'accès"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.abloy.com/global/en/our-products/products/electric-locks/europrofile-range/low-energy-locks/lock-case-el564l",
+     "titre": "Serrure EL564"
+    }
+   ],
+   "sous": "Portes intérieures",
+   "perf": "Portes vitrées : KEL461DAS",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04B.3.1.1.5.12 Serrures électriques. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-abloy-ea280-ea281",
+   "lot": "L10",
+   "nom": "Ventouses et serrures électriques EA280 / EA281 (portes DAS)",
+   "fabricant": "Abloy",
+   "reference": "EA280, EA281",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "serrure électrique",
+    "DAS"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.lockandkey.co.uk/product/abloy-ea280-concealed-door-loop-for-doors-opening-120-degrees/datasheet.pdf",
+     "titre": "EA280, fiche technique (distributeur)"
+    }
+   ],
+   "sous": "Portes intérieures",
+   "perf": "Ouverture 120° ou 180°",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04B.3.1.1.5.13 Serrures électriques portes DAS. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-vachette-urgence",
+   "lot": "L10",
+   "nom": "Serrure de sûreté décondamnable Urgence",
+   "fabricant": "Vachette",
+   "reference": "Urgence",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "serrure",
+    "décondamnable"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.vachette.fr/professionnel/fr/products/antipanique-et-urgence/serrure-et-cremone-en179/d45-urgence",
+     "titre": "D45 Urgence"
+    }
+   ],
+   "sous": "Portes intérieures",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04B.3.1.1.5.3 Serrure de sûreté décondamnable avec canon une face. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-vachette-d-452-x",
+   "lot": "L10",
+   "nom": "Serrure bec de cane D 452 X",
+   "fabricant": "Vachette",
+   "reference": "D 452 X",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "serrure",
+    "bec de cane"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.vachette.fr/professionnel/fr/products/serrure-et-verrou-menuiserie-bois/serrure-mecanique-a-mortaiser-monopoint/d450",
+     "titre": "Serrures D450"
+    }
+   ],
+   "sous": "Portes intérieures",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04B.3.1.1.5.4 Serrure bec de cane. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-vachette-d-453",
+   "lot": "L10",
+   "nom": "Serrure bec de cane à condamnation D 453",
+   "fabricant": "Vachette",
+   "reference": "D 453",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "serrure",
+    "condamnation"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.vachette.fr/professionnel/fr/products/serrure-et-verrou-menuiserie-bois/serrure-mecanique-a-mortaiser-monopoint/d450",
+     "titre": "Serrures D450"
+    }
+   ],
+   "sous": "Portes intérieures",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04B.3.1.1.5.5 Serrure bec de cane à condamnation. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-dormakaba-sr-392",
+   "lot": "L10",
+   "nom": "Sélecteur de fermeture SR 392",
+   "fabricant": "Dormakaba",
+   "reference": "SR 392",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "sélecteur",
+    "portes à deux vantaux"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.dormakaba.com/be-fr/offre/produits/technique-de-porte/ferme-portes/sr-390-sr-392-selecteurs-de-fermeture--do_2874",
+     "titre": "SR 390 / SR 392"
+    }
+   ],
+   "sous": "Portes intérieures",
+   "perf": "Marque Dorma",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04B.3.1.1.5.7 Sélecteur de fermeture. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-bricard-pop",
+   "lot": "L10",
+   "nom": "Béquille inox sur rosace Pop",
+   "fabricant": "Bricard",
+   "reference": "Pop",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "béquille",
+    "inox"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://bricard.com/professionnels/produits/poignees/poignees-inox/pop-ensemble-sur-plaque-et-rosace",
+     "titre": "Pop, ensemble sur plaque et rosace"
+    },
+    {
+     "type": "ft",
+     "url": "https://bricard.com/professionnels/wp-content/uploads/sites/17/2023/01/Fiche-technique-Poignee-sur-rosace-POP.pdf",
+     "titre": "Pop sur rosace, fiche technique"
+    }
+   ],
+   "sous": "Portes intérieures",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04B.3.1.1.5.9 Ensemble béquilles. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-bezault-equinox",
+   "lot": "L10",
+   "nom": "Rosette cache-entrée inox Equinox",
+   "fabricant": "Bezault",
+   "reference": "Equinox",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "rosette",
+    "gaine technique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.bricomarche.com/p/jeu-de-rosace-6700-type-cle-i-finition-inox-vachette-19234/3159150192343",
+     "titre": "Rosace Equinox 6700 (distributeur)"
+    }
+   ],
+   "sous": "Habillages, agencements",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04B.3.2 Façades de gaines techniques. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-polyrey-polyrey",
+   "lot": "L20",
+   "nom": "Stratifiés 8/10 gammes Uni et Bois",
+   "fabricant": "Polyrey",
+   "reference": "Polyrey",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "stratifié",
+    "agencement",
+    "banque d'accueil"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.polyrey.com/decors-et-designs",
+     "titre": "Décors et designs"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.polyrey.com/media/Technical_Resources/polyrey/polyrey_hpl_-_fiche_technique_-_fr.pdf",
+     "titre": "Stratifié HPL, fiche technique"
+    }
+   ],
+   "sous": "",
+   "perf": "8/10e",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04B.3.8.1 Banque d’accueil de la mairie; 04B.3.8.2.1 Guichet Police Municipale; 04B.3.8.3 Meuble kitchenette de la mairie; 04B.3.8.4 Meuble kitchenette de la police municipale. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-but-columbus",
+   "lot": "L20",
+   "nom": "Table basse Columbus imitation chêne",
+   "fabricant": "BUT",
+   "reference": "Columbus",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "mobilier",
+    "accueil"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.but.fr/produits/4894223245623/Table-basse-relevable-COLUMBUS-imitation-chene.html",
+     "titre": "Table basse Columbus imitation chêne"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04B.3.9.10.2 Table basse. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-forbo-sarlon-traffic-19-db",
+   "lot": "L12",
+   "nom": "Sol PVC acoustique Sarlon Traffic 19 dB",
+   "fabricant": "Forbo",
+   "reference": "Sarlon Traffic 19 dB",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "sol PVC",
+    "acoustique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.forbo.com/flooring/fr-fr/produits/sol-pvc-acoustique-u3-u4/sarlon-trafic-19-db-33-43/bjyzjj",
+     "titre": "Sarlon Trafic 19 dB"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.forbo.com/flooring/fr-fr/documentation-technique/pvc-acoustique-u3-u4-et-fort-trafic/pd30g6",
+     "titre": "Documentation technique"
+    }
+   ],
+   "sous": "",
+   "perf": "U4 P3, U3 P3, R10",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04C.3.2.1 Locaux courants. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-forbo-sarlon",
+   "lot": "L12",
+   "nom": "Sol PVC Sarlon pour marches complètes",
+   "fabricant": "Forbo",
+   "reference": "Sarlon",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "sol PVC",
+    "escalier"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.forbo.com/flooring/fr-fr/produits/sol-pvc-acoustique-u3-u4/sarlon-trafic-19-db-33-43/bjyzjj",
+     "titre": "Sarlon"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.forbo.com/flooring/fr-fr/documentation-technique/pvc-acoustique-u3-u4-et-fort-trafic/pd30g6",
+     "titre": "Documentation technique"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04C.3.2.3 Escaliers et paliers. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-forbo-coral-classic",
+   "lot": "L12",
+   "nom": "Tapis de propreté Coral Classic",
+   "fabricant": "Forbo",
+   "reference": "Coral Classic",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "tapis de propreté",
+    "entrée"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.forbo.com/flooring/fr-fr/documentation-technique/tapis-de-proprete/pbe3s5",
+     "titre": "Tapis de propreté, documentation technique"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04C.3.3.1 Tapis de propreté. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-forbo-bulletin-board",
+   "lot": "L20",
+   "nom": "Tableau d'affichage linoléum Bulletin Board",
+   "fabricant": "Forbo",
+   "reference": "Bulletin Board",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "affichage",
+    "linoléum"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.forbo.com/flooring/fr-ch/produits/linoleum-de-surface/bulletin-board/bxrv3l",
+     "titre": "Bulletin Board"
+    }
+   ],
+   "sous": "Signalétique",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04C.4.7.1.1 Panneau d’affichage souple. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-gerflor-gti-el5",
+   "lot": "L12",
+   "nom": "Dalles techniques PVC GTI EL5 (isostatiques)",
+   "fabricant": "Gerflor",
+   "reference": "GTI EL5",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "dalles PVC",
+    "antistatique",
+    "pose libre"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://cdn.gerflor.com/media/2/41203/fiche%20technique%20-%20gti%20el5%20cleantech.pdf",
+     "titre": "GTI EL5, fiche technique"
+    },
+    {
+     "type": "cat",
+     "url": "https://cdn.gerflor.com/media/2/54885/mipolam%20el5%20-%20cat%C3%A1logo.pdf",
+     "titre": "Solutions EL5 / EL7"
+    }
+   ],
+   "sous": "",
+   "perf": "500 x 500 mm, ép. 6 mm, U4 P3 E2 C2, Bfl-s1",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04C.3.2.2 Sol PVC isostatique. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-seigneurie-pancrytex",
+   "lot": "L13",
+   "nom": "Peinture Pancrytex (Hydro Pliolite)",
+   "fabricant": "Seigneurie",
+   "reference": "Pancrytex",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "peinture",
+    "façade",
+    "pliolite"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.archiexpo.com/prod/seigneurie/product-97804-1292349.html",
+     "titre": "Seigneurie (ArchiExpo)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04C.4.6.1 Peinture pliolite. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-zolpan-silextra-lisse",
+   "lot": "L13",
+   "nom": "Peinture acrylique siloxane Silextra lisse",
+   "fabricant": "Zolpan",
+   "reference": "Silextra lisse",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "peinture",
+    "extérieur",
+    "siloxane"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://pro.tollens.com/download/fiche_technique/zol_silextralisse_14945_1121/1/Silextra+Lisse-fiche_technique.pdf",
+     "titre": "Silextra Lisse, fiche technique"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/revetement-hydrofuge-d-aspect-mat-tendu-silex-p68887608.html",
+     "titre": "Silextra (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "7 m²/l par couche",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04C.4.6.2 Peinture extérieure. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-direct-signaletique-29102-005",
+   "lot": "L20",
+   "nom": "Plaques de porte modulables Slide",
+   "fabricant": "Direct Signalétique",
+   "reference": "29102-005",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "plaque de porte",
+    "signalétique"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.direct-signaletique.com/F-FICHIER_LIE_A_909.pdf-signaletique-de-porte-modulable-slide.aspx",
+     "titre": "Slide, fiche produit"
+    },
+    {
+     "type": "site",
+     "url": "https://direct-signaletique.com/445-plaques-de-porte-et-pictos",
+     "titre": "Plaques de porte"
+    }
+   ],
+   "sous": "Signalétique",
+   "perf": "A6 paysage 150 x 105 mm",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 04C.4.7.2.2 Signalisation par plaque. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-kme-sanco",
+   "lot": "L14",
+   "nom": "Tube cuivre Sanco",
+   "fabricant": "KME",
+   "reference": "Sanco",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "cuivre",
+    "eau froide",
+    "réseaux"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://www.kme.com/fileadmin/user_upload/SANCO-Product_Range_EN_2018_web.pdf",
+     "titre": "Sanco, gamme"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.kme.com/fileadmin/user_upload/Product_Data_Sheet_Plumbing_Tubes_2017_EN.pdf",
+     "titre": "Tubes cuivre sanitaires, fiche"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.3.2 Réseaux eau froide. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-armacell-armaflex",
+   "lot": "L14",
+   "nom": "Isolant élastomère Armaflex (classe M1)",
+   "fabricant": "Armacell",
+   "reference": "Armaflex",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "calorifuge",
+    "élastomère"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.armacell.com/en-US/armaflex-overview",
+     "titre": "Gamme ArmaFlex"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.armacell.com/fr-FR/product/technical-specs/htarmaflex",
+     "titre": "HT/ArmaFlex, données techniques"
+    }
+   ],
+   "sous": "",
+   "perf": "Ép. 13 mm minimum",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.3.3 Calorifuge EFS; 6A.2.4.3 Calorifuge ECS. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-lri-150",
+   "lot": "L14",
+   "nom": "Anti-bélier réf. 150",
+   "fabricant": "LRI",
+   "reference": "150",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "anti-bélier",
+    "robinetterie"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/fabricant/lri-53038/",
+     "titre": "LRI (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.3.4 Robinetterie. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-lri-3009-3007",
+   "lot": "L14",
+   "nom": "Robinet de puisage réf. 3009 avec applique 3007",
+   "fabricant": "LRI",
+   "reference": "3009, 3007",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "robinet",
+    "puisage"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/fabricant/lri-53038/",
+     "titre": "LRI (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.3.4 Robinetterie. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-desbordes-desbordes",
+   "lot": "L14",
+   "nom": "Détendeur stabilisateur de pression",
+   "fabricant": "Desbordes",
+   "reference": "Desbordes",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "détendeur",
+    "pression"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/reducteurs-de-pression-desbordes-i-type-11-bis-p379631895.html",
+     "titre": "Réducteurs de pression Desbordes (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.3.4 Robinetterie. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-chaffoteaux-aquanext-plus",
+   "lot": "L14",
+   "nom": "Chauffe-eau thermodynamique Aquanext Plus",
+   "fabricant": "Chaffoteaux",
+   "reference": "Aquanext Plus",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "ECS",
+    "thermodynamique",
+    "ballon"
+   ],
+   "liens": [
+    {
+     "type": "pose",
+     "url": "https://manualslib.fr/manual/3349/Chaffoteaux-Aquanext-Plus-200.html?page=67",
+     "titre": "Aquanext Plus 200, notice (caractéristiques techniques)"
+    }
+   ],
+   "sous": "",
+   "perf": "250 à 300 l",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.4.4 Ballon thermodynamique. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-atlantic-atlantic-compact",
+   "lot": "L14",
+   "nom": "Chauffe-eau électrique compact ou étroit",
+   "fabricant": "Atlantic",
+   "reference": "Atlantic compact",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "ECS",
+    "ballon électrique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.atlantic.fr/Chauffer-l-eau/Chauffe-eau/Chauffe-eau-electrique/Petites-Capacites",
+     "titre": "Chauffe-eau petites capacités"
+    },
+    {
+     "type": "site",
+     "url": "https://www.atlantic.fr/Chauffer-l-eau/Chauffe-eau/Chauffe-eau-electrique/Lineo-Connecte",
+     "titre": "Chauffe-eau plat Linéo"
+    }
+   ],
+   "sous": "",
+   "perf": "15 à 30 l",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.4.5 Ballon électrique. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-girpi-girpi",
+   "lot": "L14",
+   "nom": "Tubes et raccords PVC évacuation",
+   "fabricant": "Girpi",
+   "reference": "Girpi",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "PVC",
+    "évacuation",
+    "EU EV"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.girpi.com/systeme-devacuation",
+     "titre": "Système d'évacuation"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.girpi.com/download/raccords-pvc-evacuation-des-eaux-usees-et-eaux-vannes/",
+     "titre": "Raccords PVC évacuation, documentation"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.5.2 Réseaux eaux usées et eaux vannes. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-geberit-276250000-276350000",
+   "lot": "L14",
+   "nom": "Lavabo Renova Compact",
+   "fabricant": "Geberit",
+   "reference": "276250000, 276350000",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "lavabo",
+    "sanitaire"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://catalog.geberit.fr/fr-FR/series/SC1_452444",
+     "titre": "Renova Compact"
+    }
+   ],
+   "sous": "",
+   "perf": "Avec trop-plein",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.8.3 Lavabos; 6A.4.1.1 Lavabos Geberit Renova type compact. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-geberit-renova",
+   "lot": "L14",
+   "nom": "Pack WC suspendu Renova",
+   "fabricant": "Geberit",
+   "reference": "Renova",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "WC suspendu",
+    "sanitaire"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://catalog.geberit.fr/fr-FR/series/SC1_452444",
+     "titre": "Renova Compact"
+    },
+    {
+     "type": "site",
+     "url": "https://catalog.geberit.fr/fr-FR/",
+     "titre": "Catalogue Geberit"
+    }
+   ],
+   "sous": "",
+   "perf": "Abattant duroplast",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.8.8 Cuvette WC; 6A.4.1.2 Sanitaires WC Geberit Renova. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-geberit-440-303-00-5",
+   "lot": "L14",
+   "nom": "Bâti-support Sanbloc Sigma 12",
+   "fabricant": "Geberit",
+   "reference": "440.303.00.5",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "bâti-support",
+    "WC"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://catalog.geberit.fr/fr-FR/product/PRO_3933444",
+     "titre": "Bâti-support Sanbloc, réservoir Sigma 12 cm"
+    }
+   ],
+   "sous": "",
+   "perf": "Double commande 3/6 l",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.8.8 Cuvette WC; 6A.2.8.9 WC pour PMR/ lavabo PMR. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-geberit-bambini",
+   "lot": "L14",
+   "nom": "WC enfant Bambini",
+   "fabricant": "Geberit",
+   "reference": "Bambini",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "WC",
+    "enfant"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://catalog.geberit.fr/fr-FR/series/SC1_1104630",
+     "titre": "Geberit Bambini"
+    },
+    {
+     "type": "site",
+     "url": "https://catalog.geberit.fr/fr-FR/product/PRO_3933441",
+     "titre": "Bâti-support Duofix pour Bambini"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.8.8 Cuvette WC; 6A.4.1.5 Cuvette enfant WC Geberit Bambini. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-geberit-vitalis",
+   "lot": "L14",
+   "nom": "WC suspendu PMR Vitalis 70 cm",
+   "fabricant": "Geberit",
+   "reference": "Vitalis",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "WC",
+    "PMR"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://catalog.geberit.fr/fr-FR/product/PRO_1435299",
+     "titre": "WC suspendu Renova Comfort rallongé PMR"
+    },
+    {
+     "type": "site",
+     "url": "https://catalog.geberit.fr/fr-FR/",
+     "titre": "Catalogue Geberit"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.8.9 WC pour PMR/ lavabo PMR; 6A.4.1.4 Sanitaires PMR WC Geberit Renova. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-geberit-renova-comfort",
+   "lot": "L14",
+   "nom": "Lavabo PMR Renova Comfort 55 cm",
+   "fabricant": "Geberit",
+   "reference": "Renova Comfort",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "lavabo",
+    "PMR"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://catalog.geberit.fr/fr-FR/product/PRO_501193",
+     "titre": "Lavabo Renova Comfort PMR"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.8.9 WC pour PMR/ lavabo PMR; 6A.4.1.3 Lavabos Geberit Renova type comfort, adapté PMR. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-geberit-geberit",
+   "lot": "L14",
+   "nom": "Receveur de douche antidérapant 90 x 90",
+   "fabricant": "Geberit",
+   "reference": "Geberit",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "receveur",
+    "douche",
+    "antidérapant"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://catalog.geberit.fr/fr-FR/",
+     "titre": "Catalogue Geberit"
+    }
+   ],
+   "sous": "",
+   "perf": "Classe C (EN 16165), PN24",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.8.5 Douche. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-ideal-standard-okyris-clinic",
+   "lot": "L14",
+   "nom": "Robinet électronique Okyris Clinic",
+   "fabricant": "Ideal Standard",
+   "reference": "Okyris Clinic",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "robinet",
+    "électronique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.domomat.com/66803-mitigeur-evier-okyris-2-clinic-porcher-bec-bas-monotrou-chrome-porcher-d2301aa.html",
+     "titre": "Okyris 2 Clinic (distributeur)"
+    },
+    {
+     "type": "ft",
+     "url": "https://villeroy-boch-fr.mynewsdesk.com/pressreleases/ideal-standard-robinetterie-electrronique-sans-contact-3392692.pdf",
+     "titre": "Robinetterie électronique Ideal Standard"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.8.4 Robinetterie; 6A.4.2.1 Robinets à mitigeur électronique. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-ideal-standard-matura-2",
+   "lot": "L14",
+   "nom": "Barre de relèvement Matura 2",
+   "fabricant": "Ideal Standard",
+   "reference": "Matura 2",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "barre",
+    "PMR"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "350 x 350 mm, 135°",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.8.9 WC pour PMR/ lavabo PMR. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-10-26"
+  },
+  {
+   "id": "ctn-ideal-standard-ideal-standard",
+   "lot": "L14",
+   "nom": "Poste d'eau de service",
+   "fabricant": "Ideal Standard",
+   "reference": "Ideal Standard",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "vidoir",
+    "poste d'eau"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.8.7 Vidoir; 6A.4.1.8 Vidoir. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-10-26"
+  },
+  {
+   "id": "ctn-porcher-olyos",
+   "lot": "L14",
+   "nom": "Mitigeur de douche mural Olyos",
+   "fabricant": "Porcher",
+   "reference": "Olyos",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "mitigeur",
+    "douche"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/mitigeur-de-douche-mural-olyos-d2499aa-p448568482.html",
+     "titre": "Olyos D2499AA (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.8.5 Douche; 6A.4.1.6 Douche Porcher. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-limatec-1550",
+   "lot": "L14",
+   "nom": "Siphon de sol 1550",
+   "fabricant": "Limatec",
+   "reference": "1550",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "siphon de sol",
+    "douche"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/siphon-de-sol-limatec-en-acier-inoxydable-1550-p249587238.html",
+     "titre": "Siphon de sol 1550 (Batiproduits)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.espace-aubade.fr/salle-de-bain/douche-italienne/siphon-1550rbdg.html",
+     "titre": "Siphon 1550 (distributeur)"
+    }
+   ],
+   "sous": "",
+   "perf": "150 x 150 mm, sortie 50 mm",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.8.5 Douche. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-roth-equi",
+   "lot": "L14",
+   "nom": "Paroi et porte de douche Equi",
+   "fabricant": "Roth",
+   "reference": "Equi",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "paroi de douche"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/parois-de-douche-design-a-prix-mini-p69311108.html",
+     "titre": "Parois Equi (Batiproduits)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.espace-aubade.fr/salle-de-bain/douche-parois/equi-2ms-porte-pivotante.html",
+     "titre": "Equi (distributeur)"
+    }
+   ],
+   "sous": "",
+   "perf": "Verre de sécurité 5 mm",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.8.5 Douche. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-franke-286286",
+   "lot": "L14",
+   "nom": "Évier deux bacs MAN",
+   "fabricant": "Franke",
+   "reference": "286286",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "évier",
+    "inox"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "1,20 x 0,60 m",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.8.6 Évier; 6A.4.1.7 Éviers 2 bacs. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-10-26"
+  },
+  {
+   "id": "ctn-franke-active-j",
+   "lot": "L14",
+   "nom": "Mitigeur bec de cygne Active J",
+   "fabricant": "Franke",
+   "reference": "Active J",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "robinet",
+    "évier"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.franke.com/fr/fr/home-solutions/produits/mitigeurs-cuisine/product-detail-page.html/115.0653.398.html",
+     "titre": "Active J bec"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.8.6 Évier; 6A.4.2.2 Robinet évier. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-delabie-d2670",
+   "lot": "L14",
+   "nom": "Mélangeur d'évier D2670",
+   "fabricant": "Delabie",
+   "reference": "D2670",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "mélangeur",
+    "poste d'eau"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.delabie.fr/nos-produits/robinetteries-specifiques/renovation/d2670-melangeur-d-evier",
+     "titre": "D2670"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.delabie.fr/export/productsheet/pdf/50599?key=4958",
+     "titre": "D2670, fiche technique"
+    }
+   ],
+   "sous": "",
+   "perf": "Bec 120 mm, 3 l/min",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6A.2.8.7 Vidoir; 6A.4.2.3 Robinet poste d’eau. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-trox-x-cube-x2",
+   "lot": "L15",
+   "nom": "Centrale de traitement d'air X-Cube X2",
+   "fabricant": "Trox",
+   "reference": "X-Cube X2",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "CTA",
+    "double flux",
+    "adiabatique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.trox.fr/centrale-de-traitement-dair/x-cube-x2-compact-bff82ab03f72a019",
+     "titre": "X-CUBE X2 compact"
+    },
+    {
+     "type": "cat",
+     "url": "https://cdn.trox.de/2684bdbec8aceb46/2a0cb2ab6c5e/50SB_2024_04_XCUBE-X2_compact_FR_web.pdf",
+     "titre": "X-CUBE X2 compact, brochure"
+    },
+    {
+     "type": "pose",
+     "url": "https://cdn.trox.de/f4370ad00fb552d8/9fdafd7dd6f5/X2-Rxx-V--Pxx_OJ_OM_A00000094318_V2_2025_05_FR_fr.pdf",
+     "titre": "Mode d'emploi"
+    }
+   ],
+   "sous": "",
+   "perf": "Eurovent A+",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6B.1.2 Présentation du projet; 6B.2.2.11 CTA air neuf. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-trox-vfl",
+   "lot": "L15",
+   "nom": "Régulateur de débit autoréglable VFL",
+   "fabricant": "Trox",
+   "reference": "VFL",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "débit",
+    "régulation",
+    "aéraulique"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://cdn.trox.de/public/2b72dc3051ac08f5/23f0760db372aa6e7a02cb3c0d858bc9/5_9_2_vfl.pdf",
+     "titre": "VFL, fiche technique"
+    },
+    {
+     "type": "site",
+     "url": "https://www.trox.fr/produits/unit%C3%A9s-de-r%C3%A9gulation-deedff8e3100814d",
+     "titre": "Unités de régulation"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6B.2.2.2 Réseaux de gaines et accessoires. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-trox-x-grille-modular",
+   "lot": "L15",
+   "nom": "Diffuseur plafonnier X-Grille Modular",
+   "fabricant": "Trox",
+   "reference": "X-Grille Modular",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "diffuseur",
+    "soufflage",
+    "reprise"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.trox.fr/grilles-de-ventilation/x-grille-modular-ad128788786d9d52",
+     "titre": "X-Grille Modular"
+    },
+    {
+     "type": "ft",
+     "url": "https://cdn.trox.de/c5e3cac569918cae/559bfc500ebb/X-GRILLE-modular_PD_2021_03_29_DE_en.pdf",
+     "titre": "X-Grille Modular, fiche produit"
+    }
+   ],
+   "sous": "",
+   "perf": "RAL 9010",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6B.2.2.4 Diffusion de l’air. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-trox-lvs-z-lvs",
+   "lot": "L15",
+   "nom": "Bouches de ventilation LVS et Z-LVS",
+   "fabricant": "Trox",
+   "reference": "LVS, Z-LVS",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "bouche",
+    "ventilation"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://cdn.trox.de/198bccbb586e77e6/99145921dbcb/LVS_PD_2024_01_16_DE_fr.pdf",
+     "titre": "LVS, fiche technique"
+    },
+    {
+     "type": "site",
+     "url": "https://www.trox.fr/bouches-circulaires/z-lvs---soufflage-73b97ffb88ae2465",
+     "titre": "Z-LVS"
+    },
+    {
+     "type": "ft",
+     "url": "https://cdn.trox.de/f07c9f0072252801/90c2eaaa32e5/Z-LVS_PD_2026_06_02_DE_fr.pdf",
+     "titre": "Z-LVS, fiche technique"
+    }
+   ],
+   "sous": "",
+   "perf": "Type 125/G1",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6B.2.2.4 Diffusion de l’air. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-vim-cdr-50f",
+   "lot": "L15",
+   "nom": "Registre de réglage CDR 50F",
+   "fabricant": "VIM",
+   "reference": "CDR 50F",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "registre",
+    "équilibrage"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.prosynergie.fr/media/fichier/Fiche%20technique%20-%20CDR%2050%20-%20Registre%20pour%20conduite%20d%C2%B4air%20rectangulaire%20pas%20des%20ailettes%2050%20mm_20260401165827.pdf",
+     "titre": "CDR 50, fiche technique (distributeur)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/fabricant/vim-52073/",
+     "titre": "VIM (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6B.2.2.2 Réseaux de gaines et accessoires. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-vim-cult",
+   "lot": "L15",
+   "nom": "Clapet coupe-feu CULT",
+   "fabricant": "VIM",
+   "reference": "CULT",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "clapet coupe-feu",
+    "CCF"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/fabricant/vim-52073/",
+     "titre": "VIM (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "NF S 61-937",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6B.2.2.5 Clapets ou volets coupe-feu. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-anjos-alize",
+   "lot": "L15",
+   "nom": "Bouche d'extraction Alizé",
+   "fabricant": "Anjos",
+   "reference": "Alizé",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "bouche",
+    "extraction"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://media.xpair.com/pdf/ventilation/Alize_hygro.pdf",
+     "titre": "Alizé hygro, documentation"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/bouches-d-extraction-a-debit-module-p69046233.html",
+     "titre": "Bouches Alizé (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6B.2.2.4 Diffusion de l’air. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-acomat-acomat",
+   "lot": "L15",
+   "nom": "Gaine flexible isolée phonique",
+   "fabricant": "Acomat",
+   "reference": "Acomat",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "gaine flexible",
+    "acoustique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/gaines-flexibles-aluminium-aluflex-n-m0-et-sonof-p422551424.html",
+     "titre": "Aluflex N, Sonoflex I (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "M0, isolant 25 mm",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6B.2.2.4 Diffusion de l’air. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-aldes-stop-air",
+   "lot": "L15",
+   "nom": "Joints Stop Air pour clapets coupe-feu",
+   "fabricant": "Aldes",
+   "reference": "Stop Air",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "clapet coupe-feu",
+    "étanchéité"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://assets.aldes.fr/assets/docsFR/brochure-protection-incendie.pdf",
+     "titre": "Aldes, solutions protection incendie (brochure)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.aldes.fr/solutions/la-protection-incendie/le-compartimentage",
+     "titre": "Compartimentage"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6B.1.6 Réglementation applicable. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-metu-metu",
+   "lot": "L15",
+   "nom": "Trappes de visite étanches pour gaines",
+   "fabricant": "Metu",
+   "reference": "Metu",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "trappe de visite",
+    "gaines",
+    "nettoyage"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://metu.de/fr/page-daccueil/produits/trappes-de-visite/rrd/rrd-pe",
+     "titre": "Trappes de visite RRD"
+    },
+    {
+     "type": "cat",
+     "url": "http://www.metu.fr/admin/upload/page15/03_01.pdf",
+     "titre": "Trappes de visite pour parois planes (catalogue)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6B.2.2.3 Nettoyage et maintenance des gaines. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-exhale-exhale",
+   "lot": "L15",
+   "nom": "Brasseur d'air sans pales",
+   "fabricant": "Exhale",
+   "reference": "Exhale",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "brasseur d'air",
+    "rafraîchissement"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/ventilateur-de-plafond-sans-pales-exhale-p69326348.html",
+     "titre": "Exhale (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "6 vitesses",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6B.2.2.10 Brasseurs d’air. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-acova-altima-vlm-hlm",
+   "lot": "L15",
+   "nom": "Radiateurs Altima (VLM horizontal, HLM vertical)",
+   "fabricant": "Acova",
+   "reference": "Altima VLM, HLM",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "radiateur",
+    "chauffage"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/radiateurs-a-panneau-aluminium-ou-acier-inoxydabl-p69064883.html",
+     "titre": "Altima (Batiproduits)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.archiexpo.com/prod/acova/product-284-294746.html",
+     "titre": "Altima HLMA (ArchiExpo)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.archiexpo.com/prod/acova/product-284-294758.html",
+     "titre": "Altima VLMI (ArchiExpo)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6B.2.3.2 Équipements et pose des radiateurs; 6B.4.1 Tableau pré-sélection des radiateurs. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-danfoss-dynamic-valve",
+   "lot": "L15",
+   "nom": "Robinet thermostatique Dynamic Valve",
+   "fabricant": "Danfoss",
+   "reference": "Dynamic Valve",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "robinet thermostatique",
+    "radiateur"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.danfoss.com/fr-fr/products/dhs/radiator-and-room-thermostats/radiator-thermostats/radiator-valves/dynamic-valve/",
+     "titre": "Dynamic Valve"
+    },
+    {
+     "type": "cat",
+     "url": "https://assets.danfoss.com/documents/latest/94399/AD135386401323fr-FR0101.pdf",
+     "titre": "Dynamic Valve, documentation"
+    }
+   ],
+   "sous": "",
+   "perf": "Tête collectivités",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6B.2.3.2 Équipements et pose des radiateurs. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-armstrong-armstrong",
+   "lot": "L15",
+   "nom": "Purgeurs automatiques",
+   "fabricant": "Armstrong",
+   "reference": "Armstrong",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "purgeur",
+    "hydraulique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.armstronginternational.com/fr/products-systems/steam-condensate/installation-de-purge-vapeur-et-de-tra%C3%A7age/purgeurs/purgeurs-%C3%A0-flotteur-invers%C3%A9-ouvert/purgeurs-vapeur-s%C3%A9rie-fio-300",
+     "titre": "Purgeurs Armstrong"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6B.2.3.3 Terrasse technique CTA; 6B.2.3.4 Réseaux hydrauliques. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-mupro-mupro",
+   "lot": "L15",
+   "nom": "Rails et colliers de supportage",
+   "fabricant": "Mupro",
+   "reference": "Mupro",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "supportage",
+    "rails"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.muepro.fr/Produits/Technique-de-fixation/Rails-d-installation/",
+     "titre": "Rails d'installation"
+    },
+    {
+     "type": "site",
+     "url": "https://www.muepro.fr/Produits/Technique-de-fixation/Colliers/Collier-a-vis-lourd-fr-2.html",
+     "titre": "Colliers"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6B.2.2.2 Réseaux de gaines et accessoires; 6B.2.3.5 Calorifuge tuyauteries EC. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-straub-straub",
+   "lot": "L15",
+   "nom": "Raccords de tuyauteries sans soudure",
+   "fabricant": "Straub",
+   "reference": "Straub",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "raccord",
+    "tuyauterie"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.straub.ch/fr/raccords-straub/raccords-autobutee/straub-grip/",
+     "titre": "Straub-Grip"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.straub.ch/fileadmin/Straub/Downloads/03_Flyers/Manual_052018_fr_LQ_cp.pdf",
+     "titre": "Manuel Straub"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 6B.2.3.4 Réseaux hydrauliques. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-legrand-mosaic",
+   "lot": "L16",
+   "nom": "Appareillage Mosaic (interrupteurs, boutons-poussoirs, prises)",
+   "fabricant": "Legrand",
+   "reference": "Mosaic",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "appareillage",
+    "prise",
+    "interrupteur"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.legrand.fr/pro/catalogue/appareillage-maison-connectee-et-pilotage-du-batiment/appareillage-maison-et-batiment/plaque?sort-by=pertinence&programme-b2b%5B%5D=mosaic",
+     "titre": "Mosaic"
+    }
+   ],
+   "sous": "",
+   "perf": "Encastré, cadre et plaque blanche",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.2.7.1 Caractéristique des appareillages. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-legrand-plexo-55",
+   "lot": "L16",
+   "nom": "Appareillage étanche Plexo 55",
+   "fabricant": "Legrand",
+   "reference": "Plexo 55",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "appareillage",
+    "étanche"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.legrand.fr/pro/catalogue/plexo",
+     "titre": "Plexo"
+    }
+   ],
+   "sous": "",
+   "perf": "IP 55 IK07, monobloc",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.2.7.1 Caractéristique des appareillages; 05.2.6.4 Raccordements. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-legrand-cablofil-ez",
+   "lot": "L16",
+   "nom": "Chemins de câbles en fil Cablofil EZ",
+   "fabricant": "Legrand",
+   "reference": "Cablofil EZ",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "chemin de câbles",
+    "dalle fil"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.legrand.fr/pro/catalogue/cablofil",
+     "titre": "Cablofil"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.2.5.2 Caractéristiques des chemins de câbles. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-beg-beg",
+   "lot": "L16",
+   "nom": "Détecteur de présence et de seuil de lumière",
+   "fabricant": "BEG",
+   "reference": "BEG",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "détecteur de présence",
+    "éclairage"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://www.beg-luxomat.com/files/downloads/fr_FR/download-infomaterial/content/51318_DALI-Katalog_FR_V1_web.pdf",
+     "titre": "Détecteurs de présence DALI (catalogue)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.2.7.1 Caractéristique des appareillages. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-wieland-wieland",
+   "lot": "L16",
+   "nom": "Connecteurs précâblés pour éclairage et nourrices de PC",
+   "fabricant": "Wieland",
+   "reference": "Wieland",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "connecteur",
+    "câblage"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://cdn.wieland-electric.com/_Resources/Persistent/f/2/a/b/f2abeb22f10cb9b9e3d4a1c1f104db76036dd1c9/0429.2_BRO_Focus_Light_screen_FR.pdf",
+     "titre": "Connectique pour l'éclairage (brochure)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.wieland-electric.com/en/lighting-technology/solutions/",
+     "titre": "Solutions éclairage"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.2.6.1 Liaisons câbles. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-hilti-x-ekb-x-ech",
+   "lot": "L16",
+   "nom": "Fixations de câbles X-EKB et X-ECH",
+   "fabricant": "Hilti",
+   "reference": "X-EKB, X-ECH",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "fixation",
+    "câbles"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.hilti.fr/c/CLS_FASTENER_7135/CLS_FASTENING_ELEMENTS_7135/r1684",
+     "titre": "X-EKB"
+    },
+    {
+     "type": "site",
+     "url": "https://www.hilti.fr/c/CLS_FASTENER_7135/CLS_FASTENING_ELEMENTS_7135/r644",
+     "titre": "X-ECH"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.2.6.2 Supports de câbles. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-clareo-lighting-lineled-advance-fs",
+   "lot": "L16",
+   "nom": "Luminaire LED encastré LineLED Advance FS (type 01)",
+   "fabricant": "Clareo Lighting",
+   "reference": "LineLED Advance FS",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "luminaire",
+    "LED",
+    "bureaux"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.clareolighting.com/en/led-light-lines/14411-lineled-clareo-100x50-120cm-30w-120lm-w-advance-2-white-fs-3666196189959.html",
+     "titre": "LineLED Advance 2 FS"
+    }
+   ],
+   "sous": "",
+   "perf": "10 W, 49 x 32 x 100 mm, blanc",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.2.9.1 Nomenclature des appareils d’éclairage. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-clareo-lighting-downray-design-2",
+   "lot": "L16",
+   "nom": "Downlight encastré DownRay Design 2 (type 08)",
+   "fabricant": "Clareo Lighting",
+   "reference": "DownRay Design 2",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "downlight",
+    "LED",
+    "circulation"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.clareolighting.com/en/led-downlights/15330-downray-clareo-20w-optic-design-white-black-reflector-without-driver-3666196192522.html",
+     "titre": "DownRay Design"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/spots-encastres-en-saillie-ou-suspendus-en-200-c-p376867250.html",
+     "titre": "DownRay Design (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "20 W, blanc",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.2.9.1 Nomenclature des appareils d’éclairage. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-clareo-lighting-stripled-advance-2",
+   "lot": "L16",
+   "nom": "Ruban LED StripLed Advance 2 (type 10)",
+   "fabricant": "Clareo Lighting",
+   "reference": "StripLed Advance 2",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "ruban LED",
+    "bandeau lumineux"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.clareolighting.com/en/flexible-led-strips/12742-stripled-line-clareo-10w-m-ip20-tech-3666196188532.html",
+     "titre": "StripLed Clareo"
+    }
+   ],
+   "sous": "",
+   "perf": "20 W",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.2.9.1 Nomenclature des appareils d’éclairage. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-clareo-lighting-everpark-advance-4",
+   "lot": "L16",
+   "nom": "Applique étanche LED EverPark Advance 4 (type 12)",
+   "fabricant": "Clareo Lighting",
+   "reference": "EverPark Advance 4",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "applique étanche",
+    "LED",
+    "locaux techniques"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.clareolighting.com/en/led-waterproof-fixtures-120cm/18171-everpark-clareo-120cm-21w-advance-4-3666196189928.html",
+     "titre": "EverPark Advance 4 (exemple 120 cm)"
+    }
+   ],
+   "sous": "",
+   "perf": "40 W",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.2.9.1 Nomenclature des appareils d’éclairage. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-philips-led-slim",
+   "lot": "L16",
+   "nom": "Hublot mural carré LED Slim (type 13)",
+   "fabricant": "Philips",
+   "reference": "LED Slim",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "hublot",
+    "LED",
+    "escalier"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.lighting.philips.fr/prof/luminaires-interieurs/montage-mural/coreline-hublot",
+     "titre": "CoreLine Hublot"
+    }
+   ],
+   "sous": "",
+   "perf": "12 W",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.2.9.1 Nomenclature des appareils d’éclairage. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-arkoslight-a4870201nt",
+   "lot": "L16",
+   "nom": "Suspension Pipe 2M Spot (type 22)",
+   "fabricant": "Arkoslight",
+   "reference": "A4870201NT",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "suspension",
+    "LED",
+    "hall"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.arkoslight.com/en/products/pipe01/",
+     "titre": "Pipe"
+    }
+   ],
+   "sous": "",
+   "perf": "Noir",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.2.9.1 Nomenclature des appareils d’éclairage. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-arkoslight-a4620200n",
+   "lot": "L16",
+   "nom": "Spot LED encastré Shot Light S Dim DALI (type 24)",
+   "fabricant": "Arkoslight",
+   "reference": "A4620200N",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "spot",
+    "LED",
+    "sanitaires"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.arkoslight.com/en/products/shot01/",
+     "titre": "Shot Light"
+    },
+    {
+     "type": "site",
+     "url": "https://www.arkoslight.com/en/journal/shot-light-s-new-size-same-discretion/",
+     "titre": "Shot Light S"
+    }
+   ],
+   "sous": "",
+   "perf": "6 W, noir, DALI",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.2.9.1 Nomenclature des appareils d’éclairage. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-behar-spark-eclat",
+   "lot": "L16",
+   "nom": "Blocs autonomes d'éclairage de sécurité Spark+ et Eclat",
+   "fabricant": "Behar",
+   "reference": "Spark+, Eclat",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "BAES",
+    "éclairage de sécurité"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/serie-spark-luminaire-d-eclairage-de-securite-p452480452.html",
+     "titre": "Série Spark (Batiproduits)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/luminaire-d-eclairage-de-securite-evacuation-p452480467.html",
+     "titre": "Série Eclat 2 (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "Spark+ encastré, Eclat saillie (nomenclature : ETAP)",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.2.12.1 Type appareil. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-honeywell-galaxy",
+   "lot": "L16",
+   "nom": "Centrale d'alarme intrusion Galaxy",
+   "fabricant": "Honeywell",
+   "reference": "Galaxy",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "intrusion",
+    "centrale d'alarme"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://buildings.honeywell.com/ca/fr/products/by-category/access-control/control-panels/galaxy-flex-plus-intruder-alarm-control-panels",
+     "titre": "Galaxy Flex+"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/centrale-d-alarme-anti-intrusion-galaxy-dimensio-p494777398.html",
+     "titre": "Galaxy Dimension (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "Télétransmission",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.3.2.2 Centrale d’alarme intrusion. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-axis-axis",
+   "lot": "L16",
+   "nom": "Caméras IP de vidéosurveillance",
+   "fabricant": "Axis",
+   "reference": "Axis",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "caméra",
+    "vidéosurveillance",
+    "IP"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.axis.com/products/network-cameras",
+     "titre": "Caméras réseau Axis"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.axis.com/documentation/corporate/prod_guide/product_guide_fr_latest.pdf",
+     "titre": "Guide des produits Axis"
+    }
+   ],
+   "sous": "",
+   "perf": "Compatibles VMS Milestone",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.3.3.3 Caméras. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-milestone-milestone-xprotect",
+   "lot": "L16",
+   "nom": "Logiciel de gestion vidéo (VMS)",
+   "fabricant": "Milestone",
+   "reference": "Milestone XProtect",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "VMS",
+    "vidéosurveillance"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.milestonesys.com/solutions/platform/video-management-software/",
+     "titre": "XProtect VMS"
+    },
+    {
+     "type": "site",
+     "url": "https://www.milestonesys.com/products/software/video-management-software/xprotect-professional/",
+     "titre": "XProtect Professional"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.3.3.3 Caméras. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-nugelec-type-2b",
+   "lot": "L16",
+   "nom": "Tableau d'alarme incendie type 2b (BAAS Pr)",
+   "fabricant": "Nugelec",
+   "reference": "Type 2b",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "alarme incendie",
+    "SSI"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://res.cloudinary.com/sonepar-fr/raw/upload/s--krZDBzbm--/v1/documents/6226/eaton-fire-equipements-alarme-t4-planete-1b-2b-datasheet-fr-fr.pdf",
+     "titre": "Équipement d'alarme type 2b (Eaton, ex-Nugelec)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.3.4.3 Tableau d’alarme de type 2B (baas type pr). Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-nugelec-dm",
+   "lot": "L16",
+   "nom": "Déclencheurs manuels d'alarme",
+   "fabricant": "Nugelec",
+   "reference": "DM",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "alarme incendie",
+    "déclencheur"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://res.cloudinary.com/sonepar-fr/raw/upload/s--wrt_fkQO--/v1/documents/6226/eaton-fire-equipements-alarme-t4-planete-dm-datasheet-fr-fr.pdf",
+     "titre": "Déclencheur manuel (Eaton, ex-Nugelec)"
+    }
+   ],
+   "sous": "",
+   "perf": "IP40 IK07, encastrés, à 1,30 m",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.3.4.5 Déclencheurs manuels d’alarme. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-nugelec-baas-sa",
+   "lot": "L16",
+   "nom": "Blocs autonomes d'alarme sonore satellites (BAAS Sa, flash)",
+   "fabricant": "Nugelec",
+   "reference": "BAAS Sa",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "alarme incendie",
+    "BAAS",
+    "flash"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://res.cloudinary.com/sonepar-fr/raw/upload/s--LBUZAjq1--/v1/documents/6226/eaton-equipements-alarme-baas-sa-etanche-datasheet.pdf",
+     "titre": "BAAS Sa (Eaton, ex-Nugelec)"
+    }
+   ],
+   "sous": "",
+   "perf": "90 dB à 2 m, NF S 32-001",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.3.4.6 Blocs autonomes d’alarmes sonores satellites (baas type sa). Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-gigaset-cl660-cl660hx",
+   "lot": "L16",
+   "nom": "Postes téléphoniques CL660 et CL660HX",
+   "fabricant": "Gigaset",
+   "reference": "CL660, CL660HX",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "téléphonie",
+    "poste"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.gigaset.com/fr_fr/gigaset-cl660hx/",
+     "titre": "CL660HX"
+    },
+    {
+     "type": "pose",
+     "url": "https://gse.gigaset.com/fileadmin/gigaset/images/CustomerCare/Manuals/CLxx/CL660HX/A31008-M2862-R101-2-4N19_01-10-2022_fr_BE-CH-FR.pdf",
+     "titre": "Mode d'emploi"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.3.7.1 Serveur de communication. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "ctn-mitel-5380ip",
+   "lot": "L16",
+   "nom": "Poste IP Aastra 5380ip",
+   "fabricant": "Mitel",
+   "reference": "5380ip",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "téléphonie",
+    "poste IP"
+   ],
+   "liens": [
+    {
+     "type": "pose",
+     "url": "https://www.manualslib.com/manual/1309677/Mitel-A5380.html",
+     "titre": "Mode d'emploi 5380 / 5380ip"
+    }
+   ],
+   "sous": "",
+   "perf": "Marque Aastra",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry) : 05.3.7.1 Serveur de communication. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-keim-fixatif-special",
+   "lot": "L06",
+   "nom": "Fixatif spécial (impression des fonds)",
+   "fabricant": "Keim",
+   "reference": "Fixatif spécial",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "fixatif",
+    "façade",
+    "minéral"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.keim.com/data/products/989/723/TM_Soldalit-Fixativ_FR-FR.pdf",
+     "titre": "Fixatif Soldalit, fiche technique"
+    },
+    {
+     "type": "site",
+     "url": "https://www.keim.com/services/downloads/technical-data-sheets/",
+     "titre": "Fiches techniques Keim"
+    }
+   ],
+   "sous": "Enduits, ravalement",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 04.3.1.2.1 Traitement des fissures. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-keim-unical",
+   "lot": "L06",
+   "nom": "Mortier minéral de rebouchage Unical",
+   "fabricant": "Keim",
+   "reference": "Unical",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "mortier",
+    "rebouchage",
+    "fissures"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.keim.com/fileadmin/user_upload/download-center/fr/fiches-techniques/Fiche-technique-KEIM-Unical-06.pdf",
+     "titre": "Unical, fiche technique"
+    }
+   ],
+   "sous": "Enduits, ravalement",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 04.3.1.2.1 Traitement des fissures. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-keim-contact-plus-contact-plus-grob",
+   "lot": "L06",
+   "nom": "Sous-couche minérale garnissante Contact Plus",
+   "fabricant": "Keim",
+   "reference": "Contact Plus, Contact Plus Grob",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "sous-couche",
+    "minéral"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.keim.com/documents/fr-FR/723/TM_Contact-Plus_FR-FR.pdf",
+     "titre": "Contact-Plus, fiche technique"
+    }
+   ],
+   "sous": "Enduits, ravalement",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 04.3.1.2.1 Traitement des fissures. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-tollens-viero-beton",
+   "lot": "L06",
+   "nom": "Lasure pour béton Viero Béton",
+   "fabricant": "Tollens",
+   "reference": "Viero Béton",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "lasure",
+    "béton",
+    "façade"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/VIE_VIEROP/1/Vierobeton-fiche_technique.pdf",
+     "titre": "Viérobéton, fiche technique"
+    }
+   ],
+   "sous": "Enduits, ravalement",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 04.3.3.1.1 Lasure sur béton. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-siplast-adepar-js-paradiene-30-1-gs",
+   "lot": "L05",
+   "nom": "Étanchéité bicouche Adepar JS + Paradiène 30.1 GS",
+   "fabricant": "Siplast",
+   "reference": "Adepar JS, Paradiène 30.1 GS",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "étanchéité",
+    "bicouche",
+    "autoprotégé"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.siplast.fr/documents/gamme-paradiene-notice-produit",
+     "titre": "Gamme Paradiène, notices produits"
+    },
+    {
+     "type": "site",
+     "url": "https://siplast.fr/profil/maitres-ouvrage-maitres-oeuvre/telechargement-express/produit",
+     "titre": "Téléchargement express Siplast"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 05.3.3.1.3 Étanchéité bicouche. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-siplast-parequerre-supradial-gs",
+   "lot": "L05",
+   "nom": "Relevés Paréquerre et Supradial GS",
+   "fabricant": "Siplast",
+   "reference": "Paréquerre, Supradial GS",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "relevé",
+    "étanchéité"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.siplast.fr/documents/gamme-paradiene-notice-produit",
+     "titre": "Fiches produits Siplast"
+    },
+    {
+     "type": "site",
+     "url": "https://siplast.fr/profil/maitres-ouvrage-maitres-oeuvre/telechargement-express/produit",
+     "titre": "Téléchargement express Siplast"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 05.3.3.2.2 Relevé et retombée d’étanchéité. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-siplast-canopia",
+   "lot": "L05",
+   "nom": "Toiture végétalisée Canopia (drain, filtre, substrat)",
+   "fabricant": "Siplast",
+   "reference": "Canopia",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "toiture végétalisée",
+    "étanchéité"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://siplast.fr/canopia/",
+     "titre": "Canopia"
+    },
+    {
+     "type": "site",
+     "url": "https://www.siplast.fr/toiture-terrasse-vegetalisee/toiture-vegetalisee",
+     "titre": "Toitures végétalisées"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 05.3.4.1.3 Étanchéité bicouche; 05.3.4.3.1 Végétalisation extensive en tapis cultive. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-siplast-preflex-graviflex",
+   "lot": "L05",
+   "nom": "Étanchéité anti-racines Preflex et Graviflex",
+   "fabricant": "Siplast",
+   "reference": "Preflex, Graviflex",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "étanchéité",
+    "anti-racines"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.siplast.fr/toiture-terrasse-vegetalisee/vegetalisation-toiture-terrasse",
+     "titre": "Végétalisation, étanchéité anti-racines"
+    },
+    {
+     "type": "site",
+     "url": "https://siplast.fr/profil/maitres-ouvrage-maitres-oeuvre/telechargement-express/produit",
+     "titre": "Téléchargement express Siplast"
+    }
+   ],
+   "sous": "",
+   "perf": "SBS/BE 30 PY 120, SBS/BE 32 PY 180",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 05.3.4.1.3 Étanchéité bicouche; 05.3.4.2.1 Relevés d’étanchéité. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-soprema-sopranature-toundra",
+   "lot": "L05",
+   "nom": "Végétalisation extensive Sopranature (tapis Toundra)",
+   "fabricant": "Soprema",
+   "reference": "Sopranature Toundra",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "toiture végétalisée",
+    "extensive"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.soprema.fr/produits-et-systemes/sopremium-terrasse-vegetalisees-bicouche-s14",
+     "titre": "Terrasses végétalisées Sopremium"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 05.3.4.3.1 Végétalisation extensive en tapis cultive. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-dani-alu-couvernet",
+   "lot": "L05",
+   "nom": "Couvertine aluminium Couvernet",
+   "fabricant": "Dani Alu",
+   "reference": "Couvernet",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "couvertine",
+    "aluminium"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.danialu.fr/en/products/products-roof/product-waterproofing/couvernet",
+     "titre": "Couvernet"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/systeme-de-couvertine-en-aluminium-couvernet-it-p69058553.html",
+     "titre": "Couvernet ITE (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 05.3.4.2.2 Couvertines aluminium. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-dani-alu-barrial",
+   "lot": "L05",
+   "nom": "Garde-corps de toiture Barrial",
+   "fabricant": "Dani Alu",
+   "reference": "Barrial",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "garde-corps",
+    "toiture"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.danialu.fr/en/products/products-roof/safety/barrial-photovoltaique",
+     "titre": "Gamme Barrial"
+    },
+    {
+     "type": "site",
+     "url": "https://www.danialu.fr/fr/documentation/type",
+     "titre": "Documentation Dani Alu"
+    }
+   ],
+   "sous": "",
+   "perf": "NF EN ISO 14122-3",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 05.3.7.1 Garde corps périphériques industriels fixés. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-bluetek-bluesteel-pass",
+   "lot": "L05",
+   "nom": "Lanterneau d'accès toiture Bluesteel Pass",
+   "fabricant": "Bluetek",
+   "reference": "Bluesteel Pass",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "lanterneau",
+    "accès toiture"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://lotus.soprema.fr/www/boreftechadexsi.nsf/($AllByUNID)/7AE09B5BBE69CD46C12588D3002F0C6A/$File/Documentation%20commerciale%20Bluesteel%20PASS%20GD.pdf",
+     "titre": "Bluesteel Pass GD, documentation"
+    },
+    {
+     "type": "dop",
+     "url": "https://lotus.soprema.fr/www/boreftechadexsi.nsf/($AllByUNID)/5D62326A7FAF42E6C12589090034F326/$File/2022_10_10_DOP_EN1873_BLUESTEEL%20PASS%20GD_FR.pdf",
+     "titre": "DoP Bluesteel Pass GD"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 05.3.6.1 Lanterneau accès toiture. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-vachette-safe-pad",
+   "lot": "L07",
+   "nom": "Crémone Safe Pad",
+   "fabricant": "Vachette",
+   "reference": "Safe Pad",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "crémone",
+    "porte vitrée"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://media.trenois.com/static/cremone-pompier-safe-pad-733_vac570_fiche-technique.pdf",
+     "titre": "Crémone Safe Pad 733, fiche technique"
+    }
+   ],
+   "sous": "Aluminium",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 06.3.2.1.1 Porte vitrée 2 vantaux - extérieure. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-vachette-37-37",
+   "lot": "L07",
+   "nom": "Butoir de sol 37.37",
+   "fabricant": "Vachette",
+   "reference": "37.37",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "butoir",
+    "porte"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.trenois.com/p/butoir-de-porte-au-sol-3737-29908",
+     "titre": "Butoir 3737 (distributeur)"
+    }
+   ],
+   "sous": "Aluminium",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 06.3.2.2.1 Porte vitrée 2 vantaux - intérieure. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-souchier-souchier",
+   "lot": "L07",
+   "nom": "Équipement de désenfumage mécanique pour châssis",
+   "fabricant": "Souchier",
+   "reference": "Souchier",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "désenfumage",
+    "châssis"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/fabricant/souchier-adexsi-46123/",
+     "titre": "Souchier, désenfumage (Batiproduits)"
+    }
+   ],
+   "sous": "Aluminium",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 06.3.3.4.1 Équipement pour châssis de désenfumage - mécanique. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-griesser-ws200",
+   "lot": "L07",
+   "nom": "Stores extérieurs et anémomètre WS200",
+   "fabricant": "Griesser",
+   "reference": "WS200",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "store",
+    "commande automatique",
+    "anémomètre"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.griesser.ch/fr/produits/automatismes/capteurs/capteurs-commandes-et-accessoires",
+     "titre": "Capteurs, commandes et accessoires"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.griesser.ch/pdf/produkt-kategorie/griesser_broschuere_steuerungen_fr.pdf",
+     "titre": "Commandes de protection solaire (brochure)"
+    }
+   ],
+   "sous": "Occultations",
+   "perf": "PSE n° 02",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 13.5.2.1 Etage 1; 13.5.2.2 Etage 2. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-duco-wall-screening-70",
+   "lot": "L08",
+   "nom": "Pare-vue à ventelles Wall Screening 70",
+   "fabricant": "Duco",
+   "reference": "Wall Screening 70",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "ventelles",
+    "pare-vue",
+    "aluminium"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.duco.eu/en/products/intensive-ventilation/continuous-louvre-walls/ducowall-screening/ducowall-screening-70",
+     "titre": "DucoWall Screening 70"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.duco.eu/Wes/CDN/1/Attachments/brochure-bardages-a-ventelles-filantes-(fr)_639077203637364039.pdf",
+     "titre": "Bardages à ventelles filantes (brochure)"
+    }
+   ],
+   "sous": "Grilles, clôtures, portails",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 07.3.5.1.1 Pare-vue à ventelles. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-abc-equipements-collectivites-new-york",
+   "lot": "L08",
+   "nom": "Râtelier vélos New York",
+   "fabricant": "ABC Équipements collectivités",
+   "reference": "New York",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "vélos",
+    "râtelier"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/ratelier-5-velos-cote-a-cote-new-york-p384825515.html",
+     "titre": "Râtelier New York (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 07.3.5.2.1 Support vélos sur potelets. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-passage-securite-passage-securite",
+   "lot": "L08",
+   "nom": "Clous podotactiles",
+   "fabricant": "Passage Sécurité",
+   "reference": "Passage Sécurité",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "podotactile",
+    "PMR"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 07.3.6.2.1 Clous podotactiles. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-10-26"
+  },
+  {
+   "id": "uemo-placo-stil-prim-tech",
+   "lot": "L09",
+   "nom": "Plafond Placostil Stil Prim Tech",
+   "fabricant": "Placo",
+   "reference": "Stil Prim Tech",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "plafond",
+    "plaque de plâtre"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.placo.fr/documents/fiche-systeme/fichesysteme-sp00012240.pdf",
+     "titre": "Plafond longue portée Stil Prim Tech"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.placo.fr/documents/fiche-technique/fichetechnique-attache-stil-prim-tech.pdf",
+     "titre": "Attache Stil Prim Tech, fiche technique"
+    }
+   ],
+   "sous": "Plafonds",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 08.3.6.1.1 Plafonds suspendus_ 1 plaque BA 13 (F530). Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-placo-f530",
+   "lot": "L09",
+   "nom": "Plafond Placostil F530",
+   "fabricant": "Placo",
+   "reference": "F530",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "plafond",
+    "fourrure"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.placo.fr/documents/fiche-produit/2012-003.pdf",
+     "titre": "Plafond Placostil"
+    },
+    {
+     "type": "site",
+     "url": "https://www.placo.fr/professionnels/solution/sp00022682/plafonds-filant-placo-duotech-25-plancher-clt-depaisseur-mini-120-mm-1x-placo-duotech-25-stil-f-530",
+     "titre": "Exemple de plafond sur Stil F 530"
+    }
+   ],
+   "sous": "Plafonds",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 08.3.6.1.2 Plafonds suspendus_ 1 plaque hydrofuge 13 (F530). Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-placo-gyptone-activ-air-quattro-50",
+   "lot": "L09",
+   "nom": "Dalles acoustiques Gyptone Activ'Air Quattro 50",
+   "fabricant": "Placo",
+   "reference": "Gyptone Activ'Air Quattro 50",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "dalles",
+    "acoustique",
+    "plafond"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.placo.fr/Produits/plafonds-decoratifs/gyptone-activair-quattro-50",
+     "titre": "Gyptone Activ'Air Quattro 50"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.placo.fr/documents/fiche-produit/ficheproduit-gyptone-activair-quattro-50-a.pdf",
+     "titre": "Quattro 50 A, fiche produit"
+    }
+   ],
+   "sous": "Plafonds",
+   "perf": "600 x 600, T24",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 08.3.6.2.1 Plafonds suspendus dalles PLATRE_600 x 600 mm_t 24_ACOUSTIQUE. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-placo-gyptone-activ-air-xtensiv-quattro-",
+   "lot": "L09",
+   "nom": "Dalles acoustiques Gyptone Activ'Air Xtensiv Quattro 55",
+   "fabricant": "Placo",
+   "reference": "Gyptone Activ'Air Xtensiv Quattro 55",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "dalles",
+    "acoustique",
+    "plafond"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.placo.fr/Produits/plafonds-decoratifs/gyptoner-activairr-quattro-55",
+     "titre": "Gyptone Activ'Air Quattro 55"
+    }
+   ],
+   "sous": "Plafonds",
+   "perf": "1200 x 300, T24",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 08.3.6.2.2 Plafonds suspendus dalles PLATRE_1200 x 300 mm_t 24_ACOUSTIQUE. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-isover-gr-32",
+   "lot": "L09",
+   "nom": "Laine de verre GR 32 en rouleau",
+   "fabricant": "Isover",
+   "reference": "GR 32",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "laine de verre",
+    "doublage"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.isover.fr/pour-lisolation-des-murs-en-neuf-et-en-renovation-gr-32",
+     "titre": "GR 32"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.isover.fr/documents/fiche-produit/ficheproduit-gr-32-nu.pdf",
+     "titre": "GR 32 nu, fiche produit"
+    },
+    {
+     "type": "fdes",
+     "url": "https://www.isover.fr/documents/fdes/fdes-gr32-roule-kraft-140mm.pdf",
+     "titre": "FDES GR 32 roulé kraft"
+    }
+   ],
+   "sous": "Isolants",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 08.3.1.1.1 Doublage sur ossature métallique 60+13 mm; 08.3.1.1.2 Doublage sur ossature métallique 140+13 mm. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-isover-par-phonic",
+   "lot": "L09",
+   "nom": "Laine de verre Par Phonic",
+   "fabricant": "Isover",
+   "reference": "Par Phonic",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "laine de verre",
+    "cloison",
+    "acoustique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.isover.fr/guides/isolation-acoustique/les-solutions-disolation-acoustique-isover-en-renovation",
+     "titre": "Solutions acoustiques"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.isover.fr/documents/catalogues/251609-isover-offre-maj-02-25-web-pap-260225-v2.pdf",
+     "titre": "Offre Isover résidentiel 2026"
+    }
+   ],
+   "sous": "Isolants",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 08.3.2.1.1 Cloisons 72/48 mm_ monoparement BA 13; 08.3.2.1.2 Cloisons 98/48 mm_ double parement BA 13; 08.3.3.1.1 Dévoiement horizontal - soffite_monoparement BA 13; 08.3.4.1.1 Encoffrement en plaques de plâtre. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-tempo-acoustique-digitex",
+   "lot": "L09",
+   "nom": "Panneaux acoustiques rectangulaires Digitex",
+   "fabricant": "Tempo Acoustique",
+   "reference": "Digitex",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "panneau acoustique",
+    "mural",
+    "suspendu"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/panneaux-acoustiques-et-decoratifs-pour-plafonds-p68913928.html",
+     "titre": "Panneaux Tempo (Batiproduits)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/fabricant/digitex-45793/",
+     "titre": "Digitex (Batiproduits)"
+    }
+   ],
+   "sous": "Plafonds",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 08.3.6.4.1 Panneaux acoustiques muraux - 1200 x 600 mm ht; 08.3.6.4.2 Panneaux acoustiques suspendus - 600 x 1200 mm; 08.3.6.4.3 Panneaux acoustiques suspendus - 600 x 600 mm. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-knauf-fibrastyroc-ultra-clarte",
+   "lot": "L09",
+   "nom": "Panneau isolant Fibrastyroc Ultra Clarté",
+   "fabricant": "Knauf",
+   "reference": "Fibrastyroc Ultra Clarté",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "isolant",
+    "sous-face",
+    "laine de bois"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://knauf.com/fr-FR/p/produit/fibrastyroc-25755_4091",
+     "titre": "Fibrastyroc"
+    }
+   ],
+   "sous": "Isolants",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 08.3.7.1.1 Panneaux isolants en laine de bois âme pse. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-dormakaba-ts-91-ts-92-ts-93",
+   "lot": "L10",
+   "nom": "Ferme-porte à bras TS 91 / 92 / 93",
+   "fabricant": "Dormakaba",
+   "reference": "TS 91, TS 92, TS 93",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "ferme-porte"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.dormakaba.com/fr-fr/offre/produits/ferme-portes-et-verrouillages/ferme-portes/ts-9291--do_197",
+     "titre": "TS 92/91"
+    }
+   ],
+   "sous": "Portes intérieures",
+   "perf": "Marque Dorma",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 09.3.1.2.1 Blocs portes cf ½ H - 0,93 x 2,04 m ht, pêne dormant à CYLINDRE_33 db. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-vachette-radial-nt",
+   "lot": "L10",
+   "nom": "Cylindre de sécurité Radial NT+",
+   "fabricant": "Vachette",
+   "reference": "Radial NT+",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "cylindre",
+    "organigramme"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.vachette.fr/professionnel/fr/products/cylindre-et-cadenas",
+     "titre": "Cylindres Vachette"
+    }
+   ],
+   "sous": "Portes intérieures",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 09.3.2.2.1 Organigramme. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-marcal-silenzio-uno",
+   "lot": "L20",
+   "nom": "Signalétique de portes Silenzio Uno",
+   "fabricant": "Marcal",
+   "reference": "Silenzio Uno",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "signalétique",
+    "plaque de porte"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/supports-signaletiques-silenzio-uno-p426724448.html",
+     "titre": "Silenzio Uno (Batiproduits)"
+    },
+    {
+     "type": "cat",
+     "url": "https://pdf.archiexpo.com/pdf/marcal/silenzio-uno/3928-253154.html",
+     "titre": "Silenzio Uno, catalogue (ArchiExpo)"
+    }
+   ],
+   "sous": "Signalétique",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 09.3.2.4.3 Signalisation de locaux intérieurs. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-franke-chrx669",
+   "lot": "L14",
+   "nom": "Distributeur de papier hygiénique Jumbo Max CHRX669",
+   "fabricant": "Franke",
+   "reference": "CHRX669",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "accessoire sanitaire"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.bimobject.com/en/kwc_professional/product/2000060983",
+     "titre": "CHRX669 (BIMobject)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/distributeur-de-rouleau-jumbo-pour-montage-mural-e-p451311992.html",
+     "titre": "Gamme Chronos, CHRX670 (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 09.3.2.5.1 Distributeur de papier hygiénique. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-franke-brosse-wc",
+   "lot": "L14",
+   "nom": "Garniture de toilette (brosse WC)",
+   "fabricant": "Franke",
+   "reference": "Brosse WC",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "accessoire sanitaire"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 09.3.2.5.2 Garniture de toilette. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-10-26"
+  },
+  {
+   "id": "uemo-franke-rodan",
+   "lot": "L14",
+   "nom": "Distributeur de savon Rodan",
+   "fabricant": "Franke",
+   "reference": "Rodan",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "accessoire sanitaire"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/distributeur-de-savon-pour-montage-mural-rodx618-p450410792.html",
+     "titre": "Rodan RODX618 (Batiproduits)"
+    },
+    {
+     "type": "pose",
+     "url": "https://images.victorianplumbing.co.uk/products/franke-rodan-rodx619-wall-mounted-liquid-soap-dispenser/instructions/rodx619.pdf",
+     "titre": "Rodan RODX619, notice"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 09.3.2.5.3 Distributeur de savon liquide. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-comec-performance",
+   "lot": "L10",
+   "nom": "Trappe de visite Performance (PF 1/4 h)",
+   "fabricant": "Comec",
+   "reference": "Performance",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "trappe de visite",
+    "coupe-feu"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/trappes-de-visite-avec-cadre-monobloc-pf-et-cf-1-4-p69089938.html",
+     "titre": "Performance PF et CF 1/4 h (Batiproduits)"
+    }
+   ],
+   "sous": "Habillages, agencements",
+   "perf": "50 x 50 cm",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 09.3.4.2.1 Trappe de visite pf 1/4 H 50 x 50 cm. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-cegecol-superplan-rn",
+   "lot": "L11",
+   "nom": "Ragréage Superplan RN (P3)",
+   "fabricant": "Cegecol",
+   "reference": "Superplan RN",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "ragréage",
+    "sol"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/enduit-de-ragreage-autolissant-de-sol-classe-p3-p69059238.html",
+     "titre": "Ragréage autolissant P3 (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "P3",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 10.3.1.1.1 Enduit de ragréage P3. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-cegecol-cegeprim-bh2",
+   "lot": "L12",
+   "nom": "Primaire anti-remontée d'humidité Cegeprim BH2",
+   "fabricant": "Cegecol",
+   "reference": "Cegeprim BH2",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "primaire",
+    "humidité"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://fra.sika.com/dms/getdocument.get/9f65d69d-1f16-4b5f-b621-b90fb51942ff/cegeprim-bh2.pdf",
+     "titre": "Cegeprim BH2, fiche technique"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/primaire-barriere-anti-remontees-d-humidite-c-p69059328.html",
+     "titre": "Primaire barrière (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 10.4.1.1.1 Primaire anti remontée humidité. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-pavigres-uni-21",
+   "lot": "L11",
+   "nom": "Grès cérame Uni 21 300 x 300",
+   "fabricant": "Pavigres",
+   "reference": "Uni 21",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "carrelage",
+    "grès cérame"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.archiexpo.com/prod/pavigres-ceramicas/product-3709-1805366.html",
+     "titre": "Uni (ArchiExpo)"
+    },
+    {
+     "type": "cat",
+     "url": "https://pdf.archiexpo.com/pdf/pavigres-ceramicas/pavigres-geral/3709-352281.html",
+     "titre": "Catalogue général (ArchiExpo)"
+    }
+   ],
+   "sous": "",
+   "perf": "U3/U4 P3 E3 C2, R9/R10",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 10.3.2.1.1 Grès cérame 300 x 300 MM_U3 P3 E3 C2 - R10; 10.3.2.1.2 Grès cérame 300 x 300 MM_U4 P3 E3 C2 - R9. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-villeroy-boch-pro-architectura",
+   "lot": "L11",
+   "nom": "Faïence Pro Architectura 100 x 100",
+   "fabricant": "Villeroy & Boch",
+   "reference": "Pro Architectura",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "faïence"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://villeroy-boch-tiles.com/collection/pro-architectura/",
+     "titre": "Pro Architectura 3.0"
+    },
+    {
+     "type": "site",
+     "url": "https://villeroy-boch-tiles.com/fr/collection/pro-architectura-3-0/",
+     "titre": "Pro Architectura 3.0 (FR)"
+    },
+    {
+     "type": "dop",
+     "url": "https://villeroy-boch-tiles.com/wp-content/uploads/2025/11/2021-1_FR_VB_Declaration_de_Performance_BIa_rev01.pdf",
+     "titre": "DoP grès cérame BIa"
+    },
+    {
+     "type": "dop",
+     "url": "https://villeroy-boch-tiles.com/wp-content/uploads/2025/11/2021-2_FR_VB_Declaration_de_Performance_BIb_rev01.pdf",
+     "titre": "DoP grès BIb"
+    },
+    {
+     "type": "dop",
+     "url": "https://villeroy-boch-tiles.com/wp-content/uploads/2025/11/2021-3_FR_VB_Declaration_de_Performance_BIll_rev01.pdf",
+     "titre": "DoP faïence BIII"
+    },
+    {
+     "type": "fdes",
+     "url": "https://villeroy-boch-tiles.com/wp-content/uploads/2024/09/24.007_FDES_Carreaux-en-gres-cerame_6_7mm_VilleroyBoch.pdf",
+     "titre": "FDES grès cérame 6-7 mm"
+    },
+    {
+     "type": "fdes",
+     "url": "https://villeroy-boch-tiles.com/wp-content/uploads/2025/10/FDES_Carreaux_de_faience-maille_11mm_VilleroyBoch.pdf",
+     "titre": "FDES faïence 11 mm"
+    },
+    {
+     "type": "cert",
+     "url": "https://villeroy-boch-tiles.com/wp-content/uploads/2026/05/VuB_Technische-Informationen_05_UPEC-WallPEC_2026-01-01_FR.pdf",
+     "titre": "Classement UPEC (information technique)"
+    },
+    {
+     "type": "autre",
+     "url": "https://villeroy-boch-tiles.com/wp-content/uploads/2026/05/VuB_Technische-Informationen_01_Trittsicherheit-Rutschhemmung_2026-01-01_FR.pdf",
+     "titre": "Propriétés antidérapantes (information technique)"
+    }
+   ],
+   "sous": "Carrelage, grès cérame, pierre",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 10.3.3.1.1 Faïence 100 x 100 mm. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-09"
+  },
+  {
+   "id": "uemo-schluter-systems-jolly",
+   "lot": "L11",
+   "nom": "Profilé de finition murale Jolly",
+   "fabricant": "Schlüter-Systems",
+   "reference": "Jolly",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "profilé",
+    "faïence"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://eu.schluter.com/fr-FR/jolly-2927.html",
+     "titre": "Gamme JOLLY"
+    }
+   ],
+   "sous": "Profilés de finition",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 10.3.4.2.1 Profils aluminium d’arrêt de revêtements muraux. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-02"
+  },
+  {
+   "id": "uemo-schluter-systems-reno",
+   "lot": "L11",
+   "nom": "Seuil inox Reno",
+   "fabricant": "Schlüter-Systems",
+   "reference": "Reno",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "seuil",
+    "inox"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://eu.schluter.com/fr-FR/profiles-de-transition-276.html",
+     "titre": "Profilés de transition"
+    }
+   ],
+   "sous": "Profilés de transition et joints",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 10.4.4.1.1 Seuil inox de changement de revêtement. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-02"
+  },
+  {
+   "id": "uemo-forbo-sarlon-primeo",
+   "lot": "L12",
+   "nom": "Sol PVC Sarlon Primeo 43 et 33",
+   "fabricant": "Forbo",
+   "reference": "Sarlon Primeo",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "sol PVC",
+    "acoustique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.forbo.com/flooring/en-gl/products/acoustic-flooring/sarlon-primeo-acoustic-vinyl/bdojfu",
+     "titre": "Sarlon Primeo"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.forbo.com/flooring/fr-fr/documentation-technique/pvc-acoustique-u3-u4-et-fort-trafic/pd30g6",
+     "titre": "Documentation technique"
+    }
+   ],
+   "sous": "",
+   "perf": "U4 P3 / U3 P3, R10, 19 dB",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 10.4.2.1.1 Revêtements PVC_U4 P3 E2/3 C2 - R10_19 db; 10.4.2.1.2 Revêtements PVC multicouche ISOPHONIQUE_U3 P3 E2/3 C2 - R10_19 db. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-forbo-coral-welcome",
+   "lot": "L12",
+   "nom": "Tapis de propreté Coral Welcome",
+   "fabricant": "Forbo",
+   "reference": "Coral Welcome",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "tapis de propreté"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.forbo.com/flooring/fr-fr/documentation-technique/tapis-de-proprete/pbe3s5",
+     "titre": "Tapis de propreté, documentation technique"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 10.4.4.2.1 Tapis de propreté. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-gerflor-t67-alu",
+   "lot": "L12",
+   "nom": "Nez de marche aluminium T67",
+   "fabricant": "Gerflor",
+   "reference": "T67 Alu",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "nez de marche",
+    "escalier"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://cdn.gerflor.com/media/2/45102/nez%20de%20marche%20alu%20-%20fiche%20technique.pdf",
+     "titre": "Nez de marche T67 alu, fiche technique"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 10.4.4.1.2 Nez de marché antidérapant rapporté - alu. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-spm-decochoc",
+   "lot": "L13",
+   "nom": "Protections murales PVC Décochoc",
+   "fabricant": "SPM",
+   "reference": "Décochoc",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "protection murale",
+    "PVC"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/panneau-de-protection-et-d-habillage-m1-bs2d0-de-p69034533.html",
+     "titre": "Décochoc (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 10.4.3.1.1 Protections murales PVC. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-beissier-beissier",
+   "lot": "L13",
+   "nom": "Enduits de lissage et de finition",
+   "fabricant": "Beissier",
+   "reference": "Beissier",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "enduit",
+    "peinture"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.beissier.fr/les-enduits-de-lissage/",
+     "titre": "Enduits de lissage"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.beissier.fr/wp-content/uploads/2021/12/FT_Prestonett_GSB_F-2.pdf",
+     "titre": "Prestonett F, fiche technique"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 11.3.2.1.1 Enduit de lissage et finition. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-zolpan-zolflex",
+   "lot": "L13",
+   "nom": "Toile de verre à peindre Zolflex",
+   "fabricant": "Zolpan",
+   "reference": "Zolflex",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "toile de verre"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.zolpan.fr/var/site/storage/import/documents_techniques/ARMATURE_ZOLFLEX_Z-3451-18N_EN.pdf",
+     "titre": "Zolflex, fiche technique"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 11.3.4.1.1 Toile de verre à peindre. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-seigneurie-muroprim-evolutex-satin",
+   "lot": "L13",
+   "nom": "Impression Muroprim et finition Evolutex Satin",
+   "fabricant": "Seigneurie",
+   "reference": "Muroprim, Evolutex Satin",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "peinture",
+    "satinée"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.colorsquare.eu/media/fichiers_pdf/./Seigneurie-EVOLUTEX-SATIN-Blanc-5L.pdf",
+     "titre": "Evolutex Satin, fiche"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/peinture-applicable-sans-primaire-en-2-couches-e-p248018420.html",
+     "titre": "Evolutex (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "Finition C",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 11.3.4.1.2 Préparations et peinture satinée - finition \"C\" - sur toile de verre. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-someca-talmisol",
+   "lot": "L14",
+   "nom": "Manchons résilients Talmisol",
+   "fabricant": "Someca",
+   "reference": "Talmisol",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "résilient",
+    "traversée"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 12.2.2.10 Niveaux sonores; 12.6.7 Évacuations EU-EV & vp. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-10-26"
+  },
+  {
+   "id": "uemo-danfoss-msv-bd",
+   "lot": "L15",
+   "nom": "Vanne d'équilibrage MSV-BD",
+   "fabricant": "Danfoss",
+   "reference": "MSV-BD",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "vanne",
+    "équilibrage"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.danfoss.com/fr-fr/products/dhs/valves/hydronic-balancing-and-control/manual-balancing-valves/leno-msv/",
+     "titre": "Leno MSV-BD"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 12.4.4.4 Robinetteries & accessoires. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-reflex-exvoid-exdirt",
+   "lot": "L15",
+   "nom": "Dégazeur Exvoid et pot à boues Exdirt",
+   "fabricant": "Reflex",
+   "reference": "Exvoid, Exdirt",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "dégazeur",
+    "pot à boues"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://reflex-winkelmann.com/en/products/Air-%20and%20dirt%20separators",
+     "titre": "Séparateurs d'air et de boues"
+    },
+    {
+     "type": "cat",
+     "url": "https://xom-web.reflex.de/xom-rest/assets/09067281-821b-4f40-b02c-e94391f77f3c/content?locale=fr",
+     "titre": "Exvoid, Exdirt, Extwin (documentation)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 12.4.4.4 Robinetteries & accessoires. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-diehl-metering-sharky-775",
+   "lot": "L15",
+   "nom": "Compteur d'énergie Sharky 775",
+   "fabricant": "Diehl Metering",
+   "reference": "Sharky 775",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "compteur d'énergie"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.diehl.com/metering/en/products-solutions/products/thermal-energy-metering/sharky-775-fr/",
+     "titre": "Sharky 775"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.diehl.com/cms/files/SHARKY-775-176.pdf?download=1",
+     "titre": "Sharky 775, descriptif"
+    }
+   ],
+   "sous": "",
+   "perf": "Ultrasons",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 12.4.4.4 Robinetteries & accessoires. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-brugman-centric-line",
+   "lot": "L15",
+   "nom": "Radiateurs acier Centric Line et Centric Verti Line",
+   "fabricant": "Brugman",
+   "reference": "Centric Line",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "radiateur",
+    "acier"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://brugman.eu/en-gb/radiators/centric-line",
+     "titre": "Centric Line"
+    },
+    {
+     "type": "site",
+     "url": "https://brugman.eu/en-gb/radiators/centric-verti-line",
+     "titre": "Centric Verti Line"
+    },
+    {
+     "type": "ft",
+     "url": "https://brugman.eu/files/downloads/Brugman-Manuel-Technique-FR-20-10-2025.pdf",
+     "titre": "Manuel technique 2025"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 12.4.5.1 Radiateurs acier. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-oventrop-av9-uni-sh",
+   "lot": "L15",
+   "nom": "Robinet AV9 et tête thermostatique Uni SH",
+   "fabricant": "Oventrop",
+   "reference": "AV9, Uni SH",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "robinet thermostatique",
+    "radiateur"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.oventrop.com/fr-FR/article/1183704",
+     "titre": "Robinet AV 9"
+    },
+    {
+     "type": "site",
+     "url": "https://www.oventrop.com/fr-FR/article/1012066",
+     "titre": "Tête Uni SH"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.oventrop.com/Pools/Files/catalog-passage/fr/katalog_fr_chapter_01_pdf_1dd1e41a-0e1d-4ee3-aa7b-e56a4be8beb1.pdf",
+     "titre": "Catalogue, thermostats"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 12.4.5.1 Radiateurs acier. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-atlantic-critair-mini-iso",
+   "lot": "L15",
+   "nom": "Caisson d'extraction Critair Mini ISO",
+   "fabricant": "Atlantic",
+   "reference": "Critair Mini ISO",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "extraction",
+    "VMC"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.atlantic-pros.fr/Produits/Ventilation-traitement-de-l-air/Ventilation-tertiaire/Caissons-d-extraction-simple-flux",
+     "titre": "Caissons d'extraction simple flux"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 12.5.3.1 Groupe d’extraction sous-sol. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-atlantic-be-bn-cbeis",
+   "lot": "L15",
+   "nom": "Bouches d'extraction BE/BN et clapets CBEIS",
+   "fabricant": "Atlantic",
+   "reference": "BE/BN, CBEIS",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "bouche",
+    "extraction",
+    "coupe-feu"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.atlantic-pros.fr/Produits/Ventilation-traitement-de-l-air/VMC-collective/Bouches",
+     "titre": "Bouches VMC collective"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 12.5.3.5 Extraction d’air vicié. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-atlantic-eaa",
+   "lot": "L15",
+   "nom": "Entrées d'air autoréglables EAA",
+   "fabricant": "Atlantic",
+   "reference": "EAA",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "entrée d'air",
+    "acoustique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.atlantic-pros.fr/Produits/Ventilation-traitement-de-l-air/VMC-collective",
+     "titre": "VMC collective (entrées d'air)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.atlantic.fr/Ventiler-le-logement/Ventilation-de-tout-le-logement/Bouches-d-extraction-et-entrees-d-air/Entrees-d-air2",
+     "titre": "Entrées d'air"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 12.5.3.6 Amenée d’air. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-atlantic-serencio-p-switch",
+   "lot": "L15",
+   "nom": "Centrale double flux Serencio P Switch",
+   "fabricant": "Atlantic",
+   "reference": "Serencio P Switch",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "double flux",
+    "CTA"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.atlantic-pros.fr/Produits/Ventilation-traitement-de-l-air/Traitement-de-l-air-tertiaire",
+     "titre": "Traitement de l'air tertiaire (centrales double flux)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 12.5.4.1 Centrale double flux. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-atlantic-mid-dam-fp-tm",
+   "lot": "L15",
+   "nom": "Diffuseurs Mid DAM-FP et bouches TM",
+   "fabricant": "Atlantic",
+   "reference": "Mid DAM-FP, TM",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "diffuseur",
+    "soufflage"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.atlantic-pros.fr/Produits/Ventilation-traitement-de-l-air/Ventilation-tertiaire/Bouches-d-Insufflation-et-d-extraction",
+     "titre": "Bouches d'insufflation et d'extraction"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 12.5.4.6 Diffuseurs de soufflage et de reprise. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-big-foot-big-foot",
+   "lot": "L15",
+   "nom": "Supports de toiture pour équipements",
+   "fabricant": "Big Foot",
+   "reference": "Big Foot",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "support",
+    "toiture terrasse"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/support-pour-unites-de-climatisation-ou-de-ventil-p69045413.html",
+     "titre": "Big Foot Systems (Batiproduits)"
+    },
+    {
+     "type": "cat",
+     "url": "https://ik.imagekit.io/sodigaine/FT_bigfoot_brochure_eaf3bdb2e8_dNuxpBelf.pdf",
+     "titre": "Big Foot, brochure"
+    }
+   ],
+   "sous": "",
+   "perf": "DTU 43.1",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 12.5.4.1 Centrale double flux. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-f2a-f2a",
+   "lot": "L15",
+   "nom": "Pièges à son passifs",
+   "fabricant": "F2A",
+   "reference": "F2A",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "piège à son",
+    "acoustique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/octa-piege-a-son-cylindrique-passif-galva-ve-p460332183.html",
+     "titre": "Piège à son cylindrique Octa (Batiproduits)"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 12.5.4.3 Prise d’air neuf et rejet; 12.5.4.4 Réseaux de soufflage et reprise. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-isover-climcover-roll-alu2",
+   "lot": "L15",
+   "nom": "Calorifuge Climcover Roll Alu2",
+   "fabricant": "Isover",
+   "reference": "Climcover Roll Alu2",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "calorifuge",
+    "gaines"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.isover.fr/produits-et-systemes/la-gamme-isover",
+     "titre": "Gamme Isover"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.isover.fr/documents/catalogues/251609-isover-offre-maj-02-25-web-pap-260225-v2.pdf",
+     "titre": "Offre Isover résidentiel 2026"
+    }
+   ],
+   "sous": "",
+   "perf": "Avis technique CSTB",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 12.5.4.4 Réseaux de soufflage et reprise. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-presto-prestomat-2000",
+   "lot": "L14",
+   "nom": "Robinet temporisé Prestomat 2000",
+   "fabricant": "Presto",
+   "reference": "Prestomat 2000",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "robinet temporisé",
+    "lavabo"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 12.6.3.2 Sanitaires PMR R1 & R2. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-10-26"
+  },
+  {
+   "id": "uemo-nicoll-cep100",
+   "lot": "L14",
+   "nom": "Aérateur à membrane CEP100",
+   "fabricant": "Nicoll",
+   "reference": "CEP100",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "aérateur",
+    "ventilation primaire"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.nicoll.fr/fr/clapet-aerateurequilibreur-de-pression-cep-avec-dta",
+     "titre": "Clapet CEP"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.nicoll.fr/fr/documentation/cep3240-cep4050-cep100-clapet-aerateurequilibreur-de-pression-cep-avec-dta",
+     "titre": "CEP100, documentation"
+    },
+    {
+     "type": "dop",
+     "url": "https://www.nicoll.fr/sites/default/files/products/fiches%20DoP%20CEP%20-%20Fr%20-%20rev1.2.pdf",
+     "titre": "DoP CEP"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 12.6.7 Évacuations EU-EV & vp. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-hilti-hilti",
+   "lot": "L14",
+   "nom": "Produits de rebouchage coupe-feu",
+   "fabricant": "Hilti",
+   "reference": "Hilti",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "coupe-feu",
+    "calfeutrement"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.hilti.fr/c/CLS_FIRESTOP_PROTECTION_7131/CLS_FIRESTOP_SEALANTS_SPRAY_7131",
+     "titre": "Mastics, sprays et revêtements coupe-feu"
+    },
+    {
+     "type": "site",
+     "url": "https://www.hilti.fr/c/CLS_FIRESTOP_PROTECTION_7131/CLS_FIRESTOP_SEALANTS_SPRAY_7131/r4885",
+     "titre": "CFS-IS"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 12.6.7 Évacuations EU-EV & vp. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-legrand-0778-33",
+   "lot": "L16",
+   "nom": "Prise verrouillable à clé Soliroc 0778 33",
+   "fabricant": "Legrand",
+   "reference": "0778 33",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "prise",
+    "verrouillable"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.legrand.fr/pro/catalogue/prise-de-courant-2pt-a-puits-francais-avec-volet-verrouille-16a-250v-soliroc-ik10-ip55",
+     "titre": "077833 Soliroc"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.legrand.fr/sites/default/files/soliroc_0.pdf",
+     "titre": "Programme Soliroc"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 13.3.3 Appareillage. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-schneider-electric-prisma-g",
+   "lot": "L16",
+   "nom": "Armoires Prisma G",
+   "fabricant": "Schneider Electric",
+   "reference": "Prisma G",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "armoire électrique",
+    "TGBT"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.se.com/fr/fr/product-range/2198-prisma-g/",
+     "titre": "Prisma G"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 13.4.5.1 Tgbt; 13.4.5.2 Armoires td R+1; 13.4.5.3 Armoires td R+2; 13.4.6.1 Armoire td onduleur. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-socomec-diris-a40-countis-e",
+   "lot": "L16",
+   "nom": "Centrale de mesure Diris A40 et compteurs Countis E",
+   "fabricant": "Socomec",
+   "reference": "Diris A40, Countis E",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "comptage",
+    "mesure"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://emea.socomec.com/en/p/diris-a-40",
+     "titre": "Diris A-40"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.socomec.fr/sites/default/files/2020-11/DIRIS-A40_CATALOGUE---PAGES_2019-02_DCG_FR-FR.pdf",
+     "titre": "Diris A-40, catalogue"
+    },
+    {
+     "type": "site",
+     "url": "https://emea.socomec.com/en/p/countis-e-ethernet",
+     "titre": "Countis E"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 13.4.5.1 Tgbt; 13.4.5.2 Armoires td R+1; 13.4.5.3 Armoires td R+2. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-bticino-sfera-classe-300-eos",
+   "lot": "L16",
+   "nom": "Vidéophonie Sfera et Classe 300 EOS",
+   "fabricant": "Bticino",
+   "reference": "Sfera, Classe 300 EOS",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "vidéophonie",
+    "interphone"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://catalogue.bticino.com/products/door-entry-systems/2-wires-internal-solutions/classe-300eos-with-netatmo",
+     "titre": "Classe 300EOS"
+    },
+    {
+     "type": "ft",
+     "url": "https://dar.bticino.com/asset/Documents/ST_00001033_EN.pdf",
+     "titre": "Classe 300EOS, fiche technique"
+    }
+   ],
+   "sous": "",
+   "perf": "Anti-vandale",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 13.4.12 Vidéophonie. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-sylvania-sylvania",
+   "lot": "L16",
+   "nom": "Luminaires LED (panneaux, appliques)",
+   "fabricant": "Sylvania",
+   "reference": "Sylvania",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "luminaire",
+    "LED"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.sylvania-lighting.com/product/fr-fr/products/0049293/",
+     "titre": "START Surface IP66 (exemple)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sylvania-lighting.com/product/fr-be/Products/0047223",
+     "titre": "Modules 1200 x 600"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 13.3.5 Caractéristiques des luminaires. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-11-04"
+  },
+  {
+   "id": "uemo-europeenne-d-eclairage-polfip10364010",
+   "lot": "L16",
+   "nom": "Luminaires LED",
+   "fabricant": "Européenne d'Éclairage",
+   "reference": "POLFIP10364010",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "luminaire",
+    "LED"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "",
+   "projets": "UEMO",
+   "notes": "Cité au CCTP UEMO (réhabilitation de l'aile de l'UEHC, Nogent-sur-Marne) : 13.3.5 Caractéristiques des luminaires. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-10-26",
+   "maj": "2026-10-26"
+  },
   {
    "id": "duravit-me-by-starck",
    "lot": "L14",
@@ -24743,1419 +31085,6 @@ window.TD_DONNEES = {
    "maj": "2026-11-13"
   },
   {
-   "id": "poujoulat-efficience",
-   "lot": "L15",
-   "nom": "Conduit de fumée concentrique isolé Efficience (appareils étanches, poêles à granulés)",
-   "fabricant": "Poujoulat",
-   "reference": "Efficience",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "conduit de fumée",
-    "concentrique",
-    "étanche",
-    "granulés",
-    "maison individuelle"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.poujoulat.fr",
-     "titre": "Cheminées Poujoulat"
-    },
-    {
-     "type": "at",
-     "url": "https://www.poujoulat.fr/fr/bundles/poujoulatfront/images/atec/DTA_EFFICIENCE_AO2172266_V2.pdf",
-     "titre": "DTA 14.2/17-2266_V2"
-    },
-    {
-     "type": "autre",
-     "url": "https://www.poujoulat.fr/fr/bundles/poujoulatfront/images/cahiers_des_charges/descriptif-efficience-150-raccorde-poele-a-granules-etanche.pdf",
-     "titre": "Descriptif CCTP : Efficience 150 raccordé par PGI à un poêle à granulés étanche"
-    },
-    {
-     "type": "autre",
-     "url": "https://www.poujoulat.fr/fr/bundles/poujoulatfront/images/cahiers_des_charges/DESCRIPTIF-EFFICIENCE-CF-150-en-attente-en-MI.pdf",
-     "titre": "Descriptif CCTP : Efficience 150 en attente en maison neuve"
-    }
-   ],
-   "sous": "Conduits de fumée et cheminées",
-   "perf": "Conduit métallique NF EN 1856-1 ; amenée d'air comburant et évacuation des fumées ; traversée de parois étanches et isolées avec plaque de distance de sécurité étanche",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "poujoulat-pgi",
-   "lot": "L15",
-   "nom": "Système concentrique PGI pour poêles à granulés étanches",
-   "fabricant": "Poujoulat",
-   "reference": "PGI",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "conduit de fumée",
-    "concentrique",
-    "granulés",
-    "étanche"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.poujoulat.fr",
-     "titre": "Cheminées Poujoulat"
-    },
-    {
-     "type": "at",
-     "url": "https://www.poujoulat.fr/fr/bundles/poujoulatfront/images/atec/Avis-Technique-CSTB-PGI-14.2-13-1943_V2.pdf",
-     "titre": "DTA 14.2/13-1943_V2"
-    },
-    {
-     "type": "autre",
-     "url": "https://www.poujoulat.fr/fr/bundles/poujoulatfront/images/cahiers_des_charges/DESCRIPTIF_PGI_MAISON%20NEUVE_Avr-2015.pdf",
-     "titre": "Descriptif CCTP : PGI en maison neuve (04/2015)"
-    }
-   ],
-   "sous": "Conduits de fumée et cheminées",
-   "perf": "Associable aux gammes Efficience, Therminox, Tubaginox SL, Starflex+ ; usages individuels et collectifs hors 4e famille (selon DTA)",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "poujoulat-dualis",
-   "lot": "L15",
-   "nom": "Conduits concentriques Dualis pour chaudières à condensation et appareils étanches",
-   "fabricant": "Poujoulat",
-   "reference": "Dualis EI, Dualis condensation",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "conduit de fumée",
-    "concentrique",
-    "condensation",
-    "chaudière",
-    "ventouse"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.poujoulat.fr",
-     "titre": "Cheminées Poujoulat"
-    },
-    {
-     "type": "at",
-     "url": "https://www.poujoulat.fr/fr/bundles/poujoulatfront/images/atec/DTA%20142-12-1821_V3%20Dualis%20EI.pdf",
-     "titre": "DTA 14.2/12-1821_V3 Dualis EI"
-    },
-    {
-     "type": "at",
-     "url": "https://www.poujoulat.fr/fr/bundles/poujoulatfront/images/atec/DTA-dualis-condensation14-14-2002.pdf",
-     "titre": "DTA 14/14-2002 Dualis condensation (polymère, chaudières fioul et gaz étanches)"
-    }
-   ],
-   "sous": "Conduits de fumée et cheminées",
-   "perf": "Évacuation des produits de combustion et amenée d'air comburant, circuit de combustion étanche ; configuration C3 rénovation (réutilisation de conduits existants)",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "poujoulat-airflue",
-   "lot": "L15",
-   "nom": "Rénovation de conduits individuels maçonnés Airflue Rénovation et Flexcondens",
-   "fabricant": "Poujoulat",
-   "reference": "Airflue Rénovation, Flexcondens",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "conduit de fumée",
-    "rénovation",
-    "tubage",
-    "chaudière",
-    "condensation"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.poujoulat.fr",
-     "titre": "Cheminées Poujoulat"
-    },
-    {
-     "type": "at",
-     "url": "https://www.poujoulat.fr/fr/bundles/poujoulatfront/images/atec/DTA_AIRFLUE%20RENO_AO2131874_V2.pdf",
-     "titre": "DTA 14.2/13-1874_V2 Airflue Rénovation"
-    },
-    {
-     "type": "pose",
-     "url": "https://media.xpair.com/pdf/chauffage/Notice-pose-AirFlue-Mur.pdf",
-     "titre": "Notice de pose Airflue Rénovation (copie Xpair)"
-    },
-    {
-     "type": "site",
-     "url": "https://conseils.xpair.com/consulter_savoir_faire/solution-conduits-fumee-renovation/conduits-individuels-chaudiere-ventilation-airflue.htm",
-     "titre": "Solutions de rénovation des conduits individuels (Xpair)"
-    }
-   ],
-   "sous": "Conduits de fumée et cheminées",
-   "perf": "Évacuation sous pression réutilisant les conduits maçonnés individuels existants ; remplacement des appareils gaz à coupe-tirage",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "poujoulat-3cep",
-   "lot": "L15",
-   "nom": "Conduit collectif pour chaudières étanches 3CE P Multi+",
-   "fabricant": "Poujoulat",
-   "reference": "3CE P Multi+",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "conduit de fumée",
-    "collectif",
-    "3CE",
-    "logement collectif",
-    "chaudière"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.poujoulat.fr",
-     "titre": "Cheminées Poujoulat"
-    },
-    {
-     "type": "cat",
-     "url": "https://www.poujoulat.fr/fr/uploads/media/pdf/Conduits%20collectifs%203CEP%20multi+.pdf",
-     "titre": "Documentation 3CE P Multi+"
-    },
-    {
-     "type": "at",
-     "url": "https://media.xpair.com/pdf/chauffage/DTA-3CEP.pdf",
-     "titre": "DTA 14/10-1599 (édition ancienne, copie Xpair : vérifier la version en vigueur)"
-    }
-   ],
-   "sous": "Conduits de fumée et cheminées",
-   "perf": "Conduit collectif pour chaudières étanches (3CE) en logement collectif",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "poujoulat-conduits-isoles",
-   "lot": "L15",
-   "nom": "Conduits de fumée isolés Inox-Galva et Therminox, traversée Coqisol",
-   "fabricant": "Poujoulat",
-   "reference": "Inox-Galva, Therminox, Coqisol",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "conduit de fumée",
-    "isolé",
-    "bois",
-    "traversée de plancher"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.poujoulat.fr",
-     "titre": "Cheminées Poujoulat"
-    },
-    {
-     "type": "cat",
-     "url": "https://www.poujoulat.fr/fr/uploads/media/pdf/DOCUMENTATION_CONDUITS_ISOLES_2019.pdf",
-     "titre": "Documentation conduits isolés (2019)"
-    },
-    {
-     "type": "at",
-     "url": "https://chausson.fr/media/article-document/239026",
-     "titre": "Avis technique 14/12-1790 Coqisol, traversée de parois étanches et isolées (copie distributeur)"
-    }
-   ],
-   "sous": "Conduits de fumée et cheminées",
-   "perf": "Conduits métalliques composites rigides ; distance de sécurité selon NF DTU 24.1",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "poujoulat-sorties-de-toit",
-   "lot": "L04",
-   "nom": "Sorties de toit et souches de cheminée Poujoulat",
-   "fabricant": "Poujoulat",
-   "reference": "Sorties de toit",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "sortie de toit",
-    "souche",
-    "couverture",
-    "conduit de fumée"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.poujoulat.fr",
-     "titre": "Cheminées Poujoulat"
-    },
-    {
-     "type": "cat",
-     "url": "https://www.poujoulat.fr/fr/bundles/poujoulatfront/images/cahiers_des_charges/sortiesdetoit.pdf",
-     "titre": "Conduits de cheminée et sorties de toit pour maisons individuelles"
-    }
-   ],
-   "sous": "",
-   "perf": "Système intégrant conduit, étanchéité en toiture et sortie de toit, adapté au matériau de couverture (tuiles, ardoises, bac acier)",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "atlantic-alfea-excellia",
-   "lot": "L15",
-   "nom": "Pompe à chaleur air/eau split Inverter haute performance Alféa Excellia",
-   "fabricant": "Atlantic",
-   "reference": "Alféa Excellia A.I.",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "pompe à chaleur",
-    "air/eau",
-    "rénovation"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.atlantic-pro.fr",
-     "titre": "Atlantic, espace professionnels"
-    },
-    {
-     "type": "ft",
-     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/fiche-technique-pompe-a-chaleur-alfea-excellia-ai-atlantic.pdf",
-     "titre": "Documentation professionnelle Alféa Excellia (copie distributeur)"
-    }
-   ],
-   "sous": "Pompes à chaleur et climatisation",
-   "perf": "Échangeur coaxial breveté Atlantic",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "atlantic-alfea-extensa-r32",
-   "lot": "L15",
-   "nom": "Pompe à chaleur air/eau Alféa Extensa A.I. R32",
-   "fabricant": "Atlantic",
-   "reference": "Alféa Extensa A.I. R32, Extensa Duo",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "pompe à chaleur",
-    "air/eau",
-    "R32"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.atlantic-pro.fr",
-     "titre": "Atlantic, espace professionnels"
-    },
-    {
-     "type": "ft",
-     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/fiche-technique-pompe-a-chaleur-alfea-extensa-ai-r32-atlantic.pdf",
-     "titre": "Documentation professionnelle Alféa Extensa A.I. R32 (copie distributeur)"
-    }
-   ],
-   "sous": "Pompes à chaleur et climatisation",
-   "perf": "Fluide R32 ; version Duo avec ECS en 3, 5, 6, 8 et 10 kW",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "atlantic-geolia",
-   "lot": "L15",
-   "nom": "Pompe à chaleur géothermique Atlantic Géolia",
-   "fabricant": "Atlantic",
-   "reference": "Géolia",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "pompe à chaleur",
-    "géothermie",
-    "eau/eau"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.atlantic-pro.fr",
-     "titre": "Atlantic, espace professionnels"
-    },
-    {
-     "type": "ft",
-     "url": "https://res.cloudinary.com/sonepar-fr/raw/upload/s--NhxerLa5--/v1/documents/1760/22-2039-maj-doc-com-geolia-web.pdf",
-     "titre": "Documentation professionnelle Géolia (copie distributeur)"
-    }
-   ],
-   "sous": "Pompes à chaleur et climatisation",
-   "perf": "Efficacité énergétique saisonnière jusqu'à 233 % ; départ jusqu'à 60 °C en thermodynamique selon modèle et captage ; cascade 26 ou 34 kW ; ECS intégrée en option",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "atlantic-hybrides",
-   "lot": "L15",
-   "nom": "Chaudières et pompes à chaleur hybrides Atlantic (Alféa Hybrid Duo, Hysae Hybrid, Hynéa Hybrid Duo)",
-   "fabricant": "Atlantic",
-   "reference": "Alféa Hybrid Duo Gaz et Fioul, Hysae Hybrid, Hynéa Hybrid Duo RE+",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "chaudière",
-    "hybride",
-    "pompe à chaleur",
-    "gaz",
-    "condensation",
-    "RE2020"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.atlantic-pro.fr",
-     "titre": "Atlantic, espace professionnels"
-    },
-    {
-     "type": "ft",
-     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/fiche-technique-pompe-a-chaleur-alfea-hybrid-duo-gaz-atlantic.pdf",
-     "titre": "Alféa Hybrid Duo Gaz (copie distributeur)"
-    },
-    {
-     "type": "ft",
-     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/fiche-technique-pompe-a-chaleur-hysae-hybrid-atlantic.pdf",
-     "titre": "Hysae Hybrid, chaudière murale hybride (copie distributeur)"
-    },
-    {
-     "type": "ft",
-     "url": "https://res.cloudinary.com/sonepar-fr/raw/upload/s--EUVNeXAh--/documents/15/22-8021-maj-doc-com-hynea-hybrid-duo-re-v2.pdf",
-     "titre": "Hynéa Hybrid Duo RE+ (copie distributeur)"
-    },
-    {
-     "type": "ft",
-     "url": "https://res.cloudinary.com/sonepar-fr/raw/upload/s--FeUzmpSV--/v1/documents/1760/21-5040-maj-3-volets-alfea-hybrid-duo-fioul-ai-web.pdf",
-     "titre": "Alféa Hybrid Duo Fioul (copie distributeur)"
-    },
-    {
-     "type": "pose",
-     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/notice-utilisation-pompe-a-chaleur-hynea-hybrid-duo-atlantic.pdf",
-     "titre": "Notice d'utilisation Hynéa Hybrid Duo (copie distributeur)"
-    }
-   ],
-   "sous": "Chaudières et production de chaleur",
-   "perf": "Hynéa Hybrid Duo : 4 kW PAC / 24 kW chaudière, ETAS 176 % / 94 % à 55 °C ; Hysae Hybrid : 3 kW PAC et 12 kW chaudière (28 et 32 kW en ECS)",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "atlantic-explorer",
-   "lot": "L14",
-   "nom": "Chauffe-eau thermodynamique sur socle Explorer",
-   "fabricant": "Atlantic",
-   "reference": "Explorer 200 à 270 L",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "chauffe-eau thermodynamique",
-    "ECS"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.atlantic-pro.fr",
-     "titre": "Atlantic, espace professionnels"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.123elec.com/media/wysiwyg/telechargement/document/fiche-chantier-explorer-15.pdf",
-     "titre": "Fiche chantier Explorer (copie distributeur)"
-    }
-   ],
-   "sous": "Production d'eau chaude sanitaire",
-   "perf": "Sur socle, 200 à 270 L ; protection anticorrosion ACI hybride",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "atlantic-calypso",
-   "lot": "L14",
-   "nom": "Chauffe-eau thermodynamique Calypso connecté",
-   "fabricant": "Atlantic",
-   "reference": "Calypso connecté",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "chauffe-eau thermodynamique",
-    "ECS",
-    "photovoltaïque"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.atlantic-pro.fr",
-     "titre": "Atlantic, espace professionnels"
-    },
-    {
-     "type": "ft",
-     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/fiche-technique-atlantic-calypso-connecte-chauffe-eau-thermodynamique.pdf",
-     "titre": "Fiche Calypso connecté (copie distributeur)"
-    }
-   ],
-   "sous": "Production d'eau chaude sanitaire",
-   "perf": "Pilotable par gestionnaire d'énergie (contact sec) en autoconsommation photovoltaïque",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "viessmann-vitodens-100",
-   "lot": "L15",
-   "nom": "Chaudière murale gaz à condensation Vitodens 100-W et 111-W",
-   "fabricant": "Viessmann",
-   "reference": "Vitodens 100-W (B1HG, B1KG), 111-W (B1LG)",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "chaudière",
-    "gaz",
-    "condensation",
-    "murale"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.viessmann.fr",
-     "titre": "Viessmann France"
-    },
-    {
-     "type": "ft",
-     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/fiche-technique-chaudiere-Viessmann-Vitodens-100-W.pdf",
-     "titre": "Fiche Vitodens 100-W et 111-W (copie distributeur)"
-    },
-    {
-     "type": "ft",
-     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/Fiche-technique-viessmann-Vitodens-100-W-b1kf.pdf",
-     "titre": "Fiche Vitodens 100-W B1KF (copie distributeur)"
-    },
-    {
-     "type": "pose",
-     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/Notice-installation-Viessmann-Vitodens-100-W.pdf",
-     "titre": "Notice d'installation Vitodens 100-W (copie distributeur)"
-    }
-   ],
-   "sous": "Chaudières et production de chaleur",
-   "perf": "3,2 à 32 kW ; simple ou double service (micro-accumulation) ; 111-W avec ballon inox intégré ; EN 15502 gaz naturel et propane",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "viessmann-vitodens-200-222",
-   "lot": "L15",
-   "nom": "Chaudière murale gaz à condensation Vitodens 200-W et 222-W",
-   "fabricant": "Viessmann",
-   "reference": "Vitodens 200-W (B2HF, B2KF), 222-W (B2LF)",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "chaudière",
-    "gaz",
-    "condensation",
-    "murale"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.viessmann.fr",
-     "titre": "Viessmann France"
-    },
-    {
-     "type": "cat",
-     "url": "https://www.batiproduits.com/documentation-catalogue/vitodens-200-222-w-principaux-avantages-et-description-techniqu-50003-17320.html",
-     "titre": "Vitodens 200/222-W, description technique (Batiproduits)"
-    },
-    {
-     "type": "pose",
-     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/notice-installation-vitodens%20200w-b2kf-viessmann.pdf",
-     "titre": "Notice d'installation Vitodens 200-W B2KF (copie distributeur)"
-    },
-    {
-     "type": "pose",
-     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/notice-installation-vitodens%20222w-b2lf-viessmann.pdf",
-     "titre": "Notice d'installation Vitodens 222-W B2LF (copie distributeur)"
-    }
-   ],
-   "sous": "Chaudières et production de chaleur",
-   "perf": "Version 200-W également en 120 et 150 kW (tertiaire)",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "viessmann-vitocal-200g-pro",
-   "lot": "L15",
-   "nom": "Pompe à chaleur géothermique Vitocal 200-G Pro",
-   "fabricant": "Viessmann",
-   "reference": "Vitocal 200-G Pro BW 202",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "pompe à chaleur",
-    "géothermie",
-    "tertiaire"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.viessmann.fr",
-     "titre": "Viessmann France"
-    },
-    {
-     "type": "autre",
-     "url": "https://www.manualslib.fr/products/Viessmann-Vitocal-200-G-Pro-Bw-202-A080-13149475.html",
-     "titre": "Notice pour l'étude, 84 pages (ManualsLib, copie tierce)"
-    }
-   ],
-   "sous": "Pompes à chaleur et climatisation",
-   "perf": "",
-   "projets": "",
-   "notes": "Notice pour l'étude officielle à demander à Viessmann.",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "viessmann-vitocal-350-ht-pro",
-   "lot": "L15",
-   "nom": "Pompe à chaleur haute température Vitocal 350-HT Pro",
-   "fabricant": "Viessmann",
-   "reference": "Vitocal 350-HT Pro BW 352.AHT",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "pompe à chaleur",
-    "haute température",
-    "rénovation",
-    "tertiaire"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.viessmann.fr",
-     "titre": "Viessmann France"
-    },
-    {
-     "type": "autre",
-     "url": "https://www.manualslib.fr/manual/762229/Viessmann-Vitocal-350-Ht-Pro-Bw-352-Aht058Pw.html",
-     "titre": "Données techniques (ManualsLib, copie tierce)"
-    }
-   ],
-   "sous": "Pompes à chaleur et climatisation",
-   "perf": "COP selon EN 14511 ; modèles de 58 à 96 kW environ",
-   "projets": "",
-   "notes": "Notice pour l'étude officielle à demander à Viessmann.",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "finimetal-reggane-3010-compact",
-   "lot": "L15",
-   "nom": "Radiateur à panneaux acier Reggane 3010 Compact",
-   "fabricant": "Finimetal",
-   "reference": "Reggane 3010 Compact, types 11, 21, 22, 33",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "radiateur",
-    "acier",
-    "eau chaude"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.batiproduits.com/fiche/produits/radiateur-avec-panneaux-en-acier-reggane-3010-co-p316341280.html",
-     "titre": "Reggane 3010 Compact (Batiproduits)"
-    },
-    {
-     "type": "ft",
-     "url": "https://res.cloudinary.com/afdb/raw/upload/s--Mm0IB3dz--/v1/documents/1842120_radiateur_finimetal_.pdf",
-     "titre": "Fiche technique Reggane 3010 Compact (06/2024, copie distributeur)"
-    }
-   ],
-   "sous": "Radiateurs et sèche-serviettes",
-   "perf": "Pression de service 20 bar, pas de 40 mm ; longueurs de 400 à 3000 mm ; garantie 10 ans",
-   "projets": "",
-   "notes": "Remplace la Reggane 3000 Compact.",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "finimetal-reggane-3010-tertiaire",
-   "lot": "L15",
-   "nom": "Radiateurs Reggane 3010 Déco Tertiaire et Reggane 3010 Maternelle",
-   "fabricant": "Finimetal",
-   "reference": "Reggane 3010 Déco Tertiaire, Maternelle",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "radiateur",
-    "acier",
-    "ERP",
-    "école",
-    "petite enfance"
-   ],
-   "liens": [
-    {
-     "type": "ft",
-     "url": "https://www.purmo.com/public/prod/21eb49e5-5a21-43c4-a6a7-4b6d5aec62ff/12299/8efbab6b849317a91d0679f9c69c01d7/fr-fr-files-finimetal_fiche-radiateur-reggane-3010-deco-tertiaire.pdf",
-     "titre": "Fiche Reggane 3010 Déco Tertiaire"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.purmo.com/public/prod/21eb49e5-5a21-43c4-a6a7-4b6d5aec62ff/12301/bcd5826f080a3eb091d7938715f4130f/fr-fr-files-finimetal_fiche-radiateur-reggane-3010-maternelle.pdf",
-     "titre": "Fiche Reggane 3010 Maternelle"
-    }
-   ],
-   "sous": "Radiateurs et sèche-serviettes",
-   "perf": "Version Maternelle : habillage avec joues latérales et grille, insert thermostatique M30 × 1,5 prémonté",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "finimetal-reggane-deco",
-   "lot": "L15",
-   "nom": "Radiateur à panneau finement rainuré Reggane Déco",
-   "fabricant": "Finimetal",
-   "reference": "Reggane Déco, horizontal et vertical",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "radiateur",
-    "acier",
-    "design",
-    "NF"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.batiproduits.com/fiche/produits/radiateurs-a-panneau-finement-rainure-p69082503.html",
-     "titre": "Reggane Déco (Batiproduits)"
-    }
-   ],
-   "sous": "Radiateurs et sèche-serviettes",
-   "perf": "412 à 2979 W ; 110 °C et 6 bars maximum ; certifié NF",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "finimetal-t6-3010-plan",
-   "lot": "L15",
-   "nom": "Radiateur à façade plane et insert thermostatique T6 3010 Plan",
-   "fabricant": "Finimetal",
-   "reference": "T6 3010 Plan",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "radiateur",
-    "acier",
-    "façade plane"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.batiproduits.com/amp/fiche/produits/radiateur-a-insert-thermostatique-premonte-t6-p316341310.html",
-     "titre": "T6 3010 Plan (Batiproduits)"
-    }
-   ],
-   "sous": "Radiateurs et sèche-serviettes",
-   "perf": "10 bars en service, 13 bars d'épreuve ; DIN 55900 et EN 442",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "finimetal-lamella-chorus",
-   "lot": "L15",
-   "nom": "Radiateurs acier Lamella (tôle plissée) et Chorus (décoratifs)",
-   "fabricant": "Finimetal",
-   "reference": "Lamella, Chorus",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "radiateur",
-    "acier",
-    "plinthe",
-    "claustra"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.batiproduits.com/amp/fiche/produits/radiateurs-en-tole-d-acier-plissee-p69082488.html",
-     "titre": "Lamella (Batiproduits)"
-    },
-    {
-     "type": "site",
-     "url": "https://www.batiproduits.com/amp/fiche/produits/radiateurs-decoratifs-finimetal-chorus-p69082493.html",
-     "titre": "Chorus (Batiproduits)"
-    }
-   ],
-   "sous": "Radiateurs et sèche-serviettes",
-   "perf": "Lamella : plus de 1 222 combinaisons, 152 à 5537 W ; Chorus : verticaux, horizontaux, plinthes, claustras ; NF eau chaude",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "finimetal-seche-serviettes",
-   "lot": "L15",
-   "nom": "Radiateurs de salle de bains et design Finimetal (Impulse, Squara, Squasy, Twist, Gate, Slim)",
-   "fabricant": "Finimetal",
-   "reference": "Impulse, Squara, Squasy, Twist, Gate, Slim",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "sèche-serviettes",
-    "radiateur",
-    "salle de bains",
-    "design"
-   ],
-   "liens": [
-    {
-     "type": "ft",
-     "url": "https://www.purmo.com/public/prod/21eb49e5-5a21-43c4-a6a7-4b6d5aec62ff/14261/4572a8834bc578ffe7905823cad0f07e/fr-fr-files-data-sheet-impulse-fr-fr-finimetal.pdf",
-     "titre": "Fiche Impulse"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.purmo.com/public/prod/21eb49e5-5a21-43c4-a6a7-4b6d5aec62ff/14264/ec94a324ebb409411e740d6712cba7ee/fr-fr-files-data-sheet-squara-fr-fr-finimetal.pdf",
-     "titre": "Fiche Squara"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.purmo.com/public/prod/21eb49e5-5a21-43c4-a6a7-4b6d5aec62ff/14265/884ca134051022bea7684f3b0ce48e25/fr-fr-files-data-sheet-squasy-fr-fr-finimetal.pdf",
-     "titre": "Fiche Squasy"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.purmo.com/public/prod/21eb49e5-5a21-43c4-a6a7-4b6d5aec62ff/14266/67ae481420436c14d0ca0557ea8c8e65/fr-fr-files-data-sheet-twist-fr-fr-finimetal.pdf",
-     "titre": "Fiche Twist"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.purmo.com/public/prod/21eb49e5-5a21-43c4-a6a7-4b6d5aec62ff/14260/2062a23d0c69d3c9524dbb474d9447d7/fr-fr-files-data-sheet-gate-fr-fr-finimetal.pdf",
-     "titre": "Fiche Gate"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.purmo.com/public/prod/21eb49e5-5a21-43c4-a6a7-4b6d5aec62ff/14263/d2373a164fa033831c029ed27c55d688/fr-fr-files-data-sheet-slim-fr-fr-finimetal.pdf",
-     "titre": "Fiche Slim (aluminium anodisé)"
-    }
-   ],
-   "sous": "Radiateurs et sèche-serviettes",
-   "perf": "Impulse : acier EN 442, 95 °C et 6 bars maximum ; Squara : blanc RAL 9016, anthracite RAL 7016 ou noir RAL 9005 mat",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "hudevad-p5",
-   "lot": "L15",
-   "nom": "Radiateurs design à eau chaude Hudevad P5, P5K, P5V",
-   "fabricant": "Hudevad",
-   "reference": "P5, P5K, P5V, P5KV",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "radiateur",
-    "eau chaude",
-    "design",
-    "horizontal",
-    "vertical"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.hudevad.com",
-     "titre": "Hudevad"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.batiproduits.com/fiche/produits/gamme-de-radiateurs-a-eau-chaude-p69109498.html",
-     "titre": "Fiche P5 / P5K (Batiproduits)"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.batiproduits.com/fiche/produits/gamme-de-radiateurs-a-eau-chaude-p69109503.html",
-     "titre": "Fiche P5V / P5KV vertical (Batiproduits)"
-    }
-   ],
-   "sous": "Radiateurs et sèche-serviettes",
-   "perf": "Jusqu'à 95 °C, 10 bars ; tuyauterie dissimulée en face arrière (UR-Flex)",
-   "projets": "",
-   "notes": "Distribué en France par Plomb'Art.",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "hudevad-plan",
-   "lot": "L15",
-   "nom": "Radiateurs à eau chaude Hudevad Plan, P200 plinthe, Consilio, Fionia",
-   "fabricant": "Hudevad",
-   "reference": "Plan, P200, Consilio, Fionia",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "radiateur",
-    "eau chaude",
-    "plinthe",
-    "banc"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.hudevad.com",
-     "titre": "Hudevad"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.batiproduits.com/fiche/produits/radiateur-simple-ou-double-a-eau-chaude-p69109508.html",
-     "titre": "Fiche Hudevad Plan"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.batiproduits.com/fiche/produits/radiateur-plinthe-a-simple-ou-double-epaisseur-p69109473.html",
-     "titre": "Fiche P200 plinthe"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.batiproduits.com/fiche/produits/radiateur-et-meuble-tout-en-un-p69109448.html",
-     "titre": "Fiche Consilio (radiateur meuble)"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.batiproduits.com/fiche/produits/radiateur-mural-ou-de-sol-a-eau-chaude-p69109488.html",
-     "titre": "Fiche Fionia"
-    }
-   ],
-   "sous": "Radiateurs et sèche-serviettes",
-   "perf": "Plan : jusqu'à 95 °C, 10 bars, 455 à 3 018 W/m ; P200 : 93 °C, 13 bars ; Consilio : H 426 mm, P 228 mm, 1 130 W/m",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "estrada-radiateurs",
-   "lot": "L15",
-   "nom": "Radiateurs d'exception Estrada (Sevilla, sélection électrique et eau chaude)",
-   "fabricant": "Estrada",
-   "reference": "Sevilla",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "radiateur",
-    "électrique",
-    "inertie",
-    "design",
-    "showroom"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.estrada.fr",
-     "titre": "Estrada"
-    },
-    {
-     "type": "cat",
-     "url": "https://www.estrada.fr/categorie-produit/radiateur-exception/",
-     "titre": "Radiateurs d'exception"
-    }
-   ],
-   "sous": "Radiateurs et sèche-serviettes",
-   "perf": "Sevilla : radiateur à inertie rayonnant, programmable et connecté",
-   "projets": "",
-   "notes": "Distributeur et concepteur parisien (showrooms Paris, dont 97 bd Raspail) : revend aussi Acova, Campa, Cinier, Noirot, Thermor.",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "acova-seche-serviettes",
-   "lot": "L15",
-   "nom": "Sèche-serviettes Acova (Kapla, Cala, Atoll, Régate, Altaï Spa, Clipper)",
-   "fabricant": "Acova",
-   "reference": "Kapla, Cala, Atoll, Régate",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "sèche-serviettes",
-    "électrique",
-    "eau chaude",
-    "mixte",
-    "salle de bains"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.acova.fr",
-     "titre": "Acova"
-    },
-    {
-     "type": "cat",
-     "url": "https://www.acova.fr/sites/default/files/2025-07/acova_kapla_bd-pap_13062025.pdf",
-     "titre": "Brochure Kapla (2025)"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.batiproduits.com/fiche/produits/seche-serviette-electriruqe-a-tubes-plats-graph-p489274736.html",
-     "titre": "Fiche Kapla"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.batiproduits.com/fiche/produits/seche-serviettes-vertical-a-eau-chaude-p69065173.html",
-     "titre": "Fiche Atoll"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.batiproduits.com/fiche/produits/seche-serviettes-electriques-ou-a-eau-chaude-p69065058.html",
-     "titre": "Fiche Cala"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.batiproduits.com/fiche/produits/seche-serviettes-pour-chauffage-central-electri-p69064998.html",
-     "titre": "Fiche Clipper"
-    }
-   ],
-   "sous": "Radiateurs et sèche-serviettes",
-   "perf": "Kapla : électrique, chauffage central ou mixte, 500 à 900 W, 46 teintes ; Atoll : 283 à 1 154 W",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "stuv-poeles-bois",
-   "lot": "L15",
-   "nom": "Poêles à bois Stûv 6, 16, 30",
-   "fabricant": "Stûv",
-   "reference": "Stûv 6-H, 16-D4, 30",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "poêle",
-    "bois",
-    "Ecodesign",
-    "foyer"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.stuv.com",
-     "titre": "Stûv"
-    },
-    {
-     "type": "ft",
-     "url": "https://stuv.com/sites/default/files/fiches_6h_btob_260302_fr.pdf",
-     "titre": "Fiches techniques Stûv 6-H (03/2026)"
-    },
-    {
-     "type": "ft",
-     "url": "https://stuv.com/sites/default/files/fiches_16d4_btob_260303_fr.pdf",
-     "titre": "Fiches techniques Stûv 16-D4 (03/2026)"
-    }
-   ],
-   "sous": "Poêles, inserts et foyers",
-   "perf": "6-H : acier et fonte, bûches 33 cm, Ecodesign 2022 ; 16-D4 : bûches 50 cm, 226 kg",
-   "projets": "",
-   "notes": "Fabricant belge (Bois-de-Villers).",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "stuv-poeles-granules",
-   "lot": "L15",
-   "nom": "Poêles à granulés Stûv P-10 et P-20",
-   "fabricant": "Stûv",
-   "reference": "P-10, P-20s",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "poêle",
-    "granulés",
-    "pellets"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.stuv.com",
-     "titre": "Stûv"
-    },
-    {
-     "type": "ft",
-     "url": "https://stuv.com/sites/default/files/fiches_p-10_btob_260423_fr.pdf",
-     "titre": "Fiches techniques P-10 (04/2026)"
-    },
-    {
-     "type": "cat",
-     "url": "https://stuv.com/sites/default/files/stuv_p20_brochure_10_fr_web.pdf",
-     "titre": "Brochure P-20s"
-    }
-   ],
-   "sous": "Poêles, inserts et foyers",
-   "perf": "P-20s : émissions de particules inférieures aux exigences Ecodesign 2022 (selon fabricant)",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "godin-poeles",
-   "lot": "L15",
-   "nom": "Poêles, inserts et cuisinières à bois en fonte Godin",
-   "fabricant": "Godin",
-   "reference": "Gamme bois et granulés",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "poêle",
-    "insert",
-    "fonte",
-    "bois"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.godin.fr",
-     "titre": "Godin"
-    }
-   ],
-   "sous": "Poêles, inserts et foyers",
-   "perf": "",
-   "projets": "",
-   "notes": "Lien non vérifié.",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "campa-radiateurs",
-   "lot": "L15",
-   "nom": "Radiateurs électriques design Campa",
-   "fabricant": "Campa",
-   "reference": "Gamme électrique",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "radiateur",
-    "électrique",
-    "design"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.campa.fr",
-     "titre": "Campa"
-    }
-   ],
-   "sous": "Radiateurs et sèche-serviettes",
-   "perf": "",
-   "projets": "",
-   "notes": "Marque du groupe Intuis. Lien non vérifié.",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "rothelec-radiateurs",
-   "lot": "L15",
-   "nom": "Radiateurs électriques à inertie Rothelec",
-   "fabricant": "Rothelec",
-   "reference": "Gamme éco-électrique",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "radiateur",
-    "électrique",
-    "inertie"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.rothelec.fr",
-     "titre": "Rothelec"
-    }
-   ],
-   "sous": "Radiateurs et sèche-serviettes",
-   "perf": "",
-   "projets": "",
-   "notes": "Régulation vendue séparément des radiateurs. Lien non vérifié.",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "chappee-chaudieres",
-   "lot": "L15",
-   "nom": "Chaudières et pompes à chaleur Chappée",
-   "fabricant": "Chappée",
-   "reference": "Gamme résidentielle et collective",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "chaudière",
-    "condensation",
-    "pompe à chaleur"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.chappee.com",
-     "titre": "Chappée"
-    }
-   ],
-   "sous": "Chaudières et production de chaleur",
-   "perf": "",
-   "projets": "",
-   "notes": "Marque du groupe BDR Thermea. Lien non vérifié.",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "elmleblanc-chaudieres",
-   "lot": "L15",
-   "nom": "Chaudières gaz et chauffe-bains elm.leblanc",
-   "fabricant": "elm.leblanc",
-   "reference": "Gamme gaz",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "chaudière",
-    "gaz",
-    "chauffe-bains",
-    "condensation"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.elmleblanc.fr",
-     "titre": "elm.leblanc"
-    }
-   ],
-   "sous": "Chaudières et production de chaleur",
-   "perf": "",
-   "projets": "",
-   "notes": "Marque du groupe Bosch. Lien non vérifié.",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "sofath-pac",
-   "lot": "L15",
-   "nom": "Pompes à chaleur géothermiques Sofath",
-   "fabricant": "Sofath",
-   "reference": "Gamme géothermie",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "pompe à chaleur",
-    "géothermie",
-    "sol-eau"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.sofath.com",
-     "titre": "Sofath"
-    }
-   ],
-   "sous": "Pompes à chaleur et climatisation",
-   "perf": "",
-   "projets": "",
-   "notes": "Marque du groupe BDR Thermea. Lien non vérifié.",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "butagaz-propane",
-   "lot": "L15",
-   "nom": "Gaz propane en citerne Butagaz",
-   "fabricant": "Butagaz",
-   "reference": "Propane citerne",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "gaz",
-    "propane",
-    "citerne",
-    "énergie"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.butagaz.fr",
-     "titre": "Butagaz"
-    }
-   ],
-   "sous": "Gaz propane et citernes",
-   "perf": "",
-   "projets": "",
-   "notes": "Fournisseur d'énergie, pas fabricant d'équipement. Lien non vérifié.",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "acome-thermacome",
-   "lot": "L15",
-   "nom": "Plancher chauffant-rafraîchissant Thermacome (PER, Eco Thermacome, DTEK)",
-   "fabricant": "Acome",
-   "reference": "Thermacome, Eco Thermacome, DTEK",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "plancher chauffant",
-    "rafraîchissant",
-    "PER",
-    "liège"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.acome.com",
-     "titre": "Acome"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.batiproduits.com/fiche/produits/plancher-chauffant-sur-dalle-de-liege-p68926303.html",
-     "titre": "Fiche Eco Thermacome sur dalle de liège"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.richardson.fr/files/richardson/technical_document/498/892191_t63642.pdf",
-     "titre": "Fiche DTEK Thermacome, tubes détectables (copie distributeur)"
-    }
-   ],
-   "sous": "Planchers chauffants",
-   "perf": "DTEK : tube PEXc avec fil conducteur détectable sur toute la surface",
-   "projets": "",
-   "notes": "Acome produit aussi câbles et câblage télécom du bâtiment (lot L16).",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
-   "id": "roth-climacomfort",
-   "lot": "L15",
-   "nom": "Planchers chauffants-rafraîchissants Roth ClimaComfort (Compact, TBS, Panel) et dalles Rothaflex",
-   "fabricant": "Roth",
-   "reference": "ClimaComfort Compact, TBS, Panel R, Rothaflex",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "plancher chauffant",
-    "rafraîchissant",
-    "rénovation",
-    "faible épaisseur"
-   ],
-   "liens": [
-    {
-     "type": "site",
-     "url": "https://www.roth-france.fr",
-     "titre": "Roth France"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.roth-france.fr/documents/69942a4754f29.pdf",
-     "titre": "Fiche produit ClimaComfort Compact"
-    },
-    {
-     "type": "ft",
-     "url": "https://professionnels.roth-france.fr/documents/642d2b4f1b1f5.pdf",
-     "titre": "Fiche technique ClimaComfort TBS"
-    },
-    {
-     "type": "ft",
-     "url": "https://professionnels.roth-france.fr/documents/6225fc9ea8227.pdf",
-     "titre": "Fiche ClimaComfort Panel R"
-    },
-    {
-     "type": "ft",
-     "url": "https://www.roth-france.fr/documents/62333e6fb2748.pdf",
-     "titre": "Fiche technique dalle plane PUR Rothaflex"
-    }
-   ],
-   "sous": "Planchers chauffants",
-   "perf": "Rothaflex : dalles PUR 1 200 x 1 000 mm, classement SC1a2Ch, quadrillage 10 cm",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-13",
-   "maj": "2026-11-13"
-  },
-  {
    "id": "otis-gen3-core",
    "lot": "L17",
    "nom": "Ascenseur Otis Gen3 Core (résidentiel et petit tertiaire, sans local machine)",
@@ -28664,6 +33593,7067 @@ window.TD_DONNEES = {
    "maj": "2026-11-16"
   },
   {
+   "id": "poujoulat-efficience",
+   "lot": "L15",
+   "nom": "Conduit de fumée concentrique isolé Efficience (appareils étanches, poêles à granulés)",
+   "fabricant": "Poujoulat",
+   "reference": "Efficience",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "conduit de fumée",
+    "concentrique",
+    "étanche",
+    "granulés",
+    "maison individuelle"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.poujoulat.fr",
+     "titre": "Cheminées Poujoulat"
+    },
+    {
+     "type": "at",
+     "url": "https://www.poujoulat.fr/fr/bundles/poujoulatfront/images/atec/DTA_EFFICIENCE_AO2172266_V2.pdf",
+     "titre": "DTA 14.2/17-2266_V2"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.poujoulat.fr/fr/bundles/poujoulatfront/images/cahiers_des_charges/descriptif-efficience-150-raccorde-poele-a-granules-etanche.pdf",
+     "titre": "Descriptif CCTP : Efficience 150 raccordé par PGI à un poêle à granulés étanche"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.poujoulat.fr/fr/bundles/poujoulatfront/images/cahiers_des_charges/DESCRIPTIF-EFFICIENCE-CF-150-en-attente-en-MI.pdf",
+     "titre": "Descriptif CCTP : Efficience 150 en attente en maison neuve"
+    }
+   ],
+   "sous": "Conduits de fumée et cheminées",
+   "perf": "Conduit métallique NF EN 1856-1 ; amenée d'air comburant et évacuation des fumées ; traversée de parois étanches et isolées avec plaque de distance de sécurité étanche",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "poujoulat-pgi",
+   "lot": "L15",
+   "nom": "Système concentrique PGI pour poêles à granulés étanches",
+   "fabricant": "Poujoulat",
+   "reference": "PGI",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "conduit de fumée",
+    "concentrique",
+    "granulés",
+    "étanche"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.poujoulat.fr",
+     "titre": "Cheminées Poujoulat"
+    },
+    {
+     "type": "at",
+     "url": "https://www.poujoulat.fr/fr/bundles/poujoulatfront/images/atec/Avis-Technique-CSTB-PGI-14.2-13-1943_V2.pdf",
+     "titre": "DTA 14.2/13-1943_V2"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.poujoulat.fr/fr/bundles/poujoulatfront/images/cahiers_des_charges/DESCRIPTIF_PGI_MAISON%20NEUVE_Avr-2015.pdf",
+     "titre": "Descriptif CCTP : PGI en maison neuve (04/2015)"
+    }
+   ],
+   "sous": "Conduits de fumée et cheminées",
+   "perf": "Associable aux gammes Efficience, Therminox, Tubaginox SL, Starflex+ ; usages individuels et collectifs hors 4e famille (selon DTA)",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "poujoulat-dualis",
+   "lot": "L15",
+   "nom": "Conduits concentriques Dualis pour chaudières à condensation et appareils étanches",
+   "fabricant": "Poujoulat",
+   "reference": "Dualis EI, Dualis condensation",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "conduit de fumée",
+    "concentrique",
+    "condensation",
+    "chaudière",
+    "ventouse"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.poujoulat.fr",
+     "titre": "Cheminées Poujoulat"
+    },
+    {
+     "type": "at",
+     "url": "https://www.poujoulat.fr/fr/bundles/poujoulatfront/images/atec/DTA%20142-12-1821_V3%20Dualis%20EI.pdf",
+     "titre": "DTA 14.2/12-1821_V3 Dualis EI"
+    },
+    {
+     "type": "at",
+     "url": "https://www.poujoulat.fr/fr/bundles/poujoulatfront/images/atec/DTA-dualis-condensation14-14-2002.pdf",
+     "titre": "DTA 14/14-2002 Dualis condensation (polymère, chaudières fioul et gaz étanches)"
+    }
+   ],
+   "sous": "Conduits de fumée et cheminées",
+   "perf": "Évacuation des produits de combustion et amenée d'air comburant, circuit de combustion étanche ; configuration C3 rénovation (réutilisation de conduits existants)",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "poujoulat-airflue",
+   "lot": "L15",
+   "nom": "Rénovation de conduits individuels maçonnés Airflue Rénovation et Flexcondens",
+   "fabricant": "Poujoulat",
+   "reference": "Airflue Rénovation, Flexcondens",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "conduit de fumée",
+    "rénovation",
+    "tubage",
+    "chaudière",
+    "condensation"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.poujoulat.fr",
+     "titre": "Cheminées Poujoulat"
+    },
+    {
+     "type": "at",
+     "url": "https://www.poujoulat.fr/fr/bundles/poujoulatfront/images/atec/DTA_AIRFLUE%20RENO_AO2131874_V2.pdf",
+     "titre": "DTA 14.2/13-1874_V2 Airflue Rénovation"
+    },
+    {
+     "type": "pose",
+     "url": "https://media.xpair.com/pdf/chauffage/Notice-pose-AirFlue-Mur.pdf",
+     "titre": "Notice de pose Airflue Rénovation (copie Xpair)"
+    },
+    {
+     "type": "site",
+     "url": "https://conseils.xpair.com/consulter_savoir_faire/solution-conduits-fumee-renovation/conduits-individuels-chaudiere-ventilation-airflue.htm",
+     "titre": "Solutions de rénovation des conduits individuels (Xpair)"
+    }
+   ],
+   "sous": "Conduits de fumée et cheminées",
+   "perf": "Évacuation sous pression réutilisant les conduits maçonnés individuels existants ; remplacement des appareils gaz à coupe-tirage",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "poujoulat-3cep",
+   "lot": "L15",
+   "nom": "Conduit collectif pour chaudières étanches 3CE P Multi+",
+   "fabricant": "Poujoulat",
+   "reference": "3CE P Multi+",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "conduit de fumée",
+    "collectif",
+    "3CE",
+    "logement collectif",
+    "chaudière"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.poujoulat.fr",
+     "titre": "Cheminées Poujoulat"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.poujoulat.fr/fr/uploads/media/pdf/Conduits%20collectifs%203CEP%20multi+.pdf",
+     "titre": "Documentation 3CE P Multi+"
+    },
+    {
+     "type": "at",
+     "url": "https://media.xpair.com/pdf/chauffage/DTA-3CEP.pdf",
+     "titre": "DTA 14/10-1599 (édition ancienne, copie Xpair : vérifier la version en vigueur)"
+    }
+   ],
+   "sous": "Conduits de fumée et cheminées",
+   "perf": "Conduit collectif pour chaudières étanches (3CE) en logement collectif",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "poujoulat-conduits-isoles",
+   "lot": "L15",
+   "nom": "Conduits de fumée isolés Inox-Galva et Therminox, traversée Coqisol",
+   "fabricant": "Poujoulat",
+   "reference": "Inox-Galva, Therminox, Coqisol",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "conduit de fumée",
+    "isolé",
+    "bois",
+    "traversée de plancher"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.poujoulat.fr",
+     "titre": "Cheminées Poujoulat"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.poujoulat.fr/fr/uploads/media/pdf/DOCUMENTATION_CONDUITS_ISOLES_2019.pdf",
+     "titre": "Documentation conduits isolés (2019)"
+    },
+    {
+     "type": "at",
+     "url": "https://chausson.fr/media/article-document/239026",
+     "titre": "Avis technique 14/12-1790 Coqisol, traversée de parois étanches et isolées (copie distributeur)"
+    }
+   ],
+   "sous": "Conduits de fumée et cheminées",
+   "perf": "Conduits métalliques composites rigides ; distance de sécurité selon NF DTU 24.1",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "poujoulat-sorties-de-toit",
+   "lot": "L04",
+   "nom": "Sorties de toit et souches de cheminée Poujoulat",
+   "fabricant": "Poujoulat",
+   "reference": "Sorties de toit",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "sortie de toit",
+    "souche",
+    "couverture",
+    "conduit de fumée"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.poujoulat.fr",
+     "titre": "Cheminées Poujoulat"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.poujoulat.fr/fr/bundles/poujoulatfront/images/cahiers_des_charges/sortiesdetoit.pdf",
+     "titre": "Conduits de cheminée et sorties de toit pour maisons individuelles"
+    }
+   ],
+   "sous": "",
+   "perf": "Système intégrant conduit, étanchéité en toiture et sortie de toit, adapté au matériau de couverture (tuiles, ardoises, bac acier)",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "atlantic-alfea-excellia",
+   "lot": "L15",
+   "nom": "Pompe à chaleur air/eau split Inverter haute performance Alféa Excellia",
+   "fabricant": "Atlantic",
+   "reference": "Alféa Excellia A.I.",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "pompe à chaleur",
+    "air/eau",
+    "rénovation"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.atlantic-pro.fr",
+     "titre": "Atlantic, espace professionnels"
+    },
+    {
+     "type": "ft",
+     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/fiche-technique-pompe-a-chaleur-alfea-excellia-ai-atlantic.pdf",
+     "titre": "Documentation professionnelle Alféa Excellia (copie distributeur)"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "Échangeur coaxial breveté Atlantic",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "atlantic-alfea-extensa-r32",
+   "lot": "L15",
+   "nom": "Pompe à chaleur air/eau Alféa Extensa A.I. R32",
+   "fabricant": "Atlantic",
+   "reference": "Alféa Extensa A.I. R32, Extensa Duo",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "pompe à chaleur",
+    "air/eau",
+    "R32"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.atlantic-pro.fr",
+     "titre": "Atlantic, espace professionnels"
+    },
+    {
+     "type": "ft",
+     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/fiche-technique-pompe-a-chaleur-alfea-extensa-ai-r32-atlantic.pdf",
+     "titre": "Documentation professionnelle Alféa Extensa A.I. R32 (copie distributeur)"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "Fluide R32 ; version Duo avec ECS en 3, 5, 6, 8 et 10 kW",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "atlantic-geolia",
+   "lot": "L15",
+   "nom": "Pompe à chaleur géothermique Atlantic Géolia",
+   "fabricant": "Atlantic",
+   "reference": "Géolia",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "pompe à chaleur",
+    "géothermie",
+    "eau/eau"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.atlantic-pro.fr",
+     "titre": "Atlantic, espace professionnels"
+    },
+    {
+     "type": "ft",
+     "url": "https://res.cloudinary.com/sonepar-fr/raw/upload/s--NhxerLa5--/v1/documents/1760/22-2039-maj-doc-com-geolia-web.pdf",
+     "titre": "Documentation professionnelle Géolia (copie distributeur)"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "Efficacité énergétique saisonnière jusqu'à 233 % ; départ jusqu'à 60 °C en thermodynamique selon modèle et captage ; cascade 26 ou 34 kW ; ECS intégrée en option",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "atlantic-hybrides",
+   "lot": "L15",
+   "nom": "Chaudières et pompes à chaleur hybrides Atlantic (Alféa Hybrid Duo, Hysae Hybrid, Hynéa Hybrid Duo)",
+   "fabricant": "Atlantic",
+   "reference": "Alféa Hybrid Duo Gaz et Fioul, Hysae Hybrid, Hynéa Hybrid Duo RE+",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "chaudière",
+    "hybride",
+    "pompe à chaleur",
+    "gaz",
+    "condensation",
+    "RE2020"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.atlantic-pro.fr",
+     "titre": "Atlantic, espace professionnels"
+    },
+    {
+     "type": "ft",
+     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/fiche-technique-pompe-a-chaleur-alfea-hybrid-duo-gaz-atlantic.pdf",
+     "titre": "Alféa Hybrid Duo Gaz (copie distributeur)"
+    },
+    {
+     "type": "ft",
+     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/fiche-technique-pompe-a-chaleur-hysae-hybrid-atlantic.pdf",
+     "titre": "Hysae Hybrid, chaudière murale hybride (copie distributeur)"
+    },
+    {
+     "type": "ft",
+     "url": "https://res.cloudinary.com/sonepar-fr/raw/upload/s--EUVNeXAh--/documents/15/22-8021-maj-doc-com-hynea-hybrid-duo-re-v2.pdf",
+     "titre": "Hynéa Hybrid Duo RE+ (copie distributeur)"
+    },
+    {
+     "type": "ft",
+     "url": "https://res.cloudinary.com/sonepar-fr/raw/upload/s--FeUzmpSV--/v1/documents/1760/21-5040-maj-3-volets-alfea-hybrid-duo-fioul-ai-web.pdf",
+     "titre": "Alféa Hybrid Duo Fioul (copie distributeur)"
+    },
+    {
+     "type": "pose",
+     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/notice-utilisation-pompe-a-chaleur-hynea-hybrid-duo-atlantic.pdf",
+     "titre": "Notice d'utilisation Hynéa Hybrid Duo (copie distributeur)"
+    }
+   ],
+   "sous": "Chaudières et production de chaleur",
+   "perf": "Hynéa Hybrid Duo : 4 kW PAC / 24 kW chaudière, ETAS 176 % / 94 % à 55 °C ; Hysae Hybrid : 3 kW PAC et 12 kW chaudière (28 et 32 kW en ECS)",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "atlantic-explorer",
+   "lot": "L14",
+   "nom": "Chauffe-eau thermodynamique sur socle Explorer",
+   "fabricant": "Atlantic",
+   "reference": "Explorer 200 à 270 L",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "chauffe-eau thermodynamique",
+    "ECS"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.atlantic-pro.fr",
+     "titre": "Atlantic, espace professionnels"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.123elec.com/media/wysiwyg/telechargement/document/fiche-chantier-explorer-15.pdf",
+     "titre": "Fiche chantier Explorer (copie distributeur)"
+    }
+   ],
+   "sous": "Production d'eau chaude sanitaire",
+   "perf": "Sur socle, 200 à 270 L ; protection anticorrosion ACI hybride",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "atlantic-calypso",
+   "lot": "L14",
+   "nom": "Chauffe-eau thermodynamique Calypso connecté",
+   "fabricant": "Atlantic",
+   "reference": "Calypso connecté",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "chauffe-eau thermodynamique",
+    "ECS",
+    "photovoltaïque"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.atlantic-pro.fr",
+     "titre": "Atlantic, espace professionnels"
+    },
+    {
+     "type": "ft",
+     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/fiche-technique-atlantic-calypso-connecte-chauffe-eau-thermodynamique.pdf",
+     "titre": "Fiche Calypso connecté (copie distributeur)"
+    }
+   ],
+   "sous": "Production d'eau chaude sanitaire",
+   "perf": "Pilotable par gestionnaire d'énergie (contact sec) en autoconsommation photovoltaïque",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "viessmann-vitodens-100",
+   "lot": "L15",
+   "nom": "Chaudière murale gaz à condensation Vitodens 100-W et 111-W",
+   "fabricant": "Viessmann",
+   "reference": "Vitodens 100-W (B1HG, B1KG), 111-W (B1LG)",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "chaudière",
+    "gaz",
+    "condensation",
+    "murale"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.viessmann.fr",
+     "titre": "Viessmann France"
+    },
+    {
+     "type": "ft",
+     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/fiche-technique-chaudiere-Viessmann-Vitodens-100-W.pdf",
+     "titre": "Fiche Vitodens 100-W et 111-W (copie distributeur)"
+    },
+    {
+     "type": "ft",
+     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/Fiche-technique-viessmann-Vitodens-100-W-b1kf.pdf",
+     "titre": "Fiche Vitodens 100-W B1KF (copie distributeur)"
+    },
+    {
+     "type": "pose",
+     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/Notice-installation-Viessmann-Vitodens-100-W.pdf",
+     "titre": "Notice d'installation Vitodens 100-W (copie distributeur)"
+    }
+   ],
+   "sous": "Chaudières et production de chaleur",
+   "perf": "3,2 à 32 kW ; simple ou double service (micro-accumulation) ; 111-W avec ballon inox intégré ; EN 15502 gaz naturel et propane",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "viessmann-vitodens-200-222",
+   "lot": "L15",
+   "nom": "Chaudière murale gaz à condensation Vitodens 200-W et 222-W",
+   "fabricant": "Viessmann",
+   "reference": "Vitodens 200-W (B2HF, B2KF), 222-W (B2LF)",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "chaudière",
+    "gaz",
+    "condensation",
+    "murale"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.viessmann.fr",
+     "titre": "Viessmann France"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.batiproduits.com/documentation-catalogue/vitodens-200-222-w-principaux-avantages-et-description-techniqu-50003-17320.html",
+     "titre": "Vitodens 200/222-W, description technique (Batiproduits)"
+    },
+    {
+     "type": "pose",
+     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/notice-installation-vitodens%20200w-b2kf-viessmann.pdf",
+     "titre": "Notice d'installation Vitodens 200-W B2KF (copie distributeur)"
+    },
+    {
+     "type": "pose",
+     "url": "https://files.izi-by-edf-renov.fr/files/catalogue/produits/notice-installation-vitodens%20222w-b2lf-viessmann.pdf",
+     "titre": "Notice d'installation Vitodens 222-W B2LF (copie distributeur)"
+    }
+   ],
+   "sous": "Chaudières et production de chaleur",
+   "perf": "Version 200-W également en 120 et 150 kW (tertiaire)",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "viessmann-vitocal-200g-pro",
+   "lot": "L15",
+   "nom": "Pompe à chaleur géothermique Vitocal 200-G Pro",
+   "fabricant": "Viessmann",
+   "reference": "Vitocal 200-G Pro BW 202",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "pompe à chaleur",
+    "géothermie",
+    "tertiaire"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.viessmann.fr",
+     "titre": "Viessmann France"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.manualslib.fr/products/Viessmann-Vitocal-200-G-Pro-Bw-202-A080-13149475.html",
+     "titre": "Notice pour l'étude, 84 pages (ManualsLib, copie tierce)"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "",
+   "projets": "",
+   "notes": "Notice pour l'étude officielle à demander à Viessmann.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "viessmann-vitocal-350-ht-pro",
+   "lot": "L15",
+   "nom": "Pompe à chaleur haute température Vitocal 350-HT Pro",
+   "fabricant": "Viessmann",
+   "reference": "Vitocal 350-HT Pro BW 352.AHT",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "pompe à chaleur",
+    "haute température",
+    "rénovation",
+    "tertiaire"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.viessmann.fr",
+     "titre": "Viessmann France"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.manualslib.fr/manual/762229/Viessmann-Vitocal-350-Ht-Pro-Bw-352-Aht058Pw.html",
+     "titre": "Données techniques (ManualsLib, copie tierce)"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "COP selon EN 14511 ; modèles de 58 à 96 kW environ",
+   "projets": "",
+   "notes": "Notice pour l'étude officielle à demander à Viessmann.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "finimetal-reggane-3010-compact",
+   "lot": "L15",
+   "nom": "Radiateur à panneaux acier Reggane 3010 Compact",
+   "fabricant": "Finimetal",
+   "reference": "Reggane 3010 Compact, types 11, 21, 22, 33",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "radiateur",
+    "acier",
+    "eau chaude"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/radiateur-avec-panneaux-en-acier-reggane-3010-co-p316341280.html",
+     "titre": "Reggane 3010 Compact (Batiproduits)"
+    },
+    {
+     "type": "ft",
+     "url": "https://res.cloudinary.com/afdb/raw/upload/s--Mm0IB3dz--/v1/documents/1842120_radiateur_finimetal_.pdf",
+     "titre": "Fiche technique Reggane 3010 Compact (06/2024, copie distributeur)"
+    }
+   ],
+   "sous": "Radiateurs et sèche-serviettes",
+   "perf": "Pression de service 20 bar, pas de 40 mm ; longueurs de 400 à 3000 mm ; garantie 10 ans",
+   "projets": "",
+   "notes": "Remplace la Reggane 3000 Compact.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "finimetal-reggane-3010-tertiaire",
+   "lot": "L15",
+   "nom": "Radiateurs Reggane 3010 Déco Tertiaire et Reggane 3010 Maternelle",
+   "fabricant": "Finimetal",
+   "reference": "Reggane 3010 Déco Tertiaire, Maternelle",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "radiateur",
+    "acier",
+    "ERP",
+    "école",
+    "petite enfance"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.purmo.com/public/prod/21eb49e5-5a21-43c4-a6a7-4b6d5aec62ff/12299/8efbab6b849317a91d0679f9c69c01d7/fr-fr-files-finimetal_fiche-radiateur-reggane-3010-deco-tertiaire.pdf",
+     "titre": "Fiche Reggane 3010 Déco Tertiaire"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.purmo.com/public/prod/21eb49e5-5a21-43c4-a6a7-4b6d5aec62ff/12301/bcd5826f080a3eb091d7938715f4130f/fr-fr-files-finimetal_fiche-radiateur-reggane-3010-maternelle.pdf",
+     "titre": "Fiche Reggane 3010 Maternelle"
+    }
+   ],
+   "sous": "Radiateurs et sèche-serviettes",
+   "perf": "Version Maternelle : habillage avec joues latérales et grille, insert thermostatique M30 × 1,5 prémonté",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "finimetal-reggane-deco",
+   "lot": "L15",
+   "nom": "Radiateur à panneau finement rainuré Reggane Déco",
+   "fabricant": "Finimetal",
+   "reference": "Reggane Déco, horizontal et vertical",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "radiateur",
+    "acier",
+    "design",
+    "NF"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/radiateurs-a-panneau-finement-rainure-p69082503.html",
+     "titre": "Reggane Déco (Batiproduits)"
+    }
+   ],
+   "sous": "Radiateurs et sèche-serviettes",
+   "perf": "412 à 2979 W ; 110 °C et 6 bars maximum ; certifié NF",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "finimetal-t6-3010-plan",
+   "lot": "L15",
+   "nom": "Radiateur à façade plane et insert thermostatique T6 3010 Plan",
+   "fabricant": "Finimetal",
+   "reference": "T6 3010 Plan",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "radiateur",
+    "acier",
+    "façade plane"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/amp/fiche/produits/radiateur-a-insert-thermostatique-premonte-t6-p316341310.html",
+     "titre": "T6 3010 Plan (Batiproduits)"
+    }
+   ],
+   "sous": "Radiateurs et sèche-serviettes",
+   "perf": "10 bars en service, 13 bars d'épreuve ; DIN 55900 et EN 442",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "finimetal-lamella-chorus",
+   "lot": "L15",
+   "nom": "Radiateurs acier Lamella (tôle plissée) et Chorus (décoratifs)",
+   "fabricant": "Finimetal",
+   "reference": "Lamella, Chorus",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "radiateur",
+    "acier",
+    "plinthe",
+    "claustra"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/amp/fiche/produits/radiateurs-en-tole-d-acier-plissee-p69082488.html",
+     "titre": "Lamella (Batiproduits)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/amp/fiche/produits/radiateurs-decoratifs-finimetal-chorus-p69082493.html",
+     "titre": "Chorus (Batiproduits)"
+    }
+   ],
+   "sous": "Radiateurs et sèche-serviettes",
+   "perf": "Lamella : plus de 1 222 combinaisons, 152 à 5537 W ; Chorus : verticaux, horizontaux, plinthes, claustras ; NF eau chaude",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "finimetal-seche-serviettes",
+   "lot": "L15",
+   "nom": "Radiateurs de salle de bains et design Finimetal (Impulse, Squara, Squasy, Twist, Gate, Slim)",
+   "fabricant": "Finimetal",
+   "reference": "Impulse, Squara, Squasy, Twist, Gate, Slim",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "sèche-serviettes",
+    "radiateur",
+    "salle de bains",
+    "design"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.purmo.com/public/prod/21eb49e5-5a21-43c4-a6a7-4b6d5aec62ff/14261/4572a8834bc578ffe7905823cad0f07e/fr-fr-files-data-sheet-impulse-fr-fr-finimetal.pdf",
+     "titre": "Fiche Impulse"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.purmo.com/public/prod/21eb49e5-5a21-43c4-a6a7-4b6d5aec62ff/14264/ec94a324ebb409411e740d6712cba7ee/fr-fr-files-data-sheet-squara-fr-fr-finimetal.pdf",
+     "titre": "Fiche Squara"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.purmo.com/public/prod/21eb49e5-5a21-43c4-a6a7-4b6d5aec62ff/14265/884ca134051022bea7684f3b0ce48e25/fr-fr-files-data-sheet-squasy-fr-fr-finimetal.pdf",
+     "titre": "Fiche Squasy"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.purmo.com/public/prod/21eb49e5-5a21-43c4-a6a7-4b6d5aec62ff/14266/67ae481420436c14d0ca0557ea8c8e65/fr-fr-files-data-sheet-twist-fr-fr-finimetal.pdf",
+     "titre": "Fiche Twist"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.purmo.com/public/prod/21eb49e5-5a21-43c4-a6a7-4b6d5aec62ff/14260/2062a23d0c69d3c9524dbb474d9447d7/fr-fr-files-data-sheet-gate-fr-fr-finimetal.pdf",
+     "titre": "Fiche Gate"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.purmo.com/public/prod/21eb49e5-5a21-43c4-a6a7-4b6d5aec62ff/14263/d2373a164fa033831c029ed27c55d688/fr-fr-files-data-sheet-slim-fr-fr-finimetal.pdf",
+     "titre": "Fiche Slim (aluminium anodisé)"
+    }
+   ],
+   "sous": "Radiateurs et sèche-serviettes",
+   "perf": "Impulse : acier EN 442, 95 °C et 6 bars maximum ; Squara : blanc RAL 9016, anthracite RAL 7016 ou noir RAL 9005 mat",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "hudevad-p5",
+   "lot": "L15",
+   "nom": "Radiateurs design à eau chaude Hudevad P5, P5K, P5V",
+   "fabricant": "Hudevad",
+   "reference": "P5, P5K, P5V, P5KV",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "radiateur",
+    "eau chaude",
+    "design",
+    "horizontal",
+    "vertical"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.hudevad.com",
+     "titre": "Hudevad"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/gamme-de-radiateurs-a-eau-chaude-p69109498.html",
+     "titre": "Fiche P5 / P5K (Batiproduits)"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/gamme-de-radiateurs-a-eau-chaude-p69109503.html",
+     "titre": "Fiche P5V / P5KV vertical (Batiproduits)"
+    }
+   ],
+   "sous": "Radiateurs et sèche-serviettes",
+   "perf": "Jusqu'à 95 °C, 10 bars ; tuyauterie dissimulée en face arrière (UR-Flex)",
+   "projets": "",
+   "notes": "Distribué en France par Plomb'Art.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "hudevad-plan",
+   "lot": "L15",
+   "nom": "Radiateurs à eau chaude Hudevad Plan, P200 plinthe, Consilio, Fionia",
+   "fabricant": "Hudevad",
+   "reference": "Plan, P200, Consilio, Fionia",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "radiateur",
+    "eau chaude",
+    "plinthe",
+    "banc"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.hudevad.com",
+     "titre": "Hudevad"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/radiateur-simple-ou-double-a-eau-chaude-p69109508.html",
+     "titre": "Fiche Hudevad Plan"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/radiateur-plinthe-a-simple-ou-double-epaisseur-p69109473.html",
+     "titre": "Fiche P200 plinthe"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/radiateur-et-meuble-tout-en-un-p69109448.html",
+     "titre": "Fiche Consilio (radiateur meuble)"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/radiateur-mural-ou-de-sol-a-eau-chaude-p69109488.html",
+     "titre": "Fiche Fionia"
+    }
+   ],
+   "sous": "Radiateurs et sèche-serviettes",
+   "perf": "Plan : jusqu'à 95 °C, 10 bars, 455 à 3 018 W/m ; P200 : 93 °C, 13 bars ; Consilio : H 426 mm, P 228 mm, 1 130 W/m",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "estrada-radiateurs",
+   "lot": "L15",
+   "nom": "Radiateurs d'exception Estrada (Sevilla, sélection électrique et eau chaude)",
+   "fabricant": "Estrada",
+   "reference": "Sevilla",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "radiateur",
+    "électrique",
+    "inertie",
+    "design",
+    "showroom"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.estrada.fr",
+     "titre": "Estrada"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.estrada.fr/categorie-produit/radiateur-exception/",
+     "titre": "Radiateurs d'exception"
+    }
+   ],
+   "sous": "Radiateurs et sèche-serviettes",
+   "perf": "Sevilla : radiateur à inertie rayonnant, programmable et connecté",
+   "projets": "",
+   "notes": "Distributeur et concepteur parisien (showrooms Paris, dont 97 bd Raspail) : revend aussi Acova, Campa, Cinier, Noirot, Thermor.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "acova-seche-serviettes",
+   "lot": "L15",
+   "nom": "Sèche-serviettes Acova (Kapla, Cala, Atoll, Régate, Altaï Spa, Clipper)",
+   "fabricant": "Acova",
+   "reference": "Kapla, Cala, Atoll, Régate",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "sèche-serviettes",
+    "électrique",
+    "eau chaude",
+    "mixte",
+    "salle de bains"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.acova.fr",
+     "titre": "Acova"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.acova.fr/sites/default/files/2025-07/acova_kapla_bd-pap_13062025.pdf",
+     "titre": "Brochure Kapla (2025)"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/seche-serviette-electriruqe-a-tubes-plats-graph-p489274736.html",
+     "titre": "Fiche Kapla"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/seche-serviettes-vertical-a-eau-chaude-p69065173.html",
+     "titre": "Fiche Atoll"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/seche-serviettes-electriques-ou-a-eau-chaude-p69065058.html",
+     "titre": "Fiche Cala"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/seche-serviettes-pour-chauffage-central-electri-p69064998.html",
+     "titre": "Fiche Clipper"
+    }
+   ],
+   "sous": "Radiateurs et sèche-serviettes",
+   "perf": "Kapla : électrique, chauffage central ou mixte, 500 à 900 W, 46 teintes ; Atoll : 283 à 1 154 W",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "stuv-poeles-bois",
+   "lot": "L15",
+   "nom": "Poêles à bois Stûv 6, 16, 30",
+   "fabricant": "Stûv",
+   "reference": "Stûv 6-H, 16-D4, 30",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "poêle",
+    "bois",
+    "Ecodesign",
+    "foyer"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.stuv.com",
+     "titre": "Stûv"
+    },
+    {
+     "type": "ft",
+     "url": "https://stuv.com/sites/default/files/fiches_6h_btob_260302_fr.pdf",
+     "titre": "Fiches techniques Stûv 6-H (03/2026)"
+    },
+    {
+     "type": "ft",
+     "url": "https://stuv.com/sites/default/files/fiches_16d4_btob_260303_fr.pdf",
+     "titre": "Fiches techniques Stûv 16-D4 (03/2026)"
+    }
+   ],
+   "sous": "Poêles, inserts et foyers",
+   "perf": "6-H : acier et fonte, bûches 33 cm, Ecodesign 2022 ; 16-D4 : bûches 50 cm, 226 kg",
+   "projets": "",
+   "notes": "Fabricant belge (Bois-de-Villers).",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "stuv-poeles-granules",
+   "lot": "L15",
+   "nom": "Poêles à granulés Stûv P-10 et P-20",
+   "fabricant": "Stûv",
+   "reference": "P-10, P-20s",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "poêle",
+    "granulés",
+    "pellets"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.stuv.com",
+     "titre": "Stûv"
+    },
+    {
+     "type": "ft",
+     "url": "https://stuv.com/sites/default/files/fiches_p-10_btob_260423_fr.pdf",
+     "titre": "Fiches techniques P-10 (04/2026)"
+    },
+    {
+     "type": "cat",
+     "url": "https://stuv.com/sites/default/files/stuv_p20_brochure_10_fr_web.pdf",
+     "titre": "Brochure P-20s"
+    }
+   ],
+   "sous": "Poêles, inserts et foyers",
+   "perf": "P-20s : émissions de particules inférieures aux exigences Ecodesign 2022 (selon fabricant)",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "godin-poeles",
+   "lot": "L15",
+   "nom": "Poêles, inserts et cuisinières à bois en fonte Godin",
+   "fabricant": "Godin",
+   "reference": "Gamme bois et granulés",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "poêle",
+    "insert",
+    "fonte",
+    "bois"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.godin.fr",
+     "titre": "Godin"
+    }
+   ],
+   "sous": "Poêles, inserts et foyers",
+   "perf": "",
+   "projets": "",
+   "notes": "Lien non vérifié.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "campa-radiateurs",
+   "lot": "L15",
+   "nom": "Radiateurs électriques design Campa",
+   "fabricant": "Campa",
+   "reference": "Gamme électrique",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "radiateur",
+    "électrique",
+    "design"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.campa.fr",
+     "titre": "Campa"
+    }
+   ],
+   "sous": "Radiateurs et sèche-serviettes",
+   "perf": "",
+   "projets": "",
+   "notes": "Marque du groupe Intuis. Lien non vérifié.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "rothelec-radiateurs",
+   "lot": "L15",
+   "nom": "Radiateurs électriques à inertie Rothelec",
+   "fabricant": "Rothelec",
+   "reference": "Gamme éco-électrique",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "radiateur",
+    "électrique",
+    "inertie"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.rothelec.fr",
+     "titre": "Rothelec"
+    }
+   ],
+   "sous": "Radiateurs et sèche-serviettes",
+   "perf": "",
+   "projets": "",
+   "notes": "Régulation vendue séparément des radiateurs. Lien non vérifié.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "chappee-chaudieres",
+   "lot": "L15",
+   "nom": "Chaudières et pompes à chaleur Chappée",
+   "fabricant": "Chappée",
+   "reference": "Gamme résidentielle et collective",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "chaudière",
+    "condensation",
+    "pompe à chaleur"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.chappee.com",
+     "titre": "Chappée"
+    }
+   ],
+   "sous": "Chaudières et production de chaleur",
+   "perf": "",
+   "projets": "",
+   "notes": "Marque du groupe BDR Thermea. Lien non vérifié.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "elmleblanc-chaudieres",
+   "lot": "L15",
+   "nom": "Chaudières gaz et chauffe-bains elm.leblanc",
+   "fabricant": "elm.leblanc",
+   "reference": "Gamme gaz",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "chaudière",
+    "gaz",
+    "chauffe-bains",
+    "condensation"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.elmleblanc.fr",
+     "titre": "elm.leblanc"
+    }
+   ],
+   "sous": "Chaudières et production de chaleur",
+   "perf": "",
+   "projets": "",
+   "notes": "Marque du groupe Bosch. Lien non vérifié.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "sofath-pac",
+   "lot": "L15",
+   "nom": "Pompes à chaleur géothermiques Sofath",
+   "fabricant": "Sofath",
+   "reference": "Gamme géothermie",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "pompe à chaleur",
+    "géothermie",
+    "sol-eau"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.sofath.com",
+     "titre": "Sofath"
+    }
+   ],
+   "sous": "Pompes à chaleur et climatisation",
+   "perf": "",
+   "projets": "",
+   "notes": "Marque du groupe BDR Thermea. Lien non vérifié.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "butagaz-propane",
+   "lot": "L15",
+   "nom": "Gaz propane en citerne Butagaz",
+   "fabricant": "Butagaz",
+   "reference": "Propane citerne",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "gaz",
+    "propane",
+    "citerne",
+    "énergie"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.butagaz.fr",
+     "titre": "Butagaz"
+    }
+   ],
+   "sous": "Gaz propane et citernes",
+   "perf": "",
+   "projets": "",
+   "notes": "Fournisseur d'énergie, pas fabricant d'équipement. Lien non vérifié.",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "acome-thermacome",
+   "lot": "L15",
+   "nom": "Plancher chauffant-rafraîchissant Thermacome (PER, Eco Thermacome, DTEK)",
+   "fabricant": "Acome",
+   "reference": "Thermacome, Eco Thermacome, DTEK",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "plancher chauffant",
+    "rafraîchissant",
+    "PER",
+    "liège"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.acome.com",
+     "titre": "Acome"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.batiproduits.com/fiche/produits/plancher-chauffant-sur-dalle-de-liege-p68926303.html",
+     "titre": "Fiche Eco Thermacome sur dalle de liège"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.richardson.fr/files/richardson/technical_document/498/892191_t63642.pdf",
+     "titre": "Fiche DTEK Thermacome, tubes détectables (copie distributeur)"
+    }
+   ],
+   "sous": "Planchers chauffants",
+   "perf": "DTEK : tube PEXc avec fil conducteur détectable sur toute la surface",
+   "projets": "",
+   "notes": "Acome produit aussi câbles et câblage télécom du bâtiment (lot L16).",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "roth-climacomfort",
+   "lot": "L15",
+   "nom": "Planchers chauffants-rafraîchissants Roth ClimaComfort (Compact, TBS, Panel) et dalles Rothaflex",
+   "fabricant": "Roth",
+   "reference": "ClimaComfort Compact, TBS, Panel R, Rothaflex",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "plancher chauffant",
+    "rafraîchissant",
+    "rénovation",
+    "faible épaisseur"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.roth-france.fr",
+     "titre": "Roth France"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.roth-france.fr/documents/69942a4754f29.pdf",
+     "titre": "Fiche produit ClimaComfort Compact"
+    },
+    {
+     "type": "ft",
+     "url": "https://professionnels.roth-france.fr/documents/642d2b4f1b1f5.pdf",
+     "titre": "Fiche technique ClimaComfort TBS"
+    },
+    {
+     "type": "ft",
+     "url": "https://professionnels.roth-france.fr/documents/6225fc9ea8227.pdf",
+     "titre": "Fiche ClimaComfort Panel R"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.roth-france.fr/documents/62333e6fb2748.pdf",
+     "titre": "Fiche technique dalle plane PUR Rothaflex"
+    }
+   ],
+   "sous": "Planchers chauffants",
+   "perf": "Rothaflex : dalles PUR 1 200 x 1 000 mm, classement SC1a2Ch, quadrillage 10 cm",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-13",
+   "maj": "2026-11-13"
+  },
+  {
+   "id": "sikkens-polyfilla-garnissage",
+   "lot": "L13",
+   "nom": "Enduits de garnissage et de dégrossissage Polyfilla Pro (E120 poudre, E210 pâte)",
+   "fabricant": "Sikkens",
+   "reference": "Polyfilla Pro E120, E210",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "enduit",
+    "garnissage",
+    "intérieur",
+    "Polyfilla Pro"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/e120-enduit-de-garnissage",
+     "titre": "E120 Enduit de garnissage"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/e210-enduit-de-garnissage",
+     "titre": "E210 Enduit de garnissage"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/marques/polyfilla-pro",
+     "titre": "Polyfilla Pro"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.sikkens.fr/fr/documentation-technique",
+     "titre": "Documentation technique et de sécurité Sikkens (FT, FDS)"
+    }
+   ],
+   "sous": "Enduits de préparation (rebouchage, garnissage, lissage)",
+   "perf": "E120 : poudre enrichie en résine, jusqu'à 4 mm par passe, env. 1 kg/m²/mm, sacs 15 et 25 kg",
+   "projets": "",
+   "notes": "Marque Polyfilla Pro diffusée par Sikkens (AkzoNobel). Plâtre, carreaux et plaques de plâtre, béton, pierre, anciennes peintures. Fiches techniques dans la documentation Sikkens (pas de lien direct sur les pages produits).",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "sikkens-polyfilla-lissage",
+   "lot": "L13",
+   "nom": "Enduits de lissage et de finition Polyfilla Pro (E130, E200, E300)",
+   "fabricant": "Sikkens",
+   "reference": "Polyfilla Pro E130, E200, E300",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "enduit",
+    "lissage",
+    "finition",
+    "intérieur",
+    "Polyfilla Pro"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/e130-enduit-de-finition",
+     "titre": "E130 Enduit de finition"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/e200-enduit-de-lissage",
+     "titre": "E200 Enduit de lissage"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/e300-enduit-de-lissage",
+     "titre": "E300 Enduit de lissage (adhérence sur carrelage émaillé)"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.sikkens.fr/fr/documentation-technique",
+     "titre": "Documentation technique et de sécurité Sikkens (FT, FDS)"
+    }
+   ],
+   "sous": "Enduits de préparation (rebouchage, garnissage, lissage)",
+   "perf": "",
+   "projets": "",
+   "notes": "E200 ponçable après environ 4 h ; E300 adhère sur carreaux émaillés.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "sikkens-polyfilla-rebouchage",
+   "lot": "L13",
+   "nom": "Enduits de rebouchage Polyfilla Pro (F110, F120, F200, F210, F220 allégés, W300 bois)",
+   "fabricant": "Sikkens",
+   "reference": "Polyfilla Pro F110, F120, F200, F210, F220, W300",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "enduit",
+    "rebouchage",
+    "allégé",
+    "bois",
+    "Polyfilla Pro"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/f110-enduit-de-rebouchage",
+     "titre": "F110 Enduit de rebouchage"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/f120-enduit-de-rebouchage",
+     "titre": "F120 Enduit de rebouchage"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/f200-enduit-de-rebouchage",
+     "titre": "F200 Enduit de rebouchage"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/enduit-de-rebouchage-intérieur-en-pâte-allégée-f210",
+     "titre": "F210 pâte allégée"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/enduit-de-rebouchage-intérieur-en-pâte-allégée-f220",
+     "titre": "F220 pâte allégée"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/w300-enduit-de-rebouchage-bois",
+     "titre": "W300 Enduit de rebouchage bois"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.sikkens.fr/fr/documentation-technique",
+     "titre": "Documentation technique et de sécurité Sikkens (FT, FDS)"
+    }
+   ],
+   "sous": "Enduits de préparation (rebouchage, garnissage, lissage)",
+   "perf": "F220 ponçable après 2 h",
+   "projets": "",
+   "notes": "F110 et F120 : réparations profondes ; F200 à F220 : pâtes prêtes à l'emploi ; W300 : bois, se rabote et se perce.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "sikkens-polyfilla-multifonction",
+   "lot": "L13",
+   "nom": "Enduits multifonctions Polyfilla Pro (X100, X300)",
+   "fabricant": "Sikkens",
+   "reference": "Polyfilla Pro X100, X300",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "enduit",
+    "rebouchage",
+    "lissage",
+    "Polyfilla Pro"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/x100-enduit-multifonction",
+     "titre": "X100 Enduit multifonction"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/x300-enduit-de-rebouchage-lissage",
+     "titre": "X300 Enduit de rebouchage/lissage"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.sikkens.fr/fr/documentation-technique",
+     "titre": "Documentation technique et de sécurité Sikkens (FT, FDS)"
+    }
+   ],
+   "sous": "Enduits de préparation (rebouchage, garnissage, lissage)",
+   "perf": "X300 ponçable après 3 h, recouvrable sous 24 h",
+   "projets": "",
+   "notes": "Rebouchage et lissage avec un seul produit.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "sikkens-impressions-facade",
+   "lot": "L06",
+   "nom": "Impressions et fixateurs de façade Sikkens (Alphaprim Fix, Globaprim Hydro, Hydro Lisse et Classic, Rollfaçade Primer Acryl, Globafond, P100, P105)",
+   "fabricant": "Sikkens",
+   "reference": "Alphaprim Fix, Globaprim, Globafond, P100, P105",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "impression",
+    "fixateur",
+    "façade"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/alphaprim-fix",
+     "titre": "Alphaprim Fix"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/globaprim-hydro",
+     "titre": "Globaprim Hydro"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/globaprim-hydro-lisse",
+     "titre": "Globaprim Hydro Lisse"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/globaprim-classic",
+     "titre": "Globaprim Classic"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/rollfaçade-primer-acryl",
+     "titre": "Rollfaçade Primer Acryl"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/globafond",
+     "titre": "Globafond"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/p100-fixateur-façade-incolore",
+     "titre": "P100 Fixateur façade incolore"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/fixateur-facade-blanc-p105",
+     "titre": "P105 Fixateur façade blanc"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.sikkens.fr/fr/documentation-technique",
+     "titre": "Documentation technique et de sécurité Sikkens (FT, FDS)"
+    }
+   ],
+   "sous": "Enduits, ravalement",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "sikkens-peintures-facade",
+   "lot": "L06",
+   "nom": "Peintures et revêtements de façade Sikkens D2-D3 (Alphalite Hydro D2, Alphatex Monomat D3, Alphatex IQ Mat, Alpha Diwagolan, Alpha Diwatex, Alpha Renov Exterior, Globacryl, Rollfaçade, Hydro Pliolite)",
+   "fabricant": "Sikkens",
+   "reference": "Alphalite, Alphatex, Alpha Diwagolan, Alpha Renov Exterior, Globacryl, Rollfaçade",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "peinture",
+    "façade",
+    "D2",
+    "D3",
+    "pliolite"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/filters/cat_Revêtements-De-Façades",
+     "titre": "Revêtements de façades Sikkens (51 produits)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/alphalite-hydro-d2",
+     "titre": "Alphalite Hydro D2"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/alphatex-monomat-d3",
+     "titre": "Alphatex Monomat D3"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/alphatex-iq-mat",
+     "titre": "Alphatex IQ Mat"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/alpha-diwagolan",
+     "titre": "Alpha Diwagolan"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/alpha-diwatex",
+     "titre": "Alpha Diwatex"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/alpha-renov-exterior",
+     "titre": "Alpha Renov Exterior"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/globacryl-mat",
+     "titre": "Globacryl Mat"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/globacryl-monomat",
+     "titre": "Globacryl Monomat"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/globalite-hydro",
+     "titre": "Globalite Hydro"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/rollite",
+     "titre": "Rollite"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/rollfaçade-d2-acryl",
+     "titre": "Rollfaçade D2 Acryl"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/rollfaçade-d3-acryl-siloxane",
+     "titre": "Rollfaçade D3 Acryl-Siloxane"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/peinture-façade-hydro-pliolite",
+     "titre": "Peinture Façade Hydro Pliolite"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.sikkens.fr/fr/documentation-technique",
+     "titre": "Documentation technique et de sécurité Sikkens (FT, FDS)"
+    }
+   ],
+   "sous": "Enduits, ravalement",
+   "perf": "Alpha Renov Exterior : D3-I1, 700 teintes",
+   "projets": "",
+   "notes": "Rollfaçade et Globacryl : gammes adaptées à l'application mécanisée.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "sikkens-facade-siloxane-mineral",
+   "lot": "L06",
+   "nom": "Peintures de façade minérales et siloxanes Sikkens (Alpha Chalix silicate, Alphaloxan Extra, 10C et Solo, Alphaliet BL, Globaxane Mat)",
+   "fabricant": "Sikkens",
+   "reference": "Alpha Chalix, Alphaloxan, Alphaliet BL, Globaxane Mat",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "peinture",
+    "façade",
+    "siloxane",
+    "silicate",
+    "minéral"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/alpha-chalix",
+     "titre": "Alpha Chalix"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/alphaloxan-extra",
+     "titre": "Alphaloxan Extra"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/alphaloxan-10c",
+     "titre": "Alphaloxan 10C"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/alphaloxan-solo",
+     "titre": "Alphaloxan Solo"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/alphaliet-bl",
+     "titre": "Alphaliet BL"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/globaxane-mat",
+     "titre": "Globaxane Mat"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.sikkens.fr/fr/documentation-technique",
+     "titre": "Documentation technique et de sécurité Sikkens (FT, FDS)"
+    }
+   ],
+   "sous": "Enduits, ravalement",
+   "perf": "",
+   "projets": "",
+   "notes": "Perméables à la vapeur d'eau ; Alphaloxan Solo : rénovation des RPE.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "sikkens-impermeabilite",
+   "lot": "L06",
+   "nom": "Systèmes d'imperméabilité de façade Sikkens I1 à I4 (Alphatop, Diwatop, Global Lisse et Taloché, Global Sous-Couche, Diwafix, armatures 1000 et 2000)",
+   "fabricant": "Sikkens",
+   "reference": "Alphatop Monomat D3-I4, Alphatop Mat, Taloché, Taloché Plus, Diwatop, Global Mat, Lisse, Taloché NG",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "imperméabilité",
+    "façade",
+    "I1-I4",
+    "fissures"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/alphatop-monomat-d3-i4",
+     "titre": "Alphatop Monomat D3-I4"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/alphatop-mat",
+     "titre": "Alphatop Mat"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/alphatop-taloché",
+     "titre": "Alphatop Taloché"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/alphatop-taloché-plus",
+     "titre": "Alphatop Taloché Plus"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/diwatop-intermédiaire",
+     "titre": "Diwatop Intermédiaire"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/diwafix",
+     "titre": "Diwafix (impression)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/global-mat",
+     "titre": "Global Mat"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/global-lisse",
+     "titre": "Global Lisse"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/global-taloché",
+     "titre": "Global Taloché"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/global-taloché-ng",
+     "titre": "Global Taloché NG"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/global-sous-couche",
+     "titre": "Global Sous-Couche"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/armature-lisse-1000",
+     "titre": "Armature lisse 1000"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/armature-2000-structurée",
+     "titre": "Armature 2000 structurée"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.sikkens.fr/fr/documentation-technique",
+     "titre": "Documentation technique et de sécurité Sikkens (FT, FDS)"
+    }
+   ],
+   "sous": "Enduits, ravalement",
+   "perf": "Classes I1 à I4 selon la quantité appliquée",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "sikkens-entretien-ite",
+   "lot": "L06",
+   "nom": "Revêtements d'entretien des ITE Sikkens (Alphaloxan Flex D3-I1, Globaxane Flex)",
+   "fabricant": "Sikkens",
+   "reference": "Alphaloxan Flex D3-I1, Globaxane Flex",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ITE",
+    "rénovation",
+    "D3",
+    "I1"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/alphaloxan-flex-d3-i1",
+     "titre": "Alphaloxan Flex D3-I1"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/globaxane-flex",
+     "titre": "Globaxane Flex"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.sikkens.fr/fr/documentation-technique",
+     "titre": "Documentation technique et de sécurité Sikkens (FT, FDS)"
+    }
+   ],
+   "sous": "Isolation thermique par l'extérieur",
+   "perf": "D3-I1",
+   "projets": "",
+   "notes": "Entretien des systèmes d'ITE sous enduit mince.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "sikkens-globatherm",
+   "lot": "L06",
+   "nom": "Système d'ITE Globatherm Sikkens : colles, sous-enduits et finitions (Thermocolle, Thermocolle Bois, Thermocolle Plus, Thermo Pâte PE, Thermoflash, Globatherm Taloché F, M, G)",
+   "fabricant": "Sikkens",
+   "reference": "Globatherm",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ITE",
+    "PSE",
+    "laine de roche",
+    "ossature bois",
+    "système"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/thermocolle",
+     "titre": "Thermocolle (PSE, laine de roche)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/thermocolle-bois",
+     "titre": "Thermocolle Bois (PSE sur ossature bois)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/thermocolle-plus",
+     "titre": "Thermocolle Plus"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/thermo-pâte-pe",
+     "titre": "Thermo Pâte PE"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/thermoflash",
+     "titre": "Thermoflash (accélérateur)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/globatherm-taloché-f",
+     "titre": "Globatherm Taloché F"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/globatherm-taloché-m",
+     "titre": "Globatherm Taloché M"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/globatherm-taloché-g",
+     "titre": "Globatherm Taloché G"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.sikkens.fr/fr/documentation-technique",
+     "titre": "Documentation technique et de sécurité Sikkens (FT, FDS)"
+    }
+   ],
+   "sous": "Isolation thermique par l'extérieur",
+   "perf": "",
+   "projets": "",
+   "notes": "Avis techniques à demander à Sikkens (non publiés sur les pages produits).",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "sikkens-preparation-facade",
+   "lot": "L06",
+   "nom": "Préparation et produits complémentaires de façade Sikkens (S150 décapant gel, S620 nettoyant, S800 hydrofuge, P800 taloché, P810 crépi roulé, P850 structurée, P900)",
+   "fabricant": "Sikkens",
+   "reference": "S150, S620, S800, P800, P810, P850, P900",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "décapant",
+    "nettoyant",
+    "hydrofuge",
+    "crépi",
+    "façade"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/filters/cat_Produits-Complémentaires",
+     "titre": "Produits complémentaires Sikkens"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/s150-décapant-façade-gel",
+     "titre": "S150 Décapant façade gel"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/s620-nettoyant-de-façade",
+     "titre": "S620 Nettoyant de façade"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/s800-hydrofuge",
+     "titre": "S800 Hydrofuge"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/p800-revêtement-taloché",
+     "titre": "P800 Revêtement taloché"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/p810-crépi-roulé",
+     "titre": "P810 Crépi roulé"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/p850-peinture-structurée",
+     "titre": "P850 Peinture structurée"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/p900-peinture-de-ravalement-ae",
+     "titre": "P900 Peinture de ravalement AE"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.sikkens.fr/fr/documentation-technique",
+     "titre": "Documentation technique et de sécurité Sikkens (FT, FDS)"
+    }
+   ],
+   "sous": "Enduits, ravalement",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "sikkens-bois-metal",
+   "lot": "L13",
+   "nom": "Lasures Cetol, laques et primaires Sikkens (bois, métaux ferreux et non ferreux)",
+   "fabricant": "Sikkens",
+   "reference": "Cetol, laques, P500, P510",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "lasure",
+    "laque",
+    "bois",
+    "métal",
+    "primaire"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/filters/cat_Lasures",
+     "titre": "Lasures"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/filters/cat_Peintures-Laques",
+     "titre": "Peintures laques"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/filters/cat_Traitement-du-Métal",
+     "titre": "Traitement du métal"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/p500-primaire-ferreux",
+     "titre": "P500 Primaire ferreux"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/p510-primaire-non-ferreux",
+     "titre": "P510 Primaire non ferreux"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.sikkens.fr/fr/documentation-technique",
+     "titre": "Documentation technique et de sécurité Sikkens (FT, FDS)"
+    }
+   ],
+   "sous": "Lasures, laques, peintures bois et métal",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "sikkens-sols",
+   "lot": "L13",
+   "nom": "Peintures et préparation des sols Sikkens (S610 nettoyant sol, S900 poudre antidérapante)",
+   "fabricant": "Sikkens",
+   "reference": "Traitement du sol, S610, S900",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "sol",
+    "peinture de sol",
+    "antidérapant"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/filters/cat_Traitement-du-sol",
+     "titre": "Traitement du sol"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/s610-nettoyant-sol",
+     "titre": "S610 Nettoyant sol"
+    },
+    {
+     "type": "site",
+     "url": "https://www.sikkens.fr/fr/produits/s900-poudre-antidérapante",
+     "titre": "S900 Poudre antidérapante"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.sikkens.fr/fr/documentation-technique",
+     "titre": "Documentation technique et de sécurité Sikkens (FT, FDS)"
+    }
+   ],
+   "sous": "Peintures de sols",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "tollens-artis-enduits-poudre",
+   "lot": "L13",
+   "nom": "Enduits intérieurs en poudre Artis (Rebmur rebouchage, Garnimur garnissage, Murinter et Murinter NFE lissage, Multifonction)",
+   "fabricant": "Tollens",
+   "reference": "Artis Rebmur, Garnimur, Murinter, Multifonction",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "enduit",
+    "poudre",
+    "rebouchage",
+    "garnissage",
+    "lissage",
+    "Artis"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://media.tollens.com/media/catalog/akeneo_connector/media_files/F/T/FT_ARTIS_REBMUR_928d.pdf",
+     "titre": "Artis Rebmur, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://media.tollens.com/media/catalog/akeneo_connector/media_files/F/T/FT_ARTIS_GARNIMUR_68b3.pdf",
+     "titre": "Artis Garnimur, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/tol_enduit_murinter_nfe/1/Enduit+Murinter+NFE-fiche_technique.pdf",
+     "titre": "Artis Murinter NFE, fiche technique"
+    }
+   ],
+   "sous": "Enduits de préparation (rebouchage, garnissage, lissage)",
+   "perf": "Garnimur : jusqu'à 5 mm, 1 à 1,2 kg/m²/mm ; Murinter NFE : 300 à 400 g/m², A++",
+   "projets": "",
+   "notes": "Artis : marque d'enduits de Tollens (Cromology). Rebmur : G3S2V0W0A0C0R0 (EN 16566).",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "tollens-artis-enduits-pate",
+   "lot": "L13",
+   "nom": "Enduits intérieurs en pâte Artis, manuels, à projeter et airless (Dégrossissage, Bleu Lissage, Bleu Surfin, Spray Garnissant 2 en 1, Airless Fin, Garnissant Airless)",
+   "fabricant": "Tollens",
+   "reference": "Artis Dégrossissage, Bleu Lissage, Bleu Surfin, Spray Garnissant, Airless",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "enduit",
+    "pâte",
+    "airless",
+    "projeté",
+    "Artis"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/tol_enduits_alltekcachetvert/1/Enduit+Artis+d%25C3%25A9grossissage+-fiche_technique.pdf",
+     "titre": "Artis Dégrossissage, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/tol_enduits_artislissagen/1/Artis+Bleu+Surfin-fiche_technique.pdf",
+     "titre": "Artis Bleu Surfin (Superlissage N), fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://media.tollens.com/media/catalog/akeneo_connector/media_files/F/T/FT___PMO___Artis___Enduits___Airless_Garnissant___2016_cc97.pdf",
+     "titre": "Artis Garnissant Airless, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://pro.tollens.com/download/fiche_technique/tol_enduits_artismurairless/1/Enduit+Artis+Mur+Airless-fiche_technique.pdf",
+     "titre": "Artis Mur Airless autolissant, fiche technique"
+    },
+    {
+     "type": "site",
+     "url": "https://www.tollens.com/conseils/peindre-en-interieur/enduits-a-projeter",
+     "titre": "Enduits à projeter (guide Tollens)"
+    }
+   ],
+   "sous": "Enduits de préparation (rebouchage, garnissage, lissage)",
+   "perf": "",
+   "projets": "",
+   "notes": "Dégrossissage : application directe sur béton cellulaire et bétons bruts. Tollens distribue aussi Toupret et Alltek (catalogue Le Pro).",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "tollens-artis-enduits-exterieurs",
+   "lot": "L06",
+   "nom": "Enduits de rebouchage et de réparation extérieurs Artis (Reparex, Reparex Fibré, Granité, Super Granité, Fibré pâte, Enduit Mastic Fibré et Granité)",
+   "fabricant": "Tollens",
+   "reference": "Artis Reparex, Enduit Mastic",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "enduit",
+    "rebouchage",
+    "extérieur",
+    "façade",
+    "Artis"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://pro.tollens.com/download/fiche_technique/tol_enduits_artisreparexfibre/1/Reparex+Fibr%25C3%25A9-fiche_technique.pdf",
+     "titre": "Reparex Fibré, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://pro.tollens.com/download/fiche_technique/tol_enduits_artisreparexgranite/1/Reparex+Granit%25C3%25A9-fiche_technique.pdf",
+     "titre": "Reparex Granité, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/tol_enduits_artisreparexsupergranite/1/Reparex+Super+Granit%25C3%25A9-fiche_technique.pdf",
+     "titre": "Reparex Super Granité, fiche technique"
+    },
+    {
+     "type": "site",
+     "url": "https://www.tollens.com/produit/enduit-mastic-granite",
+     "titre": "Enduit Mastic Granité"
+    }
+   ],
+   "sous": "Enduits, ravalement",
+   "perf": "Reparex Granité : E5 V2 W2 A0, A2-s1,d0",
+   "projets": "",
+   "notes": "Reprises d'enduit texturées sans effet lisse (Granité, Super Granité).",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "tollens-facade-d2-d3",
+   "lot": "L06",
+   "nom": "Peintures de façade Tollens D2-D3 (Couleurs Façade, Maxi Façade, Tol Façade Pliolite, Toll O Plex, Tol Duocryl, Toll O Perl T5, Renogem, Rénoperl Plus D3-I1, Renocryl)",
+   "fabricant": "Tollens",
+   "reference": "Couleurs Façade, Tol Façade Pliolite, Toll O Plex, Tol Duocryl, Toll O Perl T5, Renogem, Rénoperl Plus",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "peinture",
+    "façade",
+    "D2",
+    "D3",
+    "siloxane",
+    "pliolite"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_COFACA/1/Couleurs+Fa%25C3%25A7ade-fiche_technique.pdf",
+     "titre": "Couleurs Façade D2, fiche technique"
+    },
+    {
+     "type": "site",
+     "url": "https://www.tollens.com/produit/toll-o-perl-t5",
+     "titre": "Toll O Perl T5 (page produit, fiche technique)"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_TOPER+/1/Toll+O+Perl+Plus-fiche_technique.pdf",
+     "titre": "Toll O Perl Plus, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_TODUCR/1/Tol+Duocryl-fiche_technique.pdf",
+     "titre": "Tol Duocryl, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_RENOGE/1/Renogem-fiche_technique.pdf",
+     "titre": "Renogem D2-D3, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_RENPLU/1/R%25C3%25A9noperl+Plus-fiche_technique.pdf",
+     "titre": "Rénoperl Plus D3-I1, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_TOFAAC/1/Tol+Fa%25C3%25A7ade+Acryl-fiche_technique.pdf",
+     "titre": "Tol Façade Acryl, fiche technique"
+    },
+    {
+     "type": "cat",
+     "url": "https://tollens.com/content/download/302120/file/CahiersPrescriptionTollens-01-FACADE-AVEC-ECHANTILLONS-PAGE.pdf",
+     "titre": "Cahier de prescription façade"
+    }
+   ],
+   "sous": "Enduits, ravalement",
+   "perf": "Couleurs Façade : 0,829 kg CO2 éq./UF (FDES individuelle)",
+   "projets": "",
+   "notes": "FDES individuelles sur INIES pour la plupart des produits. Nuancier Cromology Façade (plus de 300 teintes).",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "tollens-impermeabilite",
+   "lot": "L06",
+   "nom": "Systèmes d'imperméabilité de façade Tollens I1 à I4 (Tol Flexane Mono, Tol Flexane Taloché NG GM et GG, Tol Flex 600, 600 NG et Taloché, Tol Flex Intermédiaire, Tol Fix, Elastofix Pigmenté)",
+   "fabricant": "Tollens",
+   "reference": "Tol Flexane Mono, Tol Flexane Taloché NG, Tol Flex 600, Tol Flex Intermédiaire",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "imperméabilité",
+    "façade",
+    "I1-I4",
+    "fissures"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_TOFLMO/1/Tol+Flexane+Mono-fiche_technique.pdf",
+     "titre": "Tol Flexane Mono, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_TOXAGG/1/Tol+Flexane+Taloch%25C3%25A9+GG-fiche_technique.pdf",
+     "titre": "Tol Flexane Taloché NG GM et GG, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://tollens.com/download/fiche_technique/TBA_TOFLNG/1/Tol+Flex+600+NG-fiche_technique.pdf",
+     "titre": "Tol Flex 600 NG, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_TOFL6T/1/Tol+Flex+600+Taloch%25C3%25A9-fiche_technique.pdf",
+     "titre": "Tol Flex 600 Taloché, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_TOFLIN/1/Tol-Flex+Interm%C3%A9diaire-fiche_technique.pdf",
+     "titre": "Tol Flex Intermédiaire, fiche technique"
+    },
+    {
+     "type": "site",
+     "url": "https://www.tollens.com/produit/elastofix-pigmente",
+     "titre": "Elastofix Pigmenté (page produit, fiche technique)"
+    }
+   ],
+   "sous": "Enduits, ravalement",
+   "perf": "Tol Flexane Mono : I1 E4 V2 W3 A2 à I4 E5 V2 W3 A5",
+   "projets": "",
+   "notes": "Tol Flexane Mono : impression, intermédiaire et finition avec un seul produit, rénovation d'anciennes imperméabilités.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "tollens-viero-mineraux",
+   "lot": "L06",
+   "nom": "Revêtements minéraux de façade Viero (Silica Paint, Visolsilica OT, Vixalit et Vixalit HV chaux, Visolcalce, Vixanova P, Vieroquartz Ultra)",
+   "fabricant": "Tollens",
+   "reference": "Viero Silica Paint, Visolsilica OT, Vixalit, Visolcalce, Vixanova P, Vieroquartz",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "minéral",
+    "silicate",
+    "chaux",
+    "bâti ancien",
+    "Viero"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/VIE_SIPAIN/1/Silica+Paint-fiche_technique.pdf",
+     "titre": "Silica Paint, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/VIE_VIOTEF/1/Visolsilica+OT+XTF-fiche_technique.pdf",
+     "titre": "Visolsilica OT, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/VIE_VIXALI/1/Vixalit-fiche_technique.pdf",
+     "titre": "Vixalit, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/VIE_VIXHV/1/Vixalit+HV-fiche_technique.pdf",
+     "titre": "Vixalit HV, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/VIE_VIXANP/1/Vixanova+P-fiche_technique.pdf",
+     "titre": "Vixanova P, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/VIE_VIEROQ/1/Vieroquartz+Ultra-fiche_technique.pdf",
+     "titre": "Vieroquartz Ultra, fiche technique"
+    },
+    {
+     "type": "site",
+     "url": "https://tollens.com/services/services-en-magasin-tollens/produits-vendus-exclusivement-en-magasin/restauration",
+     "titre": "Gamme Viero, restauration du bâti ancien"
+    }
+   ],
+   "sous": "Enduits, ravalement",
+   "perf": "",
+   "projets": "",
+   "notes": "Silicate de potassium (Silica Paint, Visolsilica) ou chaux aérienne CL 90 (Vixalit, Visolcalce). Viero Béton (lasure béton) déjà présent.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "tollens-toll-o-therm",
+   "lot": "L06",
+   "nom": "Systèmes d'ITE Toll-O-Therm (Poudre Néo, Poudre Néo LM, CP, RP, WP, PSC 2.0, rénovation) : colles, sous-enduits et finitions",
+   "fabricant": "Tollens",
+   "reference": "Toll-O-Therm Poudre Néo, Néo LM, CP, 3CP+, PSC IF, Fond, Siloxane Taloché IF, Ribbé IF",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ITE",
+    "PSE",
+    "laine minérale",
+    "système",
+    "Toll-O-Therm"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://www.tollens.com/content/download/16766/file/Documentation_technique_ITE_Tollens.pdf",
+     "titre": "Documentation technique ITE Tollens"
+    },
+    {
+     "type": "at",
+     "url": "https://www.tollens.com/content/download/141303/file/Avis-technique-TOLL-O-THERM POUDRE NEO LM.pdf",
+     "titre": "Avis technique Toll-O-Therm Poudre Néo LM"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_ITETON/1/Toll+O+Therm+Poudre+N%25C3%25A9o-fiche_technique.pdf",
+     "titre": "Toll O Therm Poudre Néo, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_ITETOC2/1/Toll+O+Therm+CP-fiche_technique.pdf",
+     "titre": "Toll-O-Therm CP, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_ITETOC/1/Toll-O-Therm+3CP%2B-fiche_technique.pdf",
+     "titre": "Toll-O-Therm 3CP+, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_TOTHPS/1/Toll+O+Therm+PSC+IF-fiche_technique.pdf",
+     "titre": "Toll-O-Therm PSC IF, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_TOTFND/1/Toll+O+Therm+Fond-fiche_technique.pdf",
+     "titre": "Toll O Therm Fond, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_TOISTA/1/Toll-O-Therm+Siloxane+Taloch%C3%A9+IF-fiche_technique.pdf",
+     "titre": "Toll-O-Therm Siloxane Taloché IF, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_TOIRGM/1/Toll+O+Therm+Ribb%25C3%25A9+GM+IF-fiche_technique.pdf",
+     "titre": "Toll O Therm Ribbé GM-GG IF, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_TOTSL/1/Toll+O+Therm+Siloxane+Lisse-fiche_technique.pdf",
+     "titre": "Toll O Therm Siloxane Lisse, fiche technique"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.tollens.com/content/download/16803/file/CDC+Toll-O-Therm+Renovation.pdf",
+     "titre": "Cahier des charges Toll-O-Therm Rénovation"
+    },
+    {
+     "type": "autre",
+     "url": "https://tollens.com/Media/Files/cctp/tollens-cctp-ite-polystyrene-bas-carbone-pse-knauf",
+     "titre": "CCTP type ITE PSE bas carbone (Knauf)"
+    }
+   ],
+   "sous": "Isolation thermique par l'extérieur",
+   "perf": "",
+   "projets": "",
+   "notes": "DTA et ETE des systèmes, logiciel de CCTP (cctp-tollens.com) et vidéos sur la page « Nos systèmes ITE ».",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "tollens-preparation-facade",
+   "lot": "L06",
+   "nom": "Préparation des façades Tollens (Façade Net, nettoyants et algicides, décapants Artis Façade gélifié et Decap Hydro, fixateurs Tol Fixateur GCPV, Silica Fond, hydrofuge incolore)",
+   "fabricant": "Tollens",
+   "reference": "Façade Net, Artis Décapant façade gélifié, Tol Fix, Hydrofuge incolore",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "nettoyant",
+    "décapant",
+    "fixateur",
+    "hydrofuge",
+    "façade"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/tol_decapant_artisfacadegelifierapide.jpg/1/D%25C3%25A9capant+fa%25C3%25A7ade+g%25C3%25A9lifi%25C3%25A9+rapide+Artis-fiche_technique.pdf",
+     "titre": "Artis Décapant façade gélifié rapide, fiche technique"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.tollens.com/content/download/126567/file/Tollens.LePro2026.BD.pdf",
+     "titre": "Catalogue Le Pro 2026"
+    }
+   ],
+   "sous": "Enduits, ravalement",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "tollens-bois-metal",
+   "lot": "L13",
+   "nom": "Lasures Toll Azur et peintures bois et métal Tollens (Toll Azur Imprégnation, Fluide, Gel, Acryl, HR3, Opaque, Maxi Lasure, Elastop Hydro)",
+   "fabricant": "Tollens",
+   "reference": "Toll Azur, Maxi Lasure, Elastop Hydro",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "lasure",
+    "bois",
+    "microporeux",
+    "métal"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_TOAZHR/1/Toll+Azur+HR3-fiche_technique.pdf",
+     "titre": "Toll Azur HR3, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_TOAZAC/1/Toll+Azur+Acryl-fiche_technique.pdf",
+     "titre": "Toll Azur Acryl Satin, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_TOAZOP/1/Toll+Azur+Opaque-fiche_technique.pdf",
+     "titre": "Toll Azur Opaque, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_TOAZGE/1/Toll+Azur+Gel-fiche_technique.pdf",
+     "titre": "Toll Azur Gel, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_MXLASU/1/Maxi+Lasure-fiche_technique.pdf",
+     "titre": "Maxi Lasure, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_ELHYVE/1/Elastop+Hydro+Velours-fiche_technique.pdf",
+     "titre": "Elastop Hydro Velours, fiche technique"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.tollens.com/content/download/220645/file/Carte de teintes Toll Azur 2024_BD.pdf",
+     "titre": "Carte de teintes Toll Azur 2024"
+    }
+   ],
+   "sous": "Lasures, laques, peintures bois et métal",
+   "perf": "",
+   "projets": "",
+   "notes": "Métal (catalogue Le Pro) : Toll Métaux Antirouille, Ancorprim, Fastométal, Maxi Métal, Toll O Star Satin.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "tollens-sols",
+   "lot": "L13",
+   "nom": "Peintures de sols Tollens (Elastosol Hydro, Plus, Ultra, Intense époxy)",
+   "fabricant": "Tollens",
+   "reference": "Elastosol Hydro, Plus, Ultra, Intense",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "sol",
+    "peinture de sol",
+    "époxy",
+    "parking"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_ELSOHY/1/Elastosol+Hydro-fiche_technique.pdf",
+     "titre": "Elastosol Hydro, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_ELASTO/1/Elastosol+Plus-fiche_technique.pdf",
+     "titre": "Elastosol Plus, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_ELAULT/1/Elastosol+Ultra-fiche_technique.pdf",
+     "titre": "Elastosol Ultra, fiche technique"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.tollens.com/download/fiche_technique/TBA_ELAINT/1/Elastosol+Intense-fiche_technique.pdf",
+     "titre": "Elastosol Intense, fiche technique"
+    }
+   ],
+   "sous": "Peintures de sols",
+   "perf": "Elastosol Intense : époxy bicomposant en phase aqueuse, 7 à 10 m²/l",
+   "projets": "",
+   "notes": "Sols tertiaires et parkings (catalogue Le Pro) : Novassol, Résithan Park.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "boulenger-sols-coules-caoutchouc",
+   "lot": "L12",
+   "nom": "Sols coulés sans joints en caoutchouc Boulenger (Haltopex / Terrazoflex H, Cibélastic / Terrazoflex C, Terrazoflex E extérieur, Haltopex sportif HSP)",
+   "fabricant": "Boulenger",
+   "reference": "Haltopex, Terrazoflex H, C, E, Cibélastic, HSP",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "sol coulé",
+    "caoutchouc",
+    "polyuréthane",
+    "sans joint",
+    "acoustique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://boulenger.fr/gamme/haltopex-terrazoflex-h/",
+     "titre": "Haltopex / Terrazoflex H (fiche produit)"
+    },
+    {
+     "type": "site",
+     "url": "https://boulenger.fr/gamme/cibelastic-terrazoflex-c/",
+     "titre": "Cibélastic / Terrazoflex C (fiche produit)"
+    },
+    {
+     "type": "site",
+     "url": "https://boulenger.fr/gamme/terrazzo-flex-e/",
+     "titre": "Terrazoflex E extérieur (fiche produit)"
+    },
+    {
+     "type": "site",
+     "url": "https://boulenger.fr/",
+     "titre": "Boulenger & Cie (site du fabricant)"
+    }
+   ],
+   "sous": "Sols coulés (résine, caoutchouc)",
+   "perf": "Terrazoflex C : ATec 12/14-1687, Bfl-s1, 6 mm, U4P4 ; Terrazoflex E : ATec 12/14-1671",
+   "projets": "",
+   "notes": "Résine polyuréthane et granulés de caoutchouc coulés à froid, poncés. Fabriqué à Villetaneuse (93). Avis techniques CSTB et garantie décennale. Fiches produit sur boulenger.fr.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "boulenger-nuansol",
+   "lot": "L12",
+   "nom": "Sol coulé autolissant décoratif Boulenger Nuansol (Terrazoflex type N)",
+   "fabricant": "Boulenger",
+   "reference": "Nuansol, Terrazoflex N",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "sol coulé",
+    "résine",
+    "décoratif",
+    "autolissant"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/sol-coule-autolissant-nuansol-p68929793.html",
+     "titre": "Nuansol (fiche, nuancier, DT)"
+    }
+   ],
+   "sous": "Sols coulés (résine, caoutchouc)",
+   "perf": "",
+   "projets": "",
+   "notes": "Résine autolissante coulée à froid, sans métallisation ni cirage. Écoles, salles de spectacle. Le Nuansol autolissant n'apparaît pas au catalogue de boulenger.fr (novembre 2026), qui présente les gammes Nuansol Flooral et Nuansol composée (peintures de sol) : fiche Batiproduits conservée.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "boulenger-wigoflex",
+   "lot": "L12",
+   "nom": "Sol caoutchouc coulé d'encapsulage des sols amiantés Boulenger Wigoflex",
+   "fabricant": "Boulenger",
+   "reference": "Wigoflex",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "amiante",
+    "encapsulage",
+    "rénovation",
+    "milieu occupé",
+    "caoutchouc"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://configurateur.boulenger.fr/produits/wigoflex",
+     "titre": "Wigoflex (site du fabricant)"
+    }
+   ],
+   "sous": "Sols coulés (résine, caoutchouc)",
+   "perf": "ATEx CSTB",
+   "projets": "",
+   "notes": "Recouvrement par encapsulage de sols amiantés, intervention possible en milieu occupé. Disponible depuis 2018.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "tlm-dalles-pvc",
+   "lot": "L12",
+   "nom": "Dalles PVC clipsables pour sols industriels et tertiaires TLM (Traficfloor 5 et 7 mm, Eco recyclé, ESD et antistatique, Hekla, Traficline, Easytile, Decoline, Visiofloor, Standline caillebotis)",
+   "fabricant": "TLM",
+   "reference": "Traficfloor, Traficfloor Eco, ESD, AS, Traficline, Easytile, Decoline, Visiofloor, Standline",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "dalle PVC",
+    "clipsable",
+    "industriel",
+    "recyclé",
+    "ESD"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.groupe-tlm.com/accueil",
+     "titre": "Groupe TLM (site du fabricant)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/dalle-pvc-haute-resistance-pour-sol-a-trafic-int-p329263460.html",
+     "titre": "Traficfloor 7 mm (FT, avis CSTB, PV feu et glissance)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/dalle-pvc-ecologique-traficfloor-eco-p327939510.html",
+     "titre": "Traficfloor Eco (100 % recyclé)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/dalle-pvc-antistatique-pour-sol-industriel-conduct-p328459230.html",
+     "titre": "Traficfloor ESD"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.hellopro.fr/documentation/pdf_soc/6/1/0/2426016_92e09edafe026fe2ed6ee81c55b10f85.pdf",
+     "titre": "Brochure dalles PVC"
+    }
+   ],
+   "sous": "Sols PVC",
+   "perf": "Traficfloor Eco : Bfl-s1, R10, A+ ; 7 mm : 9,49 kg/m²",
+   "projets": "",
+   "notes": "Fabriqué à Prémilhat (Montluçon), Origine France Garantie (hors dalles ESD). Pose libre sans collage.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "tlm-resines-sol",
+   "lot": "L12",
+   "nom": "Résines de sol TLM (Neopox Color époxy sans solvant, Neopox Decor, Polyfloor acrylique uréthane, Topcolor et Neothane polyuréthane, Humipox, Primoxy, Reparbetox, Neopox Color ESD)",
+   "fabricant": "TLM",
+   "reference": "Neopox, Polyfloor, Topcolor, Neothane, Humipox, Primoxy, Reparbetox",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "résine",
+    "époxy",
+    "polyuréthane",
+    "sol industriel",
+    "ESD"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/resine-de-sol-epoxy-sans-solvant-neopox-color-p327939565.html",
+     "titre": "Neopox Color"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/resine-acrylique-urethane-monocomposante-polyf-p327939610.html",
+     "titre": "Polyfloor"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/resine-polyurethane-haute-resistance-topcolor-p329263750.html",
+     "titre": "Topcolor"
+    },
+    {
+     "type": "cat",
+     "url": "https://www.batiproduits.com/documentation-catalogue/catalogue-resines-de-sol-tl-124965-28900.html",
+     "titre": "Catalogue résines de sol TLM"
+    }
+   ],
+   "sous": "Sols coulés (résine, caoutchouc)",
+   "perf": "",
+   "projets": "",
+   "notes": "Humipox : primaire anti-humidité ; Primoxy : relissage des bétons ; Reparbetox : ragréage époxy. Peintures murales anti-salissures et anticorrosion au catalogue.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "janvic-resines-epoxy",
+   "lot": "L12",
+   "nom": "Résines de sol époxy Janvic (Epovic Liss 107, Liss 150 et 150 TX, ASW 04, ASW 08 et ASW 300 en phase aqueuse, Epovic Parking, primaires Epovic LM 12 et Hydro)",
+   "fabricant": "Janvic",
+   "reference": "Epovic Liss 107, Liss 150, ASW 04, ASW 08, ASW 300, Parking",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "résine",
+    "époxy",
+    "autolissant",
+    "parking",
+    "sol industriel"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/resine-pour-la-protection-des-sols-interieurs-et-p68894253.html",
+     "titre": "Epovic Liss 107"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/resine-epoxy-pour-sol-en-beton-epovic-liss-15-p68894203.html",
+     "titre": "Epovic Liss 150"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/revetement-autolissant-en-phase-aqueuse-epovic-p106026810.html",
+     "titre": "Epovic ASW 300 (support humide)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/revetement-interieur-mince-autolissant-en-phase-p68894198.html",
+     "titre": "Epovic ASW 04"
+    }
+   ],
+   "sous": "Sols coulés (résine, caoutchouc)",
+   "perf": "ASW 300 : 2 à 4 mm, 2 kg/m²/mm, COV ≤ 1 g/l",
+   "projets": "",
+   "notes": "Fabricant à Montmagny (95) depuis 1952. Site du fabricant janvic.fr ; fiches sur Batiproduits.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "janvic-polyurethane-decoratif",
+   "lot": "L12",
+   "nom": "Sols polyuréthanes et décoratifs Janvic (Polyvic séchage rapide, Polystone, Sol Decostone, Sol Miroir, Isovic Antistatique, vernis Isovic Top XO)",
+   "fabricant": "Janvic",
+   "reference": "Polyvic, Polystone, Decostone, Sol Miroir, Isovic",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "résine",
+    "polyuréthane",
+    "décoratif",
+    "antistatique",
+    "rénovation PVC"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/revetement-de-sol-en-resine-pour-tous-types-de-l-p68894303.html",
+     "titre": "Polyvic système séchage rapide"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/revetement-decoratif-d-aspect-mineral-pour-la-r-p177166205.html",
+     "titre": "Polystone (rénovation sols béton ou PVC)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/mortier-autocoulant-decoratif-a-aspect-mineral-p106026860.html",
+     "titre": "Sol Decostone"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/revetement-de-sol-coule-effet-miroir-sol-miroi-p68894188.html",
+     "titre": "Sol Miroir"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/systeme-antistatique-en-film-mince-isovic-anti-p106026845.html",
+     "titre": "Isovic Antistatique"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/vernis-de-finition-polyurethanne-a-faible-teneur-p68894173.html",
+     "titre": "Isovic Top XO"
+    }
+   ],
+   "sous": "Sols coulés (résine, caoutchouc)",
+   "perf": "Polystone : 4 kg/m² pour 2 mm",
+   "projets": "",
+   "notes": "Gamme aussi : étanchéité liquide, cuvelage, anticorrosion.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "solastra-sols-resine",
+   "lot": "L12",
+   "nom": "Sols industriels en résine Solastra, applicateur (époxy, polyuréthane, PU-ciment, antistatiques ESD, antidérapants, hautes résistances chimiques)",
+   "fabricant": "Solastra",
+   "reference": "Sols résine époxy, PU, PU-ciment",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "résine",
+    "applicateur",
+    "sol industriel",
+    "agroalimentaire",
+    "ESD"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.solastra.fr/",
+     "titre": "Solastra"
+    },
+    {
+     "type": "site",
+     "url": "https://www.solastra.fr/realisations",
+     "titre": "Réalisations"
+    }
+   ],
+   "sous": "Sols coulés (résine, caoutchouc)",
+   "perf": "ISO 9001, SFMR-FFB",
+   "projets": "",
+   "notes": "Entreprise d'application (pas fabricant), groupe RCR Industrial Flooring. Siège La Wantzenau (67), agences Paris, Lille, Lyon. À consulter en entreprise de pose ou pour un avis sur système.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "sika-sikafloor",
+   "lot": "L12",
+   "nom": "Sols coulés en résine Sikafloor (époxy, polyuréthane, PU-ciment Ucrete, Sika ComfortFloor, DecoFloor, parkings)",
+   "fabricant": "Sika",
+   "reference": "Sikafloor-264 N, 3240, 405, 15 Pronto, Ucrete, ComfortFloor, DecoFloor",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "résine",
+    "époxy",
+    "polyuréthane",
+    "parking",
+    "sol industriel"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/revetement-de-sols-decoratifs-sika-decofloor-p72338448.html",
+     "titre": "Sika DecoFloor"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/resine-epoxydique-coloree-pour-sol-en-milieu-ex-p69315323.html",
+     "titre": "Sika Epoxy Floor"
+    },
+    {
+     "type": "cat",
+     "url": "https://fra.sika.com/dam/dms/fr01/y/fr-bro-construction-renovation-parking.pdf",
+     "titre": "Brochure construction et rénovation des parkings"
+    }
+   ],
+   "sous": "Sols coulés (résine, caoutchouc)",
+   "perf": "",
+   "projets": "",
+   "notes": "Systèmes parkings : Sikalastic-821 LV + Sikafloor-375 / 359 N, ou Sikafloor-15 et 18 Pronto.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "sika-preparation-sols",
+   "lot": "L12",
+   "nom": "Préparation des sols Sika (ragréages Sikafloor-110 Extérieur Level, 310 Level, 400N Elastic, chapes SikaScreed Chape 50 et 55 Fluide, Sikalatex-360)",
+   "fabricant": "Sika",
+   "reference": "Sikafloor Level, SikaScreed, Sikalatex",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ragréage",
+    "chape",
+    "préparation"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://fra.sika.com/dms/getdocument.get/d95bc79b-45d7-47d8-b0a6-0eba1f5bbffc/fr-bro-essentiel-artisan.pdf",
+     "titre": "Brochure L'essentiel artisan (sols, murs, réparation)"
+    }
+   ],
+   "sous": "Préparation des supports (primaires, ragréages, chapes)",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "sika-reparation-beton",
+   "lot": "L02",
+   "nom": "Mortiers de réparation et de scellement Sika (MonoTop-310 R, 311 FR, 410 R, 4012 F, 3020, 1010, FastFix, SikaGrout-234, Sikadur-31+)",
+   "fabricant": "Sika",
+   "reference": "Sika MonoTop, FastFix, SikaGrout, Sikadur",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "mortier",
+    "réparation béton",
+    "scellement",
+    "NF EN 1504-3"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://fra.sika.com/dms/getdocument.get/d95bc79b-45d7-47d8-b0a6-0eba1f5bbffc/fr-bro-essentiel-artisan.pdf",
+     "titre": "Brochure L'essentiel artisan"
+    },
+    {
+     "type": "fdes",
+     "url": "https://fra.sika.com/dam/dms/fr01/e/fr-bro-solutions-developpement-durable.pdf",
+     "titre": "Solutions développement durable (empreintes carbone FDES)"
+    }
+   ],
+   "sous": "Mortiers techniques, réparation des bétons",
+   "perf": "",
+   "projets": "",
+   "notes": "FDES pour MonoTop-1010, 3020, 4012 F, SikaGrout-234, SikaWall-180 Viscorep.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "sika-sikawall",
+   "lot": "L13",
+   "nom": "Enduits SikaWall (rebouchage 274 R, 370 RP, garnissage 250 G, finition 200 F et 300 FP, multifonction 284 M et 384 MP, locaux humides 380 LH, extérieur 100 E, ragréage mural 180 Viscorep)",
+   "fabricant": "Sika",
+   "reference": "SikaWall",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "enduit",
+    "rebouchage",
+    "lissage",
+    "pièces humides",
+    "extérieur"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://fra.sika.com/dam/dms/fr01/e/fr-bro-gamme-sikawall.pdf",
+     "titre": "Brochure gamme SikaWall"
+    },
+    {
+     "type": "ft",
+     "url": "https://fra.sika.com/dms/getdocument.get/c52f49f4-3216-4d6e-8397-dbd121cf4888/sikawall_smoothingpastefinishcoating.pdf",
+     "titre": "SikaWall Lissage Enduit de finition pâte, notice"
+    },
+    {
+     "type": "ft",
+     "url": "https://fra.sika.com/content/dam/dms/fr01/v/sikawall_all_in_1paste.pdf",
+     "titre": "SikaWall Tout en 1 Pâte, notice"
+    }
+   ],
+   "sous": "Enduits de préparation (rebouchage, garnissage, lissage)",
+   "perf": "EC1+, A+",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "sika-etancheite-liquide",
+   "lot": "L05",
+   "nom": "Systèmes d'étanchéité liquide Sika pour toitures, balcons et terrasses (SikaRoof i-Cure Sikalastic-631 et 641, Sikalastic-625 N, Sika Premium I et II Sikafloor-405, SikaRoof MTC)",
+   "fabricant": "Sika",
+   "reference": "Sikalastic-625 N, 631, 641, Sikafloor-405, SikaRoof MTC",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "étanchéité liquide",
+    "SEL",
+    "toiture",
+    "balcon",
+    "terrasse"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://fra.sika.com/dam/dms/fr01/e/fr-depliant-systemes-etancheite-liquide-i-cure.pdf",
+     "titre": "Systèmes d'étanchéité liquide i-Cure"
+    },
+    {
+     "type": "cat",
+     "url": "https://fra.sika.com/dms/getdocument.get/03ae2368-2060-443b-a84f-d3d0df017461/fr-depliant-sikalastic-625-n.pdf",
+     "titre": "Sikalastic-625 N et Sika Premium"
+    },
+    {
+     "type": "cat",
+     "url": "https://fra.sika.com/dms/getdocument.get/f3e57307-6b86-478c-9b2e-76a4eea76ef8/fr-bro-balcons-terrasses.pdf",
+     "titre": "Brochure balcons et terrasses"
+    },
+    {
+     "type": "cat",
+     "url": "https://fra.sika.com/dam/dms/fr01/6/fr-bro-renovation-toitures.pdf",
+     "titre": "Brochure rénovation des toitures"
+    }
+   ],
+   "sous": "Systèmes d'étanchéité liquide (SEL)",
+   "perf": "Sikalastic-625 N : 1,3 mm hors primaire",
+   "projets": "",
+   "notes": "Membranes Sarnafil et Sikaplan (PVC) également au catalogue toitures.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "ardex-ragreages",
+   "lot": "L12",
+   "nom": "Ragréages de sols Ardex (K 15 DR, K 33 universel, K 301 extérieur) et primaires (P 51, P 82)",
+   "fabricant": "Ardex",
+   "reference": "Ardex K 15 DR, K 33, K 301, P 51, P 82",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ragréage",
+    "autolissant",
+    "primaire"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.ardex.ch/CH-fr/produits/enduits-de-ragreage-pour-sols/details-du-produit/ardex-k-33",
+     "titre": "Ardex K 33 (Ardex Suisse, fiche technique)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.ardex.ch/CH-fr/produits/enduits-de-ragreage-pour-sols/details-du-produit/ardex-k-15-dr",
+     "titre": "Ardex K 15 DR (Ardex Suisse, fiche technique)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.ardex-france.fr/produits/enduits-de-ragreage-pour-sols/ardex-k-301",
+     "titre": "Ardex K 301 (fiche technique)"
+    }
+   ],
+   "sous": "Préparation des supports (primaires, ragréages, chapes)",
+   "perf": "K 33 : CT-C30-F7 ; K 15 DR : CT-C35-F7, A2fl-s1",
+   "projets": "",
+   "notes": "K 33 et K 15 DR ne figurent pas au catalogue d'Ardex France : pages d'Ardex Suisse. K 301 sur ardex-france.fr.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "ardex-colles-carrelage",
+   "lot": "L11",
+   "nom": "Mortiers-colles Ardex MICROTEC pour carrelage (X 77 Flex et X 77 W murs et sols grands formats, X 78 Flex sols, X 32)",
+   "fabricant": "Ardex",
+   "reference": "Ardex X 77 Flex, X 77 W, X 78 Flex, X 32",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "mortier-colle",
+    "C2",
+    "S1",
+    "grands formats"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.ardex-france.fr/produits/mortiers-colles-carrelage/ardex-x-77-flex",
+     "titre": "Ardex X 77 Flex (fiche technique)"
+    },
+    {
+     "type": "ft",
+     "url": "https://handyhomeottevaere.be/assets/images/moxie/shop/navision/TF_FR_ARX7825.pdf",
+     "titre": "Ardex X 78 Flex, fiche technique (copie distributeur)"
+    }
+   ],
+   "sous": "Mise en œuvre du carrelage",
+   "perf": "X 77 Flex : C2E S1, certification CSTB ; X 78 Flex : C2S1EG P4S",
+   "projets": "",
+   "notes": "X 78 Flex n'est plus au catalogue d'Ardex France (novembre 2026) : fiche de 2017 en copie distributeur.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "ardex-etancheite-carrelage",
+   "lot": "L11",
+   "nom": "Étanchéité sous carrelage Ardex 8+9 (enduit d'étanchéité bicomposant)",
+   "fabricant": "Ardex",
+   "reference": "Ardex 8+9",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "étanchéité sous carrelage",
+    "SEL",
+    "douche"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.ardex-france.fr/produits/etancheites/ardex-8-9",
+     "titre": "Ardex 8+9 (fiche technique)"
+    }
+   ],
+   "sous": "Désolidarisation, étanchéité sous carrelage",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "ardex-pandomo",
+   "lot": "L12",
+   "nom": "Sols et murs décoratifs coulés Ardex PANDOMO (K1, W1, primaire PR)",
+   "fabricant": "Ardex",
+   "reference": "PANDOMO K1, W1, PR",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "sol décoratif",
+    "minéral",
+    "coulé",
+    "design"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.pandomo.com/BeNeLux-fr/pandomo-floor/pandomo-k1/",
+     "titre": "PANDOMO K1 (site Ardex Pandomo)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.pandomo.com/BeNeLux-fr/pandomo-produits-du-systeme/pandomo-pr/",
+     "titre": "PANDOMO PR (site Ardex Pandomo)"
+    }
+   ],
+   "sous": "Sols coulés (résine, caoutchouc)",
+   "perf": "",
+   "projets": "",
+   "notes": "Enduits de ragréage décoratifs à base de ciment pour sols (K1) et murs (W1), intérieur.",
+   "verifie": "",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "holcim-ecoplanet",
+   "lot": "L02",
+   "nom": "Ciments bas carbone Holcim ECOPlanet (Lafarge en France : Le Classic, Multibat, Ingemax Prime, CEM IV préfabrication)",
+   "fabricant": "Holcim",
+   "reference": "ECOPlanet, Le Classic, Multibat, Ingemax Prime",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "ciment",
+    "bas carbone",
+    "RE2020"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.lafarge.fr/sites/france/files/2022-12/fiche-produit-ecoplanet-prime.pdf",
+     "titre": "ECOPlanet Prime, fiche produit"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.lafarge.fr/sites/france/files/2023-10/fiche-produit-multibatecoplanet-ciment-bas-carbone-avec-des-composants-recycles.pdf",
+     "titre": "Multibat ECOPlanet, fiche produit"
+    },
+    {
+     "type": "autre",
+     "url": "https://www.lafarge.fr/sites/france/files/2024-03/cp-lafarge-france-ecoplanet-boost-12032024.pdf",
+     "titre": "Lafarge, gamme ECOPlanet (communiqué 2024)"
+    }
+   ],
+   "sous": "Ciments, bétons",
+   "perf": "De -30 % à -60 % de CO2 par rapport à un CEM I",
+   "projets": "",
+   "notes": "Holcim est présent en France sous la marque Lafarge (lafarge.fr) : DoP et FDS sur le site.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "holcim-ecopact",
+   "lot": "L02",
+   "nom": "Bétons prêts à l'emploi Holcim (Lafarge) : ECOPact bas carbone, Agilia autoplaçant, Artevia décoratif, Ductal BFUP",
+   "fabricant": "Holcim",
+   "reference": "ECOPact, Agilia, Artevia, Ductal",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "béton",
+    "bas carbone",
+    "autoplaçant",
+    "BFUP",
+    "décoratif"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://www.lafarge.fr/sites/france/files/2023-03/brochure-ecopact-2023-sans-trait-de-coupe-bd.pdf",
+     "titre": "Brochure ECOPact (Lafarge France)"
+    }
+   ],
+   "sous": "Ciments, bétons",
+   "perf": "ECOPact : -30 % à plus de -70 % de CO2",
+   "projets": "",
+   "notes": "Agilia, Artevia et Ductal : documentations Lafarge et Holcim hors France non reprises.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "holcim-airium",
+   "lot": "L09",
+   "nom": "Mousse minérale isolante Holcim Airium (combles, toitures, planchers, remplissage de blocs)",
+   "fabricant": "Holcim",
+   "reference": "Airium",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "isolant",
+    "minéral",
+    "mousse",
+    "recyclable"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.lafarge.fr/sites/france/files/2024-01/fiche-produit-airium.pdf",
+     "titre": "Airium, fiche produit (Lafarge France)"
+    }
+   ],
+   "sous": "Isolants",
+   "perf": "",
+   "projets": "",
+   "notes": "Jusqu'à 95 % d'air, entièrement recyclable. FDES Airium combles (LafargeHolcim France) dans la base One Click LCA.",
+   "verifie": "2026-11-18",
+   "cree": "2026-11-18",
+   "maj": "2026-11-18"
+  },
+  {
+   "id": "ctn-placo-aquaroc-13",
+   "lot": "L09",
+   "nom": "Plaque ciment très haute dureté Aquaroc 13",
+   "fabricant": "Placo",
+   "reference": "Aquaroc 13",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "plaque ciment",
+    "locaux humides",
+    "EC"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://www.placo.fr/media/33306/download",
+     "titre": "Aquaroc, brochure"
+    },
+    {
+     "type": "fdes",
+     "url": "https://www.placo.fr/documents/fdes/2022-07-11-fdes-aquaroc-13.pdf",
+     "titre": "FDES Aquaroc 13"
+    }
+   ],
+   "sous": "Plaques de plâtre",
+   "perf": "Âme en ciment allégé (billes de PSE), très haute dureté, locaux à très forte hygrométrie (EC)",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04A.3.2.1 (locaux EC), 04A.3.3.5 Jouées, 04A.3.3.6 Soffites. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-placo-duo-tech-25",
+   "lot": "L09",
+   "nom": "Plaque acoustique Duo'Tech 25 (BA25)",
+   "fabricant": "Placo",
+   "reference": "Duo'Tech 25",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "plaque de plâtre",
+    "acoustique",
+    "cloison"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://www.placo.fr/documents/fiche-technique/fichetechnique-placo-duotech-25.pdf",
+     "titre": "Fiche technique Duo'Tech 25"
+    }
+   ],
+   "sous": "Plaques de plâtre",
+   "perf": "2 parements de 13 mm et film acoustique, A2-s1,d0, DTA 9/14-980",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04A.3.1.2.2 Cloisons type 98/48 mm Duo Tech (Rw+C ≥ 53 dB). Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-knauf-fibrastyroc",
+   "lot": "L09",
+   "nom": "Panneau composite Fibrastyroc (âme XTherm Ultra 31 SE) en sous-face de dalle",
+   "fabricant": "Knauf",
+   "reference": "Fibrastyroc",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "isolant",
+    "sous-face de dalle",
+    "laine de bois"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://knauf.com/fr-FR/p/produit/fibrastyroc-25755_4091",
+     "titre": "Fibrastyroc, page produit (FT, DoP, FDES, ACERMI)"
+    }
+   ],
+   "sous": "Isolants",
+   "perf": "PSE gris + laine de roche 40 mm + parements laine de bois ciment, B-s1,d0, ACERMI 20/007/1502",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04A.3.2.4 Isolant en sous-face de dalles. Équivalent technique admis. Proposé aussi à l'offre EPRIM (lot 4).",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-saint-gobain-stadip",
+   "lot": "L10",
+   "nom": "Verre feuilleté Stadip 33.1 et 44.2 (oculus, châssis vitrés)",
+   "fabricant": "Saint-Gobain",
+   "reference": "Stadip",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "vitrage",
+    "feuilleté",
+    "sécurité"
+   ],
+   "liens": [],
+   "sous": "Verre décoratif d'agencement (imprimé, miroir)",
+   "perf": "Feuilleté de sécurité 33.1 et 44.2",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.1.1.4.6 Oculus, 04B.3.5 Châssis vitrés. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-agc-pyrobel-16-pyrobel-25",
+   "lot": "L10",
+   "nom": "Vitrage coupe-feu Pyrobel 16 (EI30) et Pyrobel 25 (EI60)",
+   "fabricant": "AGC",
+   "reference": "Pyrobel 16, Pyrobel 25",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "vitrage",
+    "coupe-feu",
+    "EI30",
+    "EI60"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://agc-pyrobel.com/fr-fr/",
+     "titre": "AGC Pyrobel, sélecteur de produits et PV"
+    }
+   ],
+   "sous": "Portes intérieures",
+   "perf": "Coupe-feu ½ h (Pyrobel 16) et 1 h (Pyrobel 25)",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.1.1.4.6 Oculus des portes coupe-feu. Équivalent technique admis. Retenu aussi à l'offre EPRIM (lot 4).",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-vachette-bigsur-evo",
+   "lot": "L10",
+   "nom": "Serrure motorisée 4 points Bigsur Evo (porte de la salle d'armement)",
+   "fabricant": "Vachette",
+   "reference": "Bigsur Evo",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "serrure motorisée",
+    "anti-effraction",
+    "CR3"
+   ],
+   "liens": [],
+   "sous": "Quincaillerie",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.1.1.4.7 Porte accès salle d'armement (bloc-porte CR3). Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-abloy-protec2",
+   "lot": "L10",
+   "nom": "Cylindre haute sûreté Protec²",
+   "fabricant": "Abloy",
+   "reference": "Protec²",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "cylindre",
+    "haute sûreté"
+   ],
+   "liens": [],
+   "sous": "Quincaillerie",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.1.1.4.7 Porte accès salle d'armement. Équivalent technique admis. Équipement de la Secudoor Evo proposée par EPRIM (lot 4).",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-abloy-el565-el461",
+   "lot": "L10",
+   "nom": "Serrures électriques à contrôle de béquille EL565 / EL461 (portes DAS) avec électronique CKELDAS",
+   "fabricant": "Abloy",
+   "reference": "EL565, EL461",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "serrure électrique",
+    "contrôle d'accès",
+    "DAS"
+   ],
+   "liens": [],
+   "sous": "Quincaillerie",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.1.1.5.13 Serrures électriques portes DAS (KEL565DAS porte pleine, KEL461DAS porte vitrée). Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-saint-gobain-emalit",
+   "lot": "L07",
+   "nom": "Verre émaillé Emalit (ensemble d'entrée de la Police municipale)",
+   "fabricant": "Saint-Gobain",
+   "reference": "Emalit",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "verre émaillé",
+    "allège"
+   ],
+   "liens": [],
+   "sous": "Aluminium",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 03A.3.2.1 Généralités (vitrage type Emalit au droit de l'ensemble d'entrée de la Police municipale). Équivalent technique admis. Voir la fiche de gamme Emalit Evolution.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-renson-l050ws",
+   "lot": "L08",
+   "nom": "Panneaux à ventelles aluminium L050WS (habillage du local technique en toiture)",
+   "fabricant": "Renson",
+   "reference": "L050WS",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "ventelles",
+    "habillage",
+    "toiture"
+   ],
+   "liens": [],
+   "sous": "Grilles, clôtures, portails",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 03B.4.1.3.2 Habillage vertical acoustique (RAL 7037). Équivalent technique admis. L'offre Lorillard propose des ventelles acoustiques ECIB VEG'optima.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-siplast-paradiene-sr4-paradiene-bds",
+   "lot": "L05",
+   "nom": "Étanchéité bicouche Paradiène SR4 + Paradiène BDS (toiture multi-usage)",
+   "fabricant": "Siplast",
+   "reference": "Paradiène SR4, Paradiène BDS",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "étanchéité",
+    "bitume SBS",
+    "bicouche"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "2 feuilles SBS 2,5 mm (armature R4 posée libre, armature VV soudée)",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 02.5.4.4 Étanchéité des parties courantes (AT Paradiène S n° 5.2/18-2609_V1), renforts Paradiène 20 S aux traversées 02.5.6.3 à 02.5.6.6. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-siplast-flashing",
+   "lot": "L05",
+   "nom": "Relevés d'étanchéité en résine polyuréthane Flashing",
+   "fabricant": "Siplast",
+   "reference": "Flashing",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "relevés",
+    "résine",
+    "polyuréthane"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 02.5.4.6.1 Relevés isolés, 02.5.4.6.2 Relevés non isolés (résine Flashing 500 g/m², voile Flashing). Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-siplast-parequerre-paradial-s",
+   "lot": "L05",
+   "nom": "Relevés bitumineux Parequerre + Paradial S (édicules et plateforme CTA)",
+   "fabricant": "Siplast",
+   "reference": "Parequerre, Paradial S",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "relevés",
+    "bitume SBS",
+    "autoprotection alu"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 02.5.5.4.1 Relevés isolés, 02.5.5.4.3 Relevés non isolés. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-siplast-paxalu",
+   "lot": "L05",
+   "nom": "Étanchéité provisoire Paxalu (mise hors d'eau)",
+   "fabricant": "Siplast",
+   "reference": "Paxalu",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "étanchéité provisoire",
+    "phase chantier"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 02.5.3 Étanchéité provisoire (pose, dépose, entretien, batardeaux, descentes provisoires). Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-marcal-littera",
+   "lot": "L20",
+   "nom": "Plans d'évacuation et d'intervention, plaques gravées de sécurité, pictogrammes Littera",
+   "fabricant": "Marcal",
+   "reference": "Littera",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "signalétique",
+    "sécurité",
+    "plans d'évacuation"
+   ],
+   "liens": [],
+   "sous": "Signalétique",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04C.4.7.1.2 Affichage des consignes de sécurité et plans, 04C.4.7.2.1 Signalisation de sécurité (plaques rouges gravées), 04C.4.7.2.3 Pictogrammes (plaquettes PVC 120 x 120). Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-inclass-nim-r1985-13933",
+   "lot": "L20",
+   "nom": "Chaises sur poutre NIM (réf. R1985-13933)",
+   "fabricant": "Inclass",
+   "reference": "NIM R1985-13933",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "mobilier",
+    "accueil",
+    "assise"
+   ],
+   "liens": [],
+   "sous": "Assises, espaces de convivialité",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.9.10.1 Chaises sur poutre (hall de la Police municipale). Équivalent technique admis, à valider par la MOE et la MOA. L'offre EPRIM propose le banc Ann (fabricant non indiqué).",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-generique-holo",
+   "lot": "L20",
+   "nom": "Fauteuils scandinaves HOLO, tissu effet velours jaune moutarde et bois clair",
+   "fabricant": "",
+   "reference": "HOLO",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "mobilier",
+    "accueil",
+    "fauteuil"
+   ],
+   "liens": [],
+   "sous": "Assises, espaces de convivialité",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.9.10.3 Fauteuils (accueil de la Mairie), plusieurs coloris demandés. Fabricant non précisé au CCTP. Retenu aussi à l'offre EPRIM (lot 4).",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-alcea-alwin",
+   "lot": "L16",
+   "nom": "Solution globale de contrôle d'accès Alwin certifiée ANSSI",
+   "fabricant": "Alcea",
+   "reference": "Alwin",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "contrôle d'accès",
+    "sûreté",
+    "ANSSI"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Cité au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 05.3.2 Contrôle des accès / intrusion. Équivalent technique admis.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-heras-m350",
+   "lot": "L00",
+   "nom": "Clôture mobile de chantier M350 (3,50 x 2,00 m)",
+   "fabricant": "Heras",
+   "reference": "M350",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "clôture",
+    "chantier"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.heras-mobile.com",
+     "titre": "Heras Mobile"
+    }
+   ],
+   "sous": "Clôtures et accès de chantier",
+   "perf": "Panneaux 3500 x 2000 mm, maille 355 x 100 mm, prégalvanisés",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de ECB, Entreprise Construction Bâtiment, attributaire du lot 1 (analyse finale du 22/10/2026) : clôtures de chantier (CCTP 01.6.1.6). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\18_EntrepriseConstructionBat). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-ultibat-point-p-b60-20x20x50",
+   "lot": "L02",
+   "nom": "Bloc béton creux B60 Ultibat 500 x 200 x 200 (8 alvéoles)",
+   "fabricant": "Ultibat (Point.P)",
+   "reference": "B60 20x20x50",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "bloc béton",
+    "maçonnerie",
+    "NF"
+   ],
+   "liens": [
+    {
+     "type": "dop",
+     "url": "https://www.portailbatiment.fr/asset.php?f=36/30/AST873630.pdf",
+     "titre": "DoP bloc creux Ultibat B60"
+    }
+   ],
+   "sous": "Blocs béton",
+   "perf": "Classe B60, NF, A1, EN 771-3, support d'enduit RT3",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de ECB, Entreprise Construction Bâtiment, attributaire du lot 1 (analyse finale du 22/10/2026) : maçonneries d'agglos (CCTP 01.6.3.8). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\18_EntrepriseConstructionBat). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-arte-deco-point-p-techno-r11",
+   "lot": "L11",
+   "nom": "Grès cérame Techno+ R11B 30 x 30 (sols des locaux collectifs)",
+   "fabricant": "Arte Deco (Point.P)",
+   "reference": "Techno+ R11",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "carrelage",
+    "grès cérame",
+    "antidérapant"
+   ],
+   "liens": [
+    {
+     "type": "dop",
+     "url": "https://www.portailbatiment.fr/asset.php?f=54/42/AST13925442.pdf",
+     "titre": "DoP Techno+ (ADC 046 V1)"
+    }
+   ],
+   "sous": "Carrelage, grès cérame, pierre",
+   "perf": "U4 P4, R11B, PN18 (B), 29,7 x 29,7 cm, ép. 8 mm",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de ECB, Entreprise Construction Bâtiment, attributaire du lot 1 (analyse finale du 22/10/2026) : en équivalence du Decoceram Techno R11 du CCTP (01.6.5.5), coloris à choisir. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\18_EntrepriseConstructionBat). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-soprema-aquadere",
+   "lot": "L05",
+   "nom": "Enduit d'imprégnation à froid Aquadère",
+   "fabricant": "Soprema",
+   "reference": "Aquadère",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "primaire",
+    "EIF"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.soprema.fr",
+     "titre": "Soprema, documentation produits"
+    }
+   ],
+   "sous": "",
+   "perf": "Primaire bitumineux en phase aqueuse",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Ciel Étanche, attributaire du lot 2 (analyse finale du 22/10/2026) : complexes d'étanchéité des toitures terrasses (CCTP 02.5.4 et 02.5.5, référence Siplast au CCTP). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\7_CielEtanche). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-soprema-elastovap",
+   "lot": "L05",
+   "nom": "Pare-vapeur Élastovap",
+   "fabricant": "Soprema",
+   "reference": "Élastovap",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "pare-vapeur",
+    "bitume SBS"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.soprema.fr",
+     "titre": "Soprema, documentation produits"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Ciel Étanche, attributaire du lot 2 (analyse finale du 22/10/2026) : complexes d'étanchéité des toitures terrasses (CCTP 02.5.4 et 02.5.5, référence Siplast au CCTP). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\7_CielEtanche). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-soprema-soprastick-si",
+   "lot": "L05",
+   "nom": "Sous-couche autoadhésive Soprastick SI",
+   "fabricant": "Soprema",
+   "reference": "Soprastick SI",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "étanchéité",
+    "autoadhésif"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.soprema.fr",
+     "titre": "Soprema, documentation produits"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Ciel Étanche, attributaire du lot 2 (analyse finale du 22/10/2026) : complexes d'étanchéité des toitures terrasses (CCTP 02.5.4 et 02.5.5, référence Siplast au CCTP). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\7_CielEtanche). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-soprema-sopralene-flam-180-ar",
+   "lot": "L05",
+   "nom": "Feuille de finition Sopralène Flam 180 AR",
+   "fabricant": "Soprema",
+   "reference": "Sopralène Flam 180 AR",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "étanchéité",
+    "bitume SBS",
+    "autoprotégé"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.soprema.fr",
+     "titre": "Soprema, documentation produits"
+    }
+   ],
+   "sous": "",
+   "perf": "Armature polyester non tissé, autoprotection ardoise, soudée au chalumeau",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Ciel Étanche, attributaire du lot 2 (analyse finale du 22/10/2026) : complexes d'étanchéité des toitures terrasses (CCTP 02.5.4 et 02.5.5, référence Siplast au CCTP). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\7_CielEtanche). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-soprema-sopralene-flam-unilay",
+   "lot": "L05",
+   "nom": "Feuille monocouche Sopralène Flam Unilay",
+   "fabricant": "Soprema",
+   "reference": "Sopralène Flam Unilay",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "étanchéité",
+    "monocouche"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.soprema.fr",
+     "titre": "Soprema, documentation produits"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Ciel Étanche, attributaire du lot 2 (analyse finale du 22/10/2026) : complexes d'étanchéité des toitures terrasses (CCTP 02.5.4 et 02.5.5, référence Siplast au CCTP). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\7_CielEtanche). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-soprema-elastophene-flam-25-ar",
+   "lot": "L05",
+   "nom": "Feuille de finition Élastophène Flam 25 AR",
+   "fabricant": "Soprema",
+   "reference": "Élastophène Flam 25 AR",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "étanchéité",
+    "bitume SBS",
+    "autoprotégé"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.soprema.fr",
+     "titre": "Soprema, documentation produits"
+    }
+   ],
+   "sous": "",
+   "perf": "Classement FIT F5 I5 T4 avec sous-couche Élastophène Flam 180-25",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Ciel Étanche, attributaire du lot 2 (analyse finale du 22/10/2026) : complexes d'étanchéité des toitures terrasses (CCTP 02.5.4 et 02.5.5, référence Siplast au CCTP). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\7_CielEtanche). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-soprema-styrbase-stick-unilay",
+   "lot": "L05",
+   "nom": "Sous-couche Styrbase Stick Unilay",
+   "fabricant": "Soprema",
+   "reference": "Styrbase Stick Unilay",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "étanchéité",
+    "autoadhésif"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.soprema.fr",
+     "titre": "Soprema, documentation produits"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Ciel Étanche, attributaire du lot 2 (analyse finale du 22/10/2026) : complexes d'étanchéité des toitures terrasses (CCTP 02.5.4 et 02.5.5, référence Siplast au CCTP). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\7_CielEtanche). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-soprema-equerre-sopralene",
+   "lot": "L05",
+   "nom": "Équerre de renfort Sopralène (relevés)",
+   "fabricant": "Soprema",
+   "reference": "Équerre Sopralène",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "relevés",
+    "renfort"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.soprema.fr",
+     "titre": "Soprema, documentation produits"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Ciel Étanche, attributaire du lot 2 (analyse finale du 22/10/2026) : complexes d'étanchéité des toitures terrasses (CCTP 02.5.4 et 02.5.5, référence Siplast au CCTP). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\7_CielEtanche). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-soprema-chape-atlas-ar-sopralast-ar",
+   "lot": "L05",
+   "nom": "Chape Atlas AR et Sopralast AR (relevés)",
+   "fabricant": "Soprema",
+   "reference": "Chape Atlas AR, Sopralast AR",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "relevés",
+    "autoprotégé"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.soprema.fr",
+     "titre": "Soprema, documentation produits"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Ciel Étanche, attributaire du lot 2 (analyse finale du 22/10/2026) : complexes d'étanchéité des toitures terrasses (CCTP 02.5.4 et 02.5.5, référence Siplast au CCTP). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\7_CielEtanche). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-efisol-efigreen-alu",
+   "lot": "L05",
+   "nom": "Isolant polyuréthane Efigreen Alu+",
+   "fabricant": "Efisol",
+   "reference": "Efigreen Alu+",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "isolant",
+    "PIR",
+    "toiture terrasse"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.efisol.fr",
+     "titre": "Efisol"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Ciel Étanche, attributaire du lot 2 (analyse finale du 22/10/2026) : isolation des toitures terrasses en complément de l'Efigreen Duo+ du CCTP (02.5.5.2). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\7_CielEtanche). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-vmzinc-zinc-naturel",
+   "lot": "L04",
+   "nom": "Zinc naturel VMZinc et tuyaux tronconiques (zinguerie, évacuations EP)",
+   "fabricant": "VMZinc",
+   "reference": "Zinc naturel",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "zinc",
+    "zinguerie",
+    "EP"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.vmzinc.fr",
+     "titre": "VMZinc"
+    }
+   ],
+   "sous": "Raccords, accessoires de pose, motorisation",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Ciel Étanche, attributaire du lot 2 (analyse finale du 22/10/2026) : zinguerie et évacuations d'eaux pluviales (CCTP 02.4.6). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\7_CielEtanche). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-aliplast-star65",
+   "lot": "L07",
+   "nom": "Fenêtres aluminium à rupture de pont thermique Star65",
+   "fabricant": "Aliplast",
+   "reference": "Star65",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "fenêtre",
+    "aluminium",
+    "RPT"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.aliplast.com/en/producten/ramen/star65",
+     "titre": "Star65, page produit"
+    },
+    {
+     "type": "ft",
+     "url": "https://architecten.aliplast.com/uploads/catalog/1/2-fr-Fiche-Star65.pdf",
+     "titre": "Fiche Star65 (FR)"
+    }
+   ],
+   "sous": "Aluminium",
+   "perf": "Uw jusqu'à 1,1 W/m².K, dormant 65 mm, ouvrant 74 mm, 3 niveaux d'isolation (Star65, 65i, 65i+)",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Lorillard Façades et M4S (groupement), attributaire du lot 3 (analyse finale du 22/10/2026) : menuiseries extérieures aluminium (CCTP 03A.3.2), DTA 6/13-2153_V3 (Star 65 Ecofutural). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\33_Lorillard). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-gretsch-unitas-gu-gu-automatic-em-emt",
+   "lot": "L07",
+   "nom": "Portes coulissantes automatiques GU Automatic EM / EMT (sas d'entrée)",
+   "fabricant": "Gretsch-Unitas (GU)",
+   "reference": "GU Automatic EM, EMT",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "porte automatique",
+    "sas",
+    "coulissant"
+   ],
+   "liens": [],
+   "sous": "Aluminium",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Lorillard Façades et M4S (groupement), attributaire du lot 3 (analyse finale du 22/10/2026) : portes de sas automatiques (CCTP 03A.3.3), documentation du distributeur Lacroix. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\33_Lorillard). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-franciaflex-minicoffre-56-universal-80-imperial-96",
+   "lot": "L07",
+   "nom": "Stores extérieurs à coffre Minicoffre 56, Universal 80, Impérial 96 (moteurs Somfy)",
+   "fabricant": "Franciaflex",
+   "reference": "Minicoffre 56, Universal 80, Impérial 96",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "store",
+    "occultation",
+    "coffre"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.franciaflex.com",
+     "titre": "Franciaflex"
+    }
+   ],
+   "sous": "Occultations",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Lorillard Façades et M4S (groupement), attributaire du lot 3 (analyse finale du 22/10/2026) : occultations (CCTP 03A.3.4). Le groupement propose des stores non intégrés au vitrage pour la Police municipale (réponse aux questions de juillet 2026). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\33_Lorillard). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-generique-vulcano",
+   "lot": "L08",
+   "nom": "Rideau métallique à enroulement Vulcano (lame Dora acier)",
+   "fabricant": "",
+   "reference": "Vulcano",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "rideau métallique",
+    "fermeture"
+   ],
+   "liens": [],
+   "sous": "Grilles, clôtures, portails",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Lorillard Façades et M4S (groupement), attributaire du lot 3 (analyse finale du 22/10/2026) : rideau métallique de l'entrée (CCTP 03B.4.1.9, référence IFD Perle 97 au CCTP). Fabricant non indiqué sur la fiche. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\33_Lorillard). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-ecib-veg-optima",
+   "lot": "L08",
+   "nom": "Ventelles acoustiques VEG'optima",
+   "fabricant": "ECIB",
+   "reference": "VEG'optima",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "ventelles",
+    "acoustique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://ecib-bruit.com",
+     "titre": "ECIB"
+    }
+   ],
+   "sous": "Grilles, clôtures, portails",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Lorillard Façades et M4S (groupement), attributaire du lot 3 (analyse finale du 22/10/2026) : habillage acoustique du local technique en toiture (CCTP 03B.4.1.3.2, référence Renson au CCTP). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\33_Lorillard). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-terreal-piterak-slim",
+   "lot": "L06",
+   "nom": "Bardage terre cuite Piterak Slim",
+   "fabricant": "Terreal",
+   "reference": "Piterak Slim",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "bardage",
+    "terre cuite"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.terreal.com",
+     "titre": "Terreal"
+    }
+   ],
+   "sous": "Bardages",
+   "perf": "Bardage double paroi 30 mm, grands formats, choc Q4",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Lorillard Façades et M4S (groupement), attributaire du lot 3 (analyse finale du 22/10/2026) : en variante du bardeau NBK Terracotta du CCTP (03B.5.1.1.2), avis technique 2.2/13-1584_V3 (support béton). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\33_Lorillard). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-rp-technik-rp-hermetic",
+   "lot": "L08",
+   "nom": "Portes acier RP-Hermetic",
+   "fabricant": "RP Technik",
+   "reference": "RP-Hermetic",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "porte acier",
+    "bloc-porte"
+   ],
+   "liens": [],
+   "sous": "Portes et cloisons acier",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Lorillard Façades et M4S (groupement), attributaire du lot 3 (analyse finale du 22/10/2026) : blocs-portes métalliques extérieurs (CCTP 03B.4.1.1). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\33_Lorillard). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-siniat-pregymetal-s140",
+   "lot": "L09",
+   "nom": "Cloison Prégymétal S140 EI60",
+   "fabricant": "Siniat",
+   "reference": "Prégymétal S140",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "cloison",
+    "plaque de plâtre",
+    "ossature"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/gamme-de-cloisons-distributives-plaques-de-platre-p68891183.html",
+     "titre": "Prégymétal D distributives (Batiproduits)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/gamme-de-cloisons-separatives-acoustiques-plaques-p68891188.html",
+     "titre": "Prégymétal S séparatives (Batiproduits)"
+    }
+   ],
+   "sous": "Cloisons et doublages",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : à la place du système Placo du CCTP (04A.3.1.2.1 Type SAA 140 mm). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-siniat-pregymetal-d98-48-s-twin",
+   "lot": "L09",
+   "nom": "Cloison Prégymétal D98/48 S Twin",
+   "fabricant": "Siniat",
+   "reference": "Prégymétal D98/48 S Twin",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "cloison",
+    "plaque de plâtre",
+    "ossature"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/gamme-de-cloisons-distributives-plaques-de-platre-p68891183.html",
+     "titre": "Prégymétal D distributives (Batiproduits)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/gamme-de-cloisons-separatives-acoustiques-plaques-p68891188.html",
+     "titre": "Prégymétal S séparatives (Batiproduits)"
+    }
+   ],
+   "sous": "Cloisons et doublages",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : à la place du système Placo du CCTP (04A.3.1.2.2 Type 98/48 Duo Tech). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-siniat-pregymetal-d98-48",
+   "lot": "L09",
+   "nom": "Cloison Prégymétal D98/48 EI60",
+   "fabricant": "Siniat",
+   "reference": "Prégymétal D98/48",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "cloison",
+    "plaque de plâtre",
+    "ossature"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/gamme-de-cloisons-distributives-plaques-de-platre-p68891183.html",
+     "titre": "Prégymétal D distributives (Batiproduits)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/gamme-de-cloisons-separatives-acoustiques-plaques-p68891188.html",
+     "titre": "Prégymétal S séparatives (Batiproduits)"
+    }
+   ],
+   "sous": "Cloisons et doublages",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : à la place du système Placo du CCTP (04A.3.1.2.3 Type 98/48 mm). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-siniat-pregymetal-d72-48",
+   "lot": "L09",
+   "nom": "Cloison Prégymétal D72/48 EI30",
+   "fabricant": "Siniat",
+   "reference": "Prégymétal D72/48",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "cloison",
+    "plaque de plâtre",
+    "ossature"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/gamme-de-cloisons-distributives-plaques-de-platre-p68891183.html",
+     "titre": "Prégymétal D distributives (Batiproduits)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/gamme-de-cloisons-separatives-acoustiques-plaques-p68891188.html",
+     "titre": "Prégymétal S séparatives (Batiproduits)"
+    }
+   ],
+   "sous": "Cloisons et doublages",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : à la place du système Placo du CCTP (04A.3.1.2.4 Type 72/48 mm). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-siniat-pregymetal-contre-cloison",
+   "lot": "L09",
+   "nom": "Contre-cloisons Prégymétal sur montants M48-35",
+   "fabricant": "Siniat",
+   "reference": "Prégymétal contre-cloison",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "cloison",
+    "plaque de plâtre",
+    "ossature"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/gamme-de-cloisons-distributives-plaques-de-platre-p68891183.html",
+     "titre": "Prégymétal D distributives (Batiproduits)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/gamme-de-cloisons-separatives-acoustiques-plaques-p68891188.html",
+     "titre": "Prégymétal S séparatives (Batiproduits)"
+    }
+   ],
+   "sous": "Cloisons et doublages",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : à la place du système Placo du CCTP (04A.3.2.1 doublages sur ossature). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-siniat-pregymetal-plafond-s47",
+   "lot": "L09",
+   "nom": "Plafond Prégymétal sur fourrures S47",
+   "fabricant": "Siniat",
+   "reference": "Prégymétal plafond S47",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "cloison",
+    "plaque de plâtre",
+    "ossature"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/gamme-de-cloisons-distributives-plaques-de-platre-p68891183.html",
+     "titre": "Prégymétal D distributives (Batiproduits)"
+    },
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/gamme-de-cloisons-separatives-acoustiques-plaques-p68891188.html",
+     "titre": "Prégymétal S séparatives (Batiproduits)"
+    }
+   ],
+   "sous": "Plafonds",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : à la place du système Placo du CCTP (04A.3.3.4 Plafonds en plaques de plâtre). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-knauf-polyplac-phonik-standard",
+   "lot": "L09",
+   "nom": "Complexe de doublage Polyplac Phonik Standard (KA13 Phonik + PSE)",
+   "fabricant": "Knauf",
+   "reference": "Polyplac Phonik Standard",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "doublage",
+    "PSE",
+    "acoustique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://knauf.com/fr-FR/knauf/solutions/isolation-thermique-par-linterieur-iti/plaque-complexe-doublage-isolation-thermique",
+     "titre": "Knauf, complexes de doublage Polyplac"
+    }
+   ],
+   "sous": "Cloisons et doublages",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : doublages collés (CCTP 04A.3.2.2 et 04A.3.2.3). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-rockfon-chicago-metallic-t24-click-c2890-ecr",
+   "lot": "L09",
+   "nom": "Ossature T24 Click C2890 ECR classe C (anticorrosion)",
+   "fabricant": "Rockfon",
+   "reference": "Chicago Metallic T24 Click C2890 ECR",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "ossature",
+    "plafond",
+    "anticorrosion"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://cdn.chausson.fr/catalog-document/feae96b1-c5a0-4c39-ab18-394cf42ba4bb/fr-grid-datasheet-chicago-metallic-t24-click-2890-d-03-2022.pdf",
+     "titre": "Fiche technique T24 Click 2890 (copie distributeur)"
+    }
+   ],
+   "sous": "Plafonds",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : ossature des plafonds hygiène (CCTP 04A.3.3.2). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-rockfon-color-all",
+   "lot": "L09",
+   "nom": "Dalles de plafond Rockfon Color-all",
+   "fabricant": "Rockfon",
+   "reference": "Color-all",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "plafond",
+    "laine de roche",
+    "couleur"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://medias.bigmat.fr/data_medias/medias_finaux/documents/3537310095060-MwrQPQqvSk.pdf",
+     "titre": "Fiche technique Color-all (copie distributeur)"
+    }
+   ],
+   "sous": "Plafonds",
+   "perf": "34 teintes, A1",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : plafonds colorés (CCTP 04A.3.3). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-knauf-organic-pure",
+   "lot": "L09",
+   "nom": "Dalles laine de bois Organic Pure bord E (SK06)",
+   "fabricant": "Knauf",
+   "reference": "Organic Pure",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "plafond",
+    "laine de bois",
+    "acoustique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://knauf.com/fr-FR/p/produit/organic-pure-23153_4091",
+     "titre": "Organic Pure, page produit"
+    }
+   ],
+   "sous": "Plafonds",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : plafonds en fibres de bois types 1 et 2 (CCTP 04A.3.3.3, référence Organic Twin ; tableau des surfaces : Organic 25 bord E/SK06 60 x 120, αw 0,55). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-polytech-polyfeu-30",
+   "lot": "L10",
+   "nom": "Blocs-portes coupe-feu Polyfeu 30 (EI30, DAS)",
+   "fabricant": "Polytech",
+   "reference": "Polyfeu 30",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "bloc-porte",
+    "menuiserie intérieure"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.polytech-bp.fr",
+     "titre": "Polytech"
+    }
+   ],
+   "sous": "Portes intérieures",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : blocs-portes et châssis intérieurs (CCTP 04B.3.1 et 04B.3.5, référence Malerba au CCTP). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-polytech-polyphone",
+   "lot": "L10",
+   "nom": "Blocs-portes acoustiques Polyphone (36 à 45 dB, EI30)",
+   "fabricant": "Polytech",
+   "reference": "Polyphone",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "bloc-porte",
+    "menuiserie intérieure"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.polytech-bp.fr",
+     "titre": "Polytech"
+    }
+   ],
+   "sous": "Portes intérieures",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : blocs-portes et châssis intérieurs (CCTP 04B.3.1 et 04B.3.5, référence Malerba au CCTP). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-polytech-polycom",
+   "lot": "L10",
+   "nom": "Blocs-portes âme pleine Polycom",
+   "fabricant": "Polytech",
+   "reference": "Polycom",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "bloc-porte",
+    "menuiserie intérieure"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.polytech-bp.fr",
+     "titre": "Polytech"
+    }
+   ],
+   "sous": "Portes intérieures",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : blocs-portes et châssis intérieurs (CCTP 04B.3.1 et 04B.3.5, référence Malerba au CCTP). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-polytech-securitech-30",
+   "lot": "L10",
+   "nom": "Blocs-portes de sécurité Securitech 30",
+   "fabricant": "Polytech",
+   "reference": "Securitech 30",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "bloc-porte",
+    "menuiserie intérieure"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.polytech-bp.fr",
+     "titre": "Polytech"
+    }
+   ],
+   "sous": "Portes intérieures",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : blocs-portes et châssis intérieurs (CCTP 04B.3.1 et 04B.3.5, référence Malerba au CCTP). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-polytech-visiotech",
+   "lot": "L10",
+   "nom": "Châssis vitrés Visiotech",
+   "fabricant": "Polytech",
+   "reference": "Visiotech",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "bloc-porte",
+    "menuiserie intérieure"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.polytech-bp.fr",
+     "titre": "Polytech"
+    }
+   ],
+   "sous": "Portes intérieures",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : blocs-portes et châssis intérieurs (CCTP 04B.3.1 et 04B.3.5, référence Malerba au CCTP). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-dormakaba-ts-92-ts-91",
+   "lot": "L10",
+   "nom": "Ferme-portes à came TS 92 / TS 91 Contur",
+   "fabricant": "dormakaba",
+   "reference": "TS 92, TS 91",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "ferme-porte"
+   ],
+   "liens": [],
+   "sous": "Quincaillerie",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : ferme-portes à glissière (CCTP 04B.3.1.1.5.8). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-foussier-sj94",
+   "lot": "L10",
+   "nom": "Béquilles doubles inox SJ94, poignées de tirage SJ, butoirs Minéral",
+   "fabricant": "Foussier",
+   "reference": "SJ94",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "béquille",
+    "butoir",
+    "inox"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.foussier.fr",
+     "titre": "Foussier"
+    }
+   ],
+   "sous": "Quincaillerie",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : garnitures et butoirs (CCTP 04B.3.1.1.5.9 et 04B.3.1.1.5.10). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-am-locks-serrures-mecaniques-am-locks",
+   "lot": "L10",
+   "nom": "Serrures mécaniques AM Locks",
+   "fabricant": "AM Locks",
+   "reference": "",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "serrure"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.amlocks.pt",
+     "titre": "AM Locks"
+    }
+   ],
+   "sous": "Quincaillerie",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : serrures à mortaiser (CCTP 04B.3.1.1.5). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-la-croisee-ds-dualis",
+   "lot": "L10",
+   "nom": "Crémone pompier encastrée Dualis",
+   "fabricant": "La Croisée DS",
+   "reference": "Dualis",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "crémone"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.lacroiseeds.fr",
+     "titre": "La Croisée DS"
+    }
+   ],
+   "sous": "Quincaillerie",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : crémones à encastrer (CCTP 04B.3.1.1.5.6). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-breheret-fg-tvb",
+   "lot": "L10",
+   "nom": "Façades de gaines techniques FG EI15 / EI30 et trappes de visite TVB EI30",
+   "fabricant": "Bréhéret",
+   "reference": "FG, TVB",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "façade de gaine",
+    "trappe",
+    "coupe-feu"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.breheret.com",
+     "titre": "Bréhéret"
+    }
+   ],
+   "sous": "Escaliers escamotables, trappes",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : façades de gaines et trappes de visite (CCTP 04B.3.2 et 04B.3.3). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-laudescher-linea-4-2-1",
+   "lot": "L10",
+   "nom": "Habillage bois Linea 4.2.1 (hall)",
+   "fabricant": "Laudescher",
+   "reference": "Linea 4.2.1",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "habillage bois",
+    "acoustique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://laudescher.com",
+     "titre": "Laudescher"
+    }
+   ],
+   "sous": "Habillages, agencements",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : habillage bois du hall (CCTP 04B.3.4.1). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-ldm-equipement-habillage-de-bati-support-wc-en-stratifie-compact-10-et",
+   "lot": "L10",
+   "nom": "Habillage de bâti-support WC en stratifié compact 10 et 13 mm",
+   "fabricant": "LDM Équipement",
+   "reference": "",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "compact",
+    "habillage",
+    "sanitaires"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.ldmequipement.fr",
+     "titre": "LDM Équipement"
+    }
+   ],
+   "sous": "Panneaux décoratifs (stratifiés HPL, compacts, placages, métal)",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : façades des bâtis-supports des WC (CCTP 04B.3.9.9). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-hartmann-tresore-hpo",
+   "lot": "L20",
+   "nom": "Armoires fortes police HPO et compartiments pour armes de poing",
+   "fabricant": "Hartmann Tresore",
+   "reference": "HPO",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "armoire forte",
+    "sécurité"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.hartmann-tresore.fr",
+     "titre": "Hartmann Tresore"
+    }
+   ],
+   "sous": "Rangements, bibliothèques, parois aménagées",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : armoires fortes de la salle d'armement (CCTP 04B.3.9.3.1, type HPO 24 casiers). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-generique-epsivol",
+   "lot": "L20",
+   "nom": "Rayonnage longue portée Epsivol",
+   "fabricant": "",
+   "reference": "Epsivol",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "rayonnage",
+    "archives"
+   ],
+   "liens": [],
+   "sous": "Rangements, bibliothèques, parois aménagées",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : étagères des archives (CCTP 04B.3.9.4.1). Fabricant non indiqué sur la fiche. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-cfp-tablettes-melaminees",
+   "lot": "L20",
+   "nom": "Tablettes mélaminées",
+   "fabricant": "CFP",
+   "reference": "",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "tablette",
+    "mélaminé"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.cfp.fr",
+     "titre": "CFP"
+    }
+   ],
+   "sous": "Rangements, bibliothèques, parois aménagées",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : étagères des locaux divers (CCTP 04B.3.9.4.2). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-sata-nf34",
+   "lot": "L20",
+   "nom": "Tableaux triptyques NF34 en tôle émaillée",
+   "fabricant": "Sata",
+   "reference": "NF34",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "tableau blanc",
+    "émaillé"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.sata.fr",
+     "titre": "Sata"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : tableaux blancs (CCTP 04B.3.9.1). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-generique-ann",
+   "lot": "L20",
+   "nom": "Banc d'accueil Ann sur poutre (2 à 5 places)",
+   "fabricant": "",
+   "reference": "Ann",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "mobilier",
+    "accueil"
+   ],
+   "liens": [],
+   "sous": "Assises, espaces de convivialité",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : en équivalence des chaises sur poutre NIM du CCTP (04B.3.9.10.1). Fabricant non indiqué sur la fiche. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-generique-accessdal",
+   "lot": "L12",
+   "nom": "Dalles podotactiles Accessdal (résine polyuréthane)",
+   "fabricant": "",
+   "reference": "Accessdal",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "podotactile",
+    "accessibilité"
+   ],
+   "liens": [
+    "N",
+    "F",
+    " ",
+    "P",
+    " ",
+    "9",
+    "8",
+    "-",
+    "3",
+    "5",
+    "1",
+    ",",
+    " ",
+    "C",
+    "f",
+    "l",
+    "-",
+    "s",
+    "1"
+   ],
+   "sous": "Sols PVC",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : éveil de vigilance (escaliers). Fabricant non indiqué sur la fiche. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-zolpan-acrimax-dual-mat",
+   "lot": "L13",
+   "nom": "Peinture mate acrylique Acrimax Dual Mat",
+   "fabricant": "Zolpan",
+   "reference": "Acrimax Dual Mat",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "peinture"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://particuliers.zolpan.fr/download/fiche_technique/ZOL_ACDUMA/1/Acrimax+dual+mat-fiche_technique.pdf",
+     "titre": "Fiche technique"
+    }
+   ],
+   "sous": "Peintures intérieures",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : peintures (04C.4.1 plafonds). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-zolpan-ondi-satin",
+   "lot": "L13",
+   "nom": "Peinture satinée Ondi+ Satin",
+   "fabricant": "Zolpan",
+   "reference": "Ondi+ Satin",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "peinture"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.zolpan.fr",
+     "titre": "Zolpan"
+    }
+   ],
+   "sous": "Peintures intérieures",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : peintures (04C.4.2 parois). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-zolpan-z-satin",
+   "lot": "L13",
+   "nom": "Laque alkyde Z Satin",
+   "fabricant": "Zolpan",
+   "reference": "Z Satin",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "peinture"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.zolpan.fr",
+     "titre": "Zolpan"
+    }
+   ],
+   "sous": "Peintures intérieures",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : peintures (04C.4.3 boiseries, 04C.4.4 métaux). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-zolpan-proalkyd-satin",
+   "lot": "L13",
+   "nom": "Peinture alkyde en phase aqueuse Proalkyd Satin",
+   "fabricant": "Zolpan",
+   "reference": "Proalkyd Satin",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "peinture"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.zolpan.fr",
+     "titre": "Zolpan"
+    }
+   ],
+   "sous": "Peintures intérieures",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : peintures (04C.4.3 boiseries). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-zolpan-zolpabois-acryl",
+   "lot": "L13",
+   "nom": "Peinture microporeuse bois Zolpabois Acryl",
+   "fabricant": "Zolpan",
+   "reference": "Zolpabois Acryl",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "peinture"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.zolpan.fr",
+     "titre": "Zolpan"
+    }
+   ],
+   "sous": "Lasures, laques, peintures bois et métal",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : peintures (04C.4.3 boiseries). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-seigneurie-vernis-aqua-mat",
+   "lot": "L13",
+   "nom": "Vernis Aqua Mat",
+   "fabricant": "Seigneurie",
+   "reference": "Vernis Aqua Mat",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "vernis"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.seigneurie.com",
+     "titre": "Seigneurie"
+    }
+   ],
+   "sous": "Lasures, laques, peintures bois et métal",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : vernis sur chants des portes stratifiées (CCTP 04C.4.3.4). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-modulex-infinity-basic",
+   "lot": "L20",
+   "nom": "Signalétique intérieure Infinity et Basic Intérieur (plaques, relief et braille)",
+   "fabricant": "Modulex",
+   "reference": "Infinity, Basic",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "signalétique",
+    "braille"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.batiproduits.com/fiche/produits/panneaux-pour-signaletique-permanente-interieure-p69032558.html",
+     "titre": "Infinity (Batiproduits)"
+    }
+   ],
+   "sous": "Signalétique",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : signalétique (CCTP 04C.4.7.2, référence Direct Signalétique Slide au CCTP). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-ura-74405-76000-43500",
+   "lot": "L16",
+   "nom": "BAES Eclat AET60LO2ENJ (74405), Knopé KNAM45 (76000), Star STARRE (43500)",
+   "fabricant": "URA",
+   "reference": "74405, 76000, 43500",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "BAES",
+    "éclairage de sécurité"
+   ],
+   "liens": [],
+   "sous": "Éclairage de sécurité",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Sodelec Énergie, attributaire du lot 5 (analyse finale du 22/10/2026) : éclairage de sécurité (CCTP 05.2.12.1, référence Behar Spark+ et Eclat au CCTP). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\27_Sodelec (FT.zip)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-axis-m2035-le-m3085-v",
+   "lot": "L16",
+   "nom": "Caméras IP AXIS M2035-LE (cylindrique) et M3085-V (mini dôme)",
+   "fabricant": "Axis",
+   "reference": "M2035-LE, M3085-V",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "caméra",
+    "vidéosurveillance"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.axis.com",
+     "titre": "Axis"
+    }
+   ],
+   "sous": "",
+   "perf": "1080p, deep learning",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Sodelec Énergie, attributaire du lot 5 (analyse finale du 22/10/2026) : vidéosurveillance (CCTP 05.3.3.3). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\27_Sodelec (FT.zip)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-philips-929002661231",
+   "lot": "L16",
+   "nom": "Plafonnier LED Magneos carré 12 W 2700 K",
+   "fabricant": "Philips",
+   "reference": "929002661231",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "luminaire",
+    "LED"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Sodelec Énergie, attributaire du lot 5 (analyse finale du 22/10/2026) : éclairage (CCTP 05.2.9.1). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\27_Sodelec (FT.zip)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-henri-depaepe-hd-2000",
+   "lot": "L16",
+   "nom": "Poste téléphonique d'urgence HD 2000 Urgence",
+   "fabricant": "Henri Depaepe",
+   "reference": "HD 2000",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "téléphone",
+    "urgence"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Sodelec Énergie, attributaire du lot 5 (analyse finale du 22/10/2026) : téléphone d'urgence (CCTP 05.3.7.2). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\27_Sodelec (FT.zip)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-ideal-standard-d6039aa",
+   "lot": "L14",
+   "nom": "Ensemble de douche Aqua D6039AA (6 l/min)",
+   "fabricant": "Ideal Standard",
+   "reference": "D6039AA",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "douche",
+    "robinetterie"
+   ],
+   "liens": [],
+   "sous": "Robinetterie collective",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : douches (CCTP 6A.2.8.5). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-geberit-sigma20",
+   "lot": "L14",
+   "nom": "Plaque de déclenchement Sigma20",
+   "fabricant": "Geberit",
+   "reference": "Sigma20",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "WC",
+    "plaque de commande"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : en remplacement de la plaque Sigma 12 du CCTP (6A.2.8.8). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-geberit-piave",
+   "lot": "L14",
+   "nom": "Robinetterie électronique de lavabo Piave (sur secteur)",
+   "fabricant": "Geberit",
+   "reference": "Piave",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "robinet électronique",
+    "lavabo"
+   ],
+   "liens": [],
+   "sous": "Robinetterie collective",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : robinetterie des lavabos (CCTP 6A.2.8.4, référence Ideal Standard Okyris Clinic au CCTP). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-generique-bonde-de-douche-extraplate-118-hauteur-58-mm",
+   "lot": "L14",
+   "nom": "Bonde de douche extraplate Ø 118, hauteur 58 mm",
+   "fabricant": "",
+   "reference": "",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "bonde",
+    "douche"
+   ],
+   "liens": [],
+   "sous": "Évacuations",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : douches (CCTP 6A.2.8.5). Fabricant non indiqué sur la fiche. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-trox-xcc-x2-r035",
+   "lot": "L15",
+   "nom": "Module adiabatique pour CTA X-Cube X2 (XCC-X2-R035)",
+   "fabricant": "Trox",
+   "reference": "XCC-X2-R035",
+   "statut": "etude",
+   "fav": false,
+   "tags": [
+    "CTA",
+    "adiabatique"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.trox.fr",
+     "titre": "Trox France"
+    }
+   ],
+   "sous": "Ventilation",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : CTA air neuf (CCTP 6B.2.2.11), configuration Trox offre n° 91237 du 15/02/2026. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-echafaudage-de-pied-tubulaire-acier-galvanise",
+   "lot": "L00",
+   "nom": "Échafaudage de pied tubulaire acier galvanisé",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "échafaudage"
+   ],
+   "liens": [],
+   "sous": "Installations de chantier, base vie",
+   "perf": "Éléments modulaires galvanisés à chaud, planchers antidérapants, plinthes, filets et bâches",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 01.6.4.1 Échafaudages.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-beton-arme-c25-30-poteaux-poutres-dalles-pleines",
+   "lot": "L02",
+   "nom": "Béton armé C25/30 (poteaux, poutres, dalles pleines)",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "béton armé"
+   ],
+   "liens": [],
+   "sous": "Ciments, bétons",
+   "perf": "C25/30 mini, NF EN 206-1, coffrage ordinaire P1, liaison équipotentielle des aciers",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 01.6.3.2 Poteaux, 01.6.3.3 Poutres, 01.6.3.4 Dalles pleines béton armé.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-profiles-acier-upe-360-s235-moises-ouverture-de-mur-porteur",
+   "lot": "L02",
+   "nom": "Profilés acier UPE 360 S235 moisés (ouverture de mur porteur)",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "acier",
+    "structure"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "S235 mini, tiges filetées, calage métal et matage au mortier sans retrait",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 01.6.3.7 Ouvertures de mur porteur par poutres métalliques.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-blocs-creux-de-beton-nf-15-et-20-cm",
+   "lot": "L02",
+   "nom": "Blocs creux de béton NF 15 et 20 cm",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "bloc béton",
+    "maçonnerie"
+   ],
+   "liens": [],
+   "sous": "Blocs béton",
+   "perf": "Marque NF, hourdage mortier n° 1, arase mortier n° 4, éléments spéciaux (U, angles)",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 01.6.3.8 Maçonneries d'agglos ciment.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-mortier-de-calage-sans-retrait-et-scellement-chimique-des-ac",
+   "lot": "L02",
+   "nom": "Mortier de calage sans retrait et scellement chimique des aciers",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "mortier",
+    "scellement"
+   ],
+   "liens": [],
+   "sous": "Mortiers techniques, réparation des bétons",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 01.6.3.2 Poteaux en sous-œuvre, 01.6.3.7, 01.6.3.8 Parois porteuses en sous-œuvre.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-escalier-bois-resineux-classe-2-limons-lamelle-colle-marches",
+   "lot": "L03",
+   "nom": "Escalier bois résineux classe 2 (limons lamellé-collé, marches 280 x 40, OSB)",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "escalier",
+    "bois"
+   ],
+   "liens": [],
+   "sous": "Bois d'ingénierie (lamellé-collé, CLT, poutres en I)",
+   "perf": "Limons 75 x 200 lamellé-collé, poteaux 140 x 140, solives 75 x 175, dalle OSB 25 mm, contremarches OSB 20 mm",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 01.6.3.6 Escalier bois dans l'ellipse.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-revetement-plastique-epais-rpe-taloche",
+   "lot": "L06",
+   "nom": "Revêtement plastique épais (RPE) taloché",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "enduit",
+    "façade"
+   ],
+   "liens": [],
+   "sous": "Enduits, ravalement",
+   "perf": "Traitement anticryptogamique, sous-enduit, DTU 26.1 et 23.1, garantie 10 ans",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 01.6.4.5 Peinture RPE (tableaux et linteaux).",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-plinthes-en-gres-cerame-30-x-10-droites-et-a-gorge",
+   "lot": "L11",
+   "nom": "Plinthes en grès cérame 30 x 10 (droites et à gorge)",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "plinthe",
+    "carrelage"
+   ],
+   "liens": [],
+   "sous": "Carrelage, grès cérame, pierre",
+   "perf": "Assorties aux revêtements de sol, éléments d'angle, pose collée",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 01.6.5.8 Plinthes droites, 01.6.5.9 Plinthes à gorges.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-carrelage-de-facade-similaire-a-l-existant-pied-du-batiment-",
+   "lot": "L11",
+   "nom": "Carrelage de façade similaire à l'existant (pied du bâtiment de la Police municipale)",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "carrelage",
+    "façade"
+   ],
+   "liens": [],
+   "sous": "Carrelage, grès cérame, pierre",
+   "perf": "Format et coloris au choix du maître d'œuvre, colle adaptée",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 01.6.5.18 Travaux de dépose en façade, 01.6.5.19 Carrelage de façade.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-double-voligeage-croise-jointif-en-sapin-traite-18-mm",
+   "lot": "L04",
+   "nom": "Double voligeage croisé jointif en sapin traité, 18 mm",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "voligeage",
+    "bois"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "Traité insecticide et fongicide",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 02.4.5.3 Voligeage.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-membrane-d-interposition-polypropylene-structure-et-feutre-a",
+   "lot": "L04",
+   "nom": "Membrane d'interposition polypropylène structuré et feutre acoustique polyester",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "membrane",
+    "acoustique"
+   ],
+   "liens": [],
+   "sous": "Écrans de sous-toiture",
+   "perf": "Réduction des bruits de pluie",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 02.4.5.4 Membrane d'interposition.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-descentes-d-eaux-pluviales-en-acier",
+   "lot": "L04",
+   "nom": "Descentes d'eaux pluviales en acier",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "EP",
+    "descente"
+   ],
+   "liens": [],
+   "sous": "Raccords, accessoires de pose, motorisation",
+   "perf": "Section selon DTU 60.11",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 02.4.6.2 Descentes d'eaux pluviales en acier.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-couvertines-en-tole-d-acier-galvanise-thermolaque",
+   "lot": "L04",
+   "nom": "Couvertines en tôle d'acier galvanisé thermolaqué",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "couvertine"
+   ],
+   "liens": [],
+   "sous": "Raccords, accessoires de pose, motorisation",
+   "perf": "Teinte au choix de l'architecte",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 02.4.7.2 Couvertine.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-chatieres-de-ventilation-en-acier-prelaque",
+   "lot": "L04",
+   "nom": "Chatières de ventilation en acier prélaqué",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "ventilation",
+    "couverture"
+   ],
+   "liens": [],
+   "sous": "Raccords, accessoires de pose, motorisation",
+   "perf": "Grillage anti-insectes",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 02.4.5.6.8 Ventilation de la toiture.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-crochets-d-entretien-de-couverture-et-prolongement-de-ligne-",
+   "lot": "L04",
+   "nom": "Crochets d'entretien de couverture et prolongement de ligne de vie",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "sécurité",
+    "toiture"
+   ],
+   "liens": [],
+   "sous": "Accès toiture, désenfumage",
+   "perf": "NF EN 517",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 02.4.5.6.9 Crochets d'entretien, 02.4.7.1 Ligne de vie (produit identique à l'existant).",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-isolant-de-toiture-terrasse-en-polystyrene-extrude-xps-100-m",
+   "lot": "L05",
+   "nom": "Isolant de toiture terrasse en polystyrène extrudé XPS, 100 mm",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "isolant",
+    "XPS"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "NF EN 13164, λ 0,035, R ≈ 2,85 m².K/W",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 02.5.4.3 Isolation thermique (toiture multi-usage).",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-platines-et-moignons-en-plomb-2-5-mm-manchons-cuivre-entrees",
+   "lot": "L05",
+   "nom": "Platines et moignons en plomb 2,5 mm, manchons cuivre (entrées d'eau, trop-pleins, traversées, crosses)",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "plomb",
+    "évacuation"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 02.5.6.3 à 02.5.6.6, 02.4.7.3 et 02.4.7.4.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-points-d-ancrage-en-tube-inox-304",
+   "lot": "L05",
+   "nom": "Points d'ancrage en tube inox 304",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "sécurité",
+    "ancrage"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "NF EN 795",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 02.5.6.8 Point d'ancrage.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-menuiseries-aluminium-a-rupture-de-pont-thermique-thermolaqu",
+   "lot": "L07",
+   "nom": "Menuiseries aluminium à rupture de pont thermique thermolaquées",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "menuiserie",
+    "aluminium"
+   ],
+   "liens": [],
+   "sous": "Aluminium",
+   "perf": "Uw 1,3 W/m².K, vitrage Cool-Lite 61/29 6*-16-4 (Ug 1,0 à 1,1), Qualicoat",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 03A.3.2.1 Généralités, 03A.3.2.2 Blocs-portes battants, liste des châssis CTN-DCE-CHASSIS ind 1.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-blocs-portes-metalliques-exterieurs-en-tole-20-10",
+   "lot": "L08",
+   "nom": "Blocs-portes métalliques extérieurs en tôle 20/10",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "porte acier"
+   ],
+   "liens": [],
+   "sous": "Portes et cloisons acier",
+   "perf": "Bâtis tubulaires, raidisseurs en T",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 03B.4.1.1 Blocs portes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-garde-corps-et-mains-courantes-en-acier-fers-plats-tubes-the",
+   "lot": "L08",
+   "nom": "Garde-corps et mains courantes en acier (fers plats, tubes) thermolaqués",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "garde-corps",
+    "acier"
+   ],
+   "liens": [],
+   "sous": "Grilles, clôtures, portails",
+   "perf": "Hauteur 1,09 m mini, finition thermolaquée (Protime)",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 03B.4.1.2 Garde-corps extérieur, 03B.4.2.1 à 03B.4.2.4 Garde-corps et main courante intérieurs.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-caillebotis-technique-et-ossature-d-habillage-du-local-techn",
+   "lot": "L08",
+   "nom": "Caillebotis technique et ossature d'habillage du local technique en toiture",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "caillebotis",
+    "toiture"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 03B.4.1.3.1 Caillebotis technique, 03B.4.1.3.2 Habillage vertical acoustique.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-boite-aux-lettres-anti-vandalisme-en-acier-galvanise",
+   "lot": "L08",
+   "nom": "Boîte aux lettres anti-vandalisme en acier galvanisé",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "boîte aux lettres"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "Volume intérieur normalisé 260 x 260 x 340 mm mini",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 03B.4.1.5 Boîte aux lettres.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-enseignes-en-lettres-d-acier-decoupees-au-laser",
+   "lot": "L08",
+   "nom": "Enseignes en lettres d'acier découpées au laser",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "enseigne",
+    "signalétique"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "Tôle acier 8/10",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 03B.4.1.8 Enseignes extérieures.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-grilles-de-ventilation-interieures-en-metal-deploye",
+   "lot": "L08",
+   "nom": "Grilles de ventilation intérieures en métal déployé",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "grille",
+    "ventilation"
+   ],
+   "liens": [],
+   "sous": "Grilles, clôtures, portails",
+   "perf": "Ossature en profilés L et T, cadre tube acier",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 03B.4.2.5 Grilles de ventilation.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-ossature-et-agrafes-en-aluminium-extrude-pour-bardage-en-bar",
+   "lot": "L06",
+   "nom": "Ossature et agrafes en aluminium extrudé pour bardage en bardeaux de terre cuite",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "ossature",
+    "bardage"
+   ],
+   "liens": [],
+   "sous": "Bardages",
+   "perf": "Équerres alu, chevilles à expansion (cahier CSTB)",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 03B.5.1.1.3 Profilés d'ossature, 03B.5.1.1.4 Agrafes des fixations.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-bandes-d-aide-a-l-orientation-en-resine-thermoplastique-chem",
+   "lot": "L18",
+   "nom": "Bandes d'aide à l'orientation en résine thermoplastique (cheminement PMR extérieur)",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "podotactile",
+    "accessibilité"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "Largeur 22 cm, blanches, pose au chalumeau",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 03B.5.2.2 Cheminements podotactiles.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-plaques-de-platre-haute-durete-ba18s",
+   "lot": "L09",
+   "nom": "Plaques de plâtre haute dureté BA18S",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "plaque de plâtre",
+    "haute dureté"
+   ],
+   "liens": [],
+   "sous": "Plaques de plâtre",
+   "perf": "18 mm, haute dureté, hydrofuge en pièces humides",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04A.3.1.2.3 Type 98/48 mm, 04A.3.1.2.4 Type 72/48 mm, 04A.3.1.2.5 Type demi-stil.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-panneaux-isolants-polyurethane-pur-pir-80-mm",
+   "lot": "L09",
+   "nom": "Panneaux isolants polyuréthane PUR/PIR, 80 mm",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "isolant",
+    "PIR"
+   ],
+   "liens": [],
+   "sous": "Isolants",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04A.3.2.5 Isolant haute densité.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-dalles-minerales-600-x-600-de-reemploi-type-4",
+   "lot": "L09",
+   "nom": "Dalles minérales 600 x 600 de réemploi (type 4)",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "plafond",
+    "réemploi"
+   ],
+   "liens": [],
+   "sous": "Plafonds",
+   "perf": "Dépose soignée, stockage, compléments",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04A.3.3.1 Dalles minérales 600x600 type 4 (réemploi).",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-extincteurs-portatifs",
+   "lot": "L20",
+   "nom": "Extincteurs portatifs",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "incendie"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "Nombre et nature selon réglementation, à valider par le bureau de contrôle",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04A.3.5 Extincteurs.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-support-fixe-de-videoprojecteur-en-acier-laque",
+   "lot": "L20",
+   "nom": "Support fixe de vidéoprojecteur en acier laqué",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "support",
+    "audiovisuel"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "Potence réglable, fixation en sous-face de dalle",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04A.3.3.7 Support vidéoprojecteur.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-huisseries-metalliques-en-tole-d-acier-15-10",
+   "lot": "L10",
+   "nom": "Huisseries métalliques en tôle d'acier 15/10",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "huisserie"
+   ],
+   "liens": [],
+   "sous": "Portes intérieures",
+   "perf": "4 pattes à scellement, cale élastique en pied",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.1.1.2 Huisseries métalliques.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-vantaux-a-ame-pleine-cadre-bois-exotique-fsc-panneaux-de-par",
+   "lot": "L10",
+   "nom": "Vantaux à âme pleine (cadre bois exotique FSC, panneaux de particules haute densité)",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "vantail",
+    "porte"
+   ],
+   "liens": [],
+   "sous": "Portes intérieures",
+   "perf": "Label CTB, finitions stratifiée HPL 8/10 ou prépeinte",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.1.1.4.1 et 04B.3.1.1.4.2.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-plaques-de-protection-de-portes-en-inox-15-10",
+   "lot": "L10",
+   "nom": "Plaques de protection de portes en inox 15/10",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "inox",
+    "protection"
+   ],
+   "liens": [],
+   "sous": "Quincaillerie",
+   "perf": "Fixation par vis inox, grain au choix",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.1.1.4.5 Plaque de protection.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-paumelles-en-acier-bleui-a-bague-laiton",
+   "lot": "L10",
+   "nom": "Paumelles en acier bleui à bague laiton",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "paumelle"
+   ],
+   "liens": [],
+   "sous": "Quincaillerie",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.1.1.5.1 Paumelles acier.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-habillage-du-hall-en-tasseaux-de-bois-massif-contrecolle-20-",
+   "lot": "L10",
+   "nom": "Habillage du hall en tasseaux de bois massif contrecollé 20 x 42 sur laine de roche",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "habillage bois",
+    "acoustique"
+   ],
+   "liens": [],
+   "sous": "Habillages, agencements",
+   "perf": "Espacement 18 mm, voile noir, essence au choix de l'architecte",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.4.1 Habillage bois du hall.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-cloison-bois-formant-garde-corps-de-l-escalier",
+   "lot": "L10",
+   "nom": "Cloison bois formant garde-corps de l'escalier",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "garde-corps",
+    "bois"
+   ],
+   "liens": [],
+   "sous": "Habillages, agencements",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.4.2 Cloison bois formant garde-corps de l'escalier.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-chassis-vitres-interieurs-en-bois-acoustiques",
+   "lot": "L10",
+   "nom": "Châssis vitrés intérieurs en bois acoustiques",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "châssis",
+    "vitrage"
+   ],
+   "liens": [],
+   "sous": "Portes intérieures",
+   "perf": "Vitrage feuilleté, joints intumescents si coupe-feu",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.5 Châssis vitrés, 04B.3.8.2.2 Châssis du guichet.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-tablettes-d-allege-en-mdf-m1-et-plinthes-bois-prepeintes",
+   "lot": "L10",
+   "nom": "Tablettes d'allège en MDF M1 et plinthes bois prépeintes",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "MDF",
+    "plinthe"
+   ],
+   "liens": [],
+   "sous": "Habillages, agencements",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.6 Tablettes bois sur allèges, 04B.3.7 Plinthes.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-banque-d-accueil-et-guichet-ossature-metallique-plans-de-tra",
+   "lot": "L10",
+   "nom": "Banque d'accueil et guichet : ossature métallique, plans de travail stratifiés 38 mm",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "agencement",
+    "accueil"
+   ],
+   "liens": [],
+   "sous": "Habillages, agencements",
+   "perf": "Parements stratifiés Polyrey, hauteur PMR",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.8.1 Banque d'accueil de la Mairie, 04B.3.8.2.1 Guichet Police municipale.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-meubles-de-kitchenette-en-contreplaque-ctb-x-19-mm",
+   "lot": "L20",
+   "nom": "Meubles de kitchenette en contreplaqué CTB-X 19 mm",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "kitchenette",
+    "agencement"
+   ],
+   "liens": [],
+   "sous": "Cuisines",
+   "perf": "Panneaux hydrofuges, cadre bois dur",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.8.3 et 04B.3.8.4 Meubles kitchenette.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-casiers-vestiaires-monoblocs-en-tole-7-et-9-10-et-bancs-de-v",
+   "lot": "L20",
+   "nom": "Casiers vestiaires monoblocs en tôle 7 et 9/10 et bancs de vestiaire",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "vestiaire"
+   ],
+   "liens": [],
+   "sous": "Rangements, bibliothèques, parois aménagées",
+   "perf": "Peinture cuite au four, casiers en L 30 x 50 x 180",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.8.6 et 04B.3.8.7 Casiers vestiaires, 04B.3.8.8 Bancs vestiaires.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-portants-a-vetements-professionnels-en-z-salle-d-armement",
+   "lot": "L20",
+   "nom": "Portants à vêtements professionnels en Z (salle d'armement)",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "portant"
+   ],
+   "liens": [],
+   "sous": "Rangements, bibliothèques, parois aménagées",
+   "perf": "Cadre acier époxy, 1670 x 1200 x 500 mm",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.8.5 Porte-manteaux salle d'armement.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-pateres-virgule-en-bois-et-en-inox",
+   "lot": "L20",
+   "nom": "Patères virgule en bois et en inox",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "patère"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "Fixation invisible",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.9.2 Patères.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-etageres-metalliques-a-cremaillere-et-etageres-melaminees-19",
+   "lot": "L20",
+   "nom": "Étagères métalliques à crémaillère et étagères mélaminées 19 mm",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "étagère"
+   ],
+   "liens": [],
+   "sous": "Rangements, bibliothèques, parois aménagées",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.9.4.1 Étagères archives, 04B.3.9.4.2 Étagères locaux divers.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-miroirs-en-glace-claire-argentee-6-mm",
+   "lot": "L10",
+   "nom": "Miroirs en glace claire argentée 6 mm",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "miroir"
+   ],
+   "liens": [],
+   "sous": "Verre décoratif d'agencement (imprimé, miroir)",
+   "perf": "Fixation par pattes inox",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.9.6 Miroirs.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-stores-interieurs-a-bandes-verticales",
+   "lot": "L20",
+   "nom": "Stores intérieurs à bandes verticales",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "store intérieur"
+   ],
+   "liens": [],
+   "sous": "Rideaux, voilages, stores intérieurs",
+   "perf": "Rail aluminium laqué 45 x 25 ; l'offre EPRIM propose des « Stores Classic » (fabricant non indiqué)",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04B.3.9.7 Occultation intérieure par bandes verticales.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-enduit-de-ragreage-autolissant",
+   "lot": "L12",
+   "nom": "Enduit de ragréage autolissant",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "ragréage"
+   ],
+   "liens": [],
+   "sous": "Préparation des supports (primaires, ragréages, chapes)",
+   "perf": "Avis technique, classement P adapté à l'UPEC du revêtement",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04C.3.1.2 Enduit de ragréage.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-barres-de-seuil-inox-12-bombees-35-mm",
+   "lot": "L12",
+   "nom": "Barres de seuil inox ½ bombées, 35 mm",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "seuil",
+    "inox"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "Fixation mécanique non apparente",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04C.3.3.2 Barre de seuil.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-peinture-acrylique-en-phase-aqueuse-mate-plafonds-finitions-",
+   "lot": "L13",
+   "nom": "Peinture acrylique en phase aqueuse mate (plafonds, finitions A et C)",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "peinture"
+   ],
+   "liens": [],
+   "sous": "Peintures intérieures",
+   "perf": "Famille I classe 7b2, écolabel, A+",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04C.4.1 Plafonds.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-peinture-acrylique-en-phase-aqueuse-satinee-parois-finitions",
+   "lot": "L13",
+   "nom": "Peinture acrylique en phase aqueuse satinée (parois, finitions A et C)",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "peinture"
+   ],
+   "liens": [],
+   "sous": "Peintures intérieures",
+   "perf": "Lessivable, écolabel, A+",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04C.4.2 Parois.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-peinture-alkyde-satinee-boiseries-portes-prepeintes-metaux-c",
+   "lot": "L13",
+   "nom": "Peinture alkyde satinée (boiseries, portes prépeintes, métaux, cuivre)",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "peinture",
+    "alkyde"
+   ],
+   "liens": [],
+   "sous": "Lasures, laques, peintures bois et métal",
+   "perf": "Famille I classe 4a, brillance Bs 10 à 60",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04C.4.3.2, 04C.4.3.3, 04C.4.4.2.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-vernis-sur-chants-des-portes-stratifiees",
+   "lot": "L13",
+   "nom": "Vernis sur chants des portes stratifiées",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "vernis"
+   ],
+   "liens": [],
+   "sous": "Lasures, laques, peintures bois et métal",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04C.4.3.4 Vernis sur chants des portes stratifiées.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-peinture-acrylique-satinee-sur-matieres-plastiques-rigides",
+   "lot": "L13",
+   "nom": "Peinture acrylique satinée sur matières plastiques rigides",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "peinture",
+    "PVC"
+   ],
+   "liens": [],
+   "sous": "Peintures intérieures",
+   "perf": "Famille I classe 7b2",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04C.4.5 Matières plastiques rigides.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-antirouille-et-peinture-laquee-sur-ouvrages-metalliques-exis",
+   "lot": "L13",
+   "nom": "Antirouille et peinture laquée sur ouvrages métalliques existants",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "peinture",
+    "métal"
+   ],
+   "liens": [],
+   "sous": "Lasures, laques, peintures bois et métal",
+   "perf": "Primaire inhibiteur, couche intermédiaire, finition laquée",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04C.4.6.3 Peinture sur ouvrages métalliques existants, 03B.5.2.1 Révision et remise en peinture.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-lettres-metalliques-collees-ville-de-chatenay-malabry-mairie",
+   "lot": "L20",
+   "nom": "Lettres métalliques collées (Ville de Châtenay-Malabry, Mairie annexe…)",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "signalétique"
+   ],
+   "liens": [],
+   "sous": "Signalétique",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 04C.4.7.2.4 Lettres métalliques collées sur support.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-cables-u1000-r2v-et-cables-resistants-au-feu-cr1-c1",
+   "lot": "L16",
+   "nom": "Câbles U1000 R2V et câbles résistants au feu CR1-C1",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "câble"
+   ],
+   "liens": [],
+   "sous": "Câbles",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 05.2.6.1 Liaisons câbles, 05.2.12 Éclairage de sécurité.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-cablage-vdi-categorie-6-f-ftp-et-prises-rj45",
+   "lot": "L16",
+   "nom": "Câblage VDI catégorie 6 F/FTP et prises RJ45",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "VDI",
+    "réseau"
+   ],
+   "liens": [],
+   "sous": "Câbles",
+   "perf": "Raccordement T568B, 3 RJ45 par poste de travail",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 05.3.5 VDI précâblage, 05.3.3 Vidéosurveillance.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-tableaux-divisionnaires-electriques",
+   "lot": "L16",
+   "nom": "Tableaux divisionnaires électriques",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "tableau électrique"
+   ],
+   "liens": [],
+   "sous": "Tableaux et distribution",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 05.2.4 Tableaux électriques.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-goulottes-et-plinthes-electriques",
+   "lot": "L16",
+   "nom": "Goulottes et plinthes électriques",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "goulotte"
+   ],
+   "liens": [],
+   "sous": "Appareillage",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 05.1.3 Liste des travaux, 05.2.7.1 Caractéristiques des appareillages.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-boucle-magnetique",
+   "lot": "L16",
+   "nom": "Boucle magnétique",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "accessibilité",
+    "boucle magnétique"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "Accessibilité des personnes malentendantes",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 05.3.6 Boucle magnétique.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-gaines-de-ventilation-en-tole-d-acier-galvanise-calorifugees",
+   "lot": "L15",
+   "nom": "Gaines de ventilation en tôle d'acier galvanisé calorifugées (laine de verre 25 et 50 mm, aluminium)",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "gaine",
+    "ventilation"
+   ],
+   "liens": [],
+   "sous": "Ventilation",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 6B.2.2.2 Réseaux de gaines et accessoires, 6B.2.2.11 CTA air neuf.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-tubes-acier-noir-sans-soudure-tarif-3-calorifuges-reseaux-de",
+   "lot": "L15",
+   "nom": "Tubes acier noir sans soudure tarif 3 calorifugés (réseaux de chauffage)",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "tube",
+    "chauffage"
+   ],
+   "liens": [],
+   "sous": "",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 6B.2.3.4 Réseaux hydrauliques, 6B.2.3.5 Calorifuge tuyauteries EC.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
+   "id": "ctn-mat-descentes-d-eaux-pluviales-interieures-renovation-et-nouvell",
+   "lot": "L14",
+   "nom": "Descentes d'eaux pluviales intérieures (rénovation et nouvelles descentes)",
+   "fabricant": "",
+   "reference": "",
+   "statut": "prescrit",
+   "fav": false,
+   "tags": [
+    "générique",
+    "EP",
+    "évacuation"
+   ],
+   "liens": [],
+   "sous": "Évacuations",
+   "perf": "",
+   "projets": "CTN",
+   "notes": "Matériau prescrit sans marque au CCTP CTN (Mairie annexe et Police municipale, Châtenay-Malabry), DCE final : 6A.2.6.1 Rénovation EP, 6A.2.6.2 Nouvelles descentes EP.",
+   "verifie": "",
+   "cree": "2026-11-19",
+   "maj": "2026-11-19"
+  },
+  {
    "id": "larochere-briques-verre",
    "lot": "L02",
    "nom": "Briques de verre pour cloisons et façades, montage traditionnel ou système Cubiver",
@@ -29765,100 +41755,6 @@ window.TD_DONNEES = {
    "maj": "2026-11-19"
   },
   {
-   "id": "sika-sols-resine",
-   "lot": "L12",
-   "nom": "Sols résine Sikafloor (époxy, polyuréthane, ESD)",
-   "fabricant": "Sika",
-   "reference": "Sikafloor",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "sol résine",
-    "époxy",
-    "polyuréthane",
-    "industriel",
-    "parking"
-   ],
-   "liens": [
-    {
-     "type": "cat",
-     "url": "https://fra.sika.com/dam/dms/fr01/p/fr-bro-gamme-preparation-supports.pdf",
-     "titre": "Guide de choix préparation des supports (primaires, ragréages Sikafloor)"
-    },
-    {
-     "type": "cat",
-     "url": "https://fra.sika.com/dms/getdocument.get/856f0130-95ca-43f0-ad30-67013879cba8/fr-bro-data-center.pdf",
-     "titre": "Brochure data centers (sols ESD, étanchéité)"
-    }
-   ],
-   "sous": "Sols coulés résine",
-   "perf": "",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-26",
-   "maj": "2026-11-26"
-  },
-  {
-   "id": "sika-chapes-ragreages",
-   "lot": "L12",
-   "nom": "Chapes et ragréages SikaScreed et Sikafloor Level",
-   "fabricant": "Sika",
-   "reference": "SikaScreed Chape-50, HardTop-60/70, SikaScreed-55 Chape Fluide, Sikafloor-300 Rapid Level, 410 Level",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "chape",
-    "ragréage",
-    "primaire",
-    "préparation support"
-   ],
-   "liens": [
-    {
-     "type": "cat",
-     "url": "https://fra.sika.com/dam/dms/fr01/p/fr-bro-gamme-preparation-supports.pdf",
-     "titre": "Gamme préparation de supports, guide de choix"
-    }
-   ],
-   "sous": "Chapes et ragréages",
-   "perf": "",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-26",
-   "maj": "2026-11-26"
-  },
-  {
-   "id": "sika-reparation-beton",
-   "lot": "L02",
-   "nom": "Réparation et protection des bétons Sika (EN 1504)",
-   "fabricant": "Sika",
-   "reference": "Sika MonoTop, SikaRep, SikaTop, Sikagard, Sika Ferrogard",
-   "statut": "ref",
-   "fav": false,
-   "tags": [
-    "réparation béton",
-    "EN 1504",
-    "mortier",
-    "protection",
-    "renforcement"
-   ],
-   "liens": [
-    {
-     "type": "cat",
-     "url": "https://fra.sika.com/dam/dms/fr01/y/fr-bro-construction-renovation-parking.pdf",
-     "titre": "Construction et rénovation de parkings (réparation, protection, renforcement)"
-    }
-   ],
-   "sous": "Mortiers techniques, réparation des bétons",
-   "perf": "",
-   "projets": "",
-   "notes": "",
-   "verifie": "",
-   "cree": "2026-11-26",
-   "maj": "2026-11-26"
-  },
-  {
    "id": "sika-cuvelage",
    "lot": "L02",
    "nom": "Étanchéité des sous-sols Sika (membranes Sikaplan, bandes d'arrêt d'eau)",
@@ -29890,16 +41786,16 @@ window.TD_DONNEES = {
   {
    "id": "sika-etancheite-toiture",
    "lot": "L05",
-   "nom": "Étanchéité de toiture Sika (Sarnafil, Sikaplan, Sikalastic)",
+   "nom": "Membranes d'étanchéité de toiture Sika (Sarnafil, Sikaplan)",
    "fabricant": "Sika",
-   "reference": "Sarnafil, Sikaplan, Sikalastic",
+   "reference": "Sarnafil, Sikaplan",
    "statut": "ref",
    "fav": false,
    "tags": [
     "toiture terrasse",
     "membrane PVC",
     "FPO",
-    "étanchéité liquide"
+    "étanchéité"
    ],
    "liens": [
     {
@@ -30270,7 +42166,713 @@ window.TD_DONNEES = {
    "maj": "2026-11-26"
   }
  ],
+ "complements": [
+  {
+   "id": "ctn-rector-rectolight",
+   "notes": "Proposé à l'offre de ECB, Entreprise Construction Bâtiment, attributaire du lot 1 (analyse finale du 22/10/2026) : Rectolight. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\18_EntrepriseConstructionBat). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-weber-weber-vegetal-stop",
+   "notes": "Proposé à l'offre de ECB, Entreprise Construction Bâtiment, attributaire du lot 1 (analyse finale du 22/10/2026) : Weber végétal stop. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\18_EntrepriseConstructionBat). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-weber-weber-pral-f",
+   "notes": "Proposé à l'offre de ECB, Entreprise Construction Bâtiment, attributaire du lot 1 (analyse finale du 22/10/2026) : weber.pral F. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\18_EntrepriseConstructionBat). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-weber-weber-derko",
+   "notes": "Proposé à l'offre de ECB, Entreprise Construction Bâtiment, attributaire du lot 1 (analyse finale du 22/10/2026) : weber.derko. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\18_EntrepriseConstructionBat). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-parexgroup-586-lankophonic-plak",
+   "notes": "Proposé à l'offre de ECB, Entreprise Construction Bâtiment, attributaire du lot 1 (analyse finale du 22/10/2026) : 586 Lankophonic Plak+. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\18_EntrepriseConstructionBat). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-desvres-cermicryl",
+   "notes": "Proposé à l'offre de ECB, Entreprise Construction Bâtiment, attributaire du lot 1 (analyse finale du 22/10/2026) : Cermicryl (Cermix). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\18_EntrepriseConstructionBat). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-cermix-cermiproof-st",
+   "notes": "Proposé à l'offre de ECB, Entreprise Construction Bâtiment, attributaire du lot 1 (analyse finale du 22/10/2026) : Cermiproof ST. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\18_EntrepriseConstructionBat). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-mosa-global-collection",
+   "notes": "Proposé à l'offre de ECB, Entreprise Construction Bâtiment, attributaire du lot 1 (analyse finale du 22/10/2026) : Global Collection. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\18_EntrepriseConstructionBat). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-mosa-core-collection-terra",
+   "notes": "Proposé à l'offre de ECB, Entreprise Construction Bâtiment, attributaire du lot 1 (analyse finale du 22/10/2026) : carrelages 90 x 90 Mosa. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\18_EntrepriseConstructionBat). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-schluter-systems-schiene-e",
+   "notes": "Proposé à l'offre de ECB, Entreprise Construction Bâtiment, attributaire du lot 1 (analyse finale du 22/10/2026) : Schiene-E. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\18_EntrepriseConstructionBat). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-schluter-systems-rondec",
+   "notes": "Proposé à l'offre de ECB, Entreprise Construction Bâtiment, attributaire du lot 1 (analyse finale du 22/10/2026) : Rondec. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\18_EntrepriseConstructionBat). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-forbo-nuway-tuftiguard",
+   "notes": "Proposé à l'offre de ECB, Entreprise Construction Bâtiment, attributaire du lot 1 (analyse finale du 22/10/2026) : Nuway Tuftiguard. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\18_EntrepriseConstructionBat). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-petersen-tegl-petersen-tegl",
+   "notes": "Proposé à l'offre de ECB, Entreprise Construction Bâtiment, attributaire du lot 1 (analyse finale du 22/10/2026) : parement brique Petersen Tegl du muret. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\18_EntrepriseConstructionBat). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-ssab-greencoat-plx",
+   "notes": "Proposé à l'offre de Ciel Étanche, attributaire du lot 2 (analyse finale du 22/10/2026) : GreenCoat PLX (couverture à joints debout). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\7_CielEtanche). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-efisol-efigreen-duo",
+   "notes": "Proposé à l'offre de Ciel Étanche, attributaire du lot 2 (analyse finale du 22/10/2026) : Efigreen Duo+ et Efigreen Duo+ XL, 100 mm, R = 4,55. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\7_CielEtanche). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-saint-gobain-sp-510",
+   "notes": "Proposé à l'offre de Lorillard Façades et M4S (groupement), attributaire du lot 3 (analyse finale du 22/10/2026) : SP 510 en rez-de-chaussée. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\33_Lorillard). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-saint-gobain-cool-lite",
+   "notes": "Proposé à l'offre de Lorillard Façades et M4S (groupement), attributaire du lot 3 (analyse finale du 22/10/2026) : Cool-Lite, Uw ≈ 1,30. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\33_Lorillard). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-vachette-v5",
+   "notes": "Proposé à l'offre de Lorillard Façades et M4S (groupement), attributaire du lot 3 (analyse finale du 22/10/2026) : cylindres provisoires V5. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\33_Lorillard). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-dormakaba-pextra-plus",
+   "notes": "Proposé à l'offre de Lorillard Façades et M4S (groupement), attributaire du lot 3 (analyse finale du 22/10/2026) : cylindres définitifs pExtra plus SUZ. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\33_Lorillard). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-nbk-terracotta",
+   "notes": "Proposé à l'offre de Lorillard Façades et M4S (groupement), attributaire du lot 3 (analyse finale du 22/10/2026) : fournisseur de référence NBK, bardeaux RAL 1015 (une variante Terreal Piterak Slim figure aussi à l'offre). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\33_Lorillard). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-placo-glasroc-h-ocean",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : Glasroc H Ocean 13. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-isover-calibel",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : Calibel SPV 10. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-isover-flex-40",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : isolant fibre de bois Isover. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-isover-panolene",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : laine de verre Panolène. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-ecophon-hygiene",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : Ecophon Hygiene Performance A (600 x 600). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-abloy-secudoor-evo-s",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : Secudoor Evo avec cylindre Protec². Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-gerflor-gti-el5",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : GTI EL5 Cleantech. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-forbo-coral-classic",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : Coral Classic. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-forbo-sarlon-traffic-19-db",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : Sarlon Traffic 19 dB. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-forbo-sarlon",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : Sarlon marche complète. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-seigneurie-pancrytex",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : Pancrytex D2 Aéro. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-zolpan-silextra-lisse",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : Silextra Lisse. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-forbo-bulletin-board",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : Bulletin Board. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-dormakaba-pextra-plus",
+   "notes": "Proposé à l'offre de EPRIM, attributaire du lot 4 (analyse finale du 22/10/2026) : cylindres pExtra plus (lot 4). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\36_Eprim (7-DOSSIER TECHNIQUE)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-arkoslight-a4870201nt",
+   "notes": "Proposé à l'offre de Sodelec Énergie, attributaire du lot 5 (analyse finale du 22/10/2026) : Pipe 2M Spot A4870201NT. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\27_Sodelec (FT.zip)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-arkoslight-a4620200n",
+   "notes": "Proposé à l'offre de Sodelec Énergie, attributaire du lot 5 (analyse finale du 22/10/2026) : Shot Light A4620200N. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\27_Sodelec (FT.zip)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-clareo-lighting-lineled-advance-fs",
+   "notes": "Proposé à l'offre de Sodelec Énergie, attributaire du lot 5 (analyse finale du 22/10/2026) : LineLED 49x32 Advance FS. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\27_Sodelec (FT.zip)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-clareo-lighting-downray-design-2",
+   "notes": "Proposé à l'offre de Sodelec Énergie, attributaire du lot 5 (analyse finale du 22/10/2026) : DownRay Design 2. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\27_Sodelec (FT.zip)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-clareo-lighting-stripled-advance-2",
+   "notes": "Proposé à l'offre de Sodelec Énergie, attributaire du lot 5 (analyse finale du 22/10/2026) : StripLED Advance 2. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\27_Sodelec (FT.zip)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-clareo-lighting-everpark-advance-4",
+   "notes": "Proposé à l'offre de Sodelec Énergie, attributaire du lot 5 (analyse finale du 22/10/2026) : EverPark Advance 4. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\27_Sodelec (FT.zip)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-axis-axis",
+   "notes": "Proposé à l'offre de Sodelec Énergie, attributaire du lot 5 (analyse finale du 22/10/2026) : caméras AXIS M2035-LE et M3085-V. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\27_Sodelec (FT.zip)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-behar-spark-eclat",
+   "notes": "Proposé à l'offre de Sodelec Énergie, attributaire du lot 5 (analyse finale du 22/10/2026) : BAES URA (Eclat, Knopé, Star) à la place des Behar du CCTP. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\27_Sodelec (FT.zip)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-trox-x-cube-x2",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : CTA X-Cube X2 configurée (XCC-X2-R035) avec module adiabatique. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-franke-286286",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : évier MAN 721-1200 inox (réf. 103.0086.961). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-geberit-renova-comfort",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : lavabo Renova Comfort PMR. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-geberit-276250000-276350000",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : lave-mains Renova Compact. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-geberit-renova",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : WC suspendu Renova (réf. 500.802.00.1). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-geberit-vitalis",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : WC Vitalis rallongé PMR. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-geberit-bambini",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : WC Bambini. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-geberit-geberit",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : receveur carré Renova à encastrer. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-ideal-standard-matura-2",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : Matura 2 S6494AC. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-delabie-d2670",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : mélangeur D2670. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-porcher-olyos",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : Olyos 2023 D2499AA (Ideal Standard). Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-ideal-standard-okyris-clinic",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : Okyris Clinic D2415AA. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-ideal-standard-ideal-standard",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : évier de service Service S593901. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-roth-equi",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : parois Equi, Equi XS, Cada, Filia. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-limatec-1550",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : siphon de sol 1550. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-exhale-exhale",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : brasseurs Exhale avec tige extensible pour faux plafond. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  },
+  {
+   "id": "ctn-acova-altima-vlm-hlm",
+   "notes": "Proposé à l'offre de Établissements Manuel Alves Pereira, attributaire du lot 6 (analyse finale du 22/10/2026) : radiateurs Altima. Fiche technique jointe à l'offre (Z:\\02-PROJETS\\CTN\\07-ACT\\03-OFFRES\\23_EtsAlves (annexe n°1 fiches techniques)). À valider au visa.",
+   "tags": [
+    "retenu à l'offre"
+   ]
+  }
+ ],
  "societes": {
+  "rector": {
+   "site": "rector.fr"
+  },
+  "weber": {
+   "site": "fr.weber"
+  },
+  "parexgroup": {
+   "site": "parexlanko.com",
+   "docs": "https://www.parexlanko.com/outils/documentheque"
+  },
+  "cermix": {
+   "site": "cermix.com"
+  },
+  "mosa": {
+   "site": "mosa.com",
+   "docs": "https://www.mosa.com/fr-fr/services/centre-de-telechargement",
+   "echantillons": {
+    "url": "https://www.mosa.com/fr-fr/services/demander-un-echantillon-de-couleur"
+   }
+  },
+  "schluter-systems": {
+   "site": "schlueter-systems.com"
+  },
+  "petersen tegl": {
+   "site": "en.petersen-tegl.dk",
+   "docs": "https://en.petersen-tegl.dk/downloads/"
+  },
+  "efisol": {
+   "site": "efisol.fr"
+  },
+  "ssab": {
+   "site": "ssab.com"
+  },
+  "vmzinc": {
+   "site": "vmzinc.fr"
+  },
+  "siplast": {
+   "site": "siplast.fr",
+   "docs": "https://siplast.fr/profil/maitres-ouvrage-maitres-oeuvre/telechargement-express/produit"
+  },
+  "dorken": {
+   "site": "doerken.com"
+  },
+  "soprema": {
+   "site": "soprema.fr"
+  },
+  "dani alu": {
+   "site": "danialu.fr"
+  },
+  "saint-gobain": {
+   "site": "saint-gobain-glass.fr"
+  },
+  "swisspacer": {
+   "site": "swisspacer.com"
+  },
+  "mermet": {
+   "site": "sunscreen-mermet.com"
+  },
+  "dormakaba": {
+   "site": "dormakaba.com"
+  },
+  "vachette": {
+   "site": "vachette.fr"
+  },
+  "nbk": {
+   "site": "nbkterracotta.com"
+  },
+  "placo": {
+   "site": "placo.fr"
+  },
+  "isover": {
+   "site": "isover.fr"
+  },
+  "ecophon": {
+   "site": "ecophon.com"
+  },
+  "knauf": {
+   "site": "knauf.fr"
+  },
+  "malerba": {
+   "site": "malerba.fr"
+  },
+  "abloy": {
+   "site": "abloy.com"
+  },
+  "bricard": {
+   "site": "bricard.com"
+  },
+  "bezault": {
+   "site": "bezault.com"
+  },
+  "polyrey": {
+   "site": "polyrey.com"
+  },
+  "but": {
+   "site": "but.fr"
+  },
+  "forbo": {
+   "site": "forbo.com"
+  },
+  "gerflor": {
+   "site": "gerflor.fr"
+  },
+  "seigneurie": {
+   "site": "seigneurie.com"
+  },
+  "zolpan": {
+   "site": "zolpan.fr"
+  },
+  "direct signaletique": {
+   "site": "directsignaletique.com"
+  },
+  "kme": {
+   "site": "kme.com"
+  },
+  "armacell": {
+   "site": "armacell.com"
+  },
+  "chaffoteaux": {
+   "site": "chaffoteaux.fr"
+  },
+  "atlantic": {
+   "site": "atlantic.fr",
+   "notes": "Avant-vente PAC et chaudières : 03 51 42 70 42 ; formations : 04 72 10 27 69. Direction PAC et chaudières : 58 avenue du Général Leclerc, 92340 Bourg-la-Reine."
+  },
+  "girpi": {
+   "site": "girpi.com",
+   "docs": "https://www.girpi.com/documentation/"
+  },
+  "geberit": {
+   "site": "geberit.fr"
+  },
+  "ideal standard": {
+   "site": "idealstandard.fr"
+  },
+  "porcher": {
+   "site": "porcher.com"
+  },
+  "roth": {
+   "site": "roth-france.fr",
+   "commercial": {
+    "nom": "Bureau d'études Roth France",
+    "tel": "01 64 12 44 44",
+    "mail": "etudes@roth-france.fr"
+   },
+   "notes": "Roth France SAS, 78 rue Ampère, ZI, CS 20090, 77465 Lagny-sur-Marne Cedex."
+  },
+  "franke": {
+   "site": "franke.com"
+  },
+  "delabie": {
+   "site": "delabie.fr"
+  },
+  "trox": {
+   "site": "trox.fr"
+  },
+  "vim": {
+   "site": "vim.fr"
+  },
+  "anjos": {
+   "site": "anjos-ventilation.com"
+  },
+  "aldes": {
+   "site": "aldes.fr"
+  },
+  "metu": {
+   "site": "metu.de"
+  },
+  "exhale": {
+   "site": "exhalefans.com"
+  },
+  "acova": {
+   "site": "acova.fr",
+   "notes": "Radiateurs et sèche-serviettes, groupe Zehnder."
+  },
+  "danfoss": {
+   "site": "danfoss.com"
+  },
+  "armstrong": {
+   "site": "armstronginternational.com"
+  },
+  "mupro": {
+   "site": "mupro.com"
+  },
+  "straub": {
+   "site": "straub.ch"
+  },
+  "legrand": {
+   "site": "legrand.fr",
+   "docs": "https://www.legrand.fr/pro/catalogue"
+  },
+  "beg": {
+   "site": "beg-luxomat.com"
+  },
+  "wieland": {
+   "site": "wieland-electric.com"
+  },
+  "hilti": {
+   "site": "hilti.fr"
+  },
+  "philips": {
+   "site": "lighting.philips.fr"
+  },
+  "arkoslight": {
+   "site": "arkoslight.com"
+  },
+  "honeywell": {
+   "site": "honeywell.com"
+  },
+  "axis": {
+   "site": "axis.com"
+  },
+  "milestone": {
+   "site": "milestonesys.com"
+  },
+  "gigaset": {
+   "site": "gigaset.com"
+  },
+  "mitel": {
+   "site": "mitel.com"
+  },
+  "keim": {
+   "site": "keim.com",
+   "docs": "https://www.keim.com/services/downloads/technical-data-sheets/"
+  },
+  "tollens": {
+   "site": "tollens.com",
+   "docs": "https://www.tollens.com/content/download/126567/file/Tollens.LePro2026.BD.pdf",
+   "notes": "Cromology. Peintures, enduits Artis, façades et imperméabilité, ITE Toll-O-Therm, minéraux Viero. Catalogue Le Pro 2026 en lien documentation."
+  },
+  "bluetek": {
+   "site": "bluetek.fr"
+  },
+  "griesser": {
+   "site": "griesser.fr"
+  },
+  "duco": {
+   "site": "duco.eu"
+  },
+  "marcal": {
+   "site": "marcal-signalisation.com"
+  },
+  "cegecol": {
+   "site": "cegecol.com"
+  },
+  "pavigres": {
+   "site": "pavigres.com"
+  },
+  "villeroy & boch": {
+   "site": "villeroy-boch.fr",
+   "docs": "https://villeroy-boch-tiles.com/fr/services/centre-de-telechargement/",
+   "echantillons": {
+    "url": "https://villeroy-boch-tiles.com/fr/services/demande-dechantillon/"
+   }
+  },
+  "beissier": {
+   "site": "beissier.fr"
+  },
+  "reflex": {
+   "site": "reflex-winkelmann.com"
+  },
+  "diehl metering": {
+   "site": "diehl.com"
+  },
+  "brugman": {
+   "site": "brugman.eu"
+  },
+  "oventrop": {
+   "site": "oventrop.com"
+  },
+  "big foot": {
+   "site": "bigfootsupports.com"
+  },
+  "presto": {
+   "site": "presto.fr"
+  },
+  "nicoll": {
+   "site": "nicoll.fr"
+  },
+  "schneider electric": {
+   "site": "se.com"
+  },
+  "socomec": {
+   "site": "socomec.fr"
+  },
+  "bticino": {
+   "site": "bticino.com"
+  },
+  "sylvania": {
+   "site": "sylvania-lighting.com"
+  },
   "duravit": {
    "site": "duravit.fr"
   },
@@ -30288,9 +42890,6 @@ window.TD_DONNEES = {
   },
   "wienerberger": {
    "site": "wienerberger.fr"
-  },
-  "schluter-systems": {
-   "site": "schlueter-systems.com"
   },
   "porcelanosa": {
    "site": "porcelanosa.com"
@@ -30339,12 +42938,6 @@ window.TD_DONNEES = {
   "heras": {
    "site": "heras.fr"
   },
-  "placo": {
-   "site": "placo.fr"
-  },
-  "knauf": {
-   "site": "knauf.fr"
-  },
   "siniat": {
    "site": "siniat.fr"
   },
@@ -30385,30 +42978,16 @@ window.TD_DONNEES = {
   "ardemo": {
    "site": "ardemo-france.com"
   },
-  "legrand": {
-   "site": "legrand.fr",
-   "docs": "https://www.legrand.fr/pro/catalogue"
-  },
   "hager": {
    "site": "hager.com/fr",
    "docs": "https://hager.com/fr/centre-de-telechargement/recherche"
   },
-  "schneider electric": {
-   "site": "se.com/fr/fr"
-  },
   "nexans": {
    "site": "nexans.fr"
-  },
-  "aldes": {
-   "site": "aldes.fr"
   },
   "daikin": {
    "site": "daikin.fr",
    "docs": "https://www.daikin.fr/fr_fr/famille-produits.html"
-  },
-  "atlantic": {
-   "site": "atlantic.fr",
-   "notes": "Avant-vente PAC et chaudières : 03 51 42 70 42 ; formations : 04 72 10 27 69. Direction PAC et chaudières : 58 avenue du Général Leclerc, 92340 Bourg-la-Reine."
   },
   "france air": {
    "site": "france-air.com",
@@ -30416,12 +42995,6 @@ window.TD_DONNEES = {
   },
   "comap": {
    "site": "comap.aalberts-hfc.com/fr"
-  },
-  "nicoll": {
-   "site": "nicoll.fr"
-  },
-  "delabie": {
-   "site": "delabie.fr"
   },
   "watts": {
    "site": "watts.eu/fr"
@@ -30444,23 +43017,16 @@ window.TD_DONNEES = {
   "hormann": {
    "site": "hormann.fr"
   },
-  "seigneurie": {
-   "site": "seigneurie.com"
-  },
   "sikkens": {
-   "site": "sikkens.fr"
-  },
-  "tollens": {
-   "site": "tollens.com"
+   "site": "sikkens.fr",
+   "docs": "https://www.sikkens.fr/fr/documentation-technique",
+   "echantillons": {
+    "url": "https://www.sikkenssamples.com/samples"
+   },
+   "notes": "AkzoNobel Decorative Paints France. Peintures, façades, ITE Globatherm, enduits Polyfilla Pro, lasures Cetol."
   },
   "tarkett": {
    "site": "professionnels.tarkett.fr"
-  },
-  "gerflor": {
-   "site": "gerflor.fr"
-  },
-  "forbo": {
-   "site": "forbo.com/flooring/fr-fr"
   },
   "aco": {
    "site": "aco.fr"
@@ -30480,9 +43046,6 @@ window.TD_DONNEES = {
   "sika": {
    "site": "fra.sika.com"
   },
-  "dorken": {
-   "site": "doerken.com"
-  },
   "texaa": {
    "site": "texaa.fr",
    "docs": "https://texaa.fr/telechargement/",
@@ -30497,37 +43060,20 @@ window.TD_DONNEES = {
   "logelis": {
    "site": "logelis.com"
   },
-  "saint-gobain": {
-   "site": "saint-gobain-glass.fr"
-  },
   "vitra tiles": {
    "site": "vitratiles.com",
    "docs": "https://www.vitratiles.com/fr-fr/catalog/"
-  },
-  "emaux de briare": {
-   "site": "emauxdebriare.com"
   },
   "agc": {
    "site": "agc-yourglass.com",
    "docs": "https://www.agc-yourglass.com/fr-FR/bibliotheque-de-documents"
   },
-  "mosa": {
-   "site": "mosa.com",
-   "docs": "https://www.mosa.com/fr-fr/services/centre-de-telechargement",
-   "echantillons": {
-    "url": "https://www.mosa.com/fr-fr/services/demander-un-echantillon-de-couleur"
-   }
-  },
   "bisazza": {
    "site": "bisazza.com",
    "docs": "https://www.bisazza.com/fr/Section-technique/"
   },
-  "villeroy & boch": {
-   "site": "villeroy-boch.fr",
-   "docs": "https://villeroy-boch-tiles.com/fr/services/centre-de-telechargement/",
-   "echantillons": {
-    "url": "https://villeroy-boch-tiles.com/fr/services/demande-dechantillon/"
-   }
+  "emaux de briare": {
+   "site": "emauxdebriare.com"
   },
   "lago": {
    "site": "lagodesign.com",
@@ -30594,78 +43140,6 @@ window.TD_DONNEES = {
    "docs": "https://www.cosentino.com/en-ca/professional/dks-system/",
    "notes": "Dekton : systèmes de façade DKS (collé sur ITE), DKB (collé), DKC, DKT (ventilés)."
   },
-  "poujoulat": {
-   "site": "poujoulat.fr",
-   "commercial": {
-    "nom": "Service technique Poujoulat",
-    "tel": "05 49 04 40 40",
-    "mail": "infos@poujoulat.fr"
-   },
-   "notes": "Poujoulat SA, CS 50016, 79270 Saint-Symphorien. Conduits de fumée et sorties de toit, avis techniques du CSTB (groupe spécialisé 14.2)."
-  },
-  "viessmann": {
-   "site": "viessmann.fr",
-   "notes": "Viessmann France SAS, avenue André Gouy, 57380 Faulquemont."
-  },
-  "finimetal": {
-   "site": "purmo.com",
-   "docs": "https://www.batiproduits.com/fiche/produits/radiateur-avec-panneaux-en-acier-reggane-3010-co-p316341280.html",
-   "notes": "Marque de radiateurs du groupe Purmo (fiches techniques hébergées sur purmo.com)."
-  },
-  "hudevad": {
-   "site": "hudevad.com",
-   "notes": "Radiateurs danois, distribués en France par Plomb'Art."
-  },
-  "estrada": {
-   "site": "estrada.fr",
-   "commercial": {
-    "nom": "Showroom Estrada Raspail",
-    "tel": "01 48 78 80 59"
-   },
-   "notes": "97 boulevard Raspail, 75006 Paris. Distributeur et concepteur de radiateurs."
-  },
-  "acova": {
-   "site": "acova.fr",
-   "notes": "Radiateurs et sèche-serviettes, groupe Zehnder."
-  },
-  "stuv": {
-   "site": "stuv.com",
-   "notes": "Fabricant belge de poêles et foyers, Bois-de-Villers."
-  },
-  "godin": {
-   "site": "godin.fr"
-  },
-  "campa": {
-   "site": "campa.fr"
-  },
-  "rothelec": {
-   "site": "rothelec.fr"
-  },
-  "chappee": {
-   "site": "chappee.com"
-  },
-  "elmleblanc": {
-   "site": "elmleblanc.fr"
-  },
-  "sofath": {
-   "site": "sofath.com"
-  },
-  "butagaz": {
-   "site": "butagaz.fr"
-  },
-  "acome": {
-   "site": "acome.com",
-   "notes": "Plancher chauffant Thermacome, câbles et câblage du bâtiment."
-  },
-  "roth": {
-   "site": "roth-france.fr",
-   "commercial": {
-    "nom": "Bureau d'études Roth France",
-    "tel": "01 64 12 44 44",
-    "mail": "etudes@roth-france.fr"
-   },
-   "notes": "Roth France SAS, 78 rue Ampère, ZI, CS 20090, 77465 Lagny-sur-Marne Cedex."
-  },
   "airwell": {
    "site": "airwell.com",
    "docs": "https://lh.airwell-res.com/",
@@ -30697,6 +43171,128 @@ window.TD_DONNEES = {
    "site": "bluetek.fr",
    "docs": "https://www.batiproduits.com/fiche/fabricant/hexadome-48698/",
    "notes": "Luynes (37). Produits commercialisés par Bluetek depuis 2016 (groupe Adexsi, Soprema)."
+  },
+  "poujoulat": {
+   "site": "poujoulat.fr",
+   "commercial": {
+    "nom": "Service technique Poujoulat",
+    "tel": "05 49 04 40 40",
+    "mail": "infos@poujoulat.fr"
+   },
+   "notes": "Poujoulat SA, CS 50016, 79270 Saint-Symphorien. Conduits de fumée et sorties de toit, avis techniques du CSTB (groupe spécialisé 14.2)."
+  },
+  "viessmann": {
+   "site": "viessmann.fr",
+   "notes": "Viessmann France SAS, avenue André Gouy, 57380 Faulquemont."
+  },
+  "finimetal": {
+   "site": "purmo.com",
+   "docs": "https://www.batiproduits.com/fiche/produits/radiateur-avec-panneaux-en-acier-reggane-3010-co-p316341280.html",
+   "notes": "Marque de radiateurs du groupe Purmo (fiches techniques hébergées sur purmo.com)."
+  },
+  "hudevad": {
+   "site": "hudevad.com",
+   "notes": "Radiateurs danois, distribués en France par Plomb'Art."
+  },
+  "estrada": {
+   "site": "estrada.fr",
+   "commercial": {
+    "nom": "Showroom Estrada Raspail",
+    "tel": "01 48 78 80 59"
+   },
+   "notes": "97 boulevard Raspail, 75006 Paris. Distributeur et concepteur de radiateurs."
+  },
+  "stuv": {
+   "site": "stuv.com",
+   "notes": "Fabricant belge de poêles et foyers, Bois-de-Villers."
+  },
+  "godin": {
+   "site": "godin.fr"
+  },
+  "campa": {
+   "site": "campa.fr"
+  },
+  "rothelec": {
+   "site": "rothelec.fr"
+  },
+  "chappee": {
+   "site": "chappee.com"
+  },
+  "elmleblanc": {
+   "site": "elmleblanc.fr"
+  },
+  "sofath": {
+   "site": "sofath.com"
+  },
+  "butagaz": {
+   "site": "butagaz.fr"
+  },
+  "acome": {
+   "site": "acome.com",
+   "notes": "Plancher chauffant Thermacome, câbles et câblage du bâtiment."
+  },
+  "boulenger": {
+   "notes": "Boulenger & Cie, Villetaneuse (93). Sols caoutchouc coulés sans joints (Haltopex, Cibélastic, Terrazoflex, Nuansol, Wigoflex).",
+   "site": "boulenger.fr"
+  },
+  "tlm": {
+   "site": "groupe-tlm.com",
+   "notes": "Prémilhat (03). Dalles PVC clipsables et résines de sol."
+  },
+  "janvic": {
+   "notes": "Montmagny (95). Résines époxy et polyuréthane, peintures de sol, étanchéité liquide, cuvelage.",
+   "site": "janvic.fr"
+  },
+  "solastra": {
+   "site": "solastra.fr",
+   "notes": "Applicateur de sols industriels en résine (groupe RCR Industrial Flooring). La Wantzenau, Paris, Lille, Lyon."
+  },
+  "ardex": {
+   "site": "ardex-france.fr",
+   "notes": "Ragréages, colles et joints carrelage, étanchéité, PANDOMO."
+  },
+  "holcim": {
+   "site": "lafarge.fr",
+   "notes": "Holcim en France : marque Lafarge (ciments ECOPlanet, bétons ECOPact, Agilia, Artevia, Ductal, Airium)."
+  },
+  "aliplast": {
+   "site": "aliplast.com"
+  },
+  "terreal": {
+   "site": "terreal.com"
+  },
+  "franciaflex": {
+   "site": "franciaflex.com"
+  },
+  "ecib": {
+   "site": "ecib-bruit.com"
+  },
+  "polytech": {
+   "site": "polytech-bp.fr"
+  },
+  "breheret": {
+   "site": "breheret.com"
+  },
+  "la croisee ds": {
+   "site": "lacroiseeds.fr"
+  },
+  "hartmann tresore": {
+   "site": "hartmann-tresore.fr"
+  },
+  "foussier": {
+   "site": "foussier.fr"
+  },
+  "am locks": {
+   "site": "amlocks.pt"
+  },
+  "cfp": {
+   "site": "cfp.fr"
+  },
+  "ldm equipement": {
+   "site": "ldmequipement.fr"
+  },
+  "sata": {
+   "site": "sata.fr"
   },
   "la rochere": {
    "site": "larochere.com"
@@ -30753,6 +43349,28 @@ window.TD_DONNEES = {
   "https://www.duravit.com/products/all_series/starck_3.com-en.html": "https://www.duravit.com/en-en/products/all-series/starck-3/",
   "https://www.otis.com/documents/256045/35422495/Brochure_Gen2_Life_FR_CH.pdf": null,
   "https://www.otis.com/documents/256045/32972881/Brochure+Gen2+Stream+2019.pdf/5aefeb68-7932-5039-f458-df7025a6b8d0?t=1606327370952": null,
-  "https://www.otis.com/documents/256045/32972881/Gen2home_FR_2020_FINAL.pdf": null
+  "https://www.otis.com/documents/256045/32972881/Gen2home_FR_2020_FINAL.pdf": null,
+  "https://www.tollens.com/content/download/16864/file/Brochure_Artis_site_Tollens.pdf": null,
+  "https://media.tollens.com/media/catalog/akeneo_connector/media_files/F/i/Fiche_Technique_TOLL_O_PERL_T5_Avr22_d86b.pdf": "https://www.tollens.com/produit/toll-o-perl-t5",
+  "https://media.tollens.com/media/catalog/akeneo_connector/media_files/F/i/Fiche_Technique_TOLL_O_PLEX_NC_Janv24_7292.pdf": null,
+  "https://media.tollens.com/media/catalog/akeneo_connector/media_files/F/i/Fiche_Technique_TOL_DUOCRYL_NC_Aout19_8807.pdf": "https://www.tollens.com/download/fiche_technique/TBA_TODUCR/1/Tol+Duocryl-fiche_technique.pdf",
+  "https://media.tollens.com/media/catalog/akeneo_connector/media_files/f/i/fiche_technique_renogem_d2_d3_nc_juil2466d0823eccc9d_06e3.pdf": "https://www.tollens.com/download/fiche_technique/TBA_RENOGE/1/Renogem-fiche_technique.pdf",
+  "https://tollens.com/content/download/14146/file/TOLLENS_GUIDE DE CHOIX FACADE_09 2024- 3.pdf": null,
+  "https://media.tollens.com/media/catalog/akeneo_connector/media_files/F/i/Fiche_Technique_TOL_FIX_NC_Juil23_1226.pdf": null,
+  "https://media.tollens.com/media/catalog/akeneo_connector/media_files/E/L/ELASTOFIX_PIGMENTE_NC_Juil19_454f.pdf": "https://www.tollens.com/produit/elastofix-pigmente",
+  "https://www.tollens.com/content/download/137763/file/Fiche-Technique-Viero-Tollens-VISOLCALCE- Extra-Fin.pdf": null,
+  "https://www.batiproduits.com/fiche/produits/sol-coule-pour-trafic-intense-a-usage-interieur-p68929798.html": "https://boulenger.fr/gamme/haltopex-terrazoflex-h/",
+  "https://www.batiproduits.com/fiche/produits/sol-coule-sans-joint-pour-trafic-intense-terraz-p68929813.html": "https://boulenger.fr/gamme/cibelastic-terrazoflex-c/",
+  "https://www.batiproduits.com/fiche/produits/sol-coule-poreux-dur-terrazoflex-type-e-p68929803.html": "https://boulenger.fr/gamme/terrazzo-flex-e/",
+  "https://www.batiproduits.com/fiche/fabricant/boulenger-cie-46873/": "https://boulenger.fr/",
+  "https://www.batiproduits.com/fiche/produits/sol-en-caoutchouc-coule-sans-joint-pour-encapsula-p186276975.html": "https://configurateur.boulenger.fr/produits/wigoflex",
+  "https://www.tlm-systems.com": "https://www.groupe-tlm.com/accueil",
+  "https://www.batiproduits.com/fiche/fabricant/janvic-44778/": null,
+  "https://handyhomeottevaere.be/assets/images/moxie/shop/navision/TF_FR_ARK3325.pdf": "https://www.ardex.ch/CH-fr/produits/enduits-de-ragreage-pour-sols/details-du-produit/ardex-k-33",
+  "https://handyhomeottevaere.be/assets/images/moxie/shop/navision/TF_FR_ARK15DR25.pdf": "https://www.ardex.ch/CH-fr/produits/enduits-de-ragreage-pour-sols/details-du-produit/ardex-k-15-dr",
+  "https://www.sanitaire.fr/ft_ardex_x77_flex_gris_2261.pdf": "https://www.ardex-france.fr/produits/mortiers-colles-carrelage/ardex-x-77-flex",
+  "https://www.handyhomeottevaere.be/assets/images/moxie/shop/navision/TF_FR_PARLN85.pdf": "https://www.ardex-france.fr/produits/etancheites/ardex-8-9",
+  "https://pro.robin.lu/sites/robin.lu/files/product-line/267 PANDOMO PR fr.pdf": "https://www.pandomo.com/BeNeLux-fr/pandomo-floor/pandomo-k1/",
+  "https://holcim.com/brand-family": "https://www.lafarge.fr/sites/france/files/2024-01/fiche-produit-airium.pdf"
  }
 };
