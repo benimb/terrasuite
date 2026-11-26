@@ -1,8 +1,8 @@
 window.TD_DONNEES = {
  "app": "TerraDocs",
  "format": 1,
- "stamp": "base-publique-2026-11-19",
- "label": "base publique : gammes de fabricants de tous corps d'état, carrelage (VitrA Tiles, Mosa, Villeroy & Boch), verre émaillé et laqué (Saint-Gobain, AGC), mosaïques (Bisazza, Émaux de Briare), mobilier LAGO, ArcelorMittal (cassettes, bardages, bacs), Sto, nora, Geggus, Koramic, panneaux décoratifs et acoustiques (Arpa Industriale FENIX, Resopal, Hubler, Marotte), Dekton sur ITE (Cosentino DKS), chauffage et fumisterie (Poujoulat, Atlantic, Viessmann, Finimetal), Hudevad, Estrada, Acova, Stûv, Godin, Campa, Rothelec, Chappée, elm.leblanc, Sofath, Butagaz, Acome, Roth, CVC (Airwell, Daikin, Technibel), désenfumage et éclairage zénithal (Madicob, Domeca, Alcaud, Hexadome HEXAONDE), protection passive incendie (Promat), verriers et menuiseries (La Rochère, Saverbat, Lamberts, Pilkington, Saint-Gobain Glass, AGC, 3form, Kawneer, 3M)",
+ "stamp": "base-publique-2026-11-26",
+ "label": "base publique : ajout Egger, Grosjean Solutions Bois, compléments Sika",
  "lots": [
   {
    "id": "L00",
@@ -23,7 +23,8 @@ window.TD_DONNEES = {
     "Blocs béton",
     "Planchers préfabriqués",
     "Mastics et joints",
-    "Briques et pavés de verre"
+    "Briques et pavés de verre",
+    "Coffrages"
    ]
   },
   {
@@ -33,7 +34,8 @@ window.TD_DONNEES = {
    "sous": [
     "Bois d'ingénierie (lamellé-collé, CLT, poutres en I)",
     "Connecteurs et fixations",
-    "Murs à ossature bois préfabriqués"
+    "Murs à ossature bois préfabriqués",
+    "Panneaux de construction (OSB, DHF)"
    ]
   },
   {
@@ -58,7 +60,8 @@ window.TD_DONNEES = {
    "sous": [
     "Fenêtres de toit plat, lanterneaux",
     "Désenfumage naturel (exutoires DENFC)",
-    "Éclairage zénithal continu (voûtes filantes)"
+    "Éclairage zénithal continu (voûtes filantes)",
+    "Membranes synthétiques et étanchéité liquide"
    ]
   },
   {
@@ -152,7 +155,10 @@ window.TD_DONNEES = {
    "sous": [
     "Sols PVC",
     "Sols caoutchouc",
-    "Tapis d'entrée encastrés"
+    "Tapis d'entrée encastrés",
+    "Sols coulés résine",
+    "Chapes et ragréages",
+    "Sols stratifiés et design"
    ]
   },
   {
@@ -29757,6 +29763,511 @@ window.TD_DONNEES = {
    "verifie": "",
    "cree": "2026-11-19",
    "maj": "2026-11-19"
+  },
+  {
+   "id": "sika-sols-resine",
+   "lot": "L12",
+   "nom": "Sols résine Sikafloor (époxy, polyuréthane, ESD)",
+   "fabricant": "Sika",
+   "reference": "Sikafloor",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "sol résine",
+    "époxy",
+    "polyuréthane",
+    "industriel",
+    "parking"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://fra.sika.com/dam/dms/fr01/p/fr-bro-gamme-preparation-supports.pdf",
+     "titre": "Guide de choix préparation des supports (primaires, ragréages Sikafloor)"
+    },
+    {
+     "type": "cat",
+     "url": "https://fra.sika.com/dms/getdocument.get/856f0130-95ca-43f0-ad30-67013879cba8/fr-bro-data-center.pdf",
+     "titre": "Brochure data centers (sols ESD, étanchéité)"
+    }
+   ],
+   "sous": "Sols coulés résine",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-26",
+   "maj": "2026-11-26"
+  },
+  {
+   "id": "sika-chapes-ragreages",
+   "lot": "L12",
+   "nom": "Chapes et ragréages SikaScreed et Sikafloor Level",
+   "fabricant": "Sika",
+   "reference": "SikaScreed Chape-50, HardTop-60/70, SikaScreed-55 Chape Fluide, Sikafloor-300 Rapid Level, 410 Level",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "chape",
+    "ragréage",
+    "primaire",
+    "préparation support"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://fra.sika.com/dam/dms/fr01/p/fr-bro-gamme-preparation-supports.pdf",
+     "titre": "Gamme préparation de supports, guide de choix"
+    }
+   ],
+   "sous": "Chapes et ragréages",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-26",
+   "maj": "2026-11-26"
+  },
+  {
+   "id": "sika-reparation-beton",
+   "lot": "L02",
+   "nom": "Réparation et protection des bétons Sika (EN 1504)",
+   "fabricant": "Sika",
+   "reference": "Sika MonoTop, SikaRep, SikaTop, Sikagard, Sika Ferrogard",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "réparation béton",
+    "EN 1504",
+    "mortier",
+    "protection",
+    "renforcement"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://fra.sika.com/dam/dms/fr01/y/fr-bro-construction-renovation-parking.pdf",
+     "titre": "Construction et rénovation de parkings (réparation, protection, renforcement)"
+    }
+   ],
+   "sous": "Mortiers techniques, réparation des bétons",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-26",
+   "maj": "2026-11-26"
+  },
+  {
+   "id": "sika-cuvelage",
+   "lot": "L02",
+   "nom": "Étanchéité des sous-sols Sika (membranes Sikaplan, bandes d'arrêt d'eau)",
+   "fabricant": "Sika",
+   "reference": "Sikaplan WT, Sika Waterbar",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "cuvelage",
+    "sous-sol",
+    "membrane",
+    "étanchéité"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://fra.sika.com/dam/dms/fr01/y/fr-bro-construction-renovation-parking.pdf",
+     "titre": "Brochure parkings : étanchéité des sous-sols"
+    }
+   ],
+   "sous": "Imperméabilisation, cuvelage",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-26",
+   "maj": "2026-11-26"
+  },
+  {
+   "id": "sika-etancheite-toiture",
+   "lot": "L05",
+   "nom": "Étanchéité de toiture Sika (Sarnafil, Sikaplan, Sikalastic)",
+   "fabricant": "Sika",
+   "reference": "Sarnafil, Sikaplan, Sikalastic",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "toiture terrasse",
+    "membrane PVC",
+    "FPO",
+    "étanchéité liquide"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://fra.sika.com/dms/getdocument.get/856f0130-95ca-43f0-ad30-67013879cba8/fr-bro-data-center.pdf",
+     "titre": "Étanchéité de dalles et toitures (Sarnafil, Sikaplan, Sikalastic)"
+    },
+    {
+     "type": "cat",
+     "url": "https://fra.sika.com/dam/dms/fr01/y/fr-bro-construction-renovation-parking.pdf",
+     "titre": "Toitures-terrasses accessibles à la circulation"
+    }
+   ],
+   "sous": "Membranes synthétiques et étanchéité liquide",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-26",
+   "maj": "2026-11-26"
+  },
+  {
+   "id": "sika-gamme-prescription",
+   "lot": "L00",
+   "nom": "Gamme Sika : guide prescription (adjuvants, mortiers, colles, mastics, sols, toitures)",
+   "fabricant": "Sika",
+   "reference": "",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "prescription",
+    "gamme"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://fra.sika.com/dms/getdocument.get/2f9fbe73-0e8a-4e1c-bba0-c470d54093fd/fr-bro-prescription.pdf",
+     "titre": "Brochure prescription Sika France"
+    }
+   ],
+   "sous": "",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-26",
+   "maj": "2026-11-26"
+  },
+  {
+   "id": "egger-eurodekor",
+   "lot": "L10",
+   "nom": "Panneaux mélaminés Eurodekor (particules, MDF, hydrofuges, ignifugés)",
+   "fabricant": "Egger",
+   "reference": "Eurodekor, collection Décors EGGER",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "mélaminé",
+    "panneau de particules",
+    "MDF",
+    "agencement",
+    "mobilier"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.egger.com/fr/interior/product/MELAMINFACEDBOARDS?country=FR",
+     "titre": "Panneaux mélaminés Eurodekor"
+    },
+    {
+     "type": "fdes",
+     "url": "https://www.egger.com/get_download/8ecf43b6-b5b6-45f7-881a-cb7b81bb7c94/Environmental_product_declaration_Eurodekor_Melamine_Faced_Chipboards.pdf",
+     "titre": "EPD Eurodekor (EN)"
+    },
+    {
+     "type": "autre",
+     "url": "https://downloads.egger.com/static/southwest/EDP/EDC26/ECD2026_Tableau_disponibilite_fr.pdf",
+     "titre": "Collection Décors 2026 : tableau de disponibilité"
+    }
+   ],
+   "sous": "Panneaux décoratifs (stratifiés HPL, compacts, placages, métal)",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-26",
+   "maj": "2026-11-26"
+  },
+  {
+   "id": "egger-stratifies",
+   "lot": "L10",
+   "nom": "Stratifiés et panneaux Feelwood, PerfectSense (mat, brillant, anti-traces)",
+   "fabricant": "Egger",
+   "reference": "Stratifié EGGER, Feelwood, PerfectSense Topmatt / Gloss, compacts",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "stratifié",
+    "HPL",
+    "laqué",
+    "mat",
+    "anti-traces",
+    "compact"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://downloads.egger.com/static/southwest/EGGER_VE_Campaign_Properties_List_Table_FR_VF.pdf?country=FR",
+     "titre": "Tableau des propriétés par surface"
+    },
+    {
+     "type": "site",
+     "url": "https://www.egger.com/fr/support/telechargements?country=FR",
+     "titre": "Centre de téléchargement Egger"
+    }
+   ],
+   "sous": "Panneaux décoratifs (stratifiés HPL, compacts, placages, métal)",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-26",
+   "maj": "2026-11-26"
+  },
+  {
+   "id": "egger-plans-travail",
+   "lot": "L20",
+   "nom": "Plans de travail Egger (stratifiés, compacts, PerfectSense)",
+   "fabricant": "Egger",
+   "reference": "Plans de travail stratifiés et compacts",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "plan de travail",
+    "cuisine",
+    "compact"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://downloads.egger.com/static/southwest/20220803_Brochure_Plans_travail_actualisation_Juillet2022_WEB.pdf",
+     "titre": "Brochure plans de travail"
+    }
+   ],
+   "sous": "Cuisines",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-26",
+   "maj": "2026-11-26"
+  },
+  {
+   "id": "egger-osb",
+   "lot": "L03",
+   "nom": "Panneaux OSB 3 et OSB 4 TOP Egger",
+   "fabricant": "Egger",
+   "reference": "EGGER OSB 3 (EN 300), OSB 4 TOP, 6 à 25 mm, rainure et languette",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "OSB",
+    "contreventement",
+    "plancher",
+    "ossature bois"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.egger.com/fr/building/product/OSBGENERAL",
+     "titre": "OSB Egger"
+    },
+    {
+     "type": "ft",
+     "url": "https://www.chausson.fr/media/article-document/210201",
+     "titre": "Brochure OSB Egger (copie distributeur)"
+    }
+   ],
+   "sous": "Panneaux de construction (OSB, DHF)",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-26",
+   "maj": "2026-11-26"
+  },
+  {
+   "id": "egger-dhf",
+   "lot": "L03",
+   "nom": "Panneau DHF Egger (pare-pluie rigide, toiture et murs)",
+   "fabricant": "Egger",
+   "reference": "EGGER DHF",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "DHF",
+    "pare-pluie",
+    "sous-toiture",
+    "ossature bois"
+   ],
+   "liens": [
+    {
+     "type": "cat",
+     "url": "https://www.egger.com/get_download/3897e97b-0fa5-42c5-a5b4-d6d5b84619e3/Brochure_institutionnelle.pdf?country=BE",
+     "titre": "Brochure institutionnelle Egger (produits construction)"
+    }
+   ],
+   "sous": "Panneaux de construction (OSB, DHF)",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-26",
+   "maj": "2026-11-26"
+  },
+  {
+   "id": "egger-sols",
+   "lot": "L12",
+   "nom": "Sols Egger PRO (stratifiés, Design GreenTec, LVT)",
+   "fabricant": "Egger",
+   "reference": "EGGER PRO stratifiés, Design GreenTec, LVT",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "sol stratifié",
+    "LVT",
+    "sans PVC"
+   ],
+   "liens": [
+    {
+     "type": "ft",
+     "url": "https://downloads.egger.com/static/southwest/EGGER_VE_Campaign_Properties_List_Table_FR_VF.pdf?country=FR",
+     "titre": "Tableau des propriétés (collection sols)"
+    }
+   ],
+   "sous": "Sols stratifiés et design",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-26",
+   "maj": "2026-11-26"
+  },
+  {
+   "id": "grosjean-panneaux-bruts",
+   "lot": "L10",
+   "nom": "Panneaux bruts : particules, contreplaqués, lattés, OSB, MDF, béton",
+   "fabricant": "Grosjean Solutions Bois",
+   "reference": "Négoce Wissous",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "négoce",
+    "panneau",
+    "contreplaqué",
+    "MDF",
+    "OSB"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://pro.grosjean-bois.com/categorie/panneaux/panneaux-bruts-a_a01",
+     "titre": "Panneaux bruts (catalogue pro)"
+    },
+    {
+     "type": "site",
+     "url": "https://pro.grosjean-bois.com/categorie/panneaux/panneaux-bruts/contreplaques-a_a01_002",
+     "titre": "Contreplaqués"
+    },
+    {
+     "type": "site",
+     "url": "https://pro.grosjean-bois.com/categorie/panneaux/panneaux-bruts/mdf-a_a01_005",
+     "titre": "MDF"
+    }
+   ],
+   "sous": "Habillages, agencements",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-26",
+   "maj": "2026-11-26"
+  },
+  {
+   "id": "grosjean-panneaux-decors",
+   "lot": "L10",
+   "nom": "Panneaux décors : mélaminés (Swiss Krono, Evola, Nebodesign), replaqués ébénisterie, plans de travail",
+   "fabricant": "Grosjean Solutions Bois",
+   "reference": "Négoce Wissous",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "négoce",
+    "mélaminé",
+    "replaqué",
+    "plan de travail"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://pro.grosjean-bois.com/categorie/panneaux/panneaux-decors-a_a02",
+     "titre": "Panneaux décors (catalogue pro)"
+    }
+   ],
+   "sous": "Panneaux décoratifs (stratifiés HPL, compacts, placages, métal)",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-26",
+   "maj": "2026-11-26"
+  },
+  {
+   "id": "grosjean-coffrage",
+   "lot": "L02",
+   "nom": "Contreplaqués de coffrage (pin import WBP, pin maritime CTBX)",
+   "fabricant": "Grosjean Solutions Bois",
+   "reference": "Négoce Wissous",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "coffrage",
+    "contreplaqué",
+    "CTBX"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://pro.grosjean-bois.com/categorie/panneaux/panneaux-coffrage-a_a03",
+     "titre": "Panneaux coffrage (catalogue pro)"
+    }
+   ],
+   "sous": "Coffrages",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-26",
+   "maj": "2026-11-26"
+  },
+  {
+   "id": "grosjean-bardages-terrasses",
+   "lot": "L06",
+   "nom": "Bardages et terrasses bois",
+   "fabricant": "Grosjean Solutions Bois",
+   "reference": "Négoce Wissous",
+   "statut": "ref",
+   "fav": false,
+   "tags": [
+    "négoce",
+    "bardage",
+    "terrasse",
+    "bois"
+   ],
+   "liens": [
+    {
+     "type": "site",
+     "url": "https://www.grosjean-bois.com/produits/",
+     "titre": "Produits : panneaux, bardages, terrasses"
+    }
+   ],
+   "sous": "Bardages",
+   "perf": "",
+   "projets": "",
+   "notes": "",
+   "verifie": "",
+   "cree": "2026-11-26",
+   "maj": "2026-11-26"
   }
  ],
  "societes": {
@@ -30208,6 +30719,13 @@ window.TD_DONNEES = {
   },
   "3m": {
    "site": "3mfrance.fr"
+  },
+  "egger": {
+   "site": "egger.com/fr"
+  },
+  "grosjean solutions bois": {
+   "site": "pro.grosjean-bois.com",
+   "notes": "Négoce bois et panneaux (groupement Nebopan). 2 rue Colbert, ZAC de Montavas, 91320 Wissous. 01 69 75 88 88, contact@grosjean-bois.com. Atelier découpe, usinage numérique, placage de chants."
   }
  },
  "liensRemplaces": {
