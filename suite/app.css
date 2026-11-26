@@ -374,3 +374,5 @@ tfoot td{border-top:2px solid var(--line)}
   .mnav .phsel{box-sizing:border-box;max-width:100%;min-width:0}
   .mnav .phsel select{min-width:0;width:100%;text-overflow:ellipsis}
 }
+/* 0.10.3 : sous les boutons d'Android (barre de navigation), le module s'arrête au-dessus */
+@media (max-width:899px){ .ts.inapp .ts-main,.ts.immersive .ts-main{padding-bottom:var(--safe-b)} }

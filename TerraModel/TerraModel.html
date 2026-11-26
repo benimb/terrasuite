@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>TerraModel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -83,7 +83,8 @@ html.ts-embed .brand small{display:none}
 .srow .snm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.srow.root{font-style:italic}.srow .ibtn.sm{width:26px;height:26px;font-size:13px;padding:0}
 .sbadge{background:var(--accent);color:var(--accent-ink);border-radius:3px;padding:0 4px;font-weight:600}.einfo .nivt th{width:34%;font-weight:600}
 .err{color:#C0392B}
-.ounit{display:none!important}@media (max-width:760px){.ounit{display:flex!important}.funit{display:none!important}}
+.ounit{display:none!important}
+@media (max-width:760px){.info{display:none}} footer.bar{padding-bottom:max(5px,env(safe-area-inset-bottom))}@media (max-width:760px){.ounit{display:flex!important}.funit{display:none!important}}
 .pv{font-size:11px;border-radius:4px;padding:1px 5px;white-space:nowrap;display:inline-block;max-width:150px;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}.pv.plu{background:#E6F0E2;color:#2E6B3F}.pv.sa{background:#E7ECF7;color:#2F4F9A}.pv.hy{background:#F6EAD6;color:#8A5A12}
 .nivt.env input{width:58px}.nivt.env td{white-space:nowrap}.nivt.env th{font-weight:500}
 .nivt{width:100%;border-collapse:collapse;font-size:13px} .nivt th,.nivt td{padding:2px 3px;border-bottom:1px solid var(--line);text-align:left} .nivt .num{text-align:right;white-space:nowrap} .nivt td:last-child{white-space:nowrap} .nivt input{width:100%;min-width:0;font:inherit;padding:2px 4px;border:1px solid var(--line);border-radius:4px}
@@ -997,7 +998,7 @@ function curvedOffset(M, set, d) {
 
 </script>
 <script>
-const APP_VERSION = '0.13.2';
+const APP_VERSION = '0.13.3';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const NF2 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 /* unités : la maquette est en mètres ; les longueurs s'affichent et se saisissent dans l'unité choisie (m, cm, mm) ; surfaces en m², volumes en m³ */
