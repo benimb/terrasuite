@@ -202,6 +202,7 @@ html.ts-embed .brand small{display:none}
         <button id="bImp">Importer…<span class="k">DWG, DXF, OBJ, DAE, glTF</span></button>
         <button id="bSave">Enregistrer une copie<span class="k">Ctrl+S</span></button>
         <hr>
+        <button id="bIfc">Exporter en IFC (BIM)<span class="k">Revit, ArchiCAD…</span></button>
         <button id="bObj">Exporter en OBJ<span class="k">Blender, SketchUp…</span></button>
         <button id="bDxf">Exporter en DXF 2D<span class="k">plan, coupe, élévation</span></button>
         <button id="bImgM">Image de la vue (PNG)…</button>
@@ -1052,7 +1053,7 @@ function planarArrange(M, keys, prio) {
 
 </script>
 <script>
-const APP_VERSION = '0.14';
+const APP_VERSION = '0.15';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const NF2 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 /* unités : la maquette est en mètres ; les longueurs s'affichent et se saisissent dans l'unité choisie (m, cm, mm) ; surfaces en m², volumes en m³ */
@@ -2460,6 +2461,7 @@ const HELP = `<h3>Unités</h3><table>
 <tr><td>Groupes</td><td>Sélection puis « Grouper » (Ctrl+G) : la géométrie du groupe reste à part, elle ne se soude pas au reste. Un clic sélectionne tout le groupe, M le déplace (Ctrl : copie), double-clic l'ouvre pour le modifier (le reste passe en grisé), Échap le referme. « Dégrouper » (Ctrl+Maj+G) remet la géométrie dans la maquette.</td></tr>
 <tr><td>Importer</td><td>DWG et DXF : tracé 2D à plat par calques, pour dessiner dessus (les accroches suivent le tracé), ou faces 3D. Modèles OBJ, DAE (SketchUp : Exporter &gt; Modèle 3D), glTF. Chaque import arrive dans un groupe. Le DWG est lu directement (premier import : quelques secondes de chargement) ; s'il échoue, passer par un export DXF. SKP : passer par l'export DAE, OBJ ou glTF de SketchUp.</td></tr>
 <tr><td>Image</td><td>Enregistre la vue actuelle en image PNG, à la taille de l'écran ou en haute définition (Full HD, 4K, 8K), fond transparent au choix.</td></tr>
+<tr><td>Export IFC</td><td>Fichier › Exporter en IFC (BIM, IFC 2x3) : projet, site, bâtiment et niveaux (panneau Niveaux) ; chaque groupe devient un élément à son nom, rangé à son niveau, avec ses couleurs et ses propriétés (balise, matériau, surfaces, volume) ; le terrain va au site ; géoréférencé (latitude, longitude, altitude NGF, nord) quand la maquette est placée dans l'étude de site TerraGeo. Pour Revit, ArchiCAD, Vectorworks, SketchUp, BIMcollab.</td></tr>
 <tr><td>Export OBJ</td><td>Fichier › Exporter en OBJ : la maquette et ses matériaux (fichier .mtl à garder à côté), pour Blender, SketchUp, Twinmotion, D5…</td></tr>
 <tr><td>Export DXF</td><td>En vue parallèle (plan, élévation, coupe) : dessin 2D en DXF, à l'échelle, dans l'unité choisie. Arêtes vues seulement (lignes cachées retirées), traits de coupe sur un calque COUPE, cotations et textes ; les groupes balisés sur un calque à leur nom. Avec un « Plan » de niveau : plan à 1,20 m.</td></tr>
 <tr><td>Emprise</td><td>Panneau Niveaux : emprise au sol (projection verticale des volumes), surfaces brute et de plancher approchée par niveau (hauteur sous plafond de plus de 1,80 m, murs extérieurs déduits selon leur épaisseur).</td></tr>
@@ -3395,6 +3397,73 @@ async function envOpen() {
 }
 
 (function init4() { const b = $('#bEnv'); if (b) b.onclick = () => envOpen(); window.TM4 = { envPrepare, envCalc, envBuild, pluValues, pluNum, ENVS, envOpen }; })();
+
+/* ================= TerraModel 0.15 : export BIM (IFC 2x3) =================
+   Projet › site › bâtiment › niveaux (panneau Niveaux, sinon un niveau 0) ; chaque groupe devient un élément nommé (IfcBuildingElementProxy),
+   la géométrie libre un élément « Géométrie libre », le terrain un IfcSite ; faces planes avec leurs trous (IfcFaceOuterBound, IfcFaceBound),
+   couleurs des matériaux (IfcSurfaceStyle), propriétés TerraModel (balise, matériau, surfaces, volume). Géoréférencement : latitude, longitude,
+   altitude NGF et nord du point d'insertion choisi dans TerraGeo, quand la maquette est placée dans le site. Unité : mètre. */
+
+const IFC_B64 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_$';
+function ifcGuid() { const b = crypto.getRandomValues(new Uint8Array(16)); let n = 0n; for (const x of b) n = (n << 8n) | BigInt(x); let s = ''; for (let i = 0; i < 22; i++) { s = IFC_B64[Number(n & 63n)] + s; n >>= 6n; } return s; }
+const ifcS = t => "'" + String(t == null ? '' : t).replace(/\\/g, '\\\\').replace(/'/g, "''").replace(/[^\x20-\x7e]/g, c => { const h = c.charCodeAt(0).toString(16).toUpperCase().padStart(4, '0'); return '\\X2\\' + h + '\\X0\\'; }) + "'";
+const ifcR = x => { const v = Math.round(x * 1e6) / 1e6; const s = String(v); return /[.eE]/.test(s) ? s : s + '.'; };
+/* angle en degrés → IfcCompoundPlaneAngleMeasure (degrés, minutes, secondes, millionièmes) */
+function ifcDMS(a) { const sg = a < 0 ? -1 : 1; a = Math.abs(a); const d = Math.floor(a), m = Math.floor((a - d) * 60), s = Math.floor(((a - d) * 60 - m) * 60), u = Math.round(((((a - d) * 60 - m) * 60) - s) * 1e6); return `(${sg * d},${sg * m},${sg * s},${sg * u})`; }
+
+async function exportIFC() {
+  const R = visModel(rootModel()), L = [], add = t => { L.push(t); return '#' + L.length; };
+  const nom = PR.projet ? projLabel(PR.projet) : 'Maquette TerraModel', now = Math.floor(Date.now() / 1000);
+  // en-tête du projet
+  const person = add(`IFCPERSON($,$,'',$,$,$,$,$)`), org = add(`IFCORGANIZATION($,'TerraSuite',$,$,$)`), po = add(`IFCPERSONANDORGANIZATION(${person},${org},$)`);
+  const app = add(`IFCAPPLICATION(${org},${ifcS(APP_VERSION)},'TerraModel','TerraModel')`), own = add(`IFCOWNERHISTORY(${po},${app},$,.ADDED.,${now},${po},${app},${now})`);
+  const P0 = add('IFCCARTESIANPOINT((0.,0.,0.))'), DZ = add('IFCDIRECTION((0.,0.,1.))'), DX = add('IFCDIRECTION((1.,0.,0.))'), AX = add(`IFCAXIS2PLACEMENT3D(${P0},${DZ},${DX})`);
+  // géoréférencement : point d'insertion de l'étude de site (TerraGeo), rotation de la maquette dans le site
+  let geo = null; try { const f = typeof geoSite === 'function' ? await geoSite() : null; if (f && f.site && f.site.mq && isFinite(+f.site.mq.x)) { const q = f.site.mq, ll = L93.inv(+q.x, +q.y); geo = { lon: ll[0], lat: ll[1], z: q.z != null && isFinite(+q.z) ? +q.z : null, rot: +q.rot || 0 }; } } catch (e) {}
+  const north = geo ? add(`IFCDIRECTION((${ifcR(Math.sin(geo.rot * Math.PI / 180))},${ifcR(Math.cos(geo.rot * Math.PI / 180))}))`) : '$';
+  const ctx = add(`IFCGEOMETRICREPRESENTATIONCONTEXT($,'Model',3,1.E-05,${AX},${north})`);
+  const uL = add('IFCSIUNIT(*,.LENGTHUNIT.,$,.METRE.)'), uA = add('IFCSIUNIT(*,.AREAUNIT.,$,.SQUARE_METRE.)'), uV = add('IFCSIUNIT(*,.VOLUMEUNIT.,$,.CUBIC_METRE.)'), uR = add('IFCSIUNIT(*,.PLANEANGLEUNIT.,$,.RADIAN.)');
+  const units = add(`IFCUNITASSIGNMENT((${uL},${uA},${uV},${uR}))`);
+  const proj = add(`IFCPROJECT(${ifcS(ifcGuid())},${own},${ifcS(nom)},'Maquette 3D TerraModel',$,$,$,(${ctx}),${units})`);
+  const plS = add(`IFCLOCALPLACEMENT($,${AX})`), plB = add(`IFCLOCALPLACEMENT(${plS},${AX})`);
+  // matériaux : un style de surface par couleur
+  const styles = new Map(), styleOf = id => { const d = id ? matOf(R, id) : null, c = d ? d.c : '#F2EFE9', a = d ? (d.a || 1) : 1, k = c + '|' + a; if (styles.has(k)) return styles.get(k);
+    const v = parseInt(String(c).replace('#', ''), 16) || 0xF2EFE9, rgb = add(`IFCCOLOURRGB($,${ifcR(((v >> 16) & 255) / 255)},${ifcR(((v >> 8) & 255) / 255)},${ifcR((v & 255) / 255)})`);
+    const ren = add(`IFCSURFACESTYLERENDERING(${rgb},${ifcR(1 - a)},$,$,$,$,$,$,.FLAT.)`), ss = add(`IFCSURFACESTYLE(${ifcS(d ? d.nom : 'Par défaut')},.BOTH.,(${ren}))`), pa = add(`IFCPRESENTATIONSTYLEASSIGNMENT((${ss}))`); styles.set(k, pa); return pa; };
+  // géométrie d'un modèle (coordonnées du site) : une surface par matériau, faces avec leurs trous
+  const shapeOf = (m, dflt) => { const by = new Map(); for (const k in m.f) { const id = m.f[k].m || dflt || ''; if (!by.has(id)) by.set(id, []); by.get(id).push(k); }
+    const items = [];
+    for (const [id, keys] of by) { const pts = new Map(), P = vid => { if (!pts.has(vid)) { const p = m.v[vid]; pts.set(vid, add(`IFCCARTESIANPOINT((${ifcR(p[0])},${ifcR(p[1])},${ifcR(p[2])}))`)); } return pts.get(vid); };
+      const faces = keys.map(k => { const f = m.f[k], loop = Lp => add(`IFCPOLYLOOP((${Lp.map(P).join(',')}))`), ob = add(`IFCFACEOUTERBOUND(${loop(f.o)},.T.)`), hb = (f.h || []).map(H => add(`IFCFACEBOUND(${loop(H)},.T.)`)); return add(`IFCFACE((${[ob, ...hb].join(',')}))`); });
+      const sh = add(`IFCOPENSHELL((${faces.join(',')}))`), sm = add(`IFCSHELLBASEDSURFACEMODEL((${sh}))`); add(`IFCSTYLEDITEM(${sm},(${styleOf(id)}),$)`); items.push(sm); }
+    if (!items.length) return null; const rep = add(`IFCSHAPEREPRESENTATION(${ctx},'Body','SurfaceModel',(${items.join(',')}))`); return add(`IFCPRODUCTDEFINITIONSHAPE($,$,(${rep}))`); };
+  // niveaux
+  const N = (R.niv && R.niv.length ? R.niv.slice() : [{ nom: 'Niveau 0', z: 0 }]).sort((a, b) => a.z - b.z);
+  const storeys = N.map(n => { const pz = add(`IFCCARTESIANPOINT((0.,0.,${ifcR(n.z)}))`), ax = add(`IFCAXIS2PLACEMENT3D(${pz},${DZ},${DX})`), pl = add(`IFCLOCALPLACEMENT(${plB},${ax})`);
+    return { n, pl, id: add(`IFCBUILDINGSTOREY(${ifcS(ifcGuid())},${own},${ifcS(n.nom)},$,$,${pl},$,$,.ELEMENT.,${ifcR(n.z)})`), els: [] }; });
+  const storeyAt = z => { let s = storeys[0]; for (const t of storeys) if (t.n.z <= z + 0.05) s = t; return s; };
+  // éléments : groupes, puis géométrie libre ; le terrain va au site
+  const proxies = [], props = [], terrains = [];
+  const element = (m, nomE, extra) => { const shape = shapeOf(m, extra.mat); if (!shape) return; const zs = Object.values(m.v).map(p => p[2]), z0 = zs.length ? Math.min(...zs) : 0, st0 = storeyAt(z0);
+    const plE = add(`IFCLOCALPLACEMENT(${plB},${AX})`), id = add(`IFCBUILDINGELEMENTPROXY(${ifcS(ifcGuid())},${own},${ifcS(nomE)},${ifcS(extra.desc || '')},$,${plE},${shape},$,$)`); st0.els.push(id);
+    const A = Object.values(m.f).reduce((s, f) => s + faceArea(m, f), 0), V = closedVolume(m), pv = [add(`IFCPROPERTYSINGLEVALUE('Balise',$,IFCLABEL(${ifcS(extra.tag || '')}),$)`), add(`IFCPROPERTYSINGLEVALUE(${ifcS('Matériau')},$,IFCLABEL(${ifcS(extra.mat ? ((matOf(R, extra.mat) || {}).nom || extra.mat) : '')}),$)`), add(`IFCPROPERTYSINGLEVALUE('Surface des faces',$,IFCAREAMEASURE(${ifcR(A)}),$)`)];
+    if (V != null) pv.push(add(`IFCPROPERTYSINGLEVALUE('Volume',$,IFCVOLUMEMEASURE(${ifcR(V)}),$)`));
+    const ps = add(`IFCPROPERTYSET(${ifcS(ifcGuid())},${own},'TerraModel',$,(${pv.join(',')}))`); add(`IFCRELDEFINESBYPROPERTIES(${ifcS(ifcGuid())},${own},$,$,(${id}),${ps})`); };
+  for (const g in R.G || {}) { const G0 = R.G[g]; if (G0.plu) continue; const w = shiftModel(G0.m, G0.t); if (isTerrain(G0)) { terrains.push(w); continue; } element(w, G0.nom || 'Groupe', { tag: G0.tag, mat: G0.mat, desc: G0.def ? 'Composant' : 'Groupe' }); }
+  if (Object.keys(R.f).length) element(R, 'Géométrie libre', { desc: 'Faces hors groupes' });
+  // site (avec le terrain), bâtiment
+  let siteShape = '$'; if (terrains.length) { const T = newModel(); for (const w of terrains) { const map = {}; for (const k in w.v) map[k] = T.n++, T.v[map[k]] = w.v[k]; for (const k in w.f) { const f = w.f[k]; T.f[T.n++] = { o: f.o.map(i => map[i]), h: (f.h || []).map(H => H.map(i => map[i])), m: f.m || 'gazon' }; } } siteShape = shapeOf(T, 'gazon') || '$'; }
+  const site = add(`IFCSITE(${ifcS(ifcGuid())},${own},${ifcS(geo ? 'Site du projet' : 'Site')},$,$,${plS},${siteShape},$,.ELEMENT.,${geo ? ifcDMS(geo.lat) : '$'},${geo ? ifcDMS(geo.lon) : '$'},${geo && geo.z != null ? ifcR(geo.z) : '$'},$,$)`);
+  const bld = add(`IFCBUILDING(${ifcS(ifcGuid())},${own},${ifcS(nom)},$,$,${plB},$,$,.ELEMENT.,$,$,$)`);
+  add(`IFCRELAGGREGATES(${ifcS(ifcGuid())},${own},$,$,${proj},(${site}))`); add(`IFCRELAGGREGATES(${ifcS(ifcGuid())},${own},$,$,${site},(${bld}))`); add(`IFCRELAGGREGATES(${ifcS(ifcGuid())},${own},$,$,${bld},(${storeys.map(s => s.id).join(',')}))`);
+  for (const s of storeys) if (s.els.length) add(`IFCRELCONTAINEDINSPATIALSTRUCTURE(${ifcS(ifcGuid())},${own},$,$,(${s.els.join(',')}),${s.id})`);
+  const fn = `${nom.replace(/[\\/:*?"<>|]/g, '-')} ${stamp()}.ifc`, iso = new Date().toISOString().slice(0, 19);
+  const txt = `ISO-10303-21;\nHEADER;\nFILE_DESCRIPTION(('ViewDefinition [CoordinationView_V2.0]'),'2;1');\nFILE_NAME(${ifcS(fn)},'${iso}',(''),('TerraSuite'),'TerraModel ${APP_VERSION}','TerraModel','');\nFILE_SCHEMA(('IFC2X3'));\nENDSEC;\nDATA;\n${L.map((t, i) => '#' + (i + 1) + '=' + t + ';').join('\n')}\nENDSEC;\nEND-ISO-10303-21;\n`;
+  dl(fn, txt, 'application/x-step'); const nEl = storeys.reduce((s, x) => s + x.els.length, 0);
+  setStatus(`Export IFC : ${nEl} élément${nEl > 1 ? 's' : ''}, ${storeys.length} niveau${storeys.length > 1 ? 'x' : ''}${terrains.length ? ', terrain' : ''}${geo ? ', géoréférencé' : ''} · Revit, ArchiCAD, Vectorworks, BIMcollab…`, 'ok');
+  return txt;
+}
+(function init5() { const b = $('#bIfc'); if (b) b.onclick = () => { exportIFC(); cv.focus(); }; window.TM5 = { exportIFC, ifcGuid }; })();
 
 </script>
 </body>
