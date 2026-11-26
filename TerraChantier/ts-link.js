@@ -93,6 +93,8 @@ const TSLink = (() => {
   }
 
   /* lecture seule des fiches d'une autre application (ex. maquettes TerraModel lues par TerraEstim) : Map rid → fiche */
+  /* même chose avec le projet de chaque fiche : Map rid → { data, projetId } */
+  async function readDocs(app, coll) { const m = new Map(); try { for (const [rid, d] of await docsOf(app, coll)) if (!d.deleted && d.data) m.set(rid, { data: d.data, projetId: d.projetId || null }); } catch (e) {} return m; }
   async function read(app, coll) { const m = new Map(); try { for (const [rid, d] of await docsOf(app, coll)) if (!d.deleted && d.data) m.set(rid, d.data); } catch (e) {} return m; }
 
   /* raccordement d'une application : appelle onRemote() quand des fiches arrivent d'un autre appareil (synchronisation faite ici ou dans un autre onglet) */
@@ -120,5 +122,5 @@ const TSLink = (() => {
       + '@media (pointer:coarse){.ts-embed .btn:not(.sm),.ts-embed .top select,.ts-embed .toolbar select,.ts-embed .tabs [role=tab]{min-height:44px}}';
     (document.head || document.documentElement).appendChild(s);
   }
-  return { pull, push, read, onRemote, received, hash, docId, seedHashes, embedded, synced, open };
+  return { pull, push, read, readDocs, onRemote, received, hash, docId, seedHashes, embedded, synced, open };
 })();
