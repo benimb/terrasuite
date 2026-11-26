@@ -542,7 +542,7 @@ function addShape(M, pts, nHint, target) {
     const S = M.f[fid], nT = faceN(M, T), res = combine(M, [T, revF(S)], nT);
     delete M.f[target]; for (const g of res) addF(M, g);
   }
-  cleanup(M); return fid;
+  cleanup(M); const r = M.f[fid] ? arrangeWith(M, fid) : null; return r != null ? r : fid;
 }
 /* croisements : les traits segs = [[a, b]] coupés là où ils croisent une arête ou un autre trait, l'un et l'autre recevant le point de croisement */
 function segX(p1, p2, q1, q2) { // points les plus proches de deux segments, paramètres s, t
@@ -996,9 +996,63 @@ function curvedOffset(M, set, d) {
   cleanup(M); return true;
 }
 
+/* ================= Formes qui se chevauchent dans un même plan (0.13.4) : rectangle sur cercle, deux cercles…
+   les contours se coupent et chaque zone devient une face, comme dans SketchUp ================= */
+function segCross2(a, b, c, d) { const r = [b[0] - a[0], b[1] - a[1]], s = [d[0] - c[0], d[1] - c[1]], den = r[0] * s[1] - r[1] * s[0]; if (Math.abs(den) < 1e-12) return null;
+  const w = [c[0] - a[0], c[1] - a[1]], t = (w[0] * s[1] - w[1] * s[0]) / den, u = (w[0] * r[1] - w[1] * r[0]) / den; return t > -1e-9 && t < 1 + 1e-9 && u > -1e-9 && u < 1 + 1e-9 ? { t, u } : null; }
+/* faces de même plan et de même sens que fid qui la chevauchent (contours qui se croisent, ou sommet de l'une à l'intérieur de l'autre) */
+function overlapping(M, fid) {
+  const F = M.f[fid], fr = frame(M, F), LF = loops2Of(M, F, fr), out = [], bF = faceBox(M, F);
+  for (const k in M.f) { if (k === String(fid)) continue; const G = M.f[k]; if (!boxHit(bF, faceBox(M, G)) || coplanar(M, F, G) !== 1) continue;
+    const LG = loops2Of(M, G, fr); let hit = LG.some(L => L.some(p => classify2(p, LF, 1e-7) === 'in')) || LF.some(L => L.some(p => classify2(p, LG, 1e-7) === 'in'));
+    if (!hit) outer: for (const A of LF) for (let i = 0; i < A.length; i++) for (const B of LG) for (let j = 0; j < B.length; j++) { const x = segCross2(A[i], A[(i + 1) % A.length], B[j], B[(j + 1) % B.length]); if (x && x.t > 1e-7 && x.t < 1 - 1e-7 && x.u > 1e-7 && x.u < 1 - 1e-7) { hit = true; break outer; } }
+    if (hit) out.push(k); }
+  return out;
+}
+function arrangeWith(M, fid) { const O = overlapping(M, fid); if (!O.length) return null; return planarArrange(M, [...O, String(fid)], String(fid)); }
+/* les faces keys (même plan, même sens) remplacées par les zones de leur découpage mutuel ; chaque zone garde le matériau d'une face qui la couvre (la plus ancienne) ;
+   rend l'identifiant de la plus grande zone couverte par la face prio */
+function planarArrange(M, keys, prio) {
+  keys = keys.filter(k => M.f[k]); if (keys.length < 2) return null; const F0 = M.f[keys[0]], fr = frame(M, F0), n = fr.n;
+  const src = keys.map(k => ({ k, f: M.f[k], L: loops2Of(M, M.f[k], fr) })), S = [];
+  for (const x of src) for (const L of x.L) for (let i = 0; i < L.length; i++) S.push([L[i], L[(i + 1) % L.length]]);
+  // découpe des segments à leurs croisements
+  const cuts = S.map(() => [0, 1]);
+  for (let i = 0; i < S.length; i++) for (let j = i + 1; j < S.length; j++) { const x = segCross2(S[i][0], S[i][1], S[j][0], S[j][1]); if (x) { cuts[i].push(Math.min(1, Math.max(0, x.t))); cuts[j].push(Math.min(1, Math.max(0, x.u))); }
+    else { // segments alignés qui se recouvrent : chacun coupé aux extrémités de l'autre
+      for (const [A, B] of [[i, j], [j, i]]) { const [a, b] = S[A], d = [b[0] - a[0], b[1] - a[1]], l2 = d[0] * d[0] + d[1] * d[1]; if (l2 < 1e-14) continue;
+        for (const q of S[B]) { const t = ((q[0] - a[0]) * d[0] + (q[1] - a[1]) * d[1]) / l2, e = Math.abs((q[0] - a[0]) * d[1] - (q[1] - a[1]) * d[0]) / Math.sqrt(l2); if (t > 1e-9 && t < 1 - 1e-9 && e < 1e-6) cuts[A].push(t); } } } }
+  const key = p => Math.round(p[0] * 1e5) + ',' + Math.round(p[1] * 1e5), P = new Map(), E = new Set(), adj = new Map();
+  const vk = p => { const k = key(p); if (!P.has(k)) { P.set(k, p); adj.set(k, new Set()); } return k; };
+  S.forEach(([a, b], i) => { const T = [...new Set(cuts[i].map(t => Math.round(t * 1e9) / 1e9))].sort((x, y) => x - y), Q = T.map(t => vk([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]));
+    for (let j = 0; j + 1 < Q.length; j++) { if (Q[j] === Q[j + 1]) continue; adj.get(Q[j]).add(Q[j + 1]); adj.get(Q[j + 1]).add(Q[j]); } });
+  // parcours des faces du graphe plan : à chaque sommet, on tourne le plus à droite (contours en sens direct pour les zones bornées)
+  const ang = (a, b) => { const p = P.get(a), q = P.get(b); return Math.atan2(q[1] - p[1], q[0] - p[0]); }, used = new Set(), loops = [];
+  const sorted = new Map(); for (const [v, s] of adj) sorted.set(v, [...s].sort((x, y) => ang(v, x) - ang(v, y)));
+  for (const [a, s] of adj) for (const b of s) { if (used.has(a + '>' + b)) continue; const L = []; let u = a, w = b, g = 0;
+    while (!used.has(u + '>' + w) && g++ < 100000) { used.add(u + '>' + w); L.push(u); const nb = sorted.get(w), i = nb.indexOf(u); const nx = nb[(i - 1 + nb.length) % nb.length]; u = w; w = nx; }
+    if (L.length >= 3) loops.push(L); }
+  const A2 = L => area2(L.map(k => P.get(k))), pos = loops.filter(L => A2(L) > 1e-10), neg = loops.filter(L => A2(L) < -1e-10);
+  const regions = pos.map(L => ({ o: L, h: [] }));
+  for (const H of neg) { const q = P.get(H[0]); let best = null; for (const R of regions) { const poly = R.o.map(k => P.get(k)); if (R.o.includes(H[0])) continue; if (pip2(q, poly) && (!best || A2(R.o) < A2(best.o))) best = R; } if (best) best.h.push(H.slice().reverse()); }
+  // point intérieur d'une zone, et la face d'origine qui la couvre
+  const inner = R => { const O = R.o.map(k => P.get(k)), Hs = R.h.map(H => H.map(k => P.get(k))), sz = Math.sqrt(Math.abs(area2(O))) * 1e-3 + 1e-6;
+    for (let i = 0; i < O.length; i++) { const a = O[i], b = O[(i + 1) % O.length], d = [b[0] - a[0], b[1] - a[1]], l = Math.hypot(d[0], d[1]) || 1, q = [(a[0] + b[0]) / 2 - d[1] / l * sz, (a[1] + b[1]) / 2 + d[0] / l * sz];
+      if (pip2(q, O) && !Hs.some(H => pip2(q, H))) return q; } return null; };
+  const to3 = k => { const p = P.get(k); return vadd(fr.o, vadd(vmul(fr.u, p[0]), vmul(fr.v, p[1]))); };
+  const made = [];
+  for (const R of regions) { const q = inner(R); if (!q) continue; const cov = src.filter(x => classify2(q, x.L, 1e-9) === 'in'); if (!cov.length) continue;
+    made.push({ R, m: (cov.find(x => x.k !== prio) || cov[0]).f.m, prio: cov.some(x => x.k === prio), a: A2(R.o) }); }
+  if (!made.length) return null;
+  for (const k of keys) delete M.f[k]; let best = null;
+  for (const z of made) { const g = { o: z.R.o.map(k => addV(M, to3(k))), h: z.R.h.map(H => H.map(k => addV(M, to3(k)))) }; if (vdot(newell(M, g.o), n) < 0) { g.o.reverse(); g.h = g.h.map(H => H.slice().reverse()); } if (z.m) g.m = z.m;
+    const id = addF(M, g); if (z.prio && (!best || z.a > best.a)) best = { id, a: z.a }; }
+  cleanup(M); return best ? best.id : null;
+}
+
 </script>
 <script>
-const APP_VERSION = '0.13.3';
+const APP_VERSION = '0.14';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const NF2 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 /* unités : la maquette est en mètres ; les longueurs s'affichent et se saisissent dans l'unité choisie (m, cm, mm) ; surfaces en m², volumes en m³ */
@@ -1063,7 +1117,10 @@ async function projUI() {
   sel.innerHTML = TSP.options(PR.rid === LIBRE ? '' : PR.rid, list, { none: 'Maquette sans projet', create: false });
   if (PR.rid !== LIBRE && !list.some(p => p.id === PR.rid)) sel.insertAdjacentHTML('beforeend', `<option value="${PR.rid}" selected>Projet ${PR.rid}</option>`);
 }
-function doOp(fn) { const before = JSON.stringify(M), m = JSON.parse(before); const r = fn(m); if (r === false) return r; const lk = lockedChanged(M, m); if (lk) { setStatus('« ' + lk + ' » est verrouillé : déverrouillez-le d\'abord (barre de sélection ou Structure)', 'err'); return false; } try { inheritMat(M, m); } catch (e) {} pushUndo(before); M = m; ST.last = null; changed(); return r; }
+/* après une action, retour à l'outil Sélection (sauf peindre, gommer, naviguer) ; la cote tapée juste après corrige encore l'action */
+const AUTO_BACK = new Set(['rect', 'circle', 'poly', 'arc', 'arc3', 'line', 'push', 'move', 'rotate', 'scale', 'offset', 'follow', 'tape', 'proto', 'dim', 'text', 'text3d', 'section', 'paste']);
+function backToSelect() { setTimeout(() => { const t = ST.tool, T = TOOLS[t]; if (AUTO_BACK.has(t) && !(T && T.busy && T.busy())) setTool('select', true); }, 0); }
+function doOp(fn) { backToSelect(); const before = JSON.stringify(M), m = JSON.parse(before); const r = fn(m); if (r === false) return r; const lk = lockedChanged(M, m); if (lk) { setStatus('« ' + lk + ' » est verrouillé : déverrouillez-le d\'abord (barre de sélection ou Structure)', 'err'); return false; } try { inheritMat(M, m); } catch (e) {} pushUndo(before); M = m; ST.last = null; changed(); return r; }
 /* groupes verrouillés : leur géométrie, leur position et leur matériau ne changent pas (nom, balise, masquage restent libres) */
 function lockedChanged(a, b) { for (const g in a.G || {}) { const A = a.G[g]; if (!A.lock) continue; const B = b.G && b.G[g]; if (!B) return A.nom; if (JSON.stringify([A.t, A.m, A.mat || '', A.R || '']) !== JSON.stringify([B.t, B.m, B.mat || '', B.R || ''])) return A.nom; } return null; }
 function pushUndo(before) { ST.undo.push(before); if (ST.undo.length > 200) ST.undo.shift(); ST.redo.length = 0; }
@@ -1526,7 +1583,7 @@ function vcbApply() {
   if (!done) setStatus('Saisie non comprise : « ' + t + ' »', 'err'); else { setStatus(''); vcb.classList.add('flash'); setTimeout(() => vcb.classList.remove('flash'), 300); }
 }
 /* opération corrigeable : une nouvelle saisie juste après la refait avec la nouvelle valeur */
-function commitFrom(before, parse, apply, v) { const m = JSON.parse(before); apply(m, v); { const lk = lockedChanged(JSON.parse(before), m); if (lk) { show(M); setTimeout(() => setStatus('« ' + lk + ' » est verrouillé : déverrouillez-le d\'abord (barre de sélection ou Structure)', 'err'), 0); return false; } } try { inheritMat(JSON.parse(before), m); } catch (e) {} pushUndo(before); M = m; ST.last = { before, parse, apply }; changed(); }
+function commitFrom(before, parse, apply, v) { backToSelect(); const m = JSON.parse(before); apply(m, v); { const lk = lockedChanged(JSON.parse(before), m); if (lk) { show(M); setTimeout(() => setStatus('« ' + lk + ' » est verrouillé : déverrouillez-le d\'abord (barre de sélection ou Structure)', 'err'), 0); return false; } } try { inheritMat(JSON.parse(before), m); } catch (e) {} pushUndo(before); M = m; ST.last = { before, parse, apply }; changed(); }
 
 /* ================= Outils ================= */
 /* point libre (sans accroche) : cotes arrondies au millimètre */
@@ -1785,10 +1842,10 @@ TOOLS.move = {
 TOOLS.orbit = { hint: () => 'Glisser : tourner autour du point visé · double-clic : centrer la vue sur ce point', label: 'Mesures', nav: 'orbit' };
 TOOLS.pan = { hint: () => 'Glisser : déplacer la vue · double-clic : centrer la vue sur ce point', label: 'Mesures', nav: 'pan' };
 function cancelTool() { const T = TOOLS[ST.tool]; if (T && T.reset) T.reset(); marker(null); rubber(); guide(); }
-function setTool(t) {
+function setTool(t, keep) {
   if (!TOOLS[t]) return; cancelTool(); ST.tool = t; $$('[data-tool]').forEach(b => b.classList.toggle('on', b.dataset.tool === t)); { const bm = $('#bMore'); if (bm) bm.classList.toggle('on', !!document.querySelector('#mMore [data-tool="' + t + '"]')); }
   const T = TOOLS[t]; hint(T.hint()); vcbShow(T.label || 'Mesures', '');
-  const sg = t === 'circle' || t === 'poly' || t === 'arc' || t === 'arc3'; $('#segsL').hidden = !sg; if (sg) { $('#segsT').textContent = t === 'poly' ? 'Côtés' : 'Segments'; $('#segs').value = ST.segs[t === 'arc3' ? 'arc' : t]; } ST.lock = null; if (ST.last && ST.last.arr) ST.last.arr = null; updateAnnot();
+  const sg = t === 'circle' || t === 'poly' || t === 'arc' || t === 'arc3'; $('#segsL').hidden = !sg; if (sg) { $('#segsT').textContent = t === 'poly' ? 'Côtés' : 'Segments'; $('#segs').value = ST.segs[t === 'arc3' ? 'arc' : t]; } ST.lock = null; if (!keep && ST.last && ST.last.arr) ST.last.arr = null; updateAnnot();
   cv.style.cursor = t === 'orbit' || t === 'pan' || t === 'look' || t === 'walk' ? 'grab' : t === 'select' ? 'default' : 'crosshair'; hover(null);
   if (T.start) T.start();
   if (t === 'paint') { ['dispP', 'nivP', 'sunP', 'compP', 'imgP', 'structP', 'solP'].forEach(id => $('#' + id).hidden = true); $('#matP').hidden = false; matPanel(); }
@@ -2414,6 +2471,8 @@ const HELP = `<h3>Unités</h3><table>
 <tr><td>Maj+Z</td><td>Zoom étendu. « Centrer » : sur la sélection, sinon toute la maquette.</td></tr>
 <tr><td>Parallèle</td><td>Passe la vue en projection parallèle (orthogonale) ou en perspective.</td></tr></table>
 <h3>Divers</h3><table>
+<tr><td>Sélection</td><td>Outil par défaut : après chaque action (rectangle, pousser, déplacer…), TerraModel revient à la sélection ; une cote tapée juste après corrige encore l'action. Peindre et Gommer restent actifs pour enchaîner les clics.</td></tr>
+<tr><td>Formes qui se chevauchent</td><td>Un rectangle, un cercle ou un polygone tracé à cheval sur une autre forme du même plan la coupe : chaque zone devient une face (la partie commune aussi), qu'on peut tirer, peindre ou effacer séparément. Pour des formes déjà tracées : sélectionnez-les puis « Intersecter ».</td></tr>
 <tr><td>Espace · E</td><td>Sélection : clic, ou fenêtre en glissant (vers la droite : ce qui est entièrement dedans ; vers la gauche : ce qui touche le cadre) ; au doigt, appui long puis glisser. Gomme. Suppr : effacer la sélection.</td></tr>
 <tr><td>Ctrl+Z · Ctrl+Y</td><td>Annuler, rétablir. Ctrl+S : enregistrer le fichier.</td></tr>
 <tr><td>Faces</td><td>Face avant claire, face arrière bleutée (comme SketchUp). Une maquette par projet TerraSuite, gardée dans ce navigateur et synchronisée entre les appareils de l'agence.</td></tr></table>`;
@@ -2788,7 +2847,7 @@ async function showHome(on) {
     window.addEventListener('message', e => { const d = e.data; if (d && d.ts === 'immersive') { $('#bMenus').hidden = !d.on; setTimeout(resize, 50); } });
     $('#bMenus').onclick = () => { try { parent.postMessage({ ts: 'menus' }, '*'); } catch (e) {} };
   }
-  setTool('rect'); cv.focus();
+  setTool('select'); cv.focus();
   window.TM = { exportDXF2D, emprise, sunPos, frUTC, applySun, setStyle, copySelection, pasteInPlace, startPaste, getClip, mirrorSel, flatModel, get style() { return ST.style; }, gVis, nivAreas, visModel, sectionArea, get lock() { return ST.lock; }, G, PR, openRid, setProjection, isO, get camera() { return camera; }, get M() { return M; }, set M(v) { M = v; changed(); }, ST, TOOLS, setTool, snap, pickFace, toScreen, req, show, rebuild, frameView, bounds, setView, setUnit, sceneAdd, sceneGo, cameraAdd, openPanel, applyCam, closedVolume, get UNIT() { return UNIT; } };
 })();
 
@@ -2818,7 +2877,7 @@ function lockSel(on) { const gs = [...ST.sel.g].filter(g => M.G && M.G[g]); if (
 function selBar2(nf, ne, ng) {
   if (ST.tool === 'paste') return ''; const gs = [...ST.sel.g].filter(g => M.G && M.G[g]), anyL = gs.some(g => M.G[g].lock), allL = gs.length && gs.every(g => M.G[g].lock);
   let h = '';
-  if (nf || ng) h += '<button class="btn sm" data-x="inter" title="Intersecter avec la maquette : les traits de rencontre des faces sélectionnées avec les autres faces sont ajoutés, les faces sont divisées">Intersecter</button>';
+  if (nf || ng || ne >= 2) h += '<button class="btn sm" data-x="inter" title="Intersecter avec la maquette : les traits de rencontre des faces sélectionnées avec les autres faces sont ajoutés, les faces sont divisées">Intersecter</button>';
   if (ng === 2 && !nf && !ne) h += '<select class="btn sm" data-x="solid" title="Opérations sur deux volumes fermés"><option value="">Solides…</option><option value="union">Union</option><option value="inter">Intersection</option><option value="diffAB">1er moins 2e</option><option value="diffBA">2e moins 1er</option></select>';
   if (ng && !ST.ctx) h += `<button class="btn sm" data-x="iso" title="N'afficher que ${ng > 1 ? 'ces groupes' : 'ce groupe'} (Échap : tout réafficher)">Isoler</button>`;
   if (ng) h += `<button class="btn sm${anyL ? ' on' : ''}" data-x="lock" title="${allL ? 'Déverrouiller' : 'Verrouiller : ni déplacé, ni modifié, ni effacé'}">${allL ? 'Déverrouiller' : 'Verrouiller'}</button>`;
@@ -2833,10 +2892,15 @@ function selBar2Wire(el) {
 
 /* ---- Intersecter avec la maquette : faces et groupes sélectionnés avec tout ce qui est visible ---- */
 function intersectSel() {
-  const fs = [...ST.sel.f].filter(k => M.f[k]), gs = [...ST.sel.g].filter(g => M.G && M.G[g] && gVis3(M, g)); if (!fs.length && !gs.length) { setStatus('Sélectionnez les faces ou les groupes à intersecter'); return; }
-  let nSeg = 0, nFace = 0, skipped = 0;
+  const fs = [...ST.sel.f].filter(k => M.f[k]), gs = [...ST.sel.g].filter(g => M.G && M.G[g] && gVis3(M, g));
+  const es = [...ST.sel.e].map(k => k.split('|').map(Number)); if (!fs.length && !gs.length && !es.length) { setStatus('Sélectionnez les faces, les traits ou les groupes à intersecter'); return; }
+  let nSeg = 0, nFace = 0, skipped = 0, nArr = 0;
   const r = doOp(m => {
-    const B = [{ id: null, w: m, sel: new Set(fs), all: Object.keys(m.f) }];
+    // formes du même plan qui se chevauchent : découpées en zones ; traits sélectionnés : coupés à leurs croisements
+    for (const k of fs) if (m.f[k]) { const n0 = Object.keys(m.f).length; if (arrangeWith(m, k) != null) { nArr++; nFace += Object.keys(m.f).length - n0 + 1; } }
+    if (es.length) { const n0 = Object.keys(m.f).length; nArr += intersectLines(m, es.filter(([a, b]) => m.v[a] && m.v[b])); splitFacesByLines(m); cleanup(m); nFace += Object.keys(m.f).length - n0; }
+    const fs2 = fs.filter(k => m.f[k]);
+    const B = [{ id: null, w: m, sel: new Set(fs2), all: Object.keys(m.f) }];
     for (const g in m.G || {}) { if (!gVis3(m, g)) continue; const G0 = m.G[g], w = shiftModel(G0.m, G0.t); B.push({ id: g, w, sel: gs.includes(g) ? new Set(Object.keys(w.f)) : new Set(), all: Object.keys(w.f), def: !!G0.def, lock: !!G0.lock }); }
     const S = B.map(() => []);
     for (let i = 0; i < B.length; i++) { if (!B[i].sel.size) continue; const ks = [...B[i].sel];
@@ -2848,9 +2912,9 @@ function intersectSel() {
       if (i === 0) { const n0 = Object.keys(m.f).length; intersectInto(m, S[i]); nFace += Object.keys(m.f).length - n0; continue; }
       const G0 = m.G[B[i].id]; if (B[i].def || B[i].lock) { skipped++; continue; } const old = JSON.parse(JSON.stringify(G0.m)), n0 = Object.keys(G0.m.f).length;
       intersectInto(G0.m, S[i].map(([p, q]) => [vsub(p, G0.t), vsub(q, G0.t)])); try { inheritMat(old, G0.m); } catch (e) {} nFace += Object.keys(G0.m.f).length - n0; }
-    if (!nSeg) return false;
+    if (!nSeg && !nArr) return false;
   });
-  if (r === false && !nSeg) { setStatus('Aucune rencontre entre la sélection et le reste de la maquette'); return; }
+  if (r === false && !nSeg && !nArr) { setStatus('Aucune rencontre entre la sélection et le reste de la maquette'); return; }
   setStatus(`Intersection : ${nFace} face(s) de plus${skipped ? ` · ${skipped} composant(s) ou groupe(s) verrouillé(s) non coupé(s)` : ''}`, 'ok');
 }
 /* maquette d'un groupe dans le repère de la maquette, matériau du groupe reporté sur ses faces */
@@ -3011,7 +3075,7 @@ TOOLS.look = { nav: 'look', label: 'Hauteur d\'œil', hint: () => 'Glisser : tou
 TOOLS.zoomwin = { s: null, hint: () => 'Glisser : encadrez la partie à agrandir · clic : zoom avant sur ce point',
   busy() { return !!this.s; }, reset() { this.s = null; selBox(null); },
   down(sx, sy) { this.s = { x0: sx, y0: sy }; }, move(sx, sy) { if (this.s) selBox(this.s, sx, sy); },
-  up(sx, sy) { const S = this.s; this.s = null; selBox(null); if (!S) return; camPushNow(); if (Math.abs(sx - S.x0) < 6 && Math.abs(sy - S.y0) < 6) zoomAt(sx, sy, 0.5); else zoomRect(S.x0, S.y0, sx, sy); save(); } };
+  up(sx, sy) { const S = this.s; this.s = null; selBox(null); if (!S) return; camPushNow(); if (Math.abs(sx - S.x0) < 6 && Math.abs(sy - S.y0) < 6) zoomAt(sx, sy, 0.5); else zoomRect(S.x0, S.y0, sx, sy); save(); setTool('select'); } };
 function zoomRect(x0, y0, x1, y1) {
   const W = view.clientWidth, H = view.clientHeight, cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, fr = Math.max(0.02, Math.max(Math.abs(x1 - x0) / W, Math.abs(y1 - y0) / H));
   const right = new THREE.Vector3(1, 0, 0).applyQuaternion(camera.quaternion).toArray(), up = new THREE.Vector3(0, 1, 0).applyQuaternion(camera.quaternion).toArray();
