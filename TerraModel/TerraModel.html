@@ -964,10 +964,38 @@ function edgeKinds(P, voisines) { const n = P.length; return P.map((p, i) => { c
   return voisines.some(R => pip2(m, R)) ? 'limite' : 'voie'; }); }
 /* volume de l'enveloppe : le polygone en plan à l'altitude z0, monté de h */
 function prismModel(Q, z0, h) { const M = newModel(); const f = addShape(M, Q.map(p => [p[0], p[1], z0]), [0, 0, 1], null); if (f != null && h > 0) pushPull(M, f, h); return M; }
+/* ================= Surfaces courbes (0.13.1) : facettes voisines à moins de 25° l'une de l'autre (cylindre, arc tiré, terrain) ================= */
+const SMOOTH_COS = Math.cos(25 * Math.PI / 180);
+/* surface courbe qui contient la face fid : facettes reliées par une arête adoucie ; la face seule si elle n'en a pas */
+function smoothGroup(M, fid) {
+  const ef = edgeFaces(M), N = new Map(), nf = k => { if (!N.has(k)) N.set(k, faceN(M, M.f[k])); return N.get(k); }, out = new Set([String(fid)]), st = [String(fid)];
+  while (st.length) { const k = st.pop(), f = M.f[k]; if (!f) continue;
+    for (const L of loopsOf(f)) for (let i = 0; i < L.length; i++) { const fs = ef.get(ekey(L[i], L[(i + 1) % L.length])); if (!fs || fs.length !== 2) continue;
+      for (const g of fs) { if (out.has(g)) continue; const c = vdot(nf(k), nf(g)); if (c > SMOOTH_COS && c < 1 - 1e-6) { out.add(g); st.push(g); } } } }
+  return out;
+}
+/* toute la surface courbe décalée de d le long de ses normales (rayon d'un cylindre agrandi ou réduit) ; les faces voisines (dessus, dessous) restent dans leur plan */
+function curvedOffset(M, set, d) {
+  const S = new Set([...set].map(String)), vs = new Set(); for (const k of S) if (M.f[k]) for (const L of loopsOf(M.f[k])) L.forEach(id => vs.add(id));
+  const byV = new Map(); for (const k in M.f) for (const L of loopsOf(M.f[k])) for (const id of L) if (vs.has(id)) { if (!byV.has(id)) byV.set(id, new Set()); byV.get(id).add(k); }
+  const NP = new Map(); for (const k in M.f) NP.set(k, { n: faceN(M, M.f[k]), p: M.v[M.f[k].o[0]] });
+  const moved = new Map();
+  for (const id of vs) { const p = M.v[id], C = [];
+    for (const k of byV.get(id)) { const { n, p: q } = NP.get(k), r = vdot(n, q) + (S.has(k) ? d : 0), same = C.find(c => vdot(c.n, n) > 1 - 1e-9); if (same) { if (S.has(k)) same.r = r; } else C.push({ n, r }); }
+    let np;
+    if (C.length === 1) np = vadd(p, vmul(C[0].n, C[0].r - vdot(C[0].n, p)));
+    else { const R = C.slice(); if (C.length === 2) { const ax = vnorm(vcross(C[0].n, C[1].n)); R.push({ n: ax, r: vdot(ax, p) }); }
+      const A = [[0, 0, 0], [0, 0, 0], [0, 0, 0]], b = [0, 0, 0]; for (const c of R) for (let i = 0; i < 3; i++) { b[i] += c.n[i] * c.r; for (let j = 0; j < 3; j++) A[i][j] += c.n[i] * c.n[j]; }
+      if (Math.abs(matDet(A)) < 1e-12) return false; np = matV(matInv(A), b); }
+    moved.set(id, np); }
+  for (const [id, p] of moved) M.v[id] = p;
+  for (const k in M.f) { const f = M.f[k], all = loopsOf(f).flat(); if (!all.some(id => moved.has(id))) continue; const nn = vnorm(newell(M, f.o)), p0 = M.v[f.o[0]]; if (vlen(newell(M, f.o)) < 1e-12 || all.some(id => Math.abs(vdot(nn, vsub(M.v[id], p0))) > 1e-5)) return false; }
+  cleanup(M); return true;
+}
 
 </script>
 <script>
-const APP_VERSION = '0.13';
+const APP_VERSION = '0.13.1';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const NF2 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 /* unités : la maquette est en mètres ; les longueurs s'affichent et se saisissent dans l'unité choisie (m, cm, mm) ; surfaces en m², volumes en m³ */
@@ -1098,11 +1126,14 @@ function triFace(m, f) {
   let tris = []; try { tris = THREE.ShapeUtils.triangulateShape(L2[0].map(p => new THREE.Vector2(p[0], p[1])), L2.slice(1).map(h => h.map(p => new THREE.Vector2(p[0], p[1])))); } catch (e) { console.warn(e); }
   return { tris, ids: loops.flat(), n: fr.n };
 }
-function faceGeo(m, keys, tag, acc) {
+function faceGeo(m, keys, tag, acc, smooth) {
   const pos = acc ? acc.pos : [], nor = acc ? acc.nor : [], tf = acc ? acc.tf : [], uv = [];
+  /* ombrage lissé : la normale d'un sommet est la moyenne des faces voisines à moins de 25° (facettes d'un cylindre) */
+  let VN = null; if (smooth) { VN = new Map(); for (const k in m.f) { const n = faceN(m, m.f[k]); for (const id of loopsOf(m.f[k]).flat()) { if (!VN.has(id)) VN.set(id, []); VN.get(id).push(n); } } }
+  const vn = (id, n) => { if (!VN) return n; let s = [0, 0, 0]; for (const g of VN.get(id) || []) if (vdot(g, n) > SMOOTH_COS) s = vadd(s, g); return vlen(s) > 1e-9 ? vnorm(s) : n; };
   for (const k of keys) { const f = m.f[k]; if (!f) continue; const { tris, ids, n } = triFace(m, f);
     const bs = acc ? null : basis(n);
-    for (const t of tris) { let a = m.v[ids[t[0]]], b = m.v[ids[t[1]]], c = m.v[ids[t[2]]]; if (vdot(vcross(vsub(b, a), vsub(c, a)), n) < 0) [b, c] = [c, b]; pos.push(...a, ...b, ...c); for (let i = 0; i < 3; i++) nor.push(...n); tf.push(tag || k); if (bs) for (const p of [a, b, c]) uv.push(vdot(p, bs.u), vdot(p, bs.v)); } }
+    for (const t of tris) { let ia = ids[t[0]], ib = ids[t[1]], ic = ids[t[2]], a = m.v[ia], b = m.v[ib], c = m.v[ic]; if (vdot(vcross(vsub(b, a), vsub(c, a)), n) < 0) { [b, c] = [c, b]; [ib, ic] = [ic, ib]; } pos.push(...a, ...b, ...c); if (VN) nor.push(...vn(ia, n), ...vn(ib, n), ...vn(ic, n)); else for (let i = 0; i < 3; i++) nor.push(...n); tf.push(tag || k); if (bs) for (const p of [a, b, c]) uv.push(vdot(p, bs.u), vdot(p, bs.v)); } }
   if (acc) return;
   const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); return { g, tf };
 }
@@ -1131,7 +1162,7 @@ function rebuild() {
   if (G.pick) G.pick.geometry.dispose(); const acc = { pos: [], nor: [], tf: [] }; if (!isoOn()) faceGeo(M, Object.keys(M.f), null, acc); G.GP = []; G.GE = [];
   for (const gid in M.G || {}) { if (!gVis3(M, gid)) continue; const w = gWorld(M.G[gid]); faceGeo(w, Object.keys(w.f), 'g:' + gid, acc); for (const k in w.v) G.GP.push(w.v[k]); for (const [a, b] of modelEdges(w)) G.GE.push({ pa: w.v[a], pb: w.v[b], g: gid }); }
   const pg = new THREE.BufferGeometry(); pg.setAttribute('position', new THREE.Float32BufferAttribute(acc.pos, 3)); pg.setAttribute('normal', new THREE.Float32BufferAttribute(acc.nor, 3)); G.pick = new THREE.Mesh(pg, mat.pick); G.tf = acc.tf;
-  G.E = isoOn() ? [] : modelEdges(M).map(([a, b]) => ({ a, b, pa: M.v[a], pb: M.v[b], k: ekey(a, b) })); G.V = isoOn() ? [] : Object.keys(M.v).map(Number);
+  G.E = isoOn() ? [] : visibleEdges(M).map(([a, b]) => ({ a, b, pa: M.v[a], pb: M.v[b], k: ekey(a, b) })); G.V = isoOn() ? [] : Object.keys(M.v).map(Number);
   drawSel(); hover(null); applyCut(); buildAnno(); dispPanel(); nivPanel(); applySun(); matPanel(); compPanel(); sunPanel(); structPanel(); isoBar(); arcInfo(); envPanel();
 }
 /* surbrillance : face ou arête survolée, sélection */
@@ -1140,7 +1171,7 @@ function hover(h) {
   const k = h ? (h.fid ? 'f' + h.fid : 'e' + h.e.k) : ''; if (k === hovKey) return; hovKey = k;
   if (hoverObj) { scene.remove(hoverObj); hoverObj.geometry.dispose(); hoverObj = null; }
   if (h && isG(h.fid) && M.G && M.G[h.fid.slice(2)]) { const w = gWorld(M.G[h.fid.slice(2)]); hoverObj = new THREE.Mesh(faceGeo(w, Object.keys(w.f)).g, mat.hover); }
-  else if (h && h.fid && M.f[h.fid]) hoverObj = new THREE.Mesh(faceGeo(M, [h.fid]).g, mat.hover);
+  else if (h && h.fid && M.f[h.fid]) hoverObj = new THREE.Mesh(faceGeo(M, [...smoothGroup(M, h.fid)]).g, mat.hover);
   else if (h && h.e) hoverObj = new THREE.LineSegments(linesGeo(M, [[h.e.a, h.e.b]]), mat.hoverEdge);
   if (hoverObj) { hoverObj.renderOrder = 2; scene.add(hoverObj); } req();
 }
@@ -1150,7 +1181,7 @@ function drawSel() {
   const g = new THREE.Group(); g.add(new THREE.Mesh(faceGeo(M, [...ST.sel.f]).g, mat.sel));
   for (const gid of ST.sel.g) if (M.G && M.G[gid]) { const w = gWorld(M.G[gid]); g.add(new THREE.Mesh(faceGeo(w, Object.keys(w.f)).g, mat.sel), new THREE.LineSegments(linesGeo(w, modelEdges(w)), M.G[gid].lock ? mat.lockEdge : mat.selEdge)); }
   const es = [...ST.sel.e].map(k => k.split('|').map(Number)).filter(([a, b]) => M.v[a] && M.v[b]);
-  for (const k of ST.sel.f) if (M.f[k]) for (const L of loopsOf(M.f[k])) for (let i = 0; i < L.length; i++) es.push([L[i], L[(i + 1) % L.length]]);
+  const VE = new Set((G.E || []).map(e => e.k)); for (const k of ST.sel.f) if (M.f[k]) for (const L of loopsOf(M.f[k])) for (let i = 0; i < L.length; i++) if (VE.has(ekey(L[i], L[(i + 1) % L.length]))) es.push([L[i], L[(i + 1) % L.length]]);
   g.add(new THREE.LineSegments(linesGeo(M, es), mat.selEdge)); g.renderOrder = 3; selObj = g; scene.add(g); req();
 }
 const clearSel = () => { ST.sel.f.clear(); ST.sel.e.clear(); ST.sel.g.clear(); drawSel(); info(); selBar(); };
@@ -1507,7 +1538,7 @@ TOOLS.select = {
   move(sx, sy) { hover(pickEdgeOrFace(sx, sy)); },
   down(sx, sy, ev) {
     const h = pickEdgeOrFace(sx, sy), add = ev.shiftKey || ev.ctrlKey || ev.metaKey; if (!add) { ST.sel.f.clear(); ST.sel.e.clear(); ST.sel.g.clear(); }
-    if (h) { const gr = isG(h.fid), set = gr ? ST.sel.g : h.fid ? ST.sel.f : ST.sel.e, k = gr ? h.fid.slice(2) : h.fid || h.e.k; if (add && set.has(k)) set.delete(k); else set.add(k); }
+    if (h) { const gr = isG(h.fid), set = gr ? ST.sel.g : h.fid ? ST.sel.f : ST.sel.e, k = gr ? h.fid.slice(2) : h.fid || h.e.k, ks = !gr && h.fid ? [...smoothGroup(M, h.fid)] : [k]; if (add && set.has(k)) ks.forEach(x => set.delete(x)); else ks.forEach(x => set.add(x)); }
     drawSel(); info(); selBar();
   },
   dbl(sx, sy) { const h = pickFace(sx, sy); if (!h) return; if (isG(h.fid)) { enterGroup(h.fid.slice(2)); return; } for (const k of connected(M, h.fid)) ST.sel.f.add(k); drawSel(); info(); selBar(); }
@@ -1667,6 +1698,7 @@ TOOLS.push = {
     const S = this.s, r = setRay(sx, sy); let d = lineRay(S.p0, S.n, r.o, r.d), lab = '';
     let bd = 10; for (const id of G.V) { if (S.own.has(id)) continue; const sp = toScreen(M.v[id]); if (!sp) continue; const dd = Math.hypot(sp[0] - sx, sp[1] - sy); if (dd < bd) { bd = dd; d = vdot(vsub(M.v[id], S.p0), S.n); lab = 'Au niveau du sommet'; } }
     d = Math.round(d * 1000) / 1000; if (S.thru != null && d < 0 && -d >= S.thru - 1e-4) { d = -S.thru; lab = 'Percement'; } S.d = d;
+    if (S.curve) { const m = JSON.parse(S.base), ok = curvedOffset(m, S.curve, d); show(ok ? m : M); hover(null); const q = vadd(S.p0, vmul(S.n, d)); guide(S.p0, q); marker({ p: q, type: 'plane' }, ok ? 'Surface courbe décalée · ' + fmtL(d) : 'Impossible : une face voisine ne resterait pas plane'); vcbShow('Distance', numL(d)); return; }
     const m = JSON.parse(S.base); pushPull(m, S.fid, d); show(m); hover(null);
     const q = vadd(S.p0, vmul(S.n, d)); guide(S.p0, q); marker({ p: q, type: 'plane' }, (lab ? lab + ' · ' : '') + fmtL(d)); vcbShow('Distance', numL(d));
   },
@@ -1695,6 +1727,7 @@ TOOLS.push = {
         const nHint = isO() ? vmul(fwd(), -1) : vsub(camPos(), t.p);
         this.s = { lines: true, segs: ch.segs, own: new Set(ch.ids), p0: t.p, u, n: planar ? vnorm(n) : null, mode: straight ? 'perp' : planar ? 'normal' : 'free', nHint, base: JSON.stringify(M), d: [0, 0, 0] };
         hover(null); hint(this.hint()); vcbShow('Distance', ''); return; }
+      const SG = smoothGroup(M, t.h.fid); if (SG.size >= 3) { const f0 = M.f[t.h.fid]; this.s = { curve: [...SG], fid: t.h.fid, p0: t.h.p, n: faceN(M, f0), base: JSON.stringify(M), d: 0, own: new Set([...SG].flatMap(k => loopsOf(M.f[k]).flat())) }; hover(null); hint(this.hint()); return; }
       const f = M.f[t.h.fid]; this.s = { fid: t.h.fid, p0: t.h.p, n: faceN(M, f), base: JSON.stringify(M), d: 0, own: new Set(loopsOf(f).flat()), thru: throughDepth(M, t.h.fid, true) }; hover(null); hint(this.hint()); return; }
     this.make(this.s.d);
   },
@@ -1703,6 +1736,7 @@ TOOLS.push = {
     if (S.lines) { const L = vlen(d); if (L < TOL) { show(M); hint(this.hint()); return; } const dir = vnorm(d), segs = S.segs, nHint = S.nHint;
       commitFrom(S.base, t => { const v = parseLen(t); return isFinite(v) && v > 0 ? v : null; }, (m, v) => extrudeLines(m, segs, vmul(dir, v), nHint), L); hint(this.hint()); return; }
     if (Math.abs(d) < TOL) { show(M); hint(this.hint()); return; }
+    if (S.curve) { const cv2 = S.curve; if (!curvedOffset(JSON.parse(S.base), cv2, d)) { show(M); setStatus('Décalage impossible : une face voisine ne resterait pas plane', 'err'); hint(this.hint()); return; } commitFrom(S.base, t => { const v = parseLen(t); return isFinite(v) ? (Math.sign(d) || 1) * v : null; }, (m, v) => curvedOffset(m, cv2, v), d); setStatus('Surface courbe décalée de ' + fmtL(Math.abs(d)) + (d > 0 ? ' vers l\'extérieur' : ' vers l\'intérieur'), 'ok'); hint(this.hint()); return; }
     const sg = Math.sign(d) || 1, fid = S.fid;
     commitFrom(S.base, t => { const v = parseLen(t); return isFinite(v) ? sg * v : null; }, (m, v) => { pushPull(m, fid, v); ST.lastPP = v; }, d);
     hint(this.hint());
@@ -2339,6 +2373,7 @@ const HELP = `<h3>Unités</h3><table>
 <tr><td>P sur un trait</td><td>Un trait, une polyligne ou le bord d'une face seule, tiré, donne une surface (un mur à partir d'un tracé au sol). Trait droit : dans toutes les directions perpendiculaires, axes proposés ; polyligne plane : perpendiculairement à son plan.</td></tr>
 <tr><td>Dans un volume</td><td>Une forme tracée sur une face s'y imprime : tirée vers l'extérieur elle fait une excroissance, poussée vers l'intérieur un creux. Poussée jusqu'à la face opposée ou au-delà, elle troue le volume (baie dans un mur, trémie dans une dalle).</td></tr>
 <tr><td>Double-clic</td><td>Refait la dernière distance de pousser/tirer sur la face cliquée.</td></tr>
+<tr><td>Surfaces courbes</td><td>Les facettes d'un cylindre, d'un arc tiré ou d'un terrain forment une seule surface, lisse à l'écran : un clic la sélectionne ou la peint en entier ; Pousser/tirer la décale tout entière (rayon d'un cylindre ou d'un trou rond agrandi ou réduit), le dessus et le dessous suivent.</td></tr>
 <tr><td>S</td><td>Échelle : point fixe, point de référence, puis le facteur à la souris ou au clavier : 1,5 ; trois facteurs X;Y;Z (2;1;1) ; ou la nouvelle longueur de la référence avec son unité (6m). Facteur négatif : symétrie. Barre de sélection, « Symétrie » : retourne la sélection selon l'axe rouge, vert ou bleu, autour de son centre.</td></tr>
 <tr><td>U</td><td>Suivez-moi : sélectionnez le chemin (traits bout à bout, ou une face pour suivre son contour : corniche, acrotère, bandeau), prenez l'outil puis cliquez la face du profil, posée au départ du chemin et perpendiculaire à lui. Joints en onglet.</td></tr>
 <tr><td>M</td><td>Déplacer : la sélection, ou la face ou l'arête visée. Monter le dessus allonge le volume, monter une arête fait un toit en pente. Ctrl : copier (une fenêtre copiée sur le même mur s'y imprime). Double-clic avec la sélection : tout le volume.</td></tr>
@@ -2407,7 +2442,7 @@ function byMat(m, keys, dflt) { const b = new Map(); for (const k of keys) { con
 /* maillage d'une maquette selon le style (matériaux, monochrome, rayons X, filaire, sans arêtes) et les ombres */
 function addMeshes(grp, m, dflt, soft) {
   const st = ST.style, sh = sunOn();
-  if (st !== 'wire') for (const [id, keys] of byMat(m, Object.keys(m.f), dflt)) { const g = faceGeo(m, keys).g, a = new THREE.Mesh(g, faceMat(id)), b = new THREE.Mesh(g, faceMat(id, true)); a.castShadow = b.castShadow = a.receiveShadow = b.receiveShadow = sh; grp.add(a, b); }
+  if (st !== 'wire') for (const [id, keys] of byMat(m, Object.keys(m.f), dflt)) { const g = faceGeo(m, keys, null, null, true).g, a = new THREE.Mesh(g, faceMat(id)), b = new THREE.Mesh(g, faceMat(id, true)); a.castShadow = b.castShadow = a.receiveShadow = b.receiveShadow = sh; grp.add(a, b); }
   if (st !== 'noedge') grp.add(new THREE.LineSegments(linesGeo(m, visibleEdges(m, soft)), mat.edge));
 }
 function matEnsure(m, id) { if (!id) return; m.mat = m.mat || {}; if (!m.mat[id]) { const p = presetOf(id); if (p) m.mat[id] = p; } }
@@ -2421,7 +2456,7 @@ TOOLS.paint = {
     if (isG(h.fid)) { const gid = h.fid.slice(2); if (ev.altKey) { ST.paint = M.G[gid].mat || ''; matPanel(); hint(this.hint()); return; } doOp(m => { matEnsure(m, cur); if (cur) m.G[gid].mat = cur; else delete m.G[gid].mat; }); matPanel(); return; }
     const f = M.f[h.fid]; if (!f) return;
     if (ev.altKey) { ST.paint = f.m || ''; matPanel(); hint(this.hint()); setStatus('Matériau pris : ' + ((matOf(M, ST.paint) || {}).nom || 'par défaut'), 'ok'); return; }
-    const keys = ev.ctrlKey || ev.metaKey ? [...connected(M, h.fid)] : ev.shiftKey ? Object.keys(M.f).filter(k => (M.f[k].m || '') === (f.m || '')) : [h.fid];
+    const keys = ev.ctrlKey || ev.metaKey ? [...connected(M, h.fid)] : ev.shiftKey ? Object.keys(M.f).filter(k => (M.f[k].m || '') === (f.m || '')) : [...smoothGroup(M, h.fid)];
     doOp(m => { matEnsure(m, cur); for (const k of keys) if (m.f[k]) { if (cur) m.f[k].m = cur; else delete m.f[k].m; } }); matPanel();
   }
 };
